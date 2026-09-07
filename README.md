@@ -1,67 +1,53 @@
 # Mosaic
 
-A cross-media recommendation prototype for CSCI 310 Junior Seminar. Explore connections across books, music, games, movies, and TV.
+A cross-media discovery app for CSCI 310 Junior Seminar.
 
-## Run locally
+## Run and publish
 
-Requires Node.js 22.13 or later and npm.
+Node.js 22.13+ and npm are required. Run `npm ci`, then `npm run dev`.
+Run `npm test`, `npm run typecheck`, and `npm run build:pages` to validate.
+GitHub Actions publishes `dist/client/mosaic` to https://anonymousxbelle.github.io/mosaic/ on main pushes. GitHub Pages must use GitHub Actions as its source. The repository and Pages site are public. No API keys are needed.
 
-```sh
-npm ci
-npm run dev
-```
+## Features
 
-Open the local URL printed by the server. No API keys or account connections are required for this first milestone.
+- Search live catalogs with debounced autocomplete for books, songs/albums, films, TV, and games.
+- Verify the selected record again by provider ID and category before adding; reject duplicate titles. Offline, timeout, rate-limit, and no-match states are explicit.
+- Automatically extract a shared tag vocabulary from provider genres and description keywords. These are reproducible rules, not an AI model or verified statements about a work's themes. Sparse metadata can produce no tags.
+- Edit tags on any title: hide inaccurate automatic/demo tags, create personal tags, and reuse tags from other titles. Personal tags accept 2–32 letters/numbers/hyphens, up to 12 per title; case and spaces normalize for consistent matching.
+- Search the library by title, creator, category or tag. Personal tags immediately influence For You, Based On, explanations and the taste profile.
+- Rate titles 1–5, remove ratings, and remove added titles. Up to 200 additions, ratings, and tag edits persist in this browser's localStorage.
 
-```sh
-npm test
-npm run typecheck
-npm run build
-```
+## APIs and attribution
 
-## Implemented
+| Media | Provider | Metadata |
+| --- | --- | --- |
+| Books | Apple Search / Lookup API | Ebook ID, author, genres, description |
+| Songs and albums | Apple Search / Lookup API | Track/collection ID, artist, genre |
+| TV | TVmaze | Show ID, genres, summary, network |
+| Films | Wikidata | Item ID, film classification Q11424, genres, director |
+| Games | Wikidata | Item ID, video-game classification Q7889, genres, developer |
 
-- Search a 25-title demonstration catalog spanning five media categories.
-- Rate and remove ratings; ratings last for the current page session.
-- For You: combine positive preferences into a unified taste profile.
-- Based On: use one selected title as the recommendation query.
-- Filter recommendations by destination media category.
-- Display matching tags and a cosine similarity score.
-- Responsive, keyboard-accessible interface using React, TypeScript, and Base UI components.
+Search text is sent directly from the visitor's browser to the selected provider. No keys, proxy server, or paid AI calls are used. Requests are abortable, cached briefly, and bounded by a timeout. Wikidata only offers directly classified film/game instances, so some valid titles may be absent. Catalog matching verifies existence and category; it does not guarantee metadata accuracy or comprehensive coverage.
 
-## Recommendation method
+[Apple API documentation](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html), [TVmaze API and CC BY-SA terms](https://www.tvmaze.com/api), [Wikidata CC0](https://www.wikidata.org/wiki/Wikidata:Licensing). Source links are retained on imported records and shown in the interface. Demo descriptions and tags are manually authored examples.
 
-Each title uses binary features from a shared tag vocabulary. For ratings 3, 4, and 5, the positive-preference weights are 1, 2, and 3. Ratings 1 and 2 contribute no positive features. The profile is the weighted average of item features. This first version does not yet model explicit negative preferences.
+## Recommendations
 
-Cosine similarity is dot(query, candidate) / (norm(query) * norm(candidate)). Empty vectors return zero. Results with zero similarity are omitted. For You excludes all rated titles. Based On excludes its seed title; select a different media category for cross-media discovery. Equal scores are sorted by title.
+Each title is a binary vector of its effective tags: automatic/demo tags minus hidden tags, plus personal tags. Ratings 3, 4 and 5 contribute positive weights 1, 2 and 3; ratings 1–2 contribute no positive preference. The profile averages these weighted vectors. Cosine similarity compares it (or a Based On seed) with available candidates, excluding rated titles in For You and the seed in Based On. Zero matches are omitted; ties sort by title.
 
-The percentage shown is a similarity score, not a probability, accuracy measure, or evidence of recommendation quality. Profile theme percentages represent weighted feature presence.
+A shared personal tag links titles across media; use it on at least two titles for a connection. Similarity is not a probability of liking a title or a measured accuracy score. Candidate recommendations currently come from the 25 demo titles and the visitor's added titles, not an automatic search of every catalog. Explicit negative-preference modeling and recommendation-quality evaluation remain future work.
 
-## Source map
+## Architecture and limits
 
-- `app/page.tsx`: discovery UI and session state.
-- `app/globals.css`: responsive visual design.
-- `lib/catalog.ts`: illustrative manually authored catalog.
-- `lib/recommendations.ts`: independent, deterministic recommendation functions.
-- `tests/recommendations.test.mjs`: numerical and ranking tests.
-- `.github/workflows/ci.yml`: automated tests, type checking, and production build.
+React + TypeScript, Vinext/Vite static export, Base UI/shadcn controls. GitHub Pages serves public static files. Each visitor has a separate browser-local library: there is no login, shared tagging database, cross-device sync, file uploading, or server API. Clearing browser storage clears the library; moving from the earlier Sites URL starts separate storage. Personal tags are private to the browser, not published to GitHub or submitted to the catalog APIs.
 
-React runs on the Vinext/Vite starter. The production adapter targets Cloudflare Workers through Sites; the entire application source is ordinary Git-tracked code and can live in GitHub. Sites' deployment source repository is separate from your GitHub repository.
+- `lib/media-api.ts`: provider normalization, search, verification and automatic tagging.
+- `lib/tags.ts`: personal-tag validation and effective features.
+- `lib/library-storage.ts`: validated persistence restoration.
+- `lib/recommendations.ts`: weighted profiles and cosine ranking.
+- `components/media/`: accessible catalog selection and tag editing dialogs.
+- `app/page.tsx`: library, ratings, filters and discovery.
+- `tests/`: recommendation, provider validation and personal-tag tests.
+- `.github/workflows/`: checks and Pages deployment.
 
-## Next milestones
-
-1. Add a backend API and persistent media/ratings database.
-2. Integrate one real catalog API, normalize metadata, and implement reproducible rule-based tagging.
-3. Expand media coverage, measure tagging quality, and improve music-specific features.
-4. Add single-media versus cross-media evaluation, participant feedback, and exportable results.
-5. Consider optional AI-assisted tagging only after establishing the non-AI baseline.
-
-No live media API integrations, login, persistent user storage, AI tagging, or user-study results exist yet. Sample descriptions and tags are illustrative and need validation before research use.
-
-## GitHub
-
-This directory is intended to be the repository root. Keep `.env*`, dependencies, generated builds, and credentials out of Git. Set a GitHub remote named `origin` once a repository is available. Do not mistake the Sites deployment remote for GitHub.
-
-## Validation notes
-
-The local route was checked for a successful HTTP response. Broader browser interaction testing was not performed. The optional WebMCP surface is feature-detected; no supported validation context was available in this build session.
+Tests cover numerical ranking, wrong-type catalog records, duplicate handling, malformed storage, error responses, tag normalization and cross-media tag connections. Live search and re-verification were checked against all five media categories. Broad browser interaction testing has not been performed. Optional WebMCP rating updates are feature-detected.
