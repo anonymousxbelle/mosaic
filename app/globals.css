@@ -536,3 +536,251 @@ footer {
     padding: 18px;
   }
 }
+.add-media-button,
+.confirm-add {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 16px;
+  min-height: 44px;
+}
+.confirm-add:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.add-media-dialog {
+  max-width: min(600px, calc(100vw - 32px)) !important;
+  max-height: 90dvh;
+  overflow-y: auto;
+  padding: 28px;
+  gap: 12px;
+}
+.add-title {
+  font-size: 24px !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.5px;
+  margin-right: 20px;
+}
+.field-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+.add-type-select {
+  width: 100%;
+  height: 42px !important;
+  background: white;
+}
+.live-search-input {
+  width: 100%;
+  min-height: 46px;
+}
+.live-search-input input {
+  font-size: 16px !important;
+}
+.media-suggestions {
+  z-index: 70;
+  min-width: 280px;
+  max-width: calc(100vw - 48px);
+}
+.media-suggestion {
+  padding: 12px !important;
+  min-height: 66px;
+  cursor: pointer;
+}
+.media-suggestion strong,
+.media-suggestion span,
+.media-suggestion small {
+  display: block;
+}
+.media-suggestion strong {
+  font-size: 15px;
+  line-height: 1.35;
+}
+.media-suggestion span {
+  font-size: 13px;
+  color: #586378;
+  margin-top: 3px;
+}
+.media-suggestion small {
+  font-size: 12px;
+  color: #4d479d;
+  margin-top: 3px;
+}
+.search-help {
+  font-size: 14px;
+  color: #5f697d;
+  min-height: 22px;
+}
+.selected-media {
+  border: 1px solid #d4d8ed;
+  border-radius: 10px;
+  padding: 16px;
+  background: #f7f8ff;
+}
+.selected-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #376451;
+  margin-bottom: 10px;
+}
+.selected-media h3 {
+  font-size: 20px;
+  font-weight: 700;
+}
+.selected-media > p {
+  font-size: 14px;
+  color: #586378;
+  margin-top: 5px;
+}
+.selected-description {
+  max-height: 110px;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0;
+}
+.selected-tags span {
+  background: #e9e7ff;
+  color: #4b40a4;
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 4px 8px;
+}
+.selected-tags p {
+  font-size: 14px;
+  color: #685423;
+}
+.selected-media > a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4b40a4;
+  font-size: 13px;
+  text-decoration: underline;
+}
+.form-error {
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  background: #fff0f0;
+  color: #9e2f38;
+  border-radius: 8px;
+}
+.form-error button {
+  display: block;
+  text-decoration: underline;
+  border: 0;
+  background: none;
+  color: inherit;
+  padding: 8px 0 0;
+}
+.form-message,
+.library-notice {
+  font-size: 14px;
+  color: #3d5767;
+  background: #ebf4f8;
+  padding: 10px;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+.library-notice {
+  margin-top: 12px;
+}
+.storage-note {
+  font-size: 12px;
+  color: #667086;
+  line-height: 1.6;
+}
+.library-creator {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #657086;
+  margin: 4px 0;
+}
+.remove-added {
+  border: 0;
+  background: transparent;
+  color: #6d5260;
+  text-decoration: underline;
+  font-size: 12px;
+  padding: 5px 0;
+}
+.source-link {
+  font-size: 12px;
+  color: #5147ac;
+  text-decoration: underline;
+  margin-top: 5px;
+}
+.spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+  }
+}
+footer a {
+  text-decoration: underline;
+}
+
+.edit-tags {
+  display: block;
+  color: #34624c;
+  font-size: 12px;
+  margin: 6px 0;
+  min-height: 32px;
+  text-decoration: underline;
+}
+.tag-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag-options button {
+  border: 1px solid #c5cbbf;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+.tag-options button[aria-pressed='false'] {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+.tag-input {
+  display: flex;
+  gap: 8px;
+}
+.tag-input input {
+  border: 1px solid #bbc4b8;
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 0;
+  flex: 1;
+}
+.tag-input button {
+  padding: 10px;
+  background: #305d46;
+  color: white;
+  border-radius: 8px;
+}

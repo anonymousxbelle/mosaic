@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import {
   BookOpen,
@@ -21,7 +21,12 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-import { catalog } from '@/lib/catalog';
+import { catalog as sampleCatalog } from '@/lib/catalog';
+import { TagEditor } from '@/components/media/tag-editor';
+import { effectiveTags, type TagEdits } from '@/lib/tags';
+import { AddMedia } from '@/components/media/add-media';
+import { findDuplicate, type CatalogMedia } from '@/lib/media-api';
+import { restoreLibrary, STORAGE_KEY } from '@/lib/library-storage';
 import {
   categories,
   profile,
@@ -47,13 +52,89 @@ function MediaMark({ item }: { item: Media }) {
   );
 }
 export default function Home() {
+  const [added, setAdded] = useState<CatalogMedia[]>([]);
+  const [ready, setReady] = useState(false);
+  const [storageError, setStorageError] = useState('');
+  const [notice, setNotice] = useState('');
+  const [tagEdits, setTagEdits] = useState<TagEdits>({});
+  const originals = useMemo(() => [...added, ...sampleCatalog], [added]);
+  const catalog = useMemo(
+    () =>
+      originals.map((item) => ({
+        ...item,
+        tags: effectiveTags(item, tagEdits[item.id]),
+      })),
+    [originals, tagEdits],
+  );
+  const knownTags = useMemo(
+    () => [...new Set(catalog.flatMap((i) => i.tags))].sort(),
+    [catalog],
+  );
+  const catalogRef = useRef(catalog);
+  catalogRef.current = catalog;
   const [ratings, setRatings] = useState<Ratings>({});
   const [mode, setMode] = useState('for-you');
   const [category, setCategory] = useState<Category | 'All'>('All');
   const [seed, setSeed] = useState('hunger');
   const [search, setSearch] = useState('');
-  const taste = useMemo(() => profile(catalog, ratings), [ratings]);
-  const selected = catalog.find((i) => i.id === seed)!;
+  const taste = useMemo(() => profile(catalog, ratings), [ratings, catalog]);
+  const selected = catalog.find((i) => i.id === seed) || catalog[0];
+  useEffect(() => {
+    try {
+      const saved = restoreLibrary(
+        localStorage.getItem(STORAGE_KEY),
+        sampleCatalog,
+      );
+      setAdded(saved.added);
+      setRatings(saved.ratings);
+      setTagEdits(saved.tagEdits);
+    } catch {
+      setStorageError(
+        'Saved library could not be read. You can still use the app in this session.',
+      );
+    }
+    setReady(true);
+  }, []);
+  useEffect(() => {
+    if (!ready) return;
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ version: 1, added, ratings, tagEdits }),
+      );
+    } catch {
+      setStorageError(
+        'Browser storage is unavailable or full. Changes will last for this session only.',
+      );
+    }
+  }, [added, ratings, tagEdits, ready]);
+  function addItem(item: CatalogMedia) {
+    if (added.length >= 200)
+      throw new Error(
+        'Your library has reached 200 added titles. Remove one before adding another.',
+      );
+    if (findDuplicate(catalog, item))
+      throw new Error('This title is already in your library.');
+    setAdded((old) => [item, ...old]);
+    setSearch('');
+    setNotice(
+      item.title + ' added. Rate it below to update your taste profile.',
+    );
+  }
+  function removeItem(id: string) {
+    setTagEdits((old) => {
+      const next = { ...old };
+      delete next[id];
+      return next;
+    });
+    setAdded((old) => old.filter((i) => i.id !== id));
+    setRatings((old) => {
+      const next = { ...old };
+      delete next[id];
+      return next;
+    });
+    if (seed === id) setSeed('hunger');
+  }
   useEffect(() => {
     const context = (
       document as Document & {
@@ -70,7 +151,7 @@ export default function Home() {
     const tool = {
       name: 'set_media_ratings',
       description:
-        'Set ratings for sample media titles and show For You recommendations. Ratings apply to the current page session.',
+        'Set ratings for library titles and show For You recommendations. Ratings are saved in this browser when storage is available.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -79,7 +160,7 @@ export default function Home() {
             items: {
               type: 'object',
               properties: {
-                id: { type: 'string', enum: catalog.map((i) => i.id) },
+                id: { type: 'string' },
                 rating: { type: 'integer', minimum: 1, maximum: 5 },
               },
               required: ['id', 'rating'],
@@ -99,7 +180,7 @@ export default function Home() {
         for (const entry of values) {
           if (
             !entry ||
-            !catalog.some((i) => i.id === entry.id) ||
+            !catalogRef.current.some((i) => i.id === entry.id) ||
             !Number.isInteger(entry.rating) ||
             entry.rating < 1 ||
             entry.rating > 5
@@ -132,19 +213,19 @@ export default function Home() {
     mode === 'based-on' ? [seed] : Object.keys(ratings),
   );
   const visible = catalog.filter((i) =>
-    (i.title + ' ' + i.creator + ' ' + i.type)
+    (i.title + ' ' + i.creator + ' ' + i.type + ' ' + i.tags.join(' '))
       .toLowerCase()
       .includes(search.toLowerCase()),
   );
   return (
     <div className="app-shell">
       <header className="topbar">
-        <a href="/" className="brand">
+        <a href="./" className="brand">
           <Layers3 size={30} />
           mosaic<span className="brand-dot">●</span>
         </a>
         <span className="project-label">A CROSS-MEDIA EXPLORATION</span>
-        <span className="prototype">Seminar prototype · 01</span>
+        <span className="prototype">Seminar prototype · 02</span>
       </header>
       <main>
         <div className="page-intro">
@@ -171,14 +252,25 @@ export default function Home() {
               <span>{Object.keys(ratings).length} rated</span>
             </div>
             <p className="muted">
-              Rate a few titles to shape your recommendations. Ratings stay in
-              this session.
+              Add media from live catalogs, then rate your favorites. Your
+              library and ratings are saved in this browser.
             </p>
+            <AddMedia items={catalog} onAdd={addItem} />
+            {notice && (
+              <p className="library-notice" role="status">
+                {notice}
+              </p>
+            )}
+            {storageError && (
+              <p className="form-error" role="alert">
+                {storageError}
+              </p>
+            )}
             <label className="search">
               <Search size={18} />
               <input
-                aria-label="Search sample catalog"
-                placeholder="Search the sample catalog"
+                aria-label="Search your library"
+                placeholder="Filter by title, creator or tag"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -190,6 +282,24 @@ export default function Home() {
                   <div>
                     <span className="type-label">{item.type}</span>
                     <h3>{item.title}</h3>
+                    <p className="library-creator">{item.creator}</p>
+                    {added.some((x) => x.id === item.id) && (
+                      <button
+                        className="remove-added"
+                        aria-label={'Remove ' + item.title + ' from library'}
+                        onClick={() => removeItem(item.id)}
+                      >
+                        Remove title
+                      </button>
+                    )}
+                    <TagEditor
+                      item={originals.find((x) => x.id === item.id)!}
+                      edit={tagEdits[item.id] || { added: [], hidden: [] }}
+                      known={knownTags}
+                      onChange={(edit) =>
+                        setTagEdits((old) => ({ ...old, [item.id]: edit }))
+                      }
+                    />
                     <div
                       className="rating"
                       role="group"
@@ -352,7 +462,18 @@ export default function Home() {
                       </span>
                     </div>
                     <h3>{item.title}</h3>
+
                     <p className="creator">{item.creator}</p>
+                    {added.find((x) => x.id === item.id) && (
+                      <a
+                        className="source-link"
+                        href={added.find((x) => x.id === item.id)!.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Source: {added.find((x) => x.id === item.id)!.provider}
+                      </a>
+                    )}
                     <p className="description">{item.description}</p>
                     <div className="connection">
                       <span>THE CONNECTION</span>
@@ -363,9 +484,11 @@ export default function Home() {
               </div>
             )}
             <p className="data-note">
-              25-title sample catalog · Illustrative, hand-authored tags ·
-              Similarity measures shared tags, not a probability that you will
-              like a title.
+              {added.length} catalog-verified additions + 25 demo titles. Added
+              titles use automatic keyword tags from catalog metadata; demo tags
+              are illustrative. Edit tags to correct automatic tags and create
+              your own connections. Similarity measures shared tags, not the
+              probability you will like a title.
             </p>
           </section>
         </div>
@@ -394,7 +517,32 @@ export default function Home() {
         </section>
         <footer>
           <span>mosaic / CSCI 310 Junior Seminar</span>
-          <span>Content-based discovery · Built to be explored</span>
+          <span>
+            Catalog data:{' '}
+            <a
+              href="https://www.apple.com/itunes/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Apple
+            </a>{' '}
+            ·{' '}
+            <a
+              href="https://www.tvmaze.com/api"
+              target="_blank"
+              rel="noreferrer"
+            >
+              TVmaze (CC BY-SA)
+            </a>{' '}
+            ·{' '}
+            <a
+              href="https://www.wikidata.org/wiki/Wikidata:Licensing"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Wikidata (CC0)
+            </a>
+          </span>
         </footer>
       </main>
     </div>
