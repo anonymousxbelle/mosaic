@@ -1,3 +1,4 @@
+import { matureRating } from './content-rating.ts';
 import { normalizeGenres, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
 import type { Category, Media } from './recommendations';
@@ -137,6 +138,8 @@ function appleRecord(data: Data, type: Category): CatalogMedia | null {
       ]),
     ],
     genres: normalizeGenres(genres),
+    adult: data.trackExplicitness === 'explicit' || matureRating(data.contentAdvisoryRating) || genres.some((g) => /\berotica\b/i.test(g)),
+    contentRating: plainText(data.contentAdvisoryRating) || (data.trackExplicitness === 'explicit' ? 'Explicit' : undefined),
     ratingCount:
       Number.isSafeInteger(data.userRatingCount) && data.userRatingCount >= 0
         ? data.userRatingCount
@@ -337,6 +340,7 @@ export async function searchMedia(
   type: Category,
   query: string,
   signal?: AbortSignal,
+  adult = false,
 ): Promise<CatalogMedia[]> {
   signal?.throwIfAborted();
   const invalid = queryError(query);
@@ -346,7 +350,7 @@ export async function searchMedia(
   if (hit && Date.now() - hit.time < 300000) return hit.items;
   let items: CatalogMedia[];
   if (catalogApi && ['Movie', 'TV', 'Game'].includes(type))
-    return gateway('search', { type, q: query.trim() }, signal);
+    return gateway('search', { type, q: query.trim(), adult: String(adult) }, signal);
   if (type === 'Game' || type === 'Movie') {
     const result = await json(
       wikiUrl({
@@ -474,6 +478,7 @@ export function findDuplicate(items: Media[], item: Media): Media | undefined {
 export function validStoredItem(value: unknown): value is CatalogMedia {
   if (!value || typeof value !== 'object') return false;
   const x = value as CatalogMedia;
+  if ((x.adult !== undefined && typeof x.adult !== 'boolean') || (x.adultMarked !== undefined && typeof x.adultMarked !== 'boolean') || (x.contentRating !== undefined && (typeof x.contentRating !== 'string' || x.contentRating.length > 80))) return false;
   if (
     typeof x.title !== 'string' ||
     !x.title ||
@@ -568,6 +573,7 @@ export async function discoverMedia(
   types: Category[],
   tags: string[],
   signal?: AbortSignal,
+  adult = false,
 ): Promise<{ items: CatalogMedia[]; failures: string[] }> {
   const items: CatalogMedia[] = [];
   const failures: string[] = [];
@@ -578,7 +584,7 @@ export async function discoverMedia(
         catalogApi && ['Movie', 'TV', 'Game'].includes(type)
           ? await gateway(
               'discover',
-              { type, tags: tags.slice(0, 3).join(',') },
+              { type, tags: tags.slice(0, 3).join(','), adult: String(adult) },
               signal,
             )
           : await searchMedia(

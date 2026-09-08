@@ -7,6 +7,9 @@ export type Media = {
   type: Category;
   tags: string[];
   genres?: string[];
+  adult?: boolean;
+  adultMarked?: boolean;
+  contentRating?: string;
   description: string;
 };
 export type Ratings = Record<string, number>;
