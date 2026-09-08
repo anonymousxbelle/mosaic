@@ -23,7 +23,7 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 import { inContentSection, contentLabel } from '@/lib/content-rating';
-import { categories, type Category, type Media } from '@/lib/recommendations';
+import { discoveryCategories, type Category, type Media } from '@/lib/recommendations';
 import {
   searchMedia,
   verifyMedia,
@@ -182,7 +182,7 @@ export function AddMedia({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {categories.map((c) => (
+            {discoveryCategories.map((c) => (
               <SelectItem key={c} value={c}>
                 {c}
               </SelectItem>
