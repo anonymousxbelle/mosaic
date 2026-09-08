@@ -45,6 +45,7 @@ export function plainText(value: unknown): string {
           '&gt;': '>',
         })[x] || ' ',
     )
+    .replace(/&#x([a-f0-9]+);/gi,(_,n)=>parseInt(n,16)<=0x10ffff?String.fromCodePoint(parseInt(n,16)):' ')
     .replace(/&#(\d+);/g, (_, n) =>
       Number(n) <= 0x10ffff ? String.fromCodePoint(Number(n)) : ' ',
     )
