@@ -57,3 +57,11 @@ React + TypeScript, Vinext/Vite static export, Base UI/shadcn controls. GitHub P
 - `.github/workflows/`: checks and Pages deployment.
 
 Tests cover numerical ranking, wrong-type catalog records, duplicate handling, malformed storage, error responses, tag normalization and cross-media tag connections. Live search and re-verification were checked against all five media categories. Broad browser interaction testing has not been performed. Optional WebMCP rating updates are feature-detected.
+
+## Genres, book results and accounts
+
+The Genres tab discovers across media using catalog genre metadata. Explicit avoided genres are hidden. Two 1–2-star ratings with no positive ratings for a genre within a media type hide it automatically; one low rating reduces its score. A positive rating revises that inference. Unknown genres cannot be filtered reliably. Match percentages can include the dislike penalty and are not probabilities.
+
+Book results sort by title/creator relevance, with available catalog rating counts breaking ties. This is not a global bestseller ranking. Recognizable standalone promotional blurbs are removed; excerpts are bounded and link to the complete source.
+
+Optional Supabase email-code login and manual cloud library save/merge are implemented but inactive until a project, email delivery and row-level security are configured. See [account setup](backend/ACCOUNT-SETUP.md). Cloud sync has not been live-tested. The current website remains browser-local.
