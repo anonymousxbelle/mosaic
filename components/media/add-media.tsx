@@ -139,7 +139,8 @@ export function AddMedia({
       <DialogContent className="add-media-dialog">
         <DialogTitle className="add-title">Add something you love</DialogTitle>
         <DialogDescription>
-          Search a live catalog and select the correct title. We check the
+          Search a live catalog and select the correct title. Exact title
+          matches rank first; available rating counts break ties. We check the
           record again before adding it.
         </DialogDescription>
         <label className="field-label" id="media-type-label">
@@ -256,7 +257,12 @@ export function AddMedia({
               {selection.format ? ' · ' + selection.format : ''}
               {selection.year ? ' · ' + selection.year : ''}
             </p>
-            <p className="selected-description">{selection.description}</p>
+            <p className="selected-description">
+              {selection.description.length > 500
+                ? selection.description.slice(0, 500).replace(/\s+\S*$/, '') +
+                  '…'
+                : selection.description}
+            </p>
             <div className="selected-tags">
               {selection.tags.length ? (
                 selection.tags.map((tag) => <span key={tag}>{tag}</span>)
@@ -268,7 +274,10 @@ export function AddMedia({
               )}
             </div>
             <a href={selection.sourceUrl} target="_blank" rel="noreferrer">
-              Check source <ExternalLink size={13} />
+              {selection.type === 'Book'
+                ? 'Full publisher description'
+                : 'Check source'}{' '}
+              <ExternalLink size={13} />
             </a>
           </div>
         )}
