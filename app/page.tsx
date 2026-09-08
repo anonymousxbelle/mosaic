@@ -25,7 +25,12 @@ import { catalog as sampleCatalog } from '@/lib/catalog';
 import { TagEditor } from '@/components/media/tag-editor';
 import { effectiveTags, type TagEdits } from '@/lib/tags';
 import { AddMedia } from '@/components/media/add-media';
-import { findDuplicate, type CatalogMedia } from '@/lib/media-api';
+import {
+  findDuplicate,
+  discoverMedia,
+  catalogApi,
+  type CatalogMedia,
+} from '@/lib/media-api';
 import { restoreLibrary, STORAGE_KEY } from '@/lib/library-storage';
 import {
   categories,
@@ -53,11 +58,25 @@ function MediaMark({ item }: { item: Media }) {
 }
 export default function Home() {
   const [added, setAdded] = useState<CatalogMedia[]>([]);
+  const [showDemo, setShowDemo] = useState(false);
+  const [candidates, setCandidates] = useState<CatalogMedia[]>([]);
+  const [discovering, setDiscovering] = useState(false);
+  const [discoveryNotice, setDiscoveryNotice] = useState('');
+  const discoveryRequest = useRef<AbortController | null>(null);
+  useEffect(() => () => discoveryRequest.current?.abort(), []);
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState('');
   const [notice, setNotice] = useState('');
   const [tagEdits, setTagEdits] = useState<TagEdits>({});
-  const originals = useMemo(() => [...added, ...sampleCatalog], [added]);
+  const originals = useMemo(
+    () => [
+      ...added,
+      ...(showDemo
+        ? sampleCatalog.filter((i) => !findDuplicate(added, i))
+        : []),
+    ],
+    [added, showDemo],
+  );
   const catalog = useMemo(
     () =>
       originals.map((item) => ({
@@ -206,11 +225,40 @@ export default function Home() {
     }
     return () => lifecycle.abort();
   }, []);
+  async function findConnections() {
+    discoveryRequest.current?.abort();
+    const controller = new AbortController();
+    discoveryRequest.current = controller;
+    setDiscovering(true);
+    setDiscoveryNotice('');
+    const query = mode === 'based-on' ? vector(selected?.tags || []) : taste;
+    const tags = Object.keys(query)
+      .filter((t) => query[t] > 0)
+      .sort((a, b) => query[b] - query[a])
+      .slice(0, 3);
+    try {
+      const found = await discoverMedia(
+        category === 'All' ? [...categories] : [category],
+        tags,
+        controller.signal,
+      );
+      if (controller.signal.aborted) return;
+      setCandidates(found.items.filter((i) => !findDuplicate(catalog, i)));
+      setDiscoveryNotice(
+        `${found.items.length} catalog candidates fetched.${found.failures.length ? ' Unavailable: ' + found.failures.join(', ') + '. Retry later.' : ''} Only candidates sharing your tags appear below.`,
+      );
+    } catch {
+      if (!controller.signal.aborted)
+        setDiscoveryNotice('Discovery could not finish. Please retry.');
+    } finally {
+      if (!controller.signal.aborted) setDiscovering(false);
+    }
+  }
   const results = recommend(
-    catalog,
-    mode === 'based-on' ? vector(selected.tags) : taste,
+    [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))],
+    mode === 'based-on' ? vector(selected?.tags || []) : taste,
     category,
-    mode === 'based-on' ? [seed] : Object.keys(ratings),
+    mode === 'based-on' ? [selected?.id || seed] : Object.keys(ratings),
   );
   const visible = catalog.filter((i) =>
     (i.title + ' ' + i.creator + ' ' + i.type + ' ' + i.tags.join(' '))
@@ -249,7 +297,7 @@ export default function Home() {
           <aside className="library">
             <div className="section-heading">
               <h2>Your starting points</h2>
-              <span>{Object.keys(ratings).length} rated</span>
+              <span>{catalog.filter((i) => ratings[i.id]).length} rated</span>
             </div>
             <p className="muted">
               Add media from live catalogs, then rate your favorites. Your
@@ -349,9 +397,13 @@ export default function Home() {
             </div>
             <button
               className="demo-button"
-              onClick={() => setRatings({ hunger: 5, life: 5, arrival: 4 })}
+              onClick={() => {
+                setShowDemo((v) => !v);
+                setCandidates([]);
+              }}
             >
-              Try an example taste profile <ArrowUpRight size={16} />
+              {showDemo ? 'Hide demo titles' : 'Explore optional demo titles'}{' '}
+              <ArrowUpRight size={16} />
             </button>
           </aside>
           <section className="discovery">
@@ -413,7 +465,9 @@ export default function Home() {
                       className="seed-select"
                     >
                       <SelectValue>
-                        {selected.title} · {selected.type}
+                        {selected
+                          ? selected.title + ' · ' + selected.type
+                          : 'Add a title to begin'}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
@@ -427,6 +481,25 @@ export default function Home() {
                 </div>
               </TabsContent>
             </Tabs>
+            <button
+              className="add-media-button"
+              disabled={
+                discovering ||
+                !(mode === 'based-on'
+                  ? selected?.tags.length || 0
+                  : Object.values(taste).some((v) => v > 0))
+              }
+              onClick={findConnections}
+            >
+              {discovering
+                ? 'Searching catalogs…'
+                : 'Find more from live catalogs'}
+            </button>
+            {discoveryNotice && (
+              <p role="status" className="library-notice">
+                {discoveryNotice}
+              </p>
+            )}
             <div className="results-heading">
               <h2>
                 {mode === 'based-on'
@@ -464,14 +537,57 @@ export default function Home() {
                     <h3>{item.title}</h3>
 
                     <p className="creator">{item.creator}</p>
-                    {added.find((x) => x.id === item.id) && (
+                    {[...added, ...candidates].find(
+                      (x) => x.id === item.id,
+                    ) && (
                       <a
                         className="source-link"
-                        href={added.find((x) => x.id === item.id)!.sourceUrl}
+                        href={
+                          [...added, ...candidates].find(
+                            (x) => x.id === item.id,
+                          )!.sourceUrl
+                        }
                         target="_blank"
                         rel="noreferrer"
                       >
-                        Source: {added.find((x) => x.id === item.id)!.provider}
+                        Source:{' '}
+                        {
+                          [...added, ...candidates].find(
+                            (x) => x.id === item.id,
+                          )!.provider
+                        }
+                      </a>
+                    )}
+                    {candidates.some((x) => x.id === item.id) &&
+                      !findDuplicate(catalog, item) && (
+                        <button
+                          className="edit-tags"
+                          onClick={() => {
+                            try {
+                              addItem(
+                                candidates.find((x) => x.id === item.id)!,
+                              );
+                            } catch (e) {
+                              setDiscoveryNotice((e as Error).message);
+                            }
+                          }}
+                        >
+                          Save to my library
+                        </button>
+                      )}
+                    {[...added, ...candidates].find((x) => x.id === item.id)
+                      ?.imdbUrl && (
+                      <a
+                        className="source-link"
+                        href={
+                          [...added, ...candidates].find(
+                            (x) => x.id === item.id,
+                          )!.imdbUrl
+                        }
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        View on IMDb
                       </a>
                     )}
                     <p className="description">{item.description}</p>
@@ -484,11 +600,12 @@ export default function Home() {
               </div>
             )}
             <p className="data-note">
-              {added.length} catalog-verified additions + 25 demo titles. Added
-              titles use automatic keyword tags from catalog metadata; demo tags
-              are illustrative. Edit tags to correct automatic tags and create
-              your own connections. Similarity measures shared tags, not the
-              probability you will like a title.
+              {added.length} saved catalog titles.{' '}
+              {showDemo ? 'Demo titles are enabled.' : 'Demo titles are off.'}{' '}
+              Live discovery fetches a bounded set of candidates, then ranks
+              shared tags. Catalog keywords supply automatic tags. Edit tags to
+              correct automatic tags and create your own connections. Similarity
+              measures shared tags, not the probability you will like a title.
             </p>
           </section>
         </div>
@@ -517,6 +634,13 @@ export default function Home() {
         </section>
         <footer>
           <span>mosaic / CSCI 310 Junior Seminar</span>
+          {catalogApi && (
+            <span>
+              Data: <a href="https://www.themoviedb.org">TMDB</a> and{' '}
+              <a href="https://www.igdb.com">IGDB</a>. This product uses the
+              TMDB API but is not endorsed or certified by TMDB.
+            </span>
+          )}
           <span>
             Catalog data:{' '}
             <a
