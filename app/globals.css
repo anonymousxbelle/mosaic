@@ -819,6 +819,191 @@ footer a {
   margin: 10px 0;
 }
 
-.content-section { margin-bottom: 24px; padding: 16px; border: 1px solid #d8d5ce; border-radius: 12px; }
-.content-section button { display: inline-flex; margin: 0 16px 12px 0; }
-.content-section button[aria-pressed="true"] { font-weight: 700; text-decoration: underline; }
+.content-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #d8d5ce;
+  border-radius: 12px;
+}
+.content-section button {
+  display: inline-flex;
+  margin: 0 16px 12px 0;
+}
+.content-section button[aria-pressed='true'] {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Focused discovery, library and preference surfaces. */
+[hidden] {
+  display: none !important;
+}
+.focused-workspace {
+  display: block;
+}
+.focused-workspace:has(> [hidden]):not(:has(> :not([hidden]))) {
+  display: none;
+}
+.primary-nav,
+.shelf-tabs,
+.result-actions,
+.collection-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+.primary-nav button,
+.shelf-tabs button,
+.result-actions button,
+.collection-list button,
+.taste-collections button,
+.library-notice button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+}
+.primary-nav button[aria-current],
+.shelf-tabs button[aria-pressed='true'] {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.onboarding,
+.preferences-screen {
+  padding: 24px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+.onboarding h2 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+.onboarding ol {
+  padding-left: 22px;
+  margin-top: 16px;
+}
+.onboarding .add-media-button {
+  max-width: 320px;
+}
+.content-section {
+  padding: 12px 16px;
+}
+.content-section button {
+  width: auto;
+}
+.focused-workspace .library {
+  border: 0;
+}
+.focused-workspace .library-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-height: none;
+}
+.focused-workspace .results {
+  max-height: none;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.library-item h3,
+.library-creator,
+.creator,
+.type-label,
+.category-badge,
+.match,
+.connection small,
+.source-link {
+  font-size: 14px;
+}
+.media-mark {
+  overflow: hidden;
+}
+.media-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.result-card > .media-mark {
+  width: 76px;
+  height: 104px;
+  margin-bottom: 14px;
+}
+.result-actions {
+  margin-top: 14px;
+}
+.full-description {
+  font-size: 14px;
+  margin: 10px 0;
+}
+.full-description summary,
+.taste-collections summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 10px 0;
+}
+.full-description p {
+  margin-top: 10px;
+}
+.taste-collections {
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: white;
+}
+.taste-collections form {
+  margin-top: 14px;
+}
+.taste-collections input:not([type='checkbox']) {
+  display: block;
+  width: min(100%, 420px);
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.taste-collections fieldset {
+  max-height: 220px;
+  overflow: auto;
+  margin: 12px 0;
+}
+.taste-collections fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+.preferences-screen .tag-options button[aria-pressed='false'] {
+  opacity: 1;
+  text-decoration: none;
+}
+.preferences-screen .tag-options button[aria-pressed='true'] {
+  background: #eeeaff;
+  border-color: var(--primary);
+}
+.rating button {
+  min-width: 36px;
+  min-height: 44px;
+}
+@media (max-width: 700px) {
+  .focused-workspace .results,
+  .focused-workspace .library-list {
+    grid-template-columns: 1fr;
+  }
+  .onboarding,
+  .preferences-screen {
+    padding: 18px;
+  }
+  .primary-nav button {
+    flex: 1;
+  }
+}

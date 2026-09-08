@@ -26,10 +26,16 @@ import { genreChoices, genrePreferences, genreAllowed } from '@/lib/genres';
 import { catalog as sampleCatalog } from '@/lib/catalog';
 import { TagEditor } from '@/components/media/tag-editor';
 import { effectiveTags, type TagEdits } from '@/lib/tags';
+import { TasteCollections } from '@/components/media/taste-collections';
+import {
+  connectionEvidence,
+  recommendationEligible,
+} from '@/lib/discovery-feedback';
 import { Account } from '@/components/media/account';
 import { AddMedia } from '@/components/media/add-media';
 import {
   findDuplicate,
+  verifyMedia,
   discoverMedia,
   catalogApi,
   type CatalogMedia,
@@ -53,13 +59,34 @@ const icons = {
 };
 function MediaMark({ item }: { item: Media }) {
   const Icon = icons[item.type];
+  const [failed, setFailed] = useState(false);
   return (
     <div className={'media-mark ' + item.type.toLowerCase()}>
-      <Icon size={24} />
+      <>
+        {item.artworkUrl && !failed ? (
+          <img
+            src={item.artworkUrl}
+            alt=""
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            onError={() => setFailed(true)}
+          />
+        ) : (
+          <Icon size={24} />
+        )}
+      </>
     </div>
   );
 }
 export default function Home() {
+  const [view, setView] = useState('discover');
+  const [shelf, setShelf] = useState('all');
+  const [collection, setCollection] = useState('');
+  const [actionBusy, setActionBusy] = useState(false);
+  const [undo, setUndo] = useState<{
+    id: string;
+    previous?: CatalogMedia;
+  } | null>(null);
   const [adultSection, setAdultSection] = useState(false);
   const [added, setAdded] = useState<CatalogMedia[]>([]);
   const [genre, setGenre] = useState('fantasy');
@@ -91,7 +118,10 @@ export default function Home() {
       })),
     [originals, tagEdits],
   );
-  const sectionCatalog = useMemo(() => catalog.filter((i) => inContentSection(i, adultSection)), [catalog, adultSection]);
+  const sectionCatalog = useMemo(
+    () => catalog.filter((i) => inContentSection(i, adultSection)),
+    [catalog, adultSection],
+  );
   const knownTags = useMemo(
     () => [...new Set(sectionCatalog.flatMap((i) => i.tags))].sort(),
     [sectionCatalog],
@@ -103,8 +133,19 @@ export default function Home() {
   const [category, setCategory] = useState<Category | 'All'>('All');
   const [seed, setSeed] = useState('hunger');
   const [search, setSearch] = useState('');
-  const taste = useMemo(() => profile(sectionCatalog, ratings), [ratings, sectionCatalog]);
-  const selected = sectionCatalog.find((i) => i.id === seed) || sectionCatalog[0];
+  const taste = useMemo(
+    () =>
+      profile(
+        sectionCatalog.filter((i) => i.libraryState !== 'dismissed'),
+        ratings,
+      ),
+    [ratings, sectionCatalog],
+  );
+  const selected =
+    [
+      ...sectionCatalog,
+      ...candidates.filter((i) => inContentSection(i, adultSection)),
+    ].find((i) => i.id === seed) || sectionCatalog[0];
   useEffect(() => {
     try {
       const saved = restoreLibrary(
@@ -143,6 +184,7 @@ export default function Home() {
     }
   }, [added, ratings, tagEdits, avoided, ready]);
   function addItem(item: CatalogMedia) {
+    setUndo(null);
     if (added.length >= 200)
       throw new Error(
         'Your library has reached 200 added titles. Remove one before adding another.',
@@ -155,7 +197,54 @@ export default function Home() {
       item.title + ' added. Rate it below to update your taste profile.',
     );
   }
+  function addFavorite(item: CatalogMedia) {
+    addItem({ ...item, libraryState: 'experienced' });
+    setRatings((old) => ({ ...old, [item.id]: 5 }));
+    setNotice(
+      item.title +
+        ' added as a favorite. You can change its rating in My Library.',
+    );
+  }
+  async function feedback(
+    item: Media,
+    state: 'later' | 'experienced' | 'dismissed',
+  ) {
+    if (actionBusy) return;
+    setActionBusy(true);
+    try {
+      const previous = added.find((i) => i.id === item.id);
+      const candidate = previous || candidates.find((i) => i.id === item.id);
+      if (!candidate)
+        throw new Error(
+          'This is a demo title. Add the real catalog record to save feedback.',
+        );
+      if (!previous && added.length >= 200)
+        throw new Error('Your library is full. Remove a title first.');
+      const verified = previous || (await verifyMedia(candidate));
+      if (!inContentSection(verified, adultSection))
+        throw new Error(
+          'Its content rating has changed. Search in the appropriate collection.',
+        );
+      setAdded((old) => [
+        { ...verified, libraryState: state },
+        ...old.filter((i) => i.id !== item.id),
+      ]);
+      setUndo({ id: item.id, previous });
+      setNotice(
+        state === 'later'
+          ? 'Saved for later in My Library.'
+          : state === 'experienced'
+            ? 'Marked as already experienced. Rate it in My Library to refine your taste.'
+            : 'Hidden from recommendations. No genre has been blocked.',
+      );
+    } catch (error) {
+      setNotice((error as Error).message);
+    } finally {
+      setActionBusy(false);
+    }
+  }
   function removeItem(id: string) {
+    setUndo(null);
     setTagEdits((old) => {
       const next = { ...old };
       delete next[id];
@@ -241,6 +330,12 @@ export default function Home() {
     return () => lifecycle.abort();
   }, []);
   async function findConnections() {
+    if (mode === 'collection') {
+      setDiscoveryNotice(
+        'Your personal collection matches saved titles below. Its private name is not sent to external catalogs.',
+      );
+      return;
+    }
     discoveryRequest.current?.abort();
     const controller = new AbortController();
     discoveryRequest.current = controller;
@@ -253,7 +348,11 @@ export default function Home() {
           ? vector(selected?.tags || [])
           : taste;
     const tags = Object.keys(query)
-      .filter((t) => query[t] > 0)
+      .filter(
+        (t) =>
+          (query[t] > 0 && originals.some((i) => i.tags.includes(t))) ||
+          (mode === 'genres' && t === genre),
+      )
       .sort((a, b) => query[b] - query[a])
       .slice(0, 3);
     try {
@@ -278,15 +377,26 @@ export default function Home() {
   const preferences = genrePreferences(sectionCatalog, ratings);
   const results = recommend(
     [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))],
-    mode === 'genres'
-      ? vector([genre])
-      : mode === 'based-on'
-        ? vector(selected?.tags || [])
-        : taste,
+    mode === 'collection'
+      ? vector([collection])
+      : mode === 'genres'
+        ? vector([genre])
+        : mode === 'based-on'
+          ? vector(selected?.tags || [])
+          : taste,
     category,
-    mode === 'based-on' ? [selected?.id || seed] : Object.keys(ratings),
+    mode === 'collection'
+      ? []
+      : mode === 'based-on'
+        ? [selected?.id || seed]
+        : Object.keys(ratings),
   );
   const filteredResults = results
+    .filter((i) =>
+      mode === 'collection'
+        ? i.libraryState !== 'dismissed'
+        : recommendationEligible(i, ratings),
+    )
     .filter((i) => inContentSection(i, adultSection))
     .filter((i) => genreAllowed(i, preferences.blocked, avoided))
     .map((i) => ({
@@ -302,11 +412,18 @@ export default function Home() {
           )),
     }))
     .sort((a, b) => b.score - a.score);
-  const visible = sectionCatalog.filter((i) =>
-    (i.title + ' ' + i.creator + ' ' + i.type + ' ' + i.tags.join(' '))
-      .toLowerCase()
-      .includes(search.toLowerCase()),
-  );
+  const visible = sectionCatalog
+    .filter(
+      (i) =>
+        shelf === 'all' ||
+        i.libraryState === shelf ||
+        (shelf === 'experienced' && !!ratings[i.id]),
+    )
+    .filter((i) =>
+      (i.title + ' ' + i.creator + ' ' + i.type + ' ' + i.tags.join(' '))
+        .toLowerCase()
+        .includes(search.toLowerCase()),
+    );
   return (
     <div className="app-shell">
       <header className="topbar">
@@ -320,71 +437,182 @@ export default function Home() {
       <main>
         <div className="page-intro">
           <div>
-            <p className="eyebrow">DISCOVER YOUR NEXT CONNECTION</p>
-            <h1>
-              Your taste goes beyond
-              <br />
-              <span>one kind of story.</span>
-            </h1>
+            <p className="eyebrow">CROSS-MEDIA DISCOVERY</p>
+            <h1>Find your next connection.</h1>
           </div>
-          <p>
-            Start with something you love.
-            <br />
-            Find a book, album, game, film, or show
-            <br />
-            that shares what draws you in.
+          <p>Start with your favorites. Follow what connects them.</p>
+        </div>
+        <nav className="primary-nav" aria-label="Main navigation">
+          {[
+            ['discover', 'Discover'],
+            ['library', 'My Library'],
+            ['preferences', 'Preferences'],
+          ].map(([id, label]) => (
+            <button
+              key={id}
+              aria-current={view === id ? 'page' : undefined}
+              onClick={() => setView(id)}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+        {notice && (
+          <div className="library-notice" role="status">
+            {notice}{' '}
+            {undo && (
+              <button
+                disabled={actionBusy}
+                onClick={() => {
+                  setAdded((old) =>
+                    undo.previous
+                      ? old.map((i) => (i.id === undo.id ? undo.previous! : i))
+                      : old.filter((i) => i.id !== undo.id),
+                  );
+                  setUndo(null);
+                  setNotice('Feedback undone.');
+                }}
+              >
+                Undo last feedback
+              </button>
+            )}
+          </div>
+        )}
+        {storageError && (
+          <p className="form-error" role="alert">
+            {storageError}
+          </p>
+        )}
+        {view === 'discover' &&
+          sectionCatalog.filter(
+            (i) => (ratings[i.id] || 0) >= 3 && i.libraryState !== 'dismissed',
+          ).length < 3 && (
+            <section className="onboarding">
+              <p className="eyebrow">MAKE THIS YOURS · NO ACCOUNT NEEDED</p>
+              <h2>Start with 3–5 favorites.</h2>
+              <p>
+                Pick books, music, movies, shows or games you already love. A
+                favorite starts at 5 stars; change it anytime in My Library.
+              </p>
+              <ol>
+                <li>
+                  <strong>
+                    {
+                      sectionCatalog.filter(
+                        (i) =>
+                          (ratings[i.id] || 0) >= 3 &&
+                          i.libraryState !== 'dismissed',
+                      ).length
+                    }{' '}
+                    of 3 favorites added
+                  </strong>
+                </li>
+                <li>Optionally choose genres to avoid in Preferences.</li>
+                <li>
+                  Show discoveries when you’re ready—even one favorite can get
+                  you started.
+                </li>
+              </ol>
+              <AddMedia
+                key={'favorite-' + adultSection}
+                favorite
+                items={catalog}
+                adult={adultSection}
+                onAdd={addFavorite}
+              />
+              <button
+                className="edit-tags"
+                onClick={() => setView('preferences')}
+              >
+                Choose preferences (optional)
+              </button>
+            </section>
+          )}
+        <div
+          className="content-section"
+          role="group"
+          aria-label="Content section"
+        >
+          <button
+            className="demo-button"
+            aria-pressed={!adultSection}
+            disabled={actionBusy}
+            onClick={() => {
+              discoveryRequest.current?.abort();
+              setDiscovering(false);
+              setCandidates([]);
+              setDiscoveryNotice('');
+              setNotice('');
+              setAdultSection(false);
+            }}
+          >
+            Main collection
+          </button>
+          <button
+            className="demo-button"
+            aria-pressed={adultSection}
+            disabled={actionBusy}
+            onClick={() => {
+              discoveryRequest.current?.abort();
+              setDiscovering(false);
+              setCandidates([]);
+              setDiscoveryNotice('');
+              setNotice('');
+              setAdultSection(true);
+            }}
+          >
+            18+ · Enter mature collection
+          </button>
+          <p className="muted">
+            {adultSection
+              ? '18+ movies, TV and books. Includes explicit flags and mature ratings such as R, NC-17 and TV-MA. This is a browsing preference, not age verification.'
+              : 'Flagged mature movies, TV and books are kept in 18+. Missing ratings are labeled unknown; this collection is not a child-safe filter.'}
           </p>
         </div>
-        <div className="content-section" role="group" aria-label="Content section">
-          <button className="demo-button" aria-pressed={!adultSection} onClick={() => { discoveryRequest.current?.abort(); setDiscovering(false); setCandidates([]); setDiscoveryNotice(''); setNotice(''); setAdultSection(false); }}>Main collection</button>
-          <button className="demo-button" aria-pressed={adultSection} onClick={() => { discoveryRequest.current?.abort(); setDiscovering(false); setCandidates([]); setDiscoveryNotice(''); setNotice(''); setAdultSection(true); }}>18+ · Enter mature collection</button>
-          <p className="muted">{adultSection ? '18+ movies, TV and books. Includes explicit flags and mature ratings such as R, NC-17 and TV-MA. This is a browsing preference, not age verification.' : 'Flagged mature movies, TV and books are kept in 18+. Missing ratings are labeled unknown; this collection is not a child-safe filter.'}</p>
-        </div>
-        <div className="workspace">
-          <aside className="library">
+        <div className="workspace focused-workspace">
+          <aside className="library" hidden={view !== 'library'}>
             <div className="section-heading">
-              <h2>Your starting points</h2>
+              <h2>My Library</h2>
               <span>{catalog.filter((i) => ratings[i.id]).length} rated</span>
             </div>
             <p className="muted">
               Add media from live catalogs, then rate your favorites. Your
               library and ratings are saved in this browser.
             </p>
-            <Account
-              library={{ version: 1, added, ratings, tagEdits, avoided }}
-              onLoad={(value) => {
-                const restored = restoreLibrary(
-                  JSON.stringify(value),
-                  sampleCatalog,
-                );
-                const merged = [...added];
-                for (const item of restored.added) {
-                  if (merged.length < 200 && !findDuplicate(merged, item))
-                    merged.push(item);
-                }
-                setAdded(merged);
-                setRatings((old) => ({ ...restored.ratings, ...old }));
-                setTagEdits((old) => ({ ...restored.tagEdits, ...old }));
-                const raw = value as { avoided?: unknown };
-                if (Array.isArray(raw?.avoided))
-                  setAvoided((old) =>
-                    [...new Set([...old, ...(raw.avoided as string[])])].filter(
-                      (g) => genreChoices.includes(g),
-                    ),
-                  );
+            <AddMedia
+              key={String(adultSection)}
+              items={catalog}
+              adult={adultSection}
+              onAdd={addItem}
+            />
+            <div className="shelf-tabs" role="group" aria-label="Library shelf">
+              {[
+                ['all', 'All titles'],
+                ['later', 'Saved for later'],
+                ['experienced', 'Already experienced'],
+                ['dismissed', 'Not interested'],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  aria-pressed={shelf === id}
+                  onClick={() => setShelf(id)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <TasteCollections
+              items={sectionCatalog.filter((i) =>
+                added.some((x) => x.id === i.id),
+              )}
+              edits={tagEdits}
+              onChange={setTagEdits}
+              onExplore={(tag) => {
+                setCollection(tag);
+                setMode('collection');
+                setView('discover');
               }}
             />
-            <AddMedia key={String(adultSection)} items={catalog} adult={adultSection} onAdd={addItem} />
-            {notice && (
-              <p className="library-notice" role="status">
-                {notice}
-              </p>
-            )}
-            {storageError && (
-              <p className="form-error" role="alert">
-                {storageError}
-              </p>
-            )}
             <label className="search">
               <Search size={18} />
               <input
@@ -403,6 +631,44 @@ export default function Home() {
                     <p className="muted">{contentLabel(item)}</p>
                     <h3>{item.title}</h3>
                     <p className="library-creator">{item.creator}</p>
+                    {item.libraryState && (
+                      <p className="muted">
+                        {item.libraryState === 'later'
+                          ? 'Saved for later'
+                          : item.libraryState === 'experienced'
+                            ? 'Already experienced'
+                            : 'Not interested'}
+                      </p>
+                    )}
+                    {item.libraryState && (
+                      <button
+                        className="edit-tags"
+                        onClick={() => {
+                          setAdded((old) =>
+                            old.map((i) =>
+                              i.id === item.id
+                                ? { ...i, libraryState: undefined }
+                                : i,
+                            ),
+                          );
+                          setNotice(
+                            'Shelf status cleared. Existing ratings still apply.',
+                          );
+                        }}
+                      >
+                        Clear shelf status
+                      </button>
+                    )}
+                    <button
+                      className="edit-tags"
+                      onClick={() => {
+                        setSeed(item.id);
+                        setMode('based-on');
+                        setView('discover');
+                      }}
+                    >
+                      More like this
+                    </button>
                     {added.some((x) => x.id === item.id) && (
                       <button
                         className="remove-added"
@@ -412,11 +678,26 @@ export default function Home() {
                         Remove title
                       </button>
                     )}
-                    {added.some((x) => x.id === item.id) && ['Book', 'Movie', 'TV'].includes(item.type) && !item.adult && (
-                      <button className="edit-tags" onClick={() => setAdded((old) => old.map((x) => x.id === item.id ? { ...x, adultMarked: !x.adultMarked } : x))}>
-                        {item.adultMarked ? 'Undo my 18+ mark' : 'Mark as 18+'}
-                      </button>
-                    )}
+                    {added.some((x) => x.id === item.id) &&
+                      ['Book', 'Movie', 'TV'].includes(item.type) &&
+                      !item.adult && (
+                        <button
+                          className="edit-tags"
+                          onClick={() =>
+                            setAdded((old) =>
+                              old.map((x) =>
+                                x.id === item.id
+                                  ? { ...x, adultMarked: !x.adultMarked }
+                                  : x,
+                              ),
+                            )
+                          }
+                        >
+                          {item.adultMarked
+                            ? 'Undo my 18+ mark'
+                            : 'Mark as 18+'}
+                        </button>
+                      )}
                     <TagEditor
                       item={originals.find((x) => x.id === item.id)!}
                       edit={tagEdits[item.id] || { added: [], hidden: [] }}
@@ -469,7 +750,10 @@ export default function Home() {
                 </article>
               ))}
               {!visible.length && (
-                <p className="muted">No titles found. Try another name.</p>
+                <p className="muted">
+                  No titles on this shelf yet. Add media or save a discovery, or
+                  try All titles.
+                </p>
               )}
             </div>
             <button
@@ -483,10 +767,13 @@ export default function Home() {
               <ArrowUpRight size={16} />
             </button>
           </aside>
-          <section className="discovery">
+          <section className="discovery" hidden={view !== 'discover'}>
             <Tabs value={mode} onValueChange={(v) => setMode(String(v))}>
               <div className="discovery-toolbar">
                 <TabsList className="mode-tabs">
+                  {collection && (
+                    <TabsTrigger value="collection">My collection</TabsTrigger>
+                  )}
                   <TabsTrigger value="for-you">
                     <Sparkles size={16} />
                     For You
@@ -518,6 +805,15 @@ export default function Home() {
                   </SelectContent>
                 </Select>
               </div>
+              <TabsContent value="collection">
+                <div className="context">
+                  <h2>{collection.replace(/-/g, ' ')}</h2>
+                  <p>
+                    Connections sharing your personal tag. Add it to more titles
+                    in My Library to build this collection.
+                  </p>
+                </div>
+              </TabsContent>
               <TabsContent value="for-you">
                 <div className="context">
                   <p className="eyebrow">THE BIG PICTURE</p>
@@ -589,7 +885,7 @@ export default function Home() {
               className="add-media-button"
               disabled={
                 discovering ||
-                !(mode === 'genres'
+                !(mode === 'genres' || mode === 'collection'
                   ? true
                   : mode === 'based-on'
                     ? selected?.tags.length || 0
@@ -599,40 +895,10 @@ export default function Home() {
             >
               {discovering
                 ? 'Searching catalogs…'
-                : 'Find more from live catalogs'}
+                : mode === 'collection'
+                  ? 'Explore saved collection'
+                  : 'Show discoveries'}
             </button>
-            <details className="genre-preferences">
-              <summary>Genre preferences</summary>
-              <p>
-                Two ratings of 1–2 stars in a genre, with no positive ratings in
-                that genre and media type, hide further matches. One negative
-                rating lowers their rank. You can also avoid genres explicitly:
-              </p>
-              <div className="tag-options">
-                {genreChoices.map((g) => (
-                  <button
-                    key={g}
-                    aria-pressed={avoided.includes(g)}
-                    onClick={() =>
-                      setAvoided((old) =>
-                        old.includes(g)
-                          ? old.filter((x) => x !== g)
-                          : [...old, g],
-                      )
-                    }
-                  >
-                    {avoided.includes(g) ? 'Avoiding: ' : 'Avoid '}
-                    {g}
-                  </button>
-                ))}
-              </div>
-              {preferences.blocked.length > 0 && (
-                <p>
-                  Hidden from ratings: {preferences.blocked.join(', ')}. Change
-                  the underlying ratings to revise these preferences.
-                </p>
-              )}
-            </details>
             {discoveryNotice && (
               <p role="status" className="library-notice">
                 {discoveryNotice}
@@ -641,8 +907,12 @@ export default function Home() {
             <div className="results-heading">
               <h2>
                 {mode === 'based-on'
-                  ? (adultSection ? '18+ connections' : 'Connected discoveries')
-                  : (adultSection ? '18+ discoveries' : 'Your discoveries')}
+                  ? adultSection
+                    ? '18+ connections'
+                    : 'Connected discoveries'
+                  : adultSection
+                    ? '18+ discoveries'
+                    : 'Your discoveries'}
               </h2>
               <span aria-live="polite">
                 {filteredResults.length} connections
@@ -651,11 +921,30 @@ export default function Home() {
             {!filteredResults.length ? (
               <div className="empty-state">
                 <Sparkles size={32} />
-                <h3>Every discovery starts somewhere.</h3>
+                <h3>
+                  {discovering
+                    ? 'Looking for connections…'
+                    : 'Let’s find another way in.'}
+                </h3>
                 <p>
-                  Give a title 3–5 stars, try another category, or explore Based
-                  On.
+                  Add a favorite, try a broader genre, or adjust your
+                  preferences. Some catalogs may have limited matching metadata.
                 </p>
+                <button
+                  className="edit-tags"
+                  onClick={() => {
+                    setCategory('All');
+                    setMode('genres');
+                  }}
+                >
+                  Explore a genre across all media
+                </button>
+                <button
+                  className="edit-tags"
+                  onClick={() => setView('library')}
+                >
+                  Add or rate titles in My Library
+                </button>
               </div>
             ) : (
               <div className="results">
@@ -671,10 +960,12 @@ export default function Home() {
                         {item.type}
                       </span>
                       <span className="match">
-                        {Math.round(item.score * 100)}% match
+                        {item.reasons.length} shared{' '}
+                        {item.reasons.length === 1 ? 'tag' : 'tags'}
                       </span>
                     </div>
                     <p className="muted">{contentLabel(item)}</p>
+                    <MediaMark item={item} />
                     <h3>{item.title}</h3>
 
                     <p className="creator">{item.creator}</p>
@@ -699,23 +990,41 @@ export default function Home() {
                         }
                       </a>
                     )}
-                    {candidates.some((x) => x.id === item.id) &&
-                      !findDuplicate(catalog, item) && (
-                        <button
-                          className="edit-tags"
-                          onClick={() => {
-                            try {
-                              addItem(
-                                candidates.find((x) => x.id === item.id)!,
-                              );
-                            } catch (e) {
-                              setDiscoveryNotice((e as Error).message);
-                            }
-                          }}
-                        >
-                          Save to my library
-                        </button>
+                    <div className="result-actions">
+                      {[...added, ...candidates].some(
+                        (x) => x.id === item.id,
+                      ) && (
+                        <>
+                          <button
+                            disabled={actionBusy}
+                            onClick={() => feedback(item, 'later')}
+                          >
+                            Save for later
+                          </button>
+                          <button
+                            disabled={actionBusy}
+                            onClick={() => feedback(item, 'experienced')}
+                          >
+                            Already experienced
+                          </button>
+                          <button
+                            disabled={actionBusy}
+                            onClick={() => feedback(item, 'dismissed')}
+                          >
+                            Not interested
+                          </button>
+                        </>
                       )}
+                      <button
+                        disabled={actionBusy}
+                        onClick={() => {
+                          setSeed(item.id);
+                          setMode('based-on');
+                        }}
+                      >
+                        More like this
+                      </button>
+                    </div>
                     {[...added, ...candidates].find((x) => x.id === item.id)
                       ?.imdbUrl && (
                       <a
@@ -738,9 +1047,42 @@ export default function Home() {
                             .replace(/\s+\S*$/, '') + '…'
                         : item.description}
                     </p>
+                    {item.description.length > 420 && (
+                      <details className="full-description">
+                        <summary>Read full description</summary>
+                        <p>{item.description}</p>
+                      </details>
+                    )}
                     <div className="connection">
                       <span>THE CONNECTION</span>
-                      <p>{item.reasons.join(' · ')}</p>
+                      <p>Shared tags: {item.reasons.join(' · ')}</p>
+                      {connectionEvidence(
+                        item,
+                        mode === 'based-on'
+                          ? selected
+                            ? [selected]
+                            : []
+                          : mode === 'collection'
+                            ? sectionCatalog.filter(
+                                (i) =>
+                                  i.tags.includes(collection) &&
+                                  i.libraryState !== 'dismissed',
+                              )
+                            : sectionCatalog.filter(
+                                (i) =>
+                                  (ratings[i.id] || 0) >= 3 &&
+                                  i.libraryState !== 'dismissed',
+                              ),
+                      ).map((e) => (
+                        <p key={e.title}>
+                          Connected to “{e.title}” through{' '}
+                          {e.tags.slice(0, 3).join(', ')}.
+                        </p>
+                      ))}
+                      <small>
+                        Based on catalog keyword tags and your edits, not a
+                        prediction of how much you’ll like it.
+                      </small>
                     </div>
                   </article>
                 ))}
@@ -756,7 +1098,66 @@ export default function Home() {
             </p>
           </section>
         </div>
-        <section className="taste-section">
+        <section className="preferences-screen" hidden={view !== 'preferences'}>
+          <h2>Your preferences</h2>{' '}
+          <Account
+            library={{ version: 1, added, ratings, tagEdits, avoided }}
+            onLoad={(value) => {
+              const restored = restoreLibrary(
+                JSON.stringify(value),
+                sampleCatalog,
+              );
+              const merged = [...added];
+              for (const item of restored.added) {
+                if (merged.length < 200 && !findDuplicate(merged, item))
+                  merged.push(item);
+              }
+              setAdded(merged);
+              setRatings((old) => ({ ...restored.ratings, ...old }));
+              setTagEdits((old) => ({ ...restored.tagEdits, ...old }));
+              const raw = value as { avoided?: unknown };
+              if (Array.isArray(raw?.avoided))
+                setAvoided((old) =>
+                  [...new Set([...old, ...(raw.avoided as string[])])].filter(
+                    (g) => genreChoices.includes(g),
+                  ),
+                );
+            }}
+          />
+          <details open className="genre-preferences">
+            <summary>Genre preferences</summary>
+            <p>
+              Low ratings gently lower a genre’s rank; they never hide a whole
+              genre. Only the genres you explicitly avoid below are excluded
+              when metadata is available.
+            </p>
+            <div className="tag-options">
+              {genreChoices.map((g) => (
+                <button
+                  key={g}
+                  aria-pressed={avoided.includes(g)}
+                  onClick={() =>
+                    setAvoided((old) =>
+                      old.includes(g)
+                        ? old.filter((x) => x !== g)
+                        : [...old, g],
+                    )
+                  }
+                >
+                  {avoided.includes(g) ? 'Avoiding: ' : 'Avoid '}
+                  {g}
+                </button>
+              ))}
+            </div>
+            {preferences.blocked.length > 0 && (
+              <p>
+                Hidden from ratings: {preferences.blocked.join(', ')}. Change
+                the underlying ratings to revise these preferences.
+              </p>
+            )}
+          </details>
+        </section>
+        <section className="taste-section" hidden={view !== 'preferences'}>
           <div>
             <p className="eyebrow">YOUR TASTE, TAKING SHAPE</p>
             <h2>The threads that connect your favorites.</h2>
