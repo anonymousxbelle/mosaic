@@ -628,18 +628,12 @@ export async function discoverMedia(
   for (const type of types) {
     signal?.throwIfAborted();
     try {
-      const found =
-        catalogApi && ['Movie', 'TV', 'Game'].includes(type)
-          ? await gateway(
-              'discover',
-              { type, tags: tags.slice(0, 3).join(','), adult: String(adult) },
-              signal,
-            )
-          : await searchMedia(
-              type,
-              tags[0]?.replace(/-/g, ' ') || 'adventure',
-              signal,
-            );
+      if (type === 'Music') continue;
+      if (!catalogApi || !['Movie', 'TV', 'Game'].includes(type)) {
+        failures.push(type);
+        continue;
+      }
+      const found = await gateway('discover', {type, tags: tags.slice(0, 3).join(','), adult: String(adult)}, signal);
       for (const item of found)
         if (!findDuplicate(items, item)) items.push(item);
     } catch (e) {

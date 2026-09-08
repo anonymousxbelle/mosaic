@@ -1,4 +1,5 @@
 export const categories = ['Book', 'Music', 'Game', 'Movie', 'TV'] as const;
+export const discoveryCategories = ['Book', 'Game', 'Movie', 'TV'] as const;
 export type Category = (typeof categories)[number];
 export type Media = {
   id: string;
