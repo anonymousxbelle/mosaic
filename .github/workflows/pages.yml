@@ -21,6 +21,10 @@ jobs:
       - run: npm test
       - run: npm run typecheck
       - run: npm run build:pages
+        env:
+          NEXT_PUBLIC_CATALOG_API: ${{ vars.CATALOG_API_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/client/mosaic
