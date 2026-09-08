@@ -99,10 +99,20 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
       : names(d.created_by).join(', ');
   const keywords = names(d.keywords?.keywords || d.keywords?.results);
   const imdb = d.external_ids?.imdb_id || d.imdb_id;
-  const certifications: string[] = type === 'Movie'
-    ? (d.release_dates?.results || []).filter((r: Data) => ['US', 'GB'].includes(r.iso_3166_1)).flatMap((r: Data) => (r.release_dates || []).map((v: Data) => plainText(v.certification)))
-    : (d.content_ratings?.results || []).filter((r: Data) => ['US', 'GB'].includes(r.iso_3166_1)).map((r: Data) => plainText(r.rating));
-  const rating = certifications.find(matureRating) || certifications.find(Boolean);
+  const certifications: string[] =
+    type === 'Movie'
+      ? (d.release_dates?.results || [])
+          .filter((r: Data) => ['US', 'GB'].includes(r.iso_3166_1))
+          .flatMap((r: Data) =>
+            (r.release_dates || []).map((v: Data) =>
+              plainText(v.certification),
+            ),
+          )
+      : (d.content_ratings?.results || [])
+          .filter((r: Data) => ['US', 'GB'].includes(r.iso_3166_1))
+          .map((r: Data) => plainText(r.rating));
+  const rating =
+    certifications.find(matureRating) || certifications.find(Boolean);
 
   return {
     id: `tmdb:${type}:${d.id}`,
@@ -115,6 +125,11 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
     genres: normalizeGenres(names(d.genres)),
     adult: d.adult === true || certifications.some(matureRating),
     contentRating: rating || (d.adult === true ? 'Adult flag' : undefined),
+    artworkUrl:
+      typeof d.poster_path === 'string' &&
+      /^\/[a-zA-Z0-9]+\.(jpg|png)$/.test(d.poster_path)
+        ? 'https://image.tmdb.org/t/p/w342' + d.poster_path
+        : undefined,
     provider: 'TMDB',
     sourceUrl: `https://www.themoviedb.org/${type === 'Movie' ? 'movie' : 'tv'}/${d.id}`,
     imdbUrl:
@@ -228,7 +243,13 @@ export default {
       const cacheKey =
         u.pathname +
         '?' +
-        new URLSearchParams({ type: type!, q, id, tags: tagText, adult: String(adult) });
+        new URLSearchParams({
+          type: type!,
+          q,
+          id,
+          tags: tagText,
+          adult: String(adult),
+        });
       const hit = responseCache.get(cacheKey);
       if (u.pathname !== '/verify' && hit && hit.expires > Date.now())
         return reply({ items: hit.items });
