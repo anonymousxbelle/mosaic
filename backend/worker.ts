@@ -1,3 +1,4 @@
+import { matureRating } from '../lib/content-rating.ts';
 import { normalizeGenres } from '../lib/genres.ts';
 import { extractTags, plainText } from '../lib/media-api.ts';
 type Env = {
@@ -98,6 +99,11 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
       : names(d.created_by).join(', ');
   const keywords = names(d.keywords?.keywords || d.keywords?.results);
   const imdb = d.external_ids?.imdb_id || d.imdb_id;
+  const certifications: string[] = type === 'Movie'
+    ? (d.release_dates?.results || []).filter((r: Data) => ['US', 'GB'].includes(r.iso_3166_1)).flatMap((r: Data) => (r.release_dates || []).map((v: Data) => plainText(v.certification)))
+    : (d.content_ratings?.results || []).filter((r: Data) => ['US', 'GB'].includes(r.iso_3166_1)).map((r: Data) => plainText(r.rating));
+  const rating = certifications.find(matureRating) || certifications.find(Boolean);
+
   return {
     id: `tmdb:${type}:${d.id}`,
     externalId: String(d.id),
@@ -107,6 +113,8 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
     description: description || 'No description supplied by this catalog.',
     tags: extractTags(description, [...names(d.genres), ...keywords]),
     genres: normalizeGenres(names(d.genres)),
+    adult: d.adult === true || certifications.some(matureRating),
+    contentRating: rating || (d.adult === true ? 'Adult flag' : undefined),
     provider: 'TMDB',
     sourceUrl: `https://www.themoviedb.org/${type === 'Movie' ? 'movie' : 'tv'}/${d.id}`,
     imdbUrl:
@@ -198,6 +206,7 @@ export default {
       const type = u.searchParams.get('type');
       if (!['Movie', 'TV', 'Game'].includes(type || ''))
         throw new ApiError(400, 'Choose Movie, TV or Game.');
+      const adult = u.searchParams.get('adult') === 'true';
       const q = (u.searchParams.get('q') || '').trim();
       const id = u.searchParams.get('id') || '';
       const tagText = (u.searchParams.get('tags') || '').slice(0, 100);
@@ -219,7 +228,7 @@ export default {
       const cacheKey =
         u.pathname +
         '?' +
-        new URLSearchParams({ type: type!, q, id, tags: tagText });
+        new URLSearchParams({ type: type!, q, id, tags: tagText, adult: String(adult) });
       const hit = responseCache.get(cacheKey);
       if (u.pathname !== '/verify' && hit && hit.expires > Date.now())
         return reply({ items: hit.items });
@@ -260,7 +269,7 @@ export default {
         const detail = async (id: number | string) =>
           tmdbRecord(
             await tmdb(
-              `${kind}/${id}?append_to_response=keywords,credits,external_ids`,
+              `${kind}/${id}?append_to_response=keywords,credits,external_ids,${kind === 'movie' ? 'release_dates' : 'content_ratings'}`,
               env,
             ),
             type as 'Movie' | 'TV',
@@ -275,8 +284,8 @@ export default {
           }
           const path =
             u.pathname === '/search'
-              ? `search/${kind}?${new URLSearchParams({ query: q, include_adult: 'false' })}`
-              : `discover/${kind}?include_adult=false&sort_by=popularity.desc&with_genres=${genreIds.join('|')}`;
+              ? `search/${kind}?${new URLSearchParams({ query: q, include_adult: String(adult) })}`
+              : `discover/${kind}?include_adult=${adult}&sort_by=popularity.desc&with_genres=${genreIds.join('|')}`;
           const data = await tmdb(path, env);
           if (!Array.isArray(data.results))
             throw new ApiError(502, 'Invalid film/TV catalog response.');
