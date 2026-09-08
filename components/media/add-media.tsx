@@ -35,10 +35,12 @@ import {
 export function AddMedia({
   items,
   adult = false,
+  favorite = false,
   onAdd,
 }: {
   items: Media[];
   adult?: boolean;
+  favorite?: boolean;
   onAdd: (item: CatalogMedia) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -74,7 +76,12 @@ export function AddMedia({
       lastSearch.current = Date.now();
       try {
         const found = await searchMedia(type, query, controller.signal, adult);
-        if (generation.current === current) setMatches(found.filter((item) => inContentSection(findDuplicate(items, item) || item, adult)));
+        if (generation.current === current)
+          setMatches(
+            found.filter((item) =>
+              inContentSection(findDuplicate(items, item) || item, adult),
+            ),
+          );
       } catch (e) {
         if (!controller.signal.aborted && generation.current === current)
           setError(
@@ -111,7 +118,10 @@ export function AddMedia({
         throw new Error(
           'This title is already in your library. Find it in Your starting points to rate it.',
         );
-      if (!inContentSection(verified, adult)) throw new Error('This title belongs in the other content section. Switch sections and search again.');
+      if (!inContentSection(verified, adult))
+        throw new Error(
+          'This title belongs in the other content section. Switch sections and search again.',
+        );
       onAdd(verified);
       setOpen(false);
       setQuery('');
@@ -138,11 +148,15 @@ export function AddMedia({
     >
       <DialogTrigger className="add-media-button">
         <Plus size={17} />
-        Add media
+        {favorite ? 'Add a favorite' : 'Add media'}
       </DialogTrigger>
       <DialogContent className="add-media-dialog">
         <DialogTitle className="add-title">Add something you love</DialogTitle>
-        <p>{adult ? '18+ catalog matches only.' : 'Flagged 18+ titles are hidden. Unrated titles may still contain mature content.'}</p>
+        <p>
+          {adult
+            ? '18+ catalog matches only.'
+            : 'Flagged 18+ titles are hidden. Unrated titles may still contain mature content.'}
+        </p>
         <DialogDescription>
           Search a live catalog and select the correct title. Exact title
           matches rank first; available rating counts break ties. We check the
@@ -316,7 +330,9 @@ export function AddMedia({
           ) : (
             <>
               <Plus size={17} />
-              Verify and add to library
+              {favorite
+                ? 'Add as a favorite · 5 stars'
+                : 'Verify and add to library'}
             </>
           )}
         </button>
