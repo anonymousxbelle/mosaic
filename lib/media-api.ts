@@ -1,3 +1,5 @@
+import { normalizeGenres, genreChoices } from './genres.ts';
+import { bookSynopsis, rankSearch } from './catalog-text.ts';
 import type { Category, Media } from './recommendations';
 export type Provider =
   | 'Apple catalog'
@@ -10,6 +12,7 @@ export type CatalogMedia = Media & {
   externalId: string;
   sourceUrl: string;
   year?: string;
+  ratingCount?: number;
   imdbUrl?: string;
   format?: 'Song' | 'Album';
   verifiedAt: string;
@@ -53,6 +56,8 @@ export function plainText(value: unknown): string {
     .slice(0, 3000);
 }
 const vocabulary: Record<string, RegExp> = {
+  'non-fiction': /\bnon[ -]?fiction\b/i,
+  fiction: /\bfiction\b/i,
   fantasy: /\b(fantasy|magic|wizard|mytholog\w*)\b/i,
   adventure: /\b(adventure|journey|quest|exploration)\b/i,
   survival: /\b(survival|survive\w*|apocalyp\w*)\b/i,
@@ -90,7 +95,11 @@ export function extractTags(description: string, genres: string[]): string[] {
   const text = [description, ...genres].join(' ');
   return Object.entries(vocabulary)
     .filter(([, pattern]) => pattern.test(text))
-    .map(([tag]) => tag);
+    .map(([tag]) => tag)
+    .filter(
+      (tag) =>
+        tag !== 'fiction' || !normalizeGenres(genres).includes('non-fiction'),
+    );
 }
 function strings(value: unknown): string[] {
   return Array.isArray(value) ? value.filter((x) => typeof x === 'string') : [];
@@ -107,7 +116,9 @@ function appleRecord(data: Data, type: Category): CatalogMedia | null {
   const title = plainText(data.trackName || data.collectionName);
   if (!valid || !/^\d+$/.test(externalId) || !title) return null;
   const description = plainText(
-    data.longDescription || data.description || data.shortDescription,
+    type === 'Book'
+      ? bookSynopsis(data.description || '')
+      : data.longDescription || data.description || data.shortDescription,
   );
   const genres = [
     ...strings(data.genres),
@@ -121,7 +132,17 @@ function appleRecord(data: Data, type: Category): CatalogMedia | null {
     creator: plainText(data.artistName) || 'Creator unavailable',
     type,
     description: description || 'No description supplied by this catalog.',
-    tags: extractTags(description, genres),
+    tags: [
+      ...new Set([
+        ...extractTags(description, genres),
+        ...normalizeGenres(genres),
+      ]),
+    ],
+    genres: normalizeGenres(genres),
+    ratingCount:
+      Number.isSafeInteger(data.userRatingCount) && data.userRatingCount >= 0
+        ? data.userRatingCount
+        : undefined,
     format:
       type === 'Music' ? (data.kind === 'song' ? 'Song' : 'Album') : undefined,
     provider: 'Apple catalog',
@@ -144,6 +165,7 @@ function tvRecord(data: Data): CatalogMedia | null {
     type: 'TV',
     description: description || 'No description supplied by this catalog.',
     tags: extractTags(description, strings(data.genres)),
+    genres: normalizeGenres(strings(data.genres)),
     provider: 'TVmaze',
     sourceUrl: `https://www.tvmaze.com/shows/${data.id}`,
     year: plainText(data.premiered).slice(0, 4),
@@ -187,7 +209,13 @@ export function gameRecord(
       (type === 'Movie' ? 'Director unavailable' : 'Developer unavailable'),
     type,
     description: description || 'No description supplied by this catalog.',
-    tags: extractTags(description, genres),
+    tags: [
+      ...new Set([
+        ...extractTags(description, genres),
+        ...normalizeGenres(genres),
+      ]),
+    ],
+    genres: normalizeGenres(genres),
     provider: 'Wikidata',
     sourceUrl: `https://www.wikidata.org/wiki/${entity.id}`,
     year: typeof date === 'string' ? date.slice(1, 5) : undefined,
@@ -360,7 +388,7 @@ export async function searchMedia(
             term: query.trim(),
             entity,
             media,
-            limit: '10',
+            limit: '25',
             country: 'US',
           }),
         signal,
@@ -369,7 +397,7 @@ export async function searchMedia(
   }
   signal?.throwIfAborted();
   if (cache.size >= 50) cache.delete(cache.keys().next().value!);
-  items = items.slice(0, 10);
+  items = rankSearch(items, query).slice(0, 20);
   cache.set(key, { time: Date.now(), items });
   return items;
 }
@@ -462,6 +490,17 @@ export function validStoredItem(value: unknown): value is CatalogMedia {
     (x.year !== undefined && typeof x.year !== 'string') ||
     x.creator.length > 500 ||
     x.description.length > 3000
+  )
+    return false;
+  if (
+    x.genres !== undefined &&
+    (!Array.isArray(x.genres) ||
+      x.genres.some((g) => !genreChoices.includes(g)))
+  )
+    return false;
+  if (
+    x.ratingCount !== undefined &&
+    (!Number.isSafeInteger(x.ratingCount) || x.ratingCount < 0)
   )
     return false;
   if (x.format !== undefined && x.format !== 'Song' && x.format !== 'Album')

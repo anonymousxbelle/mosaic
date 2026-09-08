@@ -6,6 +6,7 @@ export type Media = {
   creator: string;
   type: Category;
   tags: string[];
+  genres?: string[];
   description: string;
 };
 export type Ratings = Record<string, number>;
