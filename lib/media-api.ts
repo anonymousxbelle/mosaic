@@ -19,7 +19,10 @@ export type CatalogMedia = Media & {
   verifiedAt: string;
 };
 type Data = Record<string, any>;
-export const catalogApi = (process.env.NEXT_PUBLIC_CATALOG_API || '').replace(/\/$/, '');
+export const catalogApi = (process.env.NEXT_PUBLIC_CATALOG_API || '').replace(
+  /\/$/,
+  '',
+);
 export const providerFor = (type: Category): Provider =>
   catalogApi && ['Movie', 'TV', 'Game'].includes(type)
     ? type === 'Game'
@@ -46,7 +49,9 @@ export function plainText(value: unknown): string {
           '&gt;': '>',
         })[x] || ' ',
     )
-    .replace(/&#x([a-f0-9]+);/gi,(_,n)=>parseInt(n,16)<=0x10ffff?String.fromCodePoint(parseInt(n,16)):' ')
+    .replace(/&#x([a-f0-9]+);/gi, (_, n) =>
+      parseInt(n, 16) <= 0x10ffff ? String.fromCodePoint(parseInt(n, 16)) : ' ',
+    )
     .replace(/&#(\d+);/g, (_, n) =>
       Number(n) <= 0x10ffff ? String.fromCodePoint(Number(n)) : ' ',
     )
@@ -138,8 +143,16 @@ function appleRecord(data: Data, type: Category): CatalogMedia | null {
       ]),
     ],
     genres: normalizeGenres(genres),
-    adult: data.trackExplicitness === 'explicit' || matureRating(data.contentAdvisoryRating) || genres.some((g) => /\berotica\b/i.test(g)),
-    contentRating: plainText(data.contentAdvisoryRating) || (data.trackExplicitness === 'explicit' ? 'Explicit' : undefined),
+    adult:
+      data.trackExplicitness === 'explicit' ||
+      matureRating(data.contentAdvisoryRating) ||
+      genres.some((g) => /\berotica\b/i.test(g)),
+    contentRating:
+      plainText(data.contentAdvisoryRating) ||
+      (data.trackExplicitness === 'explicit' ? 'Explicit' : undefined),
+    artworkUrl: validArtwork(data.artworkUrl100)
+      ? data.artworkUrl100
+      : undefined,
     ratingCount:
       Number.isSafeInteger(data.userRatingCount) && data.userRatingCount >= 0
         ? data.userRatingCount
@@ -167,6 +180,9 @@ function tvRecord(data: Data): CatalogMedia | null {
     description: description || 'No description supplied by this catalog.',
     tags: extractTags(description, strings(data.genres)),
     genres: normalizeGenres(strings(data.genres)),
+    artworkUrl: validArtwork(data.image?.medium)
+      ? data.image.medium
+      : undefined,
     provider: 'TVmaze',
     sourceUrl: `https://www.tvmaze.com/shows/${data.id}`,
     year: plainText(data.premiered).slice(0, 4),
@@ -350,7 +366,11 @@ export async function searchMedia(
   if (hit && Date.now() - hit.time < 300000) return hit.items;
   let items: CatalogMedia[];
   if (catalogApi && ['Movie', 'TV', 'Game'].includes(type))
-    return gateway('search', { type, q: query.trim(), adult: String(adult) }, signal);
+    return gateway(
+      'search',
+      { type, q: query.trim(), adult: String(adult) },
+      signal,
+    );
   if (type === 'Game' || type === 'Movie') {
     const result = await json(
       wikiUrl({
@@ -475,10 +495,38 @@ export function findDuplicate(items: Media[], item: Media): Media | undefined {
         comparable(x.creator) === comparable(item.creator)),
   );
 }
+export function validArtwork(value: unknown): value is string {
+  if (typeof value !== 'string' || value.length > 1000) return false;
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === 'https:' &&
+      !url.username &&
+      !url.password &&
+      !url.port &&
+      (/^is[0-9]+-ssl\.mzstatic\.com$/.test(url.hostname) ||
+        ['image.tmdb.org', 'static.tvmaze.com'].includes(url.hostname))
+    );
+  } catch {
+    return false;
+  }
+}
 export function validStoredItem(value: unknown): value is CatalogMedia {
   if (!value || typeof value !== 'object') return false;
   const x = value as CatalogMedia;
-  if ((x.adult !== undefined && typeof x.adult !== 'boolean') || (x.adultMarked !== undefined && typeof x.adultMarked !== 'boolean') || (x.contentRating !== undefined && (typeof x.contentRating !== 'string' || x.contentRating.length > 80))) return false;
+  if (x.artworkUrl !== undefined && !validArtwork(x.artworkUrl)) return false;
+  if (
+    x.libraryState !== undefined &&
+    !['later', 'experienced', 'dismissed'].includes(x.libraryState)
+  )
+    return false;
+  if (
+    (x.adult !== undefined && typeof x.adult !== 'boolean') ||
+    (x.adultMarked !== undefined && typeof x.adultMarked !== 'boolean') ||
+    (x.contentRating !== undefined &&
+      (typeof x.contentRating !== 'string' || x.contentRating.length > 80))
+  )
+    return false;
   if (
     typeof x.title !== 'string' ||
     !x.title ||

@@ -7,6 +7,8 @@ export type Media = {
   type: Category;
   tags: string[];
   genres?: string[];
+  artworkUrl?: string;
+  libraryState?: 'later' | 'experienced' | 'dismissed';
   adult?: boolean;
   adultMarked?: boolean;
   contentRating?: string;

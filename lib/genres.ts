@@ -60,8 +60,8 @@ export function genrePreferences(
   const blocked: string[] = [];
   const penalties: Record<string, number> = {};
   for (const [key, c] of Object.entries(counts)) {
-    if (c.low >= 2 && c.high === 0) blocked.push(key);
-    else if (c.low > c.high) penalties[key] = 0.35;
+    if (c.low > c.high)
+      penalties[key] = Math.min(0.45, 0.15 * (c.low - c.high));
   }
   return { blocked, penalties };
 }
