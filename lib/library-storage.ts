@@ -16,8 +16,7 @@ export function restoreLibrary(
     throw new Error('Unrecognized saved library.');
   const added: CatalogMedia[] = [];
   for (const item of data.added.slice(0, 200)) {
-    if (validStoredItem(item) && !findDuplicate([...samples, ...added], item))
-      added.push(item);
+    if (validStoredItem(item) && !findDuplicate(added, item)) added.push(item);
   }
   const ids = new Set([...samples, ...added].map((i) => i.id));
   const ratings: Ratings = {};

@@ -1,20 +1,34 @@
 import type { Category, Media } from './recommendations';
-export type Provider = 'Apple catalog' | 'TVmaze' | 'Wikidata';
+export type Provider =
+  | 'Apple catalog'
+  | 'TVmaze'
+  | 'Wikidata'
+  | 'TMDB'
+  | 'IGDB';
 export type CatalogMedia = Media & {
   provider: Provider;
   externalId: string;
   sourceUrl: string;
   year?: string;
+  imdbUrl?: string;
   format?: 'Song' | 'Album';
   verifiedAt: string;
 };
 type Data = Record<string, any>;
+export const catalogApi =
+  typeof process !== 'undefined'
+    ? (process.env.NEXT_PUBLIC_CATALOG_API || '').replace(/\/$/, '')
+    : '';
 export const providerFor = (type: Category): Provider =>
-  type === 'TV'
-    ? 'TVmaze'
-    : type === 'Game' || type === 'Movie'
-      ? 'Wikidata'
-      : 'Apple catalog';
+  catalogApi && ['Movie', 'TV', 'Game'].includes(type)
+    ? type === 'Game'
+      ? 'IGDB'
+      : 'TMDB'
+    : type === 'TV'
+      ? 'TVmaze'
+      : type === 'Game' || type === 'Movie'
+        ? 'Wikidata'
+        : 'Apple catalog';
 export function plainText(value: unknown): string {
   if (typeof value !== 'string') return '';
   return value
@@ -305,6 +319,8 @@ export async function searchMedia(
   const hit = cache.get(key);
   if (hit && Date.now() - hit.time < 300000) return hit.items;
   let items: CatalogMedia[];
+  if (catalogApi && ['Movie', 'TV', 'Game'].includes(type))
+    return gateway('search', { type, q: query.trim() }, signal);
   if (type === 'Game' || type === 'Movie') {
     const result = await json(
       wikiUrl({
@@ -362,6 +378,17 @@ export async function verifyMedia(
   signal?: AbortSignal,
 ): Promise<CatalogMedia> {
   let result: CatalogMedia | undefined;
+  if (item.provider === 'TMDB' || item.provider === 'IGDB') {
+    if (!catalogApi) throw new Error('The catalog service is not connected.');
+    const found = await gateway(
+      'verify',
+      { type: item.type, id: item.externalId },
+      signal,
+    );
+    const record = found.find((x) => x.id === item.id);
+    if (!record) throw new Error('This title could not be verified.');
+    return record;
+  }
   if (
     item.provider === 'Wikidata' &&
     (item.type === 'Game' || item.type === 'Movie') &&
@@ -439,6 +466,28 @@ export function validStoredItem(value: unknown): value is CatalogMedia {
     return false;
   if (x.format !== undefined && x.format !== 'Song' && x.format !== 'Album')
     return false;
+  if (
+    x.imdbUrl !== undefined &&
+    (typeof x.imdbUrl !== 'string' ||
+      !/^https:\/\/www\.imdb\.com\/title\/tt\d+\/$/.test(x.imdbUrl))
+  )
+    return false;
+  if (x.provider === 'TMDB')
+    return (
+      ['Movie', 'TV'].includes(x.type) &&
+      /^\d+$/.test(x.externalId) &&
+      x.id === `tmdb:${x.type}:${x.externalId}` &&
+      x.sourceUrl ===
+        `https://www.themoviedb.org/${x.type === 'Movie' ? 'movie' : 'tv'}/${x.externalId}`
+    );
+  if (x.provider === 'IGDB')
+    return (
+      x.type === 'Game' &&
+      /^\d+$/.test(x.externalId) &&
+      x.id === `igdb:${x.externalId}` &&
+      typeof x.sourceUrl === 'string' &&
+      /^https:\/\/www\.igdb\.com\/games\/[a-z0-9-]+$/.test(x.sourceUrl)
+    );
   if (x.provider === 'Wikidata')
     return (
       (x.type === 'Game' || x.type === 'Movie') &&
@@ -463,4 +512,49 @@ export function validStoredItem(value: unknown): value is CatalogMedia {
       )
     );
   return false;
+}
+
+async function gateway(
+  action: string,
+  params: Record<string, string>,
+  signal?: AbortSignal,
+): Promise<CatalogMedia[]> {
+  const data = await json(
+    catalogApi + '/' + action + '?' + new URLSearchParams(params),
+    signal,
+  );
+  if (!Array.isArray(data.items))
+    throw new Error('Invalid catalog service response.');
+  return data.items.filter(validStoredItem);
+}
+export async function discoverMedia(
+  types: Category[],
+  tags: string[],
+  signal?: AbortSignal,
+): Promise<{ items: CatalogMedia[]; failures: string[] }> {
+  const items: CatalogMedia[] = [];
+  const failures: string[] = [];
+  for (const type of types) {
+    signal?.throwIfAborted();
+    try {
+      const found =
+        catalogApi && ['Movie', 'TV', 'Game'].includes(type)
+          ? await gateway(
+              'discover',
+              { type, tags: tags.slice(0, 3).join(',') },
+              signal,
+            )
+          : await searchMedia(
+              type,
+              tags[0]?.replace(/-/g, ' ') || 'adventure',
+              signal,
+            );
+      for (const item of found)
+        if (!findDuplicate(items, item)) items.push(item);
+    } catch (e) {
+      if (signal?.aborted) throw e;
+      failures.push(type);
+    }
+  }
+  return { items, failures };
 }
