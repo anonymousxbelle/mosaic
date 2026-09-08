@@ -11,7 +11,7 @@ test('nonfiction is a genre, not fiction, and metadata aliases normalize', () =>
   assert.ok(normalizeGenres(['Biography & Memoir']).includes('non-fiction'));
   assert.ok(normalizeGenres(['Sci-Fi & Fantasy']).includes('science-fiction'));
 });
-test('repeated genre dislikes suppress recommendations by media type', () => {
+test('inferred dislikes lower ranking without blocking an entire genre', () => {
   const items = [
     { id: 'a', type: 'Book', genres: ['non-fiction'] },
     { id: 'b', type: 'Book', genres: ['non-fiction'] },
@@ -19,16 +19,18 @@ test('repeated genre dislikes suppress recommendations by media type', () => {
   const p = genrePreferences(items, { a: 1, b: 2 });
   assert.equal(
     genreAllowed({ type: 'Book', genres: ['non-fiction'] }, p.blocked, []),
-    false,
+    true,
   );
   assert.equal(
     genreAllowed({ type: 'Movie', genres: ['non-fiction'] }, p.blocked, []),
     true,
   );
+  assert.equal(p.penalties['Book:non-fiction'], 0.3);
+  assert.equal(p.penalties['Movie:non-fiction'], undefined);
   assert.deepEqual(genrePreferences(items, { a: 1, b: 4 }).blocked, []);
   assert.equal(
     genrePreferences(items, { a: 2 }).penalties['Book:non-fiction'],
-    0.35,
+    0.15,
   );
 });
 test('explicit avoidance works without ratings', () =>
