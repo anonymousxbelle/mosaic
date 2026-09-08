@@ -21,9 +21,11 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+import { genreChoices, genrePreferences, genreAllowed } from '@/lib/genres';
 import { catalog as sampleCatalog } from '@/lib/catalog';
 import { TagEditor } from '@/components/media/tag-editor';
 import { effectiveTags, type TagEdits } from '@/lib/tags';
+import { Account } from '@/components/media/account';
 import { AddMedia } from '@/components/media/add-media';
 import {
   findDuplicate,
@@ -58,6 +60,8 @@ function MediaMark({ item }: { item: Media }) {
 }
 export default function Home() {
   const [added, setAdded] = useState<CatalogMedia[]>([]);
+  const [genre, setGenre] = useState('fantasy');
+  const [avoided, setAvoided] = useState<string[]>([]);
   const [showDemo, setShowDemo] = useState(false);
   const [candidates, setCandidates] = useState<CatalogMedia[]>([]);
   const [discovering, setDiscovering] = useState(false);
@@ -104,6 +108,14 @@ export default function Home() {
         localStorage.getItem(STORAGE_KEY),
         sampleCatalog,
       );
+      const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      setAvoided(
+        Array.isArray(raw.avoided)
+          ? raw.avoided.filter(
+              (g: unknown) => typeof g === 'string' && genreChoices.includes(g),
+            )
+          : [],
+      );
       setAdded(saved.added);
       setRatings(saved.ratings);
       setTagEdits(saved.tagEdits);
@@ -119,14 +131,14 @@ export default function Home() {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ version: 1, added, ratings, tagEdits }),
+        JSON.stringify({ version: 1, added, ratings, tagEdits, avoided }),
       );
     } catch {
       setStorageError(
         'Browser storage is unavailable or full. Changes will last for this session only.',
       );
     }
-  }, [added, ratings, tagEdits, ready]);
+  }, [added, ratings, tagEdits, avoided, ready]);
   function addItem(item: CatalogMedia) {
     if (added.length >= 200)
       throw new Error(
@@ -231,7 +243,12 @@ export default function Home() {
     discoveryRequest.current = controller;
     setDiscovering(true);
     setDiscoveryNotice('');
-    const query = mode === 'based-on' ? vector(selected?.tags || []) : taste;
+    const query =
+      mode === 'genres'
+        ? vector([genre])
+        : mode === 'based-on'
+          ? vector(selected?.tags || [])
+          : taste;
     const tags = Object.keys(query)
       .filter((t) => query[t] > 0)
       .sort((a, b) => query[b] - query[a])
@@ -254,12 +271,32 @@ export default function Home() {
       if (!controller.signal.aborted) setDiscovering(false);
     }
   }
+  const preferences = genrePreferences(catalog, ratings);
   const results = recommend(
     [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))],
-    mode === 'based-on' ? vector(selected?.tags || []) : taste,
+    mode === 'genres'
+      ? vector([genre])
+      : mode === 'based-on'
+        ? vector(selected?.tags || [])
+        : taste,
     category,
     mode === 'based-on' ? [selected?.id || seed] : Object.keys(ratings),
   );
+  const filteredResults = results
+    .filter((i) => genreAllowed(i, preferences.blocked, avoided))
+    .map((i) => ({
+      ...i,
+      score:
+        i.score *
+        (1 -
+          Math.max(
+            0,
+            ...(i.genres || []).map(
+              (g) => preferences.penalties[i.type + ':' + g] || 0,
+            ),
+          )),
+    }))
+    .sort((a, b) => b.score - a.score);
   const visible = catalog.filter((i) =>
     (i.title + ' ' + i.creator + ' ' + i.type + ' ' + i.tags.join(' '))
       .toLowerCase()
@@ -303,6 +340,30 @@ export default function Home() {
               Add media from live catalogs, then rate your favorites. Your
               library and ratings are saved in this browser.
             </p>
+            <Account
+              library={{ version: 1, added, ratings, tagEdits, avoided }}
+              onLoad={(value) => {
+                const restored = restoreLibrary(
+                  JSON.stringify(value),
+                  sampleCatalog,
+                );
+                const merged = [...added];
+                for (const item of restored.added) {
+                  if (merged.length < 200 && !findDuplicate(merged, item))
+                    merged.push(item);
+                }
+                setAdded(merged);
+                setRatings((old) => ({ ...restored.ratings, ...old }));
+                setTagEdits((old) => ({ ...restored.tagEdits, ...old }));
+                const raw = value as { avoided?: unknown };
+                if (Array.isArray(raw?.avoided))
+                  setAvoided((old) =>
+                    [...new Set([...old, ...(raw.avoided as string[])])].filter(
+                      (g) => genreChoices.includes(g),
+                    ),
+                  );
+              }}
+            />
             <AddMedia items={catalog} onAdd={addItem} />
             {notice && (
               <p className="library-notice" role="status">
@@ -414,6 +475,7 @@ export default function Home() {
                     <Sparkles size={16} />
                     For You
                   </TabsTrigger>
+                  <TabsTrigger value="genres">Genres</TabsTrigger>
                   <TabsTrigger value="based-on">
                     <Layers3 size={16} />
                     Based On
@@ -448,6 +510,32 @@ export default function Home() {
                     Connections drawn from the titles you rate 3 stars or
                     higher.
                   </p>
+                </div>
+              </TabsContent>
+              <TabsContent value="genres">
+                <div className="context">
+                  <h2>One genre. Different media.</h2>
+                  <p>
+                    Explore a genre across books, music, movies, TV and games
+                    where the catalog supplies matching metadata.
+                  </p>
+                  <Select
+                    value={genre}
+                    onValueChange={(v) => {
+                      if (v) setGenre(v);
+                    }}
+                  >
+                    <SelectTrigger aria-label="Discovery genre">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {genreChoices.map((g) => (
+                        <SelectItem key={g} value={g}>
+                          {g.replace(/-/g, ' ')}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </TabsContent>
               <TabsContent value="based-on">
@@ -485,9 +573,11 @@ export default function Home() {
               className="add-media-button"
               disabled={
                 discovering ||
-                !(mode === 'based-on'
-                  ? selected?.tags.length || 0
-                  : Object.values(taste).some((v) => v > 0))
+                !(mode === 'genres'
+                  ? true
+                  : mode === 'based-on'
+                    ? selected?.tags.length || 0
+                    : Object.values(taste).some((v) => v > 0))
               }
               onClick={findConnections}
             >
@@ -495,6 +585,38 @@ export default function Home() {
                 ? 'Searching catalogs…'
                 : 'Find more from live catalogs'}
             </button>
+            <details className="genre-preferences">
+              <summary>Genre preferences</summary>
+              <p>
+                Two ratings of 1–2 stars in a genre, with no positive ratings in
+                that genre and media type, hide further matches. One negative
+                rating lowers their rank. You can also avoid genres explicitly:
+              </p>
+              <div className="tag-options">
+                {genreChoices.map((g) => (
+                  <button
+                    key={g}
+                    aria-pressed={avoided.includes(g)}
+                    onClick={() =>
+                      setAvoided((old) =>
+                        old.includes(g)
+                          ? old.filter((x) => x !== g)
+                          : [...old, g],
+                      )
+                    }
+                  >
+                    {avoided.includes(g) ? 'Avoiding: ' : 'Avoid '}
+                    {g}
+                  </button>
+                ))}
+              </div>
+              {preferences.blocked.length > 0 && (
+                <p>
+                  Hidden from ratings: {preferences.blocked.join(', ')}. Change
+                  the underlying ratings to revise these preferences.
+                </p>
+              )}
+            </details>
             {discoveryNotice && (
               <p role="status" className="library-notice">
                 {discoveryNotice}
@@ -506,9 +628,11 @@ export default function Home() {
                   ? 'Connected discoveries'
                   : 'Your discoveries'}
               </h2>
-              <span aria-live="polite">{results.length} connections</span>
+              <span aria-live="polite">
+                {filteredResults.length} connections
+              </span>
             </div>
-            {!results.length ? (
+            {!filteredResults.length ? (
               <div className="empty-state">
                 <Sparkles size={32} />
                 <h3>Every discovery starts somewhere.</h3>
@@ -519,7 +643,7 @@ export default function Home() {
               </div>
             ) : (
               <div className="results">
-                {results.map((item, index) => (
+                {filteredResults.map((item, index) => (
                   <article className="result-card" key={item.id}>
                     <div className="card-top">
                       <span className="rank">
@@ -531,7 +655,7 @@ export default function Home() {
                         {item.type}
                       </span>
                       <span className="match">
-                        {Math.round(item.score * 100)}% similarity
+                        {Math.round(item.score * 100)}% match
                       </span>
                     </div>
                     <h3>{item.title}</h3>
@@ -590,7 +714,13 @@ export default function Home() {
                         View on IMDb
                       </a>
                     )}
-                    <p className="description">{item.description}</p>
+                    <p className="description">
+                      {item.description.length > 420
+                        ? item.description
+                            .slice(0, 420)
+                            .replace(/\s+\S*$/, '') + '…'
+                        : item.description}
+                    </p>
                     <div className="connection">
                       <span>THE CONNECTION</span>
                       <p>{item.reasons.join(' · ')}</p>

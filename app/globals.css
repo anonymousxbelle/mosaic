@@ -784,3 +784,37 @@ footer a {
   color: white;
   border-radius: 8px;
 }
+
+.account-panel,
+.genre-preferences {
+  margin: 16px 0;
+  font-size: 13px;
+}
+.account-panel summary,
+.genre-preferences summary {
+  cursor: pointer;
+  padding: 10px 0;
+  font-weight: 600;
+}
+.account-panel form {
+  display: grid;
+  gap: 8px;
+}
+.account-panel input {
+  display: block;
+  border: 1px solid #b7c4b9;
+  border-radius: 6px;
+  padding: 8px;
+  width: 100%;
+}
+.account-panel button {
+  padding: 8px 10px;
+  border: 1px solid #c6ccc3;
+  border-radius: 8px;
+  margin: 4px 4px 4px 0;
+}
+.account-panel p,
+.genre-preferences p {
+  line-height: 1.6;
+  margin: 10px 0;
+}
