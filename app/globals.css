@@ -818,3 +818,7 @@ footer a {
   line-height: 1.6;
   margin: 10px 0;
 }
+
+.content-section { margin-bottom: 24px; padding: 16px; border: 1px solid #d8d5ce; border-radius: 12px; }
+.content-section button { display: inline-flex; margin: 0 16px 12px 0; }
+.content-section button[aria-pressed="true"] { font-weight: 700; text-decoration: underline; }

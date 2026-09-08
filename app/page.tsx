@@ -21,6 +21,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+import { inContentSection, contentLabel } from '@/lib/content-rating';
 import { genreChoices, genrePreferences, genreAllowed } from '@/lib/genres';
 import { catalog as sampleCatalog } from '@/lib/catalog';
 import { TagEditor } from '@/components/media/tag-editor';
@@ -59,6 +60,7 @@ function MediaMark({ item }: { item: Media }) {
   );
 }
 export default function Home() {
+  const [adultSection, setAdultSection] = useState(false);
   const [added, setAdded] = useState<CatalogMedia[]>([]);
   const [genre, setGenre] = useState('fantasy');
   const [avoided, setAvoided] = useState<string[]>([]);
@@ -89,9 +91,10 @@ export default function Home() {
       })),
     [originals, tagEdits],
   );
+  const sectionCatalog = useMemo(() => catalog.filter((i) => inContentSection(i, adultSection)), [catalog, adultSection]);
   const knownTags = useMemo(
-    () => [...new Set(catalog.flatMap((i) => i.tags))].sort(),
-    [catalog],
+    () => [...new Set(sectionCatalog.flatMap((i) => i.tags))].sort(),
+    [sectionCatalog],
   );
   const catalogRef = useRef(catalog);
   catalogRef.current = catalog;
@@ -100,8 +103,8 @@ export default function Home() {
   const [category, setCategory] = useState<Category | 'All'>('All');
   const [seed, setSeed] = useState('hunger');
   const [search, setSearch] = useState('');
-  const taste = useMemo(() => profile(catalog, ratings), [ratings, catalog]);
-  const selected = catalog.find((i) => i.id === seed) || catalog[0];
+  const taste = useMemo(() => profile(sectionCatalog, ratings), [ratings, sectionCatalog]);
+  const selected = sectionCatalog.find((i) => i.id === seed) || sectionCatalog[0];
   useEffect(() => {
     try {
       const saved = restoreLibrary(
@@ -258,6 +261,7 @@ export default function Home() {
         category === 'All' ? [...categories] : [category],
         tags,
         controller.signal,
+        adultSection,
       );
       if (controller.signal.aborted) return;
       setCandidates(found.items.filter((i) => !findDuplicate(catalog, i)));
@@ -271,7 +275,7 @@ export default function Home() {
       if (!controller.signal.aborted) setDiscovering(false);
     }
   }
-  const preferences = genrePreferences(catalog, ratings);
+  const preferences = genrePreferences(sectionCatalog, ratings);
   const results = recommend(
     [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))],
     mode === 'genres'
@@ -283,6 +287,7 @@ export default function Home() {
     mode === 'based-on' ? [selected?.id || seed] : Object.keys(ratings),
   );
   const filteredResults = results
+    .filter((i) => inContentSection(i, adultSection))
     .filter((i) => genreAllowed(i, preferences.blocked, avoided))
     .map((i) => ({
       ...i,
@@ -297,7 +302,7 @@ export default function Home() {
           )),
     }))
     .sort((a, b) => b.score - a.score);
-  const visible = catalog.filter((i) =>
+  const visible = sectionCatalog.filter((i) =>
     (i.title + ' ' + i.creator + ' ' + i.type + ' ' + i.tags.join(' '))
       .toLowerCase()
       .includes(search.toLowerCase()),
@@ -329,6 +334,11 @@ export default function Home() {
             <br />
             that shares what draws you in.
           </p>
+        </div>
+        <div className="content-section" role="group" aria-label="Content section">
+          <button className="demo-button" aria-pressed={!adultSection} onClick={() => { discoveryRequest.current?.abort(); setDiscovering(false); setCandidates([]); setDiscoveryNotice(''); setNotice(''); setAdultSection(false); }}>Main collection</button>
+          <button className="demo-button" aria-pressed={adultSection} onClick={() => { discoveryRequest.current?.abort(); setDiscovering(false); setCandidates([]); setDiscoveryNotice(''); setNotice(''); setAdultSection(true); }}>18+ · Enter mature collection</button>
+          <p className="muted">{adultSection ? '18+ movies, TV and books. Includes explicit flags and mature ratings such as R, NC-17 and TV-MA. This is a browsing preference, not age verification.' : 'Flagged mature movies, TV and books are kept in 18+. Missing ratings are labeled unknown; this collection is not a child-safe filter.'}</p>
         </div>
         <div className="workspace">
           <aside className="library">
@@ -364,7 +374,7 @@ export default function Home() {
                   );
               }}
             />
-            <AddMedia items={catalog} onAdd={addItem} />
+            <AddMedia key={String(adultSection)} items={catalog} adult={adultSection} onAdd={addItem} />
             {notice && (
               <p className="library-notice" role="status">
                 {notice}
@@ -390,6 +400,7 @@ export default function Home() {
                   <MediaMark item={item} />
                   <div>
                     <span className="type-label">{item.type}</span>
+                    <p className="muted">{contentLabel(item)}</p>
                     <h3>{item.title}</h3>
                     <p className="library-creator">{item.creator}</p>
                     {added.some((x) => x.id === item.id) && (
@@ -399,6 +410,11 @@ export default function Home() {
                         onClick={() => removeItem(item.id)}
                       >
                         Remove title
+                      </button>
+                    )}
+                    {added.some((x) => x.id === item.id) && ['Book', 'Movie', 'TV'].includes(item.type) && !item.adult && (
+                      <button className="edit-tags" onClick={() => setAdded((old) => old.map((x) => x.id === item.id ? { ...x, adultMarked: !x.adultMarked } : x))}>
+                        {item.adultMarked ? 'Undo my 18+ mark' : 'Mark as 18+'}
                       </button>
                     )}
                     <TagEditor
@@ -559,7 +575,7 @@ export default function Home() {
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      {catalog.map((i) => (
+                      {sectionCatalog.map((i) => (
                         <SelectItem key={i.id} value={i.id}>
                           {i.title} · {i.type}
                         </SelectItem>
@@ -625,8 +641,8 @@ export default function Home() {
             <div className="results-heading">
               <h2>
                 {mode === 'based-on'
-                  ? 'Connected discoveries'
-                  : 'Your discoveries'}
+                  ? (adultSection ? '18+ connections' : 'Connected discoveries')
+                  : (adultSection ? '18+ discoveries' : 'Your discoveries')}
               </h2>
               <span aria-live="polite">
                 {filteredResults.length} connections
@@ -658,6 +674,7 @@ export default function Home() {
                         {Math.round(item.score * 100)}% match
                       </span>
                     </div>
+                    <p className="muted">{contentLabel(item)}</p>
                     <h3>{item.title}</h3>
 
                     <p className="creator">{item.creator}</p>
