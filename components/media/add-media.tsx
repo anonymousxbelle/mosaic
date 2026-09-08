@@ -22,6 +22,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+import { inContentSection, contentLabel } from '@/lib/content-rating';
 import { categories, type Category, type Media } from '@/lib/recommendations';
 import {
   searchMedia,
@@ -33,9 +34,11 @@ import {
 } from '@/lib/media-api';
 export function AddMedia({
   items,
+  adult = false,
   onAdd,
 }: {
   items: Media[];
+  adult?: boolean;
   onAdd: (item: CatalogMedia) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -70,8 +73,8 @@ export function AddMedia({
     const timer = setTimeout(async () => {
       lastSearch.current = Date.now();
       try {
-        const found = await searchMedia(type, query, controller.signal);
-        if (generation.current === current) setMatches(found);
+        const found = await searchMedia(type, query, controller.signal, adult);
+        if (generation.current === current) setMatches(found.filter((item) => inContentSection(findDuplicate(items, item) || item, adult)));
       } catch (e) {
         if (!controller.signal.aborted && generation.current === current)
           setError(
@@ -86,7 +89,7 @@ export function AddMedia({
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query, type, open, retry, selection]);
+  }, [query, type, open, retry, selection, adult]);
   function reset() {
     generation.current++;
     verification.current?.abort();
@@ -108,6 +111,7 @@ export function AddMedia({
         throw new Error(
           'This title is already in your library. Find it in Your starting points to rate it.',
         );
+      if (!inContentSection(verified, adult)) throw new Error('This title belongs in the other content section. Switch sections and search again.');
       onAdd(verified);
       setOpen(false);
       setQuery('');
@@ -138,6 +142,7 @@ export function AddMedia({
       </DialogTrigger>
       <DialogContent className="add-media-dialog">
         <DialogTitle className="add-title">Add something you love</DialogTitle>
+        <p>{adult ? '18+ catalog matches only.' : 'Flagged 18+ titles are hidden. Unrated titles may still contain mature content.'}</p>
         <DialogDescription>
           Search a live catalog and select the correct title. Exact title
           matches rank first; available rating counts break ties. We check the
@@ -251,6 +256,7 @@ export function AddMedia({
               <CheckCircle2 size={16} />
               Catalog match · {selection.provider}
             </div>
+            <p>{contentLabel(selection)}</p>
             <h3>{selection.title}</h3>
             <p>
               {selection.creator}
