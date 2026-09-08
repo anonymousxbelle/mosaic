@@ -8,6 +8,12 @@ Node.js 22.13+ and npm are required. Run `npm ci`, then `npm run dev`.
 Run `npm test`, `npm run typecheck`, and `npm run build:pages` to validate.
 GitHub Actions publishes `dist/client/mosaic` to https://anonymousxbelle.github.io/mosaic/ on main pushes. GitHub Pages must use GitHub Actions as its source. The repository and Pages site are public. No API keys are needed.
 
+## Latest update
+
+Demo titles are off by default and can be enabled explicitly. Find more from live catalogs retrieves candidates from the current providers using a leading taste tag, then ranks their metadata tags. It can return no matches and is not an exhaustive catalog search.
+
+TMDB and IGDB server adapters, IMDb links and genre/theme discovery are implemented but **not activated**. Developer credentials and a backend deployment are still needed. See [backend setup](backend/README.md). The live site continues to use the original providers.
+
 ## Features
 
 - Search live catalogs with debounced autocomplete for books, songs/albums, films, TV, and games.
@@ -35,11 +41,11 @@ Search text is sent directly from the visitor's browser to the selected provider
 
 Each title is a binary vector of its effective tags: automatic/demo tags minus hidden tags, plus personal tags. Ratings 3, 4 and 5 contribute positive weights 1, 2 and 3; ratings 1–2 contribute no positive preference. The profile averages these weighted vectors. Cosine similarity compares it (or a Based On seed) with available candidates, excluding rated titles in For You and the seed in Based On. Zero matches are omitted; ties sort by title.
 
-A shared personal tag links titles across media; use it on at least two titles for a connection. Similarity is not a probability of liking a title or a measured accuracy score. Candidate recommendations currently come from the 25 demo titles and the visitor's added titles, not an automatic search of every catalog. Explicit negative-preference modeling and recommendation-quality evaluation remain future work.
+A shared personal tag links titles across media; use it on at least two titles for a connection. Similarity is not a probability of liking a title or a measured accuracy score. Candidate recommendations come from saved titles, optional demos, and live candidates fetched by the visitor. Explicit negative-preference modeling and recommendation-quality evaluation remain future work.
 
 ## Architecture and limits
 
-React + TypeScript, Vinext/Vite static export, Base UI/shadcn controls. GitHub Pages serves public static files. Each visitor has a separate browser-local library: there is no login, shared tagging database, cross-device sync, file uploading, or server API. Clearing browser storage clears the library; moving from the earlier Sites URL starts separate storage. Personal tags are private to the browser, not published to GitHub or submitted to the catalog APIs.
+React + TypeScript, Vinext/Vite static export, Base UI/shadcn controls. GitHub Pages serves public static files. Each visitor has a separate browser-local library: there is no login, shared tagging database, cross-device sync, file uploading, or deployed server API. Clearing browser storage clears the library; moving from the earlier Sites URL starts separate storage. Personal tags are private to the browser, not published to GitHub or submitted to the catalog APIs.
 
 - `lib/media-api.ts`: provider normalization, search, verification and automatic tagging.
 - `lib/tags.ts`: personal-tag validation and effective features.
