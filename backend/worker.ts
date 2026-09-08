@@ -1,3 +1,4 @@
+import { normalizeGenres } from '../lib/genres.ts';
 import { extractTags, plainText } from '../lib/media-api.ts';
 type Env = {
   TMDB_TOKEN?: string;
@@ -105,6 +106,7 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
     creator: creator || 'Creator unavailable',
     description: description || 'No description supplied by this catalog.',
     tags: extractTags(description, [...names(d.genres), ...keywords]),
+    genres: normalizeGenres(names(d.genres)),
     provider: 'TMDB',
     sourceUrl: `https://www.themoviedb.org/${type === 'Movie' ? 'movie' : 'tv'}/${d.id}`,
     imdbUrl:
@@ -149,6 +151,7 @@ export function igdbRecord(d: Data) {
       ...names(d.themes),
       ...names(d.keywords),
     ]),
+    genres: normalizeGenres([...names(d.genres), ...names(d.themes)]),
     provider: 'IGDB',
     sourceUrl: `https://www.igdb.com/games/${d.slug}`,
     year:
