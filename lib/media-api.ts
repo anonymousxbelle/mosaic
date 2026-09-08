@@ -18,10 +18,7 @@ export type CatalogMedia = Media & {
   verifiedAt: string;
 };
 type Data = Record<string, any>;
-export const catalogApi =
-  typeof process !== 'undefined'
-    ? (process.env.NEXT_PUBLIC_CATALOG_API || '').replace(/\/$/, '')
-    : '';
+export const catalogApi = (process.env.NEXT_PUBLIC_CATALOG_API || '').replace(/\/$/, '');
 export const providerFor = (type: Category): Provider =>
   catalogApi && ['Movie', 'TV', 'Game'].includes(type)
     ? type === 'Game'
