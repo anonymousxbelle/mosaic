@@ -42,7 +42,7 @@ import {
 } from '@/lib/media-api';
 import { restoreLibrary, STORAGE_KEY } from '@/lib/library-storage';
 import {
-  categories,
+  discoveryCategories,
   profile,
   vector,
   recommend,
@@ -122,6 +122,7 @@ export default function Home() {
     () => catalog.filter((i) => inContentSection(i, adultSection)),
     [catalog, adultSection],
   );
+  const discoveryCatalog = useMemo(() => sectionCatalog.filter((i) => i.type !== 'Music'), [sectionCatalog]);
   const knownTags = useMemo(
     () => [...new Set(sectionCatalog.flatMap((i) => i.tags))].sort(),
     [sectionCatalog],
@@ -136,16 +137,16 @@ export default function Home() {
   const taste = useMemo(
     () =>
       profile(
-        sectionCatalog.filter((i) => i.libraryState !== 'dismissed'),
+        discoveryCatalog.filter((i) => i.libraryState !== 'dismissed'),
         ratings,
       ),
-    [ratings, sectionCatalog],
+    [ratings, discoveryCatalog],
   );
   const selected =
     [
-      ...sectionCatalog,
+      ...discoveryCatalog,
       ...candidates.filter((i) => inContentSection(i, adultSection)),
-    ].find((i) => i.id === seed) || sectionCatalog[0];
+    ].find((i) => i.id === seed) || discoveryCatalog[0];
   useEffect(() => {
     try {
       const saved = restoreLibrary(
@@ -357,7 +358,7 @@ export default function Home() {
       .slice(0, 3);
     try {
       const found = await discoverMedia(
-        category === 'All' ? [...categories] : [category],
+        category === 'All' ? [...discoveryCategories] : [category],
         tags,
         controller.signal,
         adultSection,
@@ -365,7 +366,7 @@ export default function Home() {
       if (controller.signal.aborted) return;
       setCandidates(found.items.filter((i) => !findDuplicate(catalog, i)));
       setDiscoveryNotice(
-        `${found.items.length} catalog candidates fetched.${found.failures.length ? ' Unavailable: ' + found.failures.join(', ') + '. Retry later.' : ''} Only candidates sharing your tags appear below.`,
+        `${found.items.length} catalog candidates fetched.${found.failures.length ? ' Unavailable: ' + found.failures.join(', ') + '. Genre discovery needs a connected provider; title search in My Library still works.' : ''} Only candidates sharing your tags appear below.`,
       );
     } catch {
       if (!controller.signal.aborted)
@@ -374,7 +375,7 @@ export default function Home() {
       if (!controller.signal.aborted) setDiscovering(false);
     }
   }
-  const preferences = genrePreferences(sectionCatalog, ratings);
+  const preferences = genrePreferences(discoveryCatalog, ratings);
   const results = recommend(
     [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))],
     mode === 'collection'
@@ -392,6 +393,7 @@ export default function Home() {
         : Object.keys(ratings),
   );
   const filteredResults = results
+    .filter((i) => i.type !== 'Music')
     .filter((i) =>
       mode === 'collection'
         ? i.libraryState !== 'dismissed'
@@ -484,21 +486,21 @@ export default function Home() {
           </p>
         )}
         {view === 'discover' &&
-          sectionCatalog.filter(
+          discoveryCatalog.filter(
             (i) => (ratings[i.id] || 0) >= 3 && i.libraryState !== 'dismissed',
           ).length < 3 && (
             <section className="onboarding">
               <p className="eyebrow">MAKE THIS YOURS · NO ACCOUNT NEEDED</p>
               <h2>Start with 3–5 favorites.</h2>
               <p>
-                Pick books, music, movies, shows or games you already love. A
+                Pick books, movies, shows or games you already love. A
                 favorite starts at 5 stars; change it anytime in My Library.
               </p>
               <ol>
                 <li>
                   <strong>
                     {
-                      sectionCatalog.filter(
+                      discoveryCatalog.filter(
                         (i) =>
                           (ratings[i.id] || 0) >= 3 &&
                           i.libraryState !== 'dismissed',
@@ -585,6 +587,7 @@ export default function Home() {
               adult={adultSection}
               onAdd={addItem}
             />
+            <p className="muted">Music discovery is paused. Saved songs, albums, ratings and tags are preserved here.</p>
             <div className="shelf-tabs" role="group" aria-label="Library shelf">
               {[
                 ['all', 'All titles'],
@@ -662,12 +665,13 @@ export default function Home() {
                     <button
                       className="edit-tags"
                       onClick={() => {
+                        if (item.type === 'Music') return;
                         setSeed(item.id);
                         setMode('based-on');
                         setView('discover');
                       }}
                     >
-                      More like this
+                      {item.type === 'Music' ? 'Music discovery paused' : 'More like this'}
                     </button>
                     {added.some((x) => x.id === item.id) && (
                       <button
@@ -797,7 +801,7 @@ export default function Home() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {['All', ...categories].map((c) => (
+                    {['All', ...discoveryCategories].map((c) => (
                       <SelectItem key={c} value={c}>
                         {c === 'All' ? 'All media' : c}
                       </SelectItem>
@@ -828,7 +832,7 @@ export default function Home() {
                 <div className="context">
                   <h2>One genre. Different media.</h2>
                   <p>
-                    Explore a genre across books, music, movies, TV and games
+                    Explore a genre across books, movies, TV and games
                     where the catalog supplies matching metadata.
                   </p>
                   <Select
@@ -871,7 +875,7 @@ export default function Home() {
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      {sectionCatalog.map((i) => (
+                      {discoveryCatalog.map((i) => (
                         <SelectItem key={i.id} value={i.id}>
                           {i.title} · {i.type}
                         </SelectItem>
@@ -1022,7 +1026,7 @@ export default function Home() {
                           setMode('based-on');
                         }}
                       >
-                        More like this
+                        {item.type === 'Music' ? 'Music discovery paused' : 'More like this'}
                       </button>
                     </div>
                     {[...added, ...candidates].find((x) => x.id === item.id)
@@ -1063,12 +1067,12 @@ export default function Home() {
                             ? [selected]
                             : []
                           : mode === 'collection'
-                            ? sectionCatalog.filter(
+                            ? discoveryCatalog.filter(
                                 (i) =>
                                   i.tags.includes(collection) &&
                                   i.libraryState !== 'dismissed',
                               )
-                            : sectionCatalog.filter(
+                            : discoveryCatalog.filter(
                                 (i) =>
                                   (ratings[i.id] || 0) >= 3 &&
                                   i.libraryState !== 'dismissed',
