@@ -62,3 +62,8 @@ These priorities are an assessment of Mosaic's current implementation, not resul
 
 - [NN/g recommendation UX guidance](https://www.nngroup.com/articles/recommendation-guidelines/): understandable explanations and user feedback/control.
 - [ACM RecSys evaluation session](https://recsys.acm.org/recsys21/session-3/): relevance alongside diversity, novelty and serendipity.
+
+
+## 2026-09-08 — Onboarding, feedback and navigation milestone
+
+User authorized starting roadmap items 2, 3 and 5 from the conversation (onboarding, understandable/adjustable recommendations, coherent interface). Implemented: Discover/My Library/Preferences navigation; guest favorite onboarding with explicit initial five-star rating; saved/experienced/not-interested shelves with undo; real shared-tag/source-title explanations; match percentages replaced by shared-tag counts; expandable descriptions; provider artwork when available; named personal-tag collections. Inferred dislikes now only reduce rank (15 percentage points per excess low rating, capped at 45%); only explicit genre exclusions hide a genre. Existing records without artwork retain category icons. Personal collection names stay local and are not sent as search queries. Further improvement: smoother automatic retrieval, more comprehensive metadata, usability testing, actual account activation. U12 age verification remains deferred. These changes do not activate TMDB/IGDB or replace the current keyword recommendation baseline.

@@ -60,8 +60,19 @@ Tests cover numerical ranking, wrong-type catalog records, duplicate handling, m
 
 ## Genres, book results and accounts
 
-The Genres tab discovers across media using catalog genre metadata. Explicit avoided genres are hidden. Two 1–2-star ratings with no positive ratings for a genre within a media type hide it automatically; one low rating reduces its score. A positive rating revises that inference. Unknown genres cannot be filtered reliably. Match percentages can include the dislike penalty and are not probabilities.
+The Genres tab discovers across media using catalog genre metadata. Explicit avoided genres are hidden. Low ratings reduce genre ranking conservatively; only explicit avoided genres hide a genre. A positive rating revises the inferred penalty. Unknown genres cannot be filtered reliably. Results display shared-tag counts rather than uncalibrated match percentages.
 
 Book results sort by title/creator relevance, with available catalog rating counts breaking ties. This is not a global bestseller ranking. Recognizable standalone promotional blurbs are removed; excerpts are bounded and link to the complete source.
 
 Optional Supabase email-code login and manual cloud library save/merge are implemented but inactive until a project, email delivery and row-level security are configured. See [account setup](backend/ACCOUNT-SETUP.md). Cloud sync has not been live-tested. The current website remains browser-local.
+
+
+## Guided discovery and feedback
+
+Discover, My Library and Preferences are separate views. Guest onboarding asks for 3–5 favorites; Add a favorite explicitly assigns 5 stars, editable in My Library. Users can start discovery with fewer favorites. Search remains backed by the current live providers, not a new recommendation engine.
+
+Save for later, Already experienced and Not interested persist on catalog records and exclude those records from recommendations. Not interested does not block a genre or create a star rating. The last feedback action can be undone; shelves can be cleared from My Library. New candidate feedback re-verifies the record. Recommendation explanations show actual intersecting effective tags and up to two source titles. Provider artwork is optional, restricted to known HTTPS hosts, with category-icon fallbacks.
+
+My taste collections applies a reusable personal tag to selected saved titles. Opening a collection shows saved matches, including rated titles, but excludes dismissed records and respects the content section and explicit avoided genres. A custom collection name is not an external catalog query. Remove membership using Edit tags. Tag count/format restrictions still apply. Only catalog-derived tags are selected for ordinary external discovery queries.
+
+Track user requests and milestones in [PROJECT-BACKLOG.md](PROJECT-BACKLOG.md). Recommendation-engine next steps are in [RECOMMENDATION-PLAN.md](RECOMMENDATION-PLAN.md). Unit/type/build validation does not substitute for browser usability testing or real-account testing.
