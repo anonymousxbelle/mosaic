@@ -77,3 +77,10 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 - GitHub repository connection confirmed. Worker deployment uses backend/wrangler.jsonc from main.
 - TMDB_TOKEN exists as an encrypted runtime secret. First backend build and live provider verification remain pending; frontend activation follows verification.
 
+
+## TMDB activation (2026-09-10)
+- Cloudflare backend deployed successfully. Live movie/TV search, record verification, genre discovery and Pages-origin CORS checks passed.
+- Frontend connects through CATALOG_API_URL; token stays in the encrypted Worker secret. Official TMDB logo and endorsement notice included.
+- IGDB remains inactive independently of TMDB. Games retain Wikidata title search. Books retain Apple title search; genre-based external book discovery remains pending. Music stays paused.
+- Validation: 35 tests, TypeScript and production Pages build passed. Browser interaction testing remains pending.
+
