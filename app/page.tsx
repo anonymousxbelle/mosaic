@@ -38,6 +38,7 @@ import {
   verifyMedia,
   discoverMedia,
   catalogApi,
+  igdbEnabled,
   type CatalogMedia,
 } from '@/lib/media-api';
 import { restoreLibrary, STORAGE_KEY } from '@/lib/library-storage';
@@ -1188,8 +1189,11 @@ export default function Home() {
           <span>mosaic / CSCI 310 Junior Seminar</span>
           {catalogApi && (
             <span>
-              Data: <a href="https://www.themoviedb.org">TMDB</a> and{' '}
-              <a href="https://www.igdb.com">IGDB</a>. This product uses the
+              <a href="https://www.themoviedb.org" aria-label="Movie and TV data from TMDB">
+                <img src="https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB" width="90" style={{ display: 'inline-block', height: 'auto', marginRight: 12 }} />
+              </a>
+              {igdbEnabled && <><a href="https://www.igdb.com">IGDB</a>. </>}
+              This product uses the
               TMDB API but is not endorsed or certified by TMDB.
             </span>
           )}
