@@ -23,7 +23,7 @@ async function query(env:HardcoverEnv,query:string,variables:Row){
  const d=await r.json() as Row;if(d.errors||!d.data)throw Error('Hardcover could not complete the book query.');return d.data;
 }
 async function search(env:HardcoverEnv,text:string,subjects=false){
- const q=subjects?'query Search($q: String!) { search(query: $q, query_type: "Book", per_page: 20, page: 1, fields: "genres,moods,tags", weights: "3,2,2") { results } }':'query Search($q: String!) { search(query: $q, query_type: "Book", per_page: 20, page: 1) { results } }';
+ const q=subjects?'query Search($q: String!) { search(query: $q, query_type: "Book", per_page: 20, page: 1, fields: "genres,description", weights: "3,1") { results } }':'query Search($q: String!) { search(query: $q, query_type: "Book", per_page: 20, page: 1) { results } }';
  const data=await query(env,q,{q:text});
  let result=data.search?.results;if(typeof result==='string'){try{result=JSON.parse(result);}catch{throw Error('Invalid Hardcover response.');}}
  if(!Array.isArray(result?.hits))throw Error('Invalid Hardcover search response.');
@@ -42,4 +42,5 @@ export async function hardcoverBooks(env:HardcoverEnv,action:string,q:string,id:
  const items:Row[]=[];for(const tag of selected){for(const item of await search(env,tag.replaceAll('-',' '),true)){if(item&&!items.some(x=>x.id===item.id))items.push(item);}}
  return items;
 }
+
 
