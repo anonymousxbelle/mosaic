@@ -1322,7 +1322,8 @@ export default function Home() {
             </span>
           )}
           <span>
-            Catalog data: <a href="https://openlibrary.org">Open Library</a> ·{' '}
+            Catalog data: <a href="https://hardcover.app">Hardcover</a> ·{' '}
+            <a href="https://openlibrary.org">Open Library</a> ·{' '}
             <a
               href="https://www.apple.com/itunes/"
               target="_blank"
