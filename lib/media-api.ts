@@ -23,8 +23,12 @@ export const catalogApi = (process.env.NEXT_PUBLIC_CATALOG_API || '').replace(
   /\/$/,
   '',
 );
+// IGDB requires its own credentials; a TMDB connection alone must not route games there.
+export const igdbEnabled = process.env.NEXT_PUBLIC_IGDB_ENABLED === 'true';
+const usesGateway = (type: Category) => Boolean(catalogApi) &&
+  (type === 'Movie' || type === 'TV' || (type === 'Game' && igdbEnabled));
 export const providerFor = (type: Category): Provider =>
-  catalogApi && ['Movie', 'TV', 'Game'].includes(type)
+  usesGateway(type)
     ? type === 'Game'
       ? 'IGDB'
       : 'TMDB'
@@ -365,7 +369,7 @@ export async function searchMedia(
   const hit = cache.get(key);
   if (hit && Date.now() - hit.time < 300000) return hit.items;
   let items: CatalogMedia[];
-  if (catalogApi && ['Movie', 'TV', 'Game'].includes(type))
+  if (usesGateway(type))
     return gateway(
       'search',
       { type, q: query.trim(), adult: String(adult) },
@@ -629,7 +633,7 @@ export async function discoverMedia(
     signal?.throwIfAborted();
     try {
       if (type === 'Music') continue;
-      if (!catalogApi || !['Movie', 'TV', 'Game'].includes(type)) {
+      if (!usesGateway(type)) {
         failures.push(type);
         continue;
       }
