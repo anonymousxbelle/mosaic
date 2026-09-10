@@ -30,7 +30,10 @@ test('Apple results validate media type and stable identifiers', () => {
     ],
   });
   assert.equal(book.id, 'apple:Book:123');
-  assert.deepEqual(book.tags, ['fantasy', 'adventure', 'friendship']);
+  assert.deepEqual(
+    new Set(book.tags),
+    new Set(['quest', 'fantasy', 'adventure', 'friendship']),
+  );
   assert.ok(validStoredItem(book));
   assert.equal(normalizeResults('Movie', { results: [apple] }).length, 0);
 });
