@@ -21,6 +21,9 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+import { detailedFeatures, specificity, detailedTags } from '@/lib/features';
+import { GenreGuide } from '@/components/media/genre-guide';
+import { DiscoveryFeedback } from '@/components/media/discovery-feedback';
 import { inContentSection, contentLabel } from '@/lib/content-rating';
 import { genreChoices, genrePreferences, genreAllowed } from '@/lib/genres';
 import { catalog as sampleCatalog } from '@/lib/catalog';
@@ -47,6 +50,7 @@ import {
   profile,
   vector,
   recommend,
+  diversify,
   type Category,
   type Ratings,
   type Media,
@@ -123,7 +127,10 @@ export default function Home() {
     () => catalog.filter((i) => inContentSection(i, adultSection)),
     [catalog, adultSection],
   );
-  const discoveryCatalog = useMemo(() => sectionCatalog.filter((i) => i.type !== 'Music'), [sectionCatalog]);
+  const discoveryCatalog = useMemo(
+    () => sectionCatalog.filter((i) => i.type !== 'Music'),
+    [sectionCatalog],
+  );
   const knownTags = useMemo(
     () => [...new Set(sectionCatalog.flatMap((i) => i.tags))].sort(),
     [sectionCatalog],
@@ -133,6 +140,7 @@ export default function Home() {
   const [ratings, setRatings] = useState<Ratings>({});
   const [mode, setMode] = useState('for-you');
   const [category, setCategory] = useState<Category | 'All'>('All');
+  const [focusTags, setFocusTags] = useState<string[]>([]);
   const [seed, setSeed] = useState('hunger');
   const [search, setSearch] = useState('');
   const taste = useMemo(
@@ -148,6 +156,7 @@ export default function Home() {
       ...discoveryCatalog,
       ...candidates.filter((i) => inContentSection(i, adultSection)),
     ].find((i) => i.id === seed) || discoveryCatalog[0];
+  useEffect(() => setFocusTags([]), [seed]);
   useEffect(() => {
     try {
       const saved = restoreLibrary(
@@ -347,16 +356,26 @@ export default function Home() {
       mode === 'genres'
         ? vector([genre])
         : mode === 'based-on'
-          ? vector(selected?.tags || [])
+          ? vector(
+              focusTags.length
+                ? focusTags.filter((t) => selected?.tags.includes(t))
+                : selected?.tags || [],
+            )
           : taste;
     const tags = Object.keys(query)
       .filter(
         (t) =>
-          (query[t] > 0 && originals.some((i) => i.tags.includes(t))) ||
+          (query[t] > 0 &&
+            originals.some((i) =>
+              [
+                ...i.tags,
+                ...detailedFeatures(i.description, i.genres || []),
+              ].includes(t),
+            )) ||
           (mode === 'genres' && t === genre),
       )
-      .sort((a, b) => query[b] - query[a])
-      .slice(0, 3);
+      .sort((a, b) => query[b] * specificity(b) - query[a] * specificity(a))
+      .slice(0, 9);
     try {
       const found = await discoverMedia(
         category === 'All' ? [...discoveryCategories] : [category],
@@ -384,7 +403,11 @@ export default function Home() {
       : mode === 'genres'
         ? vector([genre])
         : mode === 'based-on'
-          ? vector(selected?.tags || [])
+          ? vector(
+              focusTags.length
+                ? focusTags.filter((t) => selected?.tags.includes(t))
+                : selected?.tags || [],
+            )
           : taste,
     category,
     mode === 'collection'
@@ -393,28 +416,30 @@ export default function Home() {
         ? [selected?.id || seed]
         : Object.keys(ratings),
   );
-  const filteredResults = results
-    .filter((i) => i.type !== 'Music')
-    .filter((i) =>
-      mode === 'collection'
-        ? i.libraryState !== 'dismissed'
-        : recommendationEligible(i, ratings),
-    )
-    .filter((i) => inContentSection(i, adultSection))
-    .filter((i) => genreAllowed(i, preferences.blocked, avoided))
-    .map((i) => ({
-      ...i,
-      score:
-        i.score *
-        (1 -
-          Math.max(
-            0,
-            ...(i.genres || []).map(
-              (g) => preferences.penalties[i.type + ':' + g] || 0,
-            ),
-          )),
-    }))
-    .sort((a, b) => b.score - a.score);
+  const filteredResults = diversify(
+    results
+      .filter((i) => i.type !== 'Music')
+      .filter((i) =>
+        mode === 'collection'
+          ? i.libraryState !== 'dismissed'
+          : recommendationEligible(i, ratings),
+      )
+      .filter((i) => inContentSection(i, adultSection))
+      .filter((i) => genreAllowed(i, preferences.blocked, avoided))
+      .map((i) => ({
+        ...i,
+        score:
+          i.score *
+          (1 -
+            Math.max(
+              0,
+              ...(i.genres || []).map(
+                (g) => preferences.penalties[i.type + ':' + g] || 0,
+              ),
+            )),
+      }))
+      .sort((a, b) => b.score - a.score),
+  );
   const visible = sectionCatalog
     .filter(
       (i) =>
@@ -494,8 +519,8 @@ export default function Home() {
               <p className="eyebrow">MAKE THIS YOURS · NO ACCOUNT NEEDED</p>
               <h2>Start with 3–5 favorites.</h2>
               <p>
-                Pick books, movies, shows or games you already love. A
-                favorite starts at 5 stars; change it anytime in My Library.
+                Pick books, movies, shows or games you already love. A favorite
+                starts at 5 stars; change it anytime in My Library.
               </p>
               <ol>
                 <li>
@@ -588,7 +613,10 @@ export default function Home() {
               adult={adultSection}
               onAdd={addItem}
             />
-            <p className="muted">Music discovery is paused. Saved songs, albums, ratings and tags are preserved here.</p>
+            <p className="muted">
+              Music discovery is paused. Saved songs, albums, ratings and tags
+              are preserved here.
+            </p>
             <div className="shelf-tabs" role="group" aria-label="Library shelf">
               {[
                 ['all', 'All titles'],
@@ -672,7 +700,9 @@ export default function Home() {
                         setView('discover');
                       }}
                     >
-                      {item.type === 'Music' ? 'Music discovery paused' : 'More like this'}
+                      {item.type === 'Music'
+                        ? 'Music discovery paused'
+                        : 'More like this'}
                     </button>
                     {added.some((x) => x.id === item.id) && (
                       <button
@@ -703,6 +733,48 @@ export default function Home() {
                             : 'Mark as 18+'}
                         </button>
                       )}
+                    <DiscoveryFeedback
+                      item={item}
+                      library={catalog}
+                      onDismiss={() => feedback(item, 'dismissed')}
+                    />
+                    {added.some((x) => x.id === item.id) && (
+                      <button
+                        disabled={actionBusy}
+                        onClick={async () => {
+                          const original = added.find((x) => x.id === item.id);
+                          if (!original) return;
+                          setActionBusy(true);
+                          try {
+                            const fresh = await verifyMedia(original);
+                            setAdded((old) =>
+                              old.map((x) =>
+                                x.id === fresh.id
+                                  ? {
+                                      ...fresh,
+                                      libraryState: x.libraryState,
+                                      adultMarked: x.adultMarked,
+                                    }
+                                  : x,
+                              ),
+                            );
+                            setNotice(
+                              'Catalog details refreshed. Your rating and personal tags are preserved.',
+                            );
+                          } catch (e) {
+                            setNotice(
+                              e instanceof Error
+                                ? e.message
+                                : 'Could not refresh details.',
+                            );
+                          } finally {
+                            setActionBusy(false);
+                          }
+                        }}
+                      >
+                        Refresh catalog details
+                      </button>
+                    )}
                     <TagEditor
                       item={originals.find((x) => x.id === item.id)!}
                       edit={tagEdits[item.id] || { added: [], hidden: [] }}
@@ -833,8 +905,8 @@ export default function Home() {
                 <div className="context">
                   <h2>One genre. Different media.</h2>
                   <p>
-                    Explore a genre across books, movies, TV and games
-                    where the catalog supplies matching metadata.
+                    Explore a genre across books, movies, TV and games where the
+                    catalog supplies matching metadata.
                   </p>
                   <Select
                     value={genre}
@@ -846,11 +918,13 @@ export default function Home() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {genreChoices.map((g) => (
-                        <SelectItem key={g} value={g}>
-                          {g.replace(/-/g, ' ')}
-                        </SelectItem>
-                      ))}
+                      {[...new Set([...genreChoices, ...detailedTags])].map(
+                        (g) => (
+                          <SelectItem key={g} value={g}>
+                            {g.replace(/-/g, ' ')}
+                          </SelectItem>
+                        ),
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
@@ -858,7 +932,7 @@ export default function Home() {
               <TabsContent value="based-on">
                 <div className="context">
                   <p className="eyebrow">FOLLOW A SINGLE THREAD</p>
-                  <h2>More like this. In another medium.</h2>
+                  <h2>More of what you enjoyed.</h2>
                   <Select
                     value={seed}
                     onValueChange={(v) => {
@@ -884,6 +958,31 @@ export default function Home() {
                     </SelectContent>
                   </Select>
                 </div>
+                {selected && (
+                  <fieldset>
+                    <legend>What did you enjoy? (optional)</legend>
+                    <p>Choose up to five aspects to focus this discovery.</p>
+                    <div className="tag-options">
+                      {selected.tags.map((t) => (
+                        <button
+                          key={t}
+                          aria-pressed={focusTags.includes(t)}
+                          onClick={() =>
+                            setFocusTags((v) =>
+                              v.includes(t)
+                                ? v.filter((x) => x !== t)
+                                : v.length < 5
+                                  ? [...v, t]
+                                  : v,
+                            )
+                          }
+                        >
+                          {t.replaceAll('-', ' ')}
+                        </button>
+                      ))}
+                    </div>
+                  </fieldset>
+                )}
               </TabsContent>
             </Tabs>
             <button
@@ -995,6 +1094,12 @@ export default function Home() {
                         }
                       </a>
                     )}
+                    <DiscoveryFeedback
+                      item={item}
+                      seed={selected}
+                      library={catalog}
+                      onDismiss={() => feedback(item, 'dismissed')}
+                    />
                     <div className="result-actions">
                       {[...added, ...candidates].some(
                         (x) => x.id === item.id,
@@ -1027,7 +1132,9 @@ export default function Home() {
                           setMode('based-on');
                         }}
                       >
-                        {item.type === 'Music' ? 'Music discovery paused' : 'More like this'}
+                        {item.type === 'Music'
+                          ? 'Music discovery paused'
+                          : 'More like this'}
                       </button>
                     </div>
                     {[...added, ...candidates].find((x) => x.id === item.id)
@@ -1185,20 +1292,37 @@ export default function Home() {
             )}
           </div>
         </section>
+        <GenreGuide />
         <footer>
           <span>mosaic / CSCI 310 Junior Seminar</span>
           {catalogApi && (
             <span>
-              <a href="https://www.themoviedb.org" aria-label="Movie and TV data from TMDB">
-                <img src="https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB" width="90" style={{ display: 'inline-block', height: 'auto', marginRight: 12 }} />
+              <a
+                href="https://www.themoviedb.org"
+                aria-label="Movie and TV data from TMDB"
+              >
+                <img
+                  src="https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg"
+                  alt="TMDB"
+                  width="90"
+                  style={{
+                    display: 'inline-block',
+                    height: 'auto',
+                    marginRight: 12,
+                  }}
+                />
               </a>
-              {igdbEnabled && <><a href="https://www.igdb.com">IGDB</a>. </>}
-              This product uses the
-              TMDB API but is not endorsed or certified by TMDB.
+              {igdbEnabled && (
+                <>
+                  <a href="https://www.igdb.com">IGDB</a>.{' '}
+                </>
+              )}
+              This product uses the TMDB API but is not endorsed or certified by
+              TMDB.
             </span>
           )}
           <span>
-            Catalog data:{' '}
+            Catalog data: <a href="https://openlibrary.org">Open Library</a> ·{' '}
             <a
               href="https://www.apple.com/itunes/"
               target="_blank"
