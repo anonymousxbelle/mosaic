@@ -84,3 +84,20 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 - IGDB remains inactive independently of TMDB. Games retain Wikidata title search. Books retain Apple title search; genre-based external book discovery remains pending. Music stays paused.
 - Validation: 35 tests, TypeScript and production Pages build passed. Browser interaction testing remains pending.
 
+
+## 2026-09-10 — Book recommendation quality and community input
+- User example: liking Harry Potter should retrieve plausible related works such as Percy Jackson through supported fantasy/magic/adventure evidence. Treat as a quality benchmark, not a hardcoded recommendation or guaranteed preference.
+- Evaluate Open Library work/subject search as the first book discovery source, with Google Books as optional metadata enrichment. Check coverage, identity matching, descriptions and provider usage limits before adoption.
+- Separate genres from themes and audience/tone; downweight broad tags; retrieve candidates before ranking; deduplicate editions and diversify franchises.
+- Requested: incorporate what people with similar interests enjoyed. Proposed hybrid content plus collaborative ranking requires consent-based shared ratings, stable work IDs, sufficient overlap and confidence thresholds. No community signal exists in the current browser-local baseline.
+- Requested: bounded user ratings and recommendation suggestions. Keep existing 1–5 ratings and personal tags; propose catalog-verified title-to-title suggestions with short reasons, one editable contribution per account, rate limits, reporting and review before influencing shared recommendations. Personal tags must not silently become public metadata.
+- Next implementation candidate: book subject retrieval plus richer feature mapping and evaluated ranking. This entry records requested scope; it does not implement these features.
+
+## 2026-09-10 — Recommendation quality and metadata corrections
+- Implemented Open Library work-level book search, ID verification and bounded subject-based discovery. Existing Apple records remain restorable/verifiable. Requests are cached and paced per browser; service-wide quotas may still need a proxy if usage grows.
+- Added a hierarchical subgenre/theme/tone/audience vocabulary with descriptions, including sports, basketball, anime and sports drama. No minimum tag count is fabricated. TMDB supplies keywords plus animation/origin evidence. Saved items can refresh metadata without changing ratings or personal edits.
+- Weighted cosine similarity downweights broad tags and emphasizes specific matches. A diversity pass reduces repeated creators/media among relevant results. Optional selected aspects focus seed discovery. These weights are heuristic, not empirically optimized.
+- Added local good-match/not-for-me feedback, metadata/content-rating correction reports and saved-title similarity suggestions (280-character reason, bounded local history). Export is available. Reports do not automatically modify public metadata or change subjective ratings.
+- Community schema and similarity aggregation are prepared but NOT deployed or wired to a public contribution service. User confirmed Supabase project does not exist. Trusted catalog registration, moderation service/UI, live two-account RLS verification and consent-based rating collection remain blocked on account setup; no community recommendation claims are displayed.
+- Provider research: Goodreads public API is deprecated; Hardcover has a token-based API worth evaluating. No supported public Crunchyroll developer metadata API was found. IMDb richer licensed data requires separate access; TMDB remains active. Anime-specific enrichment such as Jikan requires separate evaluation and matching, not a guessed title join.
+- Still pending: field-level evidence/confidence for every tag, robust franchise IDs beyond work/creator diversity, broader real-user relevance evaluation, community activation, and optional additional provider enrichment. These are not completed merely by passing unit tests.

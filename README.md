@@ -76,3 +76,14 @@ Save for later, Already experienced and Not interested persist on catalog record
 My taste collections applies a reusable personal tag to selected saved titles. Opening a collection shows saved matches, including rated titles, but excludes dismissed records and respects the content section and explicit avoided genres. A custom collection name is not an external catalog query. Remove membership using Edit tags. Tag count/format restrictions still apply. Only catalog-derived tags are selected for ordinary external discovery queries.
 
 Track user requests and milestones in [PROJECT-BACKLOG.md](PROJECT-BACKLOG.md). Recommendation-engine next steps are in [RECOMMENDATION-PLAN.md](RECOMMENDATION-PLAN.md). Unit/type/build validation does not substitute for browser usability testing or real-account testing.
+
+## Recommendation quality update (2026-09-10)
+Books now use Open Library work search and subject queries for discovery. Existing Apple books remain readable and verifiable. Open Library requests are user-triggered, cached for ten minutes and serialized at approximately one request per second per browser. This is not a global traffic cap. Source metadata may be missing or inconsistent; no minimum tag count is imposed.
+
+The tag vocabulary now distinguishes subgenres, themes, tone and audience labels, with an in-app glossary. Weighted cosine ranking emphasizes specific shared evidence and discounts broad labels; a greedy diversity pass reduces repeated creators and media. Users can focus a seed on up to five aspects. The weights are an initial heuristic; a controlled user study remains necessary.
+
+TMDB keywords support more specific retrieval; unsupported tag queries return no matches instead of an unfiltered popular list. Japanese animation plus sports evidence can receive sports-anime, basketball and sports-drama tags. Refresh catalog details updates saved metadata while keeping personal ratings and edits.
+
+Feedback and correction reports save locally and can be exported. They are not yet sent to moderators. Community rating aggregation and an RLS database schema are prepared, but Supabase, trusted catalog registration, moderation and server integration are not activated. No other readers' preferences are currently used in the live ranking.
+
+Provider references: [Open Library API](https://openlibrary.org/developers/api), [TMDB keyword search](https://developer.themoviedb.org/reference/search-keyword), [Hardcover API](https://api.hardcover.app/), [IMDb licensed data](https://developer.imdb.com/).
