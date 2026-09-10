@@ -1,3 +1,4 @@
+import { featureGroups, detailedTags } from '../lib/features.ts';
 import { matureRating } from '../lib/content-rating.ts';
 import { normalizeGenres } from '../lib/genres.ts';
 import { extractTags, plainText } from '../lib/media-api.ts';
@@ -114,6 +115,16 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
   const rating =
     certifications.find(matureRating) || certifications.find(Boolean);
 
+  const tags = extractTags(description, [...names(d.genres), ...keywords]);
+  if (
+    names(d.genres).includes('Animation') &&
+    (d.origin_country?.includes('JP') || d.original_language === 'ja')
+  )
+    tags.push('anime');
+  if (tags.includes('sports') && tags.includes('anime'))
+    tags.push('sports-anime');
+  if (tags.includes('sports') && tags.includes('drama'))
+    tags.push('sports-drama');
   return {
     id: `tmdb:${type}:${d.id}`,
     externalId: String(d.id),
@@ -121,7 +132,7 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
     title,
     creator: creator || 'Creator unavailable',
     description: description || 'No description supplied by this catalog.',
-    tags: extractTags(description, [...names(d.genres), ...keywords]),
+    tags: [...new Set(tags)],
     genres: normalizeGenres(names(d.genres)),
     adult: d.adult === true || certifications.some(matureRating),
     contentRating: rating || (d.adult === true ? 'Adult flag' : undefined),
@@ -226,13 +237,16 @@ export default {
       const id = u.searchParams.get('id') || '';
       const tagText = (u.searchParams.get('tags') || '').slice(0, 100);
       const tags = tagText.split(',').slice(0, 3);
+      const parentTags = Object.entries(featureGroups)
+        .filter(([, children]) => children.some((t) => tags.includes(t)))
+        .map(([parent]) => parent);
       const matched = (rows: Data[]) =>
         rows
           .filter(
             (r) =>
               Number.isSafeInteger(r.id) &&
-              extractTags('', [plainText(r.name)]).some((t) =>
-                tags.includes(t),
+              extractTags('', [plainText(r.name)]).some(
+                (t) => tags.includes(t) || parentTags.includes(t),
               ),
           )
           .map((r) => r.id);
@@ -299,14 +313,39 @@ export default {
           items = [await detail(id)].filter(Boolean);
         else {
           let genreIds: number[] = [];
+          const keywordIds: number[] = [];
           if (u.pathname === '/discover') {
             const genres = await tmdb(`genre/${kind}/list`, env);
             if (Array.isArray(genres.genres)) genreIds = matched(genres.genres);
+            const keywordNames: Record<string, string> = {
+              'sports-anime': 'sport',
+              'sports-drama': 'sport',
+              sports: 'sport',
+              'mythic-fantasy': 'mythology',
+              'magical-school': 'magic school',
+            };
+            for (const tag of tags
+              .filter((t) => detailedTags.includes(t) || t === 'sports')
+              .slice(0, 2)) {
+              const name = keywordNames[tag] || tag.replaceAll('-', ' ');
+              const keywords = await tmdb(
+                'search/keyword?' + new URLSearchParams({ query: name }),
+                env,
+              );
+              const exact = keywords.results?.find(
+                (k: Data) =>
+                  plainText(k.name).toLowerCase() === name &&
+                  Number.isSafeInteger(k.id),
+              );
+              if (exact) keywordIds.push(exact.id);
+            }
+            if (!genreIds.length && !keywordIds.length)
+              return reply({ items: [] });
           }
           const path =
             u.pathname === '/search'
               ? `search/${kind}?${new URLSearchParams({ query: q, include_adult: String(adult) })}`
-              : `discover/${kind}?include_adult=${adult}&sort_by=popularity.desc&with_genres=${genreIds.join('|')}`;
+              : `discover/${kind}?include_adult=${adult}&sort_by=popularity.desc&with_genres=${genreIds.join('|')}&with_keywords=${keywordIds.join('|')}`;
           const data = await tmdb(path, env);
           if (!Array.isArray(data.results))
             throw new ApiError(502, 'Invalid film/TV catalog response.');
