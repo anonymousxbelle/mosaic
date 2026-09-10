@@ -20,7 +20,11 @@ export function hardcoverRecord(row:Row){
 async function query(env:HardcoverEnv,query:string,variables:Row){
  const token=(env.HARDCOVER_TOKEN||'').trim();if(!token)throw Error('Hardcover is not configured.');
  const r=await fetch('https://api.hardcover.app/v1/graphql',{method:'POST',headers:{Authorization:token.startsWith('Bearer ')?token:'Bearer '+token,'Content-Type':'application/json','User-Agent':'Mosaic seminar catalog (https://github.com/anonymousxbelle/mosaic)'},body:JSON.stringify({query,variables}),signal:AbortSignal.timeout(12000)});
- if(!r.ok)throw Error(r.status===401||r.status===403?'Hardcover authentication failed.':'Hardcover request failed.');
+ if(!r.ok){
+  const details=await r.text();
+  const field=/\bweights\b/i.test(details)?'weights':/\bfields\b/i.test(details)?'fields':/\bgenres\b/i.test(details)?'genres':/\bdescription\b/i.test(details)?'description':'request';
+  throw new HardcoverError('Hardcover '+field+' failed (HTTP '+r.status+').');
+ }
  const d=await r.json() as Row;if(d.errors||!d.data){
   const messages=JSON.stringify(d.errors||[]);
   const category=/field.*not found|unknown argument|unexpected.*field/i.test(messages)?'unsupported field':/expected.*(string|integer|array|list)|type.*mismatch/i.test(messages)?'argument type':/permission|access|authorized/i.test(messages)?'permission':/index|query_by|searchable/i.test(messages)?'search index':'provider rejection';
