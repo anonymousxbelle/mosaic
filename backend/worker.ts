@@ -1,9 +1,11 @@
+import { hardcoverBooks } from './hardcover.ts';
 import { featureGroups, detailedTags } from '../lib/features.ts';
 import { matureRating } from '../lib/content-rating.ts';
 import { normalizeGenres } from '../lib/genres.ts';
 import { extractTags, plainText } from '../lib/media-api.ts';
 type Env = {
   TMDB_TOKEN?: string;
+  HARDCOVER_TOKEN?: string;
   IGDB_CLIENT_ID?: string;
   IGDB_CLIENT_SECRET?: string;
   ALLOWED_ORIGIN: string;
@@ -225,13 +227,14 @@ export default {
       if (u.pathname === '/status')
         return reply({
           tmdb: !!env.TMDB_TOKEN,
+          hardcover: !!env.HARDCOVER_TOKEN,
           igdb: !!(env.IGDB_CLIENT_ID && env.IGDB_CLIENT_SECRET),
         });
       if (!['/search', '/verify', '/discover'].includes(u.pathname))
         return reply({ error: 'Not found.' }, 404);
       const type = u.searchParams.get('type');
-      if (!['Movie', 'TV', 'Game'].includes(type || ''))
-        throw new ApiError(400, 'Choose Movie, TV or Game.');
+      if (!['Movie', 'TV', 'Game', 'Book'].includes(type || ''))
+        throw new ApiError(400, 'Choose Movie, TV, Game or Book.');
       const adult = u.searchParams.get('adult') === 'true';
       const q = (u.searchParams.get('q') || '').trim();
       const id = u.searchParams.get('id') || '';
@@ -272,13 +275,15 @@ export default {
       if (
         !(
           await env.CATALOG_LIMITER.limit({
-            key: type === 'Game' ? 'igdb' : 'tmdb',
+            key: type === 'Book' ? 'hardcover' : type === 'Game' ? 'igdb' : 'tmdb',
           })
         ).success
       )
         throw new ApiError(429, 'Catalog is busy. Please retry later.');
       let items: any[];
-      if (type === 'Game') {
+      if (type === 'Book') {
+        items = await hardcoverBooks(env,u.pathname,q,id,tags);
+      } else if (type === 'Game') {
         let themeIds: number[] = [];
         if (u.pathname === '/discover') {
           const themes = await igdb(
