@@ -1,3 +1,4 @@
+import { specificity } from './features.ts';
 export const categories = ['Book', 'Music', 'Game', 'Movie', 'TV'] as const;
 export const discoveryCategories = ['Book', 'Game', 'Movie', 'TV'] as const;
 export type Category = (typeof categories)[number];
@@ -55,7 +56,34 @@ export function recommend(
     )
     .map((i) => ({
       ...i,
-      score: cosine(query, vector(i.tags)),
+      score:
+        cosine(
+          Object.fromEntries(
+            Object.entries(query).map(([t, w]) => [t, w * specificity(t)]),
+          ),
+          Object.fromEntries(
+            [...new Set(i.tags)].map((t) => [t, specificity(t)]),
+          ),
+        ) *
+        (i.tags.some((t) => query[t] > 0 && specificity(t) > 0.55) ? 1 : 0.35) *
+        ([
+          'fantasy',
+          'science-fiction',
+          'mystery',
+          'horror',
+          'romance',
+          'sports',
+        ].some((t) => query[t] > 0) &&
+        ![
+          'fantasy',
+          'science-fiction',
+          'mystery',
+          'horror',
+          'romance',
+          'sports',
+        ].some((t) => query[t] > 0 && i.tags.includes(t))
+          ? 0.6
+          : 1),
       reasons: i.tags
         .filter((t) => query[t] > 0)
         .sort((a, b) => query[b] - query[a])
@@ -63,4 +91,35 @@ export function recommend(
     }))
     .filter((i) => i.score > 0)
     .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
+}
+
+// Greedy diversity reranking only among relevant, already-filtered candidates.
+export function diversify<T extends Media & { score: number }>(
+  items: T[],
+  limit = 30,
+): T[] {
+  const rest = [...items],
+    out: T[] = [];
+  while (rest.length && out.length < limit) {
+    let best = 0,
+      bestValue = -Infinity;
+    rest.forEach((item, index) => {
+      const creatorRepeat = out.filter(
+        (x) => x.creator === item.creator && x.type === item.type,
+      ).length;
+      const typeRepeat = out.filter((x) => x.type === item.type).length;
+      const overlap = out.length
+        ? Math.max(...out.map((x) => cosine(vector(x.tags), vector(item.tags))))
+        : 0;
+      const value =
+        item.score /
+        (1 + 0.3 * creatorRepeat + 0.06 * typeRepeat + 0.15 * overlap);
+      if (value > bestValue) {
+        best = index;
+        bestValue = value;
+      }
+    });
+    out.push(rest.splice(best, 1)[0]);
+  }
+  return out;
 }

@@ -1,8 +1,10 @@
+import { detailedPatterns } from './features.ts';
 import { matureRating } from './content-rating.ts';
 import { normalizeGenres, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
 import type { Category, Media } from './recommendations';
 export type Provider =
+  | 'Open Library'
   | 'Apple catalog'
   | 'TVmaze'
   | 'Wikidata'
@@ -25,18 +27,21 @@ export const catalogApi = (process.env.NEXT_PUBLIC_CATALOG_API || '').replace(
 );
 // IGDB requires its own credentials; a TMDB connection alone must not route games there.
 export const igdbEnabled = process.env.NEXT_PUBLIC_IGDB_ENABLED === 'true';
-const usesGateway = (type: Category) => Boolean(catalogApi) &&
+const usesGateway = (type: Category) =>
+  Boolean(catalogApi) &&
   (type === 'Movie' || type === 'TV' || (type === 'Game' && igdbEnabled));
 export const providerFor = (type: Category): Provider =>
-  usesGateway(type)
-    ? type === 'Game'
-      ? 'IGDB'
-      : 'TMDB'
-    : type === 'TV'
-      ? 'TVmaze'
-      : type === 'Game' || type === 'Movie'
-        ? 'Wikidata'
-        : 'Apple catalog';
+  type === 'Book'
+    ? 'Open Library'
+    : usesGateway(type)
+      ? type === 'Game'
+        ? 'IGDB'
+        : 'TMDB'
+      : type === 'TV'
+        ? 'TVmaze'
+        : type === 'Game' || type === 'Movie'
+          ? 'Wikidata'
+          : 'Apple catalog';
 export function plainText(value: unknown): string {
   if (typeof value !== 'string') return '';
   return value
@@ -64,6 +69,7 @@ export function plainText(value: unknown): string {
     .slice(0, 3000);
 }
 const vocabulary: Record<string, RegExp> = {
+  ...detailedPatterns,
   'non-fiction': /\bnon[ -]?fiction\b/i,
   fiction: /\bfiction\b/i,
   fantasy: /\b(fantasy|magic|wizard|mytholog\w*)\b/i,
@@ -100,7 +106,12 @@ const vocabulary: Record<string, RegExp> = {
 };
 // Deterministic keyword baseline: do not invent themes from the media category or title.
 export function extractTags(description: string, genres: string[]): string[] {
-  const text = [description, ...genres].join(' ');
+  const text = [
+    description,
+    ...genres.filter(
+      (g) => !/^science fiction (?:&|and) fantasy$/i.test(g.trim()),
+    ),
+  ].join(' ');
   return Object.entries(vocabulary)
     .filter(([, pattern]) => pattern.test(text))
     .map(([tag]) => tag)
@@ -369,6 +380,16 @@ export async function searchMedia(
   const hit = cache.get(key);
   if (hit && Date.now() - hit.time < 300000) return hit.items;
   let items: CatalogMedia[];
+  if (type === 'Book') {
+    try {
+      return await (await import('./book-api.ts')).searchBooks(query.trim(), signal);
+    } catch (error) {
+      if (signal?.aborted) throw error;
+      return rankSearch(normalizeResults('Book', await json(
+        'https://itunes.apple.com/search?' + new URLSearchParams({term: query.trim(),entity:'ebook',media:'ebook',limit:'25',country:'US'}), signal,
+      )), query).slice(0,20);
+    }
+  }
   if (usesGateway(type))
     return gateway(
       'search',
@@ -404,8 +425,8 @@ export async function searchMedia(
       ),
     );
   else {
-    const entity = type === 'Book' ? 'ebook' : 'album,song';
-    const media = type === 'Book' ? 'ebook' : 'music';
+    const entity = 'album,song';
+    const media = 'music';
     items = normalizeResults(
       type,
       await json(
@@ -431,6 +452,8 @@ export async function verifyMedia(
   item: CatalogMedia,
   signal?: AbortSignal,
 ): Promise<CatalogMedia> {
+  if (item.provider === 'Open Library' && item.type === 'Book')
+    return (await import('./book-api.ts')).verifyBook(item.externalId, signal);
   let result: CatalogMedia | undefined;
   if (item.provider === 'TMDB' || item.provider === 'IGDB') {
     if (!catalogApi) throw new Error('The catalog service is not connected.');
@@ -509,7 +532,11 @@ export function validArtwork(value: unknown): value is string {
       !url.password &&
       !url.port &&
       (/^is[0-9]+-ssl\.mzstatic\.com$/.test(url.hostname) ||
-        ['image.tmdb.org', 'static.tvmaze.com'].includes(url.hostname))
+        [
+          'image.tmdb.org',
+          'static.tvmaze.com',
+          'covers.openlibrary.org',
+        ].includes(url.hostname))
     );
   } catch {
     return false;
@@ -566,6 +593,13 @@ export function validStoredItem(value: unknown): value is CatalogMedia {
       !/^https:\/\/www\.imdb\.com\/title\/tt\d+\/$/.test(x.imdbUrl))
   )
     return false;
+  if (x.provider === 'Open Library')
+    return (
+      x.type === 'Book' &&
+      /^OL\d+W$/.test(x.externalId) &&
+      x.id === 'openlibrary:' + x.externalId &&
+      x.sourceUrl === 'https://openlibrary.org/works/' + x.externalId
+    );
   if (x.provider === 'TMDB')
     return (
       ['Movie', 'TV'].includes(x.type) &&
@@ -633,11 +667,23 @@ export async function discoverMedia(
     signal?.throwIfAborted();
     try {
       if (type === 'Music') continue;
+      if (type === 'Book') {
+        const found = await (
+          await import('./book-api.ts')
+        ).discoverBooks(tags, signal);
+        if (!found.length) failures.push(type);
+        items.push(...found);
+        continue;
+      }
       if (!usesGateway(type)) {
         failures.push(type);
         continue;
       }
-      const found = await gateway('discover', {type, tags: tags.slice(0, 3).join(','), adult: String(adult)}, signal);
+      const found = await gateway(
+        'discover',
+        { type, tags: tags.slice(0, 3).join(','), adult: String(adult) },
+        signal,
+      );
       for (const item of found)
         if (!findDuplicate(items, item)) items.push(item);
     } catch (e) {

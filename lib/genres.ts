@@ -1,5 +1,9 @@
+import { subgenres, detailedFeatures, featureGroups } from './features.ts';
 import type { Media, Ratings } from './recommendations';
 export const genreChoices = [
+  ...subgenres,
+  'sports',
+  'animation',
   'fantasy',
   'science-fiction',
   'mystery',
@@ -26,12 +30,21 @@ export const genreChoices = [
   'classical',
 ];
 export function normalizeGenres(values: string[]): string[] {
+  values = values.filter(
+    (g) => !/^science fiction (?:&|and) fantasy$/i.test(g.trim()),
+  );
   const text = values.join(' ').toLowerCase();
   const out = genreChoices.filter((g) =>
     new RegExp('\\b' + g.replace(/-/g, '[ -]?') + '\\b', 'i').test(text),
   );
+  out.push(
+    ...detailedFeatures('', values).filter((t) => subgenres.includes(t)),
+  );
+  for (const [parent, children] of Object.entries(featureGroups))
+    if (children.some((t) => out.includes(t)) && parent !== 'non-fiction')
+      out.push(parent);
   if (
-    /non[ -]?fiction|documentary|biograph|memoir|self.help|business|history|science & nature|reference|religion|travel|cookbook/.test(
+    /non[ -]?fiction|documentary|biograph|memoir|self.help|business|science & nature|reference|religion|travel|cookbook/.test(
       text,
     )
   )

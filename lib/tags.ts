@@ -1,3 +1,4 @@
+import { detailedFeatures } from './features.ts';
 import type { Media } from './recommendations';
 export type TagEdits = Record<string, { added: string[]; hidden: string[] }>;
 export function normalizeTag(raw: string): string {
@@ -21,7 +22,12 @@ export function normalizeTag(raw: string): string {
 export function effectiveTags(item: Media, edit?: TagEdits[string]): string[] {
   return [
     ...new Set([
-      ...item.tags.filter((t) => !edit?.hidden.includes(t)),
+      ...[
+        ...new Set([
+          ...item.tags,
+          ...detailedFeatures(item.description, item.genres || []),
+        ]),
+      ].filter((t) => !edit?.hidden.includes(t)),
       ...(edit?.added || []),
     ]),
   ];
@@ -44,7 +50,12 @@ export function restoreTagEdits(value: unknown, items: Media[]): TagEdits {
     }
     out[item.id] = {
       added,
-      hidden: item.tags.filter((t) => edit.hidden.includes(t)),
+      hidden: [
+        ...new Set([
+          ...item.tags,
+          ...detailedFeatures(item.description, item.genres || []),
+        ]),
+      ].filter((t) => edit.hidden.includes(t)),
     };
   }
   return out;
