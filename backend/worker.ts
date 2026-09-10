@@ -1,4 +1,4 @@
-import { hardcoverBooks } from './hardcover.ts';
+import { hardcoverBooks, HardcoverError } from './hardcover.ts';
 import { featureGroups, detailedTags } from '../lib/features.ts';
 import { matureRating } from '../lib/content-rating.ts';
 import { normalizeGenres } from '../lib/genres.ts';
@@ -376,7 +376,7 @@ export default {
       return reply(
         {
           error:
-            e instanceof ApiError
+            e instanceof ApiError || e instanceof HardcoverError
               ? e.message
               : 'Catalog service temporarily unavailable.',
         },

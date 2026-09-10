@@ -2,6 +2,7 @@ import {extractTags,plainText} from '../lib/media-api.ts';
 import {normalizeGenres} from '../lib/genres.ts';
 import {detailedTags,bookSubjects} from '../lib/features.ts';
 type Row=Record<string,any>;
+export class HardcoverError extends Error {}
 export type HardcoverEnv={HARDCOVER_TOKEN?:string};
 export function hardcoverRecord(row:Row){
  if(!row||typeof row!=='object')return null;
@@ -20,7 +21,11 @@ async function query(env:HardcoverEnv,query:string,variables:Row){
  const token=(env.HARDCOVER_TOKEN||'').trim();if(!token)throw Error('Hardcover is not configured.');
  const r=await fetch('https://api.hardcover.app/v1/graphql',{method:'POST',headers:{Authorization:token.startsWith('Bearer ')?token:'Bearer '+token,'Content-Type':'application/json','User-Agent':'Mosaic seminar catalog (https://github.com/anonymousxbelle/mosaic)'},body:JSON.stringify({query,variables}),signal:AbortSignal.timeout(12000)});
  if(!r.ok)throw Error(r.status===401||r.status===403?'Hardcover authentication failed.':'Hardcover request failed.');
- const d=await r.json() as Row;if(d.errors||!d.data)throw Error('Hardcover could not complete the book query.');return d.data;
+ const d=await r.json() as Row;if(d.errors||!d.data){
+  const messages=JSON.stringify(d.errors||[]);
+  const category=/field.*not found|unknown argument|unexpected.*field/i.test(messages)?'unsupported field':/expected.*(string|integer|array|list)|type.*mismatch/i.test(messages)?'argument type':/permission|access|authorized/i.test(messages)?'permission':/index|query_by|searchable/i.test(messages)?'search index':'provider rejection';
+  throw new HardcoverError('Hardcover query failed: '+category+'.');
+ }return d.data;
 }
 async function search(env:HardcoverEnv,text:string,subjects=false){
  const q=subjects?'query Search($q: String!) { search(query: $q, query_type: "Book", per_page: 20, page: 1, fields: "genres,description", weights: "3,1") { results } }':'query Search($q: String!) { search(query: $q, query_type: "Book", per_page: 20, page: 1) { results } }';
