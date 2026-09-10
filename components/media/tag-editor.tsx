@@ -1,4 +1,5 @@
 'use client';
+import { detailedTags, featureGroups, detailedFeatures } from '@/lib/features';
 import { useState } from 'react';
 import {
   Dialog,
@@ -20,6 +21,15 @@ export function TagEditor({
   known: string[];
   onChange: (edit: TagEdits[string]) => void;
 }) {
+  item = {
+    ...item,
+    tags: [
+      ...new Set([
+        ...item.tags,
+        ...detailedFeatures(item.description, item.genres || []),
+      ]),
+    ],
+  };
   const [query, setQuery] = useState('');
   const [error, setError] = useState('');
   function add(raw: string) {
@@ -42,7 +52,7 @@ export function TagEditor({
       setError((e as Error).message);
     }
   }
-  const available = known
+  const available = [...new Set([...known, ...detailedTags])]
     .filter(
       (t) =>
         !edit.added.includes(t) &&
@@ -91,6 +101,21 @@ export function TagEditor({
             <p>No automatic tags found. Add your own below.</p>
           )}
         </div>
+        <details>
+          <summary>Explore subgenres and themes</summary>
+          {Object.entries(featureGroups).map(([parent, children]) => (
+            <div key={parent}>
+              <h4>{parent}</h4>
+              <div className="tag-options">
+                {children.map((t) => (
+                  <button key={t} onClick={() => add(t)}>
+                    + {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </details>
         <h3>Your tags · {edit.added.length}/12</h3>
         <div className="tag-options">
           {edit.added.map((t) => (
