@@ -4,6 +4,7 @@ import { normalizeGenres, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
 import type { Category, Media } from './recommendations';
 export type Provider =
+  | 'Hardcover'
   | 'Open Library'
   | 'Apple catalog'
   | 'TVmaze'
@@ -32,7 +33,7 @@ const usesGateway = (type: Category) =>
   (type === 'Movie' || type === 'TV' || (type === 'Game' && igdbEnabled));
 export const providerFor = (type: Category): Provider =>
   type === 'Book'
-    ? 'Open Library'
+    ? catalogApi ? 'Hardcover' : 'Open Library'
     : usesGateway(type)
       ? type === 'Game'
         ? 'IGDB'
@@ -381,6 +382,12 @@ export async function searchMedia(
   if (hit && Date.now() - hit.time < 300000) return hit.items;
   let items: CatalogMedia[];
   if (type === 'Book') {
+    if (catalogApi) {
+      try {
+        const found = await gateway('search', {type, q: query.trim(), adult: String(adult)}, signal);
+        if (found.length) return found;
+      } catch (error) { if (signal?.aborted) throw error; }
+    }
     try {
       return await (await import('./book-api.ts')).searchBooks(query.trim(), signal);
     } catch (error) {
@@ -455,7 +462,7 @@ export async function verifyMedia(
   if (item.provider === 'Open Library' && item.type === 'Book')
     return (await import('./book-api.ts')).verifyBook(item.externalId, signal);
   let result: CatalogMedia | undefined;
-  if (item.provider === 'TMDB' || item.provider === 'IGDB') {
+  if (item.provider === 'TMDB' || item.provider === 'IGDB' || item.provider === 'Hardcover') {
     if (!catalogApi) throw new Error('The catalog service is not connected.');
     const found = await gateway(
       'verify',
@@ -593,6 +600,10 @@ export function validStoredItem(value: unknown): value is CatalogMedia {
       !/^https:\/\/www\.imdb\.com\/title\/tt\d+\/$/.test(x.imdbUrl))
   )
     return false;
+  if (x.provider === 'Hardcover')
+    return x.type === 'Book' && /^[1-9]\d{0,9}$/.test(x.externalId) &&
+      x.id === 'hardcover:' + x.externalId && typeof x.sourceUrl === 'string' &&
+      /^https:\/\/hardcover\.app\/books\/[a-z0-9][a-z0-9-]*$/.test(x.sourceUrl);
   if (x.provider === 'Open Library')
     return (
       x.type === 'Book' &&
@@ -668,6 +679,12 @@ export async function discoverMedia(
     try {
       if (type === 'Music') continue;
       if (type === 'Book') {
+        if (catalogApi) {
+          try {
+            const found = await gateway('discover', {type, tags: tags.slice(0,3).join(','), adult: String(adult)}, signal);
+            if (found.length) { items.push(...found); continue; }
+          } catch (error) { if (signal?.aborted) throw error; }
+        }
         const found = await (
           await import('./book-api.ts')
         ).discoverBooks(tags, signal);
