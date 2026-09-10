@@ -72,3 +72,8 @@ User authorized starting roadmap items 2, 3 and 5 from the conversation (onboard
 ## 2026-09-08 — Focus scope and TMDB readiness
 
 User approved pausing music discovery, preserving saved music and revisiting it as a future extension. Music is removed from new-title selection, recommendation categories, positive discovery profiles and results. Existing music records, ratings and tags remain in My Library. Removed tag-as-title-query discovery fallback for unconnected providers: ordinary explicit title search still works, but genre discovery reports unsupported providers instead of misleading title matches. Proper book genre retrieval remains open. TMDB account/API access is ready per user; token has not been received or configured, and backend remains inactive. Next: Cloudflare account, secure secret entry, provider attribution, deployment and live validation. IGDB remains pending.
+
+## Cloudflare setup checkpoint (2026-09-10)
+- GitHub repository connection confirmed. Worker deployment uses backend/wrangler.jsonc from main.
+- TMDB_TOKEN exists as an encrypted runtime secret. First backend build and live provider verification remain pending; frontend activation follows verification.
+
