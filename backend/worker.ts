@@ -350,7 +350,7 @@ export default {
               'magical-school': 'magic school',
             };
             for (const tag of tags
-              .filter((t) => detailedTags.includes(t) || t === 'sports')
+              .filter((t) => detailedTags.includes(t) || ['sports','magic'].includes(t))
               .slice(0, 2)) {
               const name = keywordNames[tag] || tag.replaceAll('-', ' ');
               const keywords = await tmdb(
