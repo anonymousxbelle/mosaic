@@ -6,17 +6,17 @@ A cross-media discovery app for CSCI 310 Junior Seminar.
 
 Node.js 22.13+ and npm are required. Run `npm ci`, then `npm run dev`.
 Run `npm test`, `npm run typecheck`, and `npm run build:pages` to validate.
-GitHub Actions publishes `dist/client/mosaic` to https://anonymousxbelle.github.io/mosaic/ on main pushes. GitHub Pages must use GitHub Actions as its source. The repository and Pages site are public. No API keys are needed.
+GitHub Actions publishes `dist/client/mosaic` to https://anonymousxbelle.github.io/mosaic/ on main pushes. GitHub Pages must use GitHub Actions as its source. The repository and Pages site are public. Provider credentials stay in Cloudflare Worker secrets.
 
 ## Latest update
 
 Demo titles are off by default and can be enabled explicitly. Find more from live catalogs retrieves candidates from the current providers using a leading taste tag, then ranks their metadata tags. It can return no matches and is not an exhaustive catalog search.
 
-TMDB and IGDB server adapters, IMDb links and genre/theme discovery are implemented but **not activated**. Developer credentials and a backend deployment are still needed. See [backend setup](backend/README.md). The live site continues to use the original providers.
+TMDB is active for films and TV. Hardcover is connected for book search and ID verification, with Open Library and Apple search fallbacks. Book discovery uses Open Library subject queries; Hardcover metadata-field discovery is not active because live requests failed. IGDB remains inactive; games use Wikidata. Music discovery is paused. See [backend setup](backend/README.md).
 
 ## Features
 
-- Search live catalogs with debounced autocomplete for books, songs/albums, films, TV, and games.
+- Search live catalogs with debounced autocomplete for books, films, TV, and games.
 - Verify the selected record again by provider ID and category before adding; reject duplicate titles. Offline, timeout, rate-limit, and no-match states are explicit.
 - Automatically extract a shared tag vocabulary from provider genres and description keywords. These are reproducible rules, not an AI model or verified statements about a work's themes. Sparse metadata can produce no tags.
 - Edit tags on any title: hide inaccurate automatic/demo tags, create personal tags, and reuse tags from other titles. Personal tags accept 2–32 letters/numbers/hyphens, up to 12 per title; case and spaces normalize for consistent matching.
@@ -27,13 +27,13 @@ TMDB and IGDB server adapters, IMDb links and genre/theme discovery are implemen
 
 | Media | Provider | Metadata |
 | --- | --- | --- |
-| Books | Apple Search / Lookup API | Ebook ID, author, genres, description |
-| Songs and albums | Apple Search / Lookup API | Track/collection ID, artist, genre |
-| TV | TVmaze | Show ID, genres, summary, network |
-| Films | Wikidata | Item ID, film classification Q11424, genres, director |
+| Books | Hardcover; Open Library and Apple fallbacks | Stable ID, contributors, genres, moods/themes, synopsis, available rating counts |
+| Songs and albums (paused) | Apple Search / Lookup API | Existing saved music remains supported |
+| TV | TMDB | Show ID, genres, keywords, summary, content ratings |
+| Films | TMDB | Film ID, genres, keywords, director, content ratings |
 | Games | Wikidata | Item ID, video-game classification Q7889, genres, developer |
 
-Search text is sent directly from the visitor's browser to the selected provider. No keys, proxy server, or paid AI calls are used. Requests are abortable, cached briefly, and bounded by a timeout. Wikidata only offers directly classified film/game instances, so some valid titles may be absent. Catalog matching verifies existence and category; it does not guarantee metadata accuracy or comprehensive coverage.
+Hardcover and TMDB queries pass through the Cloudflare backend; fallback catalog queries go directly to their providers. Tokens never reach the browser. No paid AI calls are used. Requests are abortable, cached briefly, and bounded by a timeout. Wikidata only offers directly classified game instances, so some valid titles may be absent. Catalog matching verifies existence and category; it does not guarantee metadata accuracy or comprehensive coverage. Hardcover search preserves its relevance/popularity ordering; its rating counts are catalog metadata, not Mosaic user ratings or collaborative recommendations.
 
 [Apple API documentation](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html), [TVmaze API and CC BY-SA terms](https://www.tvmaze.com/api), [Wikidata CC0](https://www.wikidata.org/wiki/Wikidata:Licensing). Source links are retained on imported records and shown in the interface. Demo descriptions and tags are manually authored examples.
 
@@ -45,7 +45,7 @@ A shared personal tag links titles across media; use it on at least two titles f
 
 ## Architecture and limits
 
-React + TypeScript, Vinext/Vite static export, Base UI/shadcn controls. GitHub Pages serves public static files. Each visitor has a separate browser-local library: there is no login, shared tagging database, cross-device sync, file uploading, or deployed server API. Clearing browser storage clears the library; moving from the earlier Sites URL starts separate storage. Personal tags are private to the browser, not published to GitHub or submitted to the catalog APIs.
+React + TypeScript, Vinext/Vite static export, Base UI/shadcn controls. GitHub Pages serves public static files, with a separate Cloudflare catalog API. Each visitor currently has a browser-local library. Login/cloud sync code awaits Supabase configuration; shared ratings and moderation are not active. Clearing browser storage clears the library; moving from the earlier Sites URL starts separate storage. Personal tags are private to the browser, not published to GitHub or submitted to the catalog APIs.
 
 - `lib/media-api.ts`: provider normalization, search, verification and automatic tagging.
 - `lib/tags.ts`: personal-tag validation and effective features.

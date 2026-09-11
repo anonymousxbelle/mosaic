@@ -101,3 +101,16 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 - Community schema and similarity aggregation are prepared but NOT deployed or wired to a public contribution service. User confirmed Supabase project does not exist. Trusted catalog registration, moderation service/UI, live two-account RLS verification and consent-based rating collection remain blocked on account setup; no community recommendation claims are displayed.
 - Provider research: Goodreads public API is deprecated; Hardcover has a token-based API worth evaluating. No supported public Crunchyroll developer metadata API was found. IMDb richer licensed data requires separate access; TMDB remains active. Anime-specific enrichment such as Jikan requires separate evaluation and matching, not a guessed title join.
 - Still pending: field-level evidence/confidence for every tag, robust franchise IDs beyond work/creator diversity, broader real-user relevance evaluation, community activation, and optional additional provider enrichment. These are not completed merely by passing unit tests.
+
+## 2026-09-10 — Audience and content-filter proposal
+- User suggested age categories/filters and requested an explanation before choosing behavior.
+- Proposed distinct audience preferences (children, middle grade, teen/YA, adult, unknown) and country-specific content-rating filters. Adult audience must not imply explicit/18+ content.
+- Default audience preference should softly influence ranking; offer strict audience filtering explicitly. Unknown metadata must be visible, with an option to exclude it when a strict content limit is chosen.
+- Do not infer a visitor's age from favorites, or label missing ratings safe. Preserve original rating and jurisdiction rather than treating PG-13, TV-14 and other systems as identical.
+- Age verification remains a separate deferred requirement. No age gate or filter implementation was added in this explanatory turn.
+
+## 2026-09-11 — Hardcover integration and music API research
+- Hardcover token configured as an encrypted Cloudflare runtime secret. Book title search and ID verification passed live checks; normalized public metadata includes genres, moods/themes, synopsis and rating counts. No account/library data is requested.
+- Book discovery stays on Open Library subject queries. Hardcover metadata-field searches failed live; investigate supported discovery queries before enabling them. Never substitute genre words as title queries.
+- Book search uses Hardcover with Open Library/Apple fallbacks, preserving existing saved records and personal edits. Provider rating counts are not collaborative recommendation signals.
+- TODO (user requested): explore Google Music and YouTube Music APIs. Establish what official APIs are currently available, including relevant YouTube Data API capabilities; assess authentication, quotas/cost, metadata/genre quality, usage terms and whether they can support meaningful cross-media recommendations. Research only; music remains paused pending a quality plan.
