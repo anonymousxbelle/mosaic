@@ -10,7 +10,7 @@ GitHub Actions publishes `dist/client/mosaic` to https://anonymousxbelle.github.
 
 ## Latest update
 
-Demo titles are off by default and can be enabled explicitly. Find more from live catalogs retrieves candidates from the current providers using a leading taste tag, then ranks their metadata tags. It can return no matches and is not an exhaustive catalog search.
+Demo titles are off by default and can be enabled explicitly. Find more from live catalogs retrieves candidates from the current providers using multiple genre/topic queries and additional pages when needed, then ranks eligible metadata matches. It can return no matches and is not an exhaustive catalog search.
 
 TMDB is active for films and TV. Hardcover is connected for book search and ID verification, with Open Library and Apple search fallbacks. Book discovery uses Open Library subject queries; Hardcover metadata-field discovery is not active because live requests failed. IGDB remains inactive; games use Wikidata. Music discovery is paused. See [backend setup](backend/README.md).
 
@@ -87,3 +87,6 @@ TMDB keywords support more specific retrieval; unsupported tag queries return no
 Feedback and correction reports save locally and can be exported. They are not yet sent to moderators. Community rating aggregation and an RLS database schema are prepared, but Supabase, trusted catalog registration, moderation and server integration are not activated. No other readers' preferences are currently used in the live ranking.
 
 Provider references: [Open Library API](https://openlibrary.org/developers/api), [TMDB keyword search](https://developer.themoviedb.org/reference/search-keyword), [Hardcover API](https://api.hardcover.app/), [IMDb licensed data](https://developer.imdb.com/).
+
+## Candidate retrieval
+Discovery now filters candidates before ranking and expands sparse results across up to three query plans and three pages per plan. Open Library queries use core subjects plus specific interests; TMDB combines genre/keyword discovery with same-provider related titles. TMDB pages are enriched with details, and up to four leading book matches receive work-level description enrichment. The UI reports how many titles were examined and rejected. Recent records are cached in memory with bounded size and expiry and re-filtered for each request. Partial failures retain usable results. These limits improve coverage without claiming to search every title or guarantee the best possible result; the score ranks only the retrieved pool.

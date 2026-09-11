@@ -130,3 +130,17 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 - Based-on default All media discovery leads with the seed's media type and anime style when applicable. Diversity reranking preserves that priority; related cross-media candidates follow. Explicit media selection removes the default preference.
 - Known basketball/football/baseball seed topics are required for candidates and prioritized in retrieval, even if a shared theme is focused. The interface explains the topic and media preference. Genre constraints remain in force.
 - Regression test: basketball anime precedes basketball live-action/books; football anime is excluded; explicit Books returns basketball books. This does not guarantee provider coverage of every relevant anime.
+
+## 2026-09-11 - Genre navigation polish (lower priority)
+- TODO: sort the genre list consistently so genres are easier to find.
+- TODO: make genre tags such as Drama clickable, opening discovery filtered to that genre.
+- Priority: defer both until candidate retrieval and recommendation quality improvements. User explicitly requested backlog tracking rather than implementation now.
+
+## 2026-09-11 - Broader, filtered candidate retrieval
+- Implemented round-robin retrieval over up to three query plans, up to three pages each, stopping after a round supplies 30 eligible candidates. For anime in its own medium, the stopping target counts anime candidates. Empty/exhausted sources stop; failures preserve other results.
+- Apply seed genre/topic, content section, avoided genres, saved/dismissed/experienced exclusions and shared-tag evidence before accepting external candidates. No filter relaxation to fill results.
+- Open Library discovery combines core subjects with specific interests and a broader core query, 30 work records per page. Enrich up to four strongest subject matches with work descriptions/subjects, then recheck eligibility. Search ordering is provider relevance, not a global best-book claim.
+- TMDB uses complete 20-row pages, AND genre/keyword queries and recommendations for a verified same-provider seed. Four concurrent detail requests enrich tags/ratings before frontend acceptance. Page/seed parameters are bounded and validated; page-specific caches prevent repeated page-one results.
+- Cache up to 400 normalized catalog records for ten minutes in browser memory, reapply eligibility on reuse; cache up to 250 public TMDB responses for five minutes in the Worker. Verification bypasses the TMDB cache. This is not a persistent whole-catalog database; durable catalog storage requires separate infrastructure/provider-term review.
+- UI reports examined/rejected/accepted counts, pages and cached matches. Added regression checks for sparse first pages, additional pages, alternative-source failures, deduplication, anime retrieval depth and related-page validation.
+- Remaining: tune budgets with user relevance/latency measurements; broader book-related-title retrieval (Hardcover discovery remains unavailable), durable term-compliant cache, provider coverage and named-title recall benchmarks. More retrieval is not proof of globally best recommendations.
