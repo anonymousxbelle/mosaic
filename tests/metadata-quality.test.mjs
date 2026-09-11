@@ -5,6 +5,18 @@ import {featureKind,primaryGenre} from '../lib/features.ts';
 import {sameWork} from '../lib/media-identity.ts';
 import {recommend,vector,diversify} from '../lib/recommendations.ts';
 const book=(id,title,tags,extra={})=>({id,title,tags,creator:'A Writer',type:'Book',description:'',...extra});
+test('basketball anime leads default seed discovery and explicit books keep basketball',()=>{
+ const seed=book('seed','Kuroko',['sports','basketball','anime','friendship'],{type:'TV'});
+ const anime=book('anime','Basketball anime',['sports','basketball','anime'],{type:'TV'});
+ const live=book('live','Basketball drama',seed.tags.filter(t=>t!=='anime'),{type:'TV'});
+ const basketballBook=book('book','Basketball book',['sports','basketball','friendship']);
+ const otherSport=book('other','Football anime',['sports','football','anime','friendship'],{type:'TV'});
+ const candidates=[basketballBook,live,otherSport,anime];
+ const ranked=diversify(recommend(candidates,vector(['friendship','basketball']),'All',[],'sports',seed));
+ assert.equal(ranked[0].id,'anime');
+ assert.equal(ranked.some(x=>x.id==='other'),false);
+ assert.deepEqual(recommend(candidates,vector(['friendship']),'Book',[],'sports',seed).map(x=>x.id),['book']);
+});
 test('fantasy seed requires fantasy even when focusing only on friendship',()=>{
  const seed=book('seed','Harry Potter',['fantasy','friendship'],{genres:['fantasy','adventure','fiction']});
  const fantasy=book('fantasy','Fantasy friendship',['fantasy','friendship']);
