@@ -1,8 +1,9 @@
-import { detailedPatterns } from './features.ts';
+import { detailedPatterns, detailedFeatures } from './features.ts';
 import { matureRating } from './content-rating.ts';
 import { normalizeGenres, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
 import type { Category, Media } from './recommendations';
+import { sameWork } from './media-identity.ts';
 export type Provider =
   | 'Hardcover'
   | 'Open Library'
@@ -107,6 +108,7 @@ const vocabulary: Record<string, RegExp> = {
 };
 // Deterministic keyword baseline: do not invent themes from the media category or title.
 export function extractTags(description: string, genres: string[]): string[] {
+  const detailed = new Set(detailedFeatures(description, genres));
   const text = [
     description,
     ...genres.filter(
@@ -115,6 +117,7 @@ export function extractTags(description: string, genres: string[]): string[] {
   ].join(' ');
   return Object.entries(vocabulary)
     .filter(([, pattern]) => pattern.test(text))
+    .filter(([tag]) => !Object.hasOwn(detailedPatterns,tag) || detailed.has(tag))
     .map(([tag]) => tag)
     .filter(
       (tag) =>
@@ -518,7 +521,7 @@ const comparable = (text: string) =>
 export function findDuplicate(items: Media[], item: Media): Media | undefined {
   return items.find(
     (x) =>
-      x.id === item.id ||
+      sameWork(x,item) ||
       (x.type === item.type &&
         (!('format' in x) ||
           !('format' in item) ||
@@ -552,6 +555,7 @@ export function validArtwork(value: unknown): value is string {
 export function validStoredItem(value: unknown): value is CatalogMedia {
   if (!value || typeof value !== 'object') return false;
   const x = value as CatalogMedia;
+  if(x.seriesKey !== undefined && (typeof x.seriesKey !== 'string' || !/^(hardcover|tmdb):[\p{L}\p{N} -]{1,160}$/u.test(x.seriesKey))) return false;
   if (x.artworkUrl !== undefined && !validArtwork(x.artworkUrl)) return false;
   if (
     x.libraryState !== undefined &&

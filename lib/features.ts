@@ -1,4 +1,5 @@
-export type FeatureKind = 'subgenre' | 'theme' | 'tone' | 'audience';
+export type FeatureKind = 'genre' | 'subgenre' | 'theme' | 'tone' | 'audience' | 'format';
+export const featureLabels: Record<FeatureKind, string> = {genre:'Genres',subgenre:'Subgenres',theme:'Themes',tone:'Mood',audience:'Audience',format:'Style / format'};
 export const featureGroups: Record<string, string[]> = {
   sports: [
     'basketball',
@@ -118,16 +119,20 @@ export const detailedPatterns = Object.fromEntries(
 export const detailedTags = Object.keys(terms);
 export const subgenres = [...new Set(Object.values(featureGroups).flat())];
 export function featureKind(tag: string): FeatureKind {
-  if (subgenres.includes(tag)) return 'subgenre';
+  if (['anime','animation'].includes(tag)) return 'format';
   if (['middle-grade', 'young-adult'].includes(tag)) return 'audience';
-  if (['lighthearted', 'heartwarming', 'suspenseful'].includes(tag))
+  if (['lighthearted', 'heartwarming', 'suspenseful','emotional','reflective','hope'].includes(tag))
     return 'tone';
+  if (['quest','survival','exploration','coming-of-age','superheroes','martial-arts','basketball','football','baseball'].includes(tag)) return 'theme';
+  if (Object.hasOwn(featureGroups, tag) || ['fiction','non-fiction'].includes(tag)) return 'genre';
+  if (subgenres.includes(tag)) return 'subgenre';
   return 'theme';
 }
 export function specificity(tag: string): number {
   if (['fiction', 'non-fiction'].includes(tag)) return 0.15;
   if (['middle-grade', 'young-adult', 'animation', 'anime'].includes(tag))
     return 0.35;
+  if (featureKind(tag) === 'tone') return 0.65;
   if (Object.hasOwn(featureGroups, tag)) return 0.55;
   return detailedTags.includes(tag) ? 1.6 : 1;
 }
@@ -135,6 +140,10 @@ export function detailedFeatures(description: string, subjects: string[]) {
   const text = [description, ...subjects].join(' ');
   return Object.entries(detailedPatterns)
     .filter(([, p]) => p.test(text))
+    // Audience comes from catalog labels, never a character's age in a synopsis.
+    .filter(([tag,p]) => featureKind(tag) !== 'audience' || subjects.some(s=>p.test(s)))
+    // An incidental mention of "sports" (e.g. Quidditch) is not a sports genre.
+    .filter(([tag]) => tag !== 'sports' || subjects.some(s=>detailedPatterns.sports.test(s)) || /\b(basketball|football|baseball|volleyball|soccer)\b/i.test(description))
     .map(([tag]) => tag);
 }
 // Controlled subject queries only. Personal collection names never become catalog queries.

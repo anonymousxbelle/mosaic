@@ -1,4 +1,5 @@
-import { specificity } from './features.ts';
+import { specificity, featureKind } from './features.ts';
+import { sameWork } from './media-identity.ts';
 export const categories = ['Book', 'Music', 'Game', 'Movie', 'TV'] as const;
 export const discoveryCategories = ['Book', 'Game', 'Movie', 'TV'] as const;
 export type Category = (typeof categories)[number];
@@ -9,6 +10,7 @@ export type Media = {
   type: Category;
   tags: string[];
   genres?: string[];
+  seriesKey?: string;
   artworkUrl?: string;
   libraryState?: 'later' | 'experienced' | 'dismissed';
   adult?: boolean;
@@ -86,9 +88,13 @@ export function recommend(
           : 1),
       reasons: i.tags
         .filter((t) => query[t] > 0)
-        .sort((a, b) => query[b] - query[a])
+        .sort((a, b) => query[b] * specificity(b) - query[a] * specificity(a))
         .slice(0, 3),
     }))
+    .map(i=>({...i,score:i.score * (
+      Object.keys(query).some(t=>query[t]>0 && !['audience','format','tone'].includes(featureKind(t))) &&
+      !i.tags.some(t=>query[t]>0 && !['audience','format','tone'].includes(featureKind(t))) ? 0.2 : 1
+    )}))
     .filter((i) => i.score > 0)
     .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
 }
@@ -98,7 +104,7 @@ export function diversify<T extends Media & { score: number }>(
   items: T[],
   limit = 30,
 ): T[] {
-  const rest = [...items],
+  const rest = items.filter((item,index)=>!items.slice(0,index).some(x=>sameWork(x,item))),
     out: T[] = [];
   while (rest.length && out.length < limit) {
     let best = 0,
@@ -108,12 +114,13 @@ export function diversify<T extends Media & { score: number }>(
         (x) => x.creator === item.creator && x.type === item.type,
       ).length;
       const typeRepeat = out.filter((x) => x.type === item.type).length;
+      const seriesRepeat = item.seriesKey ? out.filter(x=>x.seriesKey===item.seriesKey).length : 0;
       const overlap = out.length
         ? Math.max(...out.map((x) => cosine(vector(x.tags), vector(item.tags))))
         : 0;
       const value =
         item.score /
-        (1 + 0.3 * creatorRepeat + 0.06 * typeRepeat + 0.15 * overlap);
+        (1 + 0.9 * seriesRepeat + 0.3 * creatorRepeat + 0.06 * typeRepeat + 0.15 * overlap);
       if (value > bestValue) {
         best = index;
         bestValue = value;
