@@ -1,9 +1,10 @@
 import { hardcoverBooks, HardcoverError } from './hardcover.ts';
+import { semanticComparison, SemanticError, type SemanticEnv } from './semantic.ts';
 import { featureGroups, detailedTags } from '../lib/features.ts';
 import { matureRating } from '../lib/content-rating.ts';
 import { normalizeGenres } from '../lib/genres.ts';
 import { extractTags, plainText } from '../lib/media-api.ts';
-type Env = {
+type Env = SemanticEnv & {
   TMDB_TOKEN?: string;
   HARDCOVER_TOKEN?: string;
   IGDB_CLIENT_ID?: string;
@@ -223,15 +224,20 @@ export default {
     if (request.method === 'OPTIONS')
       return new Response(null, {
         status: 204,
-        headers: { ...headers, 'Access-Control-Allow-Methods': 'GET, OPTIONS' },
+        headers: { ...headers, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers':'Content-Type' },
       });
-    if (request.method !== 'GET')
+    if (request.method !== 'GET' && !(request.method==='POST' && new URL(request.url).pathname==='/semantic'))
       return reply({ error: 'Method not allowed.' }, 405);
     try {
       const u = new URL(request.url);
+      if(u.pathname==='/semantic'){
+        if(request.method!=='POST')return reply({error:'Use POST.'},405);
+        return reply(await semanticComparison(request,env));
+      }
       if (u.pathname === '/status')
         return reply({
           tmdb: !!env.TMDB_TOKEN,
+          semantic: !!(env.AI && env.AI_LIMITER),
           hardcover: !!env.HARDCOVER_TOKEN,
           igdb: !!(env.IGDB_CLIENT_ID && env.IGDB_CLIENT_SECRET),
         });
@@ -389,11 +395,11 @@ export default {
       return reply(
         {
           error:
-            e instanceof ApiError || e instanceof HardcoverError
+            e instanceof ApiError || e instanceof HardcoverError || e instanceof SemanticError
               ? e.message
               : 'Catalog service temporarily unavailable.',
         },
-        e instanceof ApiError ? e.status : 502,
+        e instanceof ApiError || e instanceof SemanticError ? e.status : 502,
       );
     }
   },

@@ -2,10 +2,16 @@
   "name": "mosaic-catalog-api",
   "main": "worker.ts",
   "compatibility_date": "2026-09-07",
+  "ai": { "binding": "AI" },
   "vars": {
     "ALLOWED_ORIGIN": "https://anonymousxbelle.github.io"
   },
   "ratelimits": [
+    {
+      "name": "AI_LIMITER",
+      "namespace_id": "31002",
+      "simple": { "limit": 4, "period": 60 }
+    },
     {
       "name": "CATALOG_LIMITER",
       "namespace_id": "31001",
