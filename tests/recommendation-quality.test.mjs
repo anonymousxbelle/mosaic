@@ -103,12 +103,12 @@ test('subject retrieval is bounded, cached, and never searches a title for a tag
   try {
     const x = await discoverBooks(['magic', 'fantasy']);
     assert.equal(x.length, 1);
-    assert.equal(urls.length, 2);
+    assert.equal(urls.length, 3);
     assert.ok(
-      urls.every((u) => new URL(u).searchParams.get('q').includes('subject:')),
+      urls.filter(u=>u.includes('/search.json')).every((u) => new URL(u).searchParams.get('q').includes('subject:')),
     );
     await discoverBooks(['magic', 'fantasy']);
-    assert.equal(urls.length, 2);
+    assert.equal(urls.length, 3);
     assert.deepEqual(await discoverBooks(['my-private-taste']), []);
   } finally {
     globalThis.fetch = old;

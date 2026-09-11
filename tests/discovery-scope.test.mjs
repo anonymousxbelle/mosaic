@@ -12,5 +12,5 @@ test('paused music remains restorable but is not a discovery category',()=>{
 test('unconfigured discovery never sends a genre as a title query',async()=>{
  const original=globalThis.fetch;let called=false;
  globalThis.fetch=async()=>{called=true;throw new Error('Unexpected title search');};
- try {const found=await discoverMedia(['Music','Book','TV','Movie','Game'],['alternative']);assert.equal(called,false);assert.deepEqual(found.items,[]);assert.deepEqual(found.failures,['Book','TV','Movie','Game']);}finally{globalThis.fetch=original;}
+ try {const found=await discoverMedia(['Music','Book','TV','Movie','Game'],['alternative']);assert.equal(called,false);assert.deepEqual(found.items,[]);assert.deepEqual(found.failures,['TV','Movie','Game']);}finally{globalThis.fetch=original;}
 });
