@@ -1,10 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {extractTags} from '../lib/media-api.ts';
-import {featureKind} from '../lib/features.ts';
+import {featureKind,primaryGenre} from '../lib/features.ts';
 import {sameWork} from '../lib/media-identity.ts';
 import {recommend,vector,diversify} from '../lib/recommendations.ts';
 const book=(id,title,tags,extra={})=>({id,title,tags,creator:'A Writer',type:'Book',description:'',...extra});
+test('fantasy seed requires fantasy even when focusing only on friendship',()=>{
+ const seed=book('seed','Harry Potter',['fantasy','friendship'],{genres:['fantasy','adventure','fiction']});
+ const fantasy=book('fantasy','Fantasy friendship',['fantasy','friendship']);
+ const unrelated=book('other','Contemporary friendship',['friendship','drama']);
+ const unknown=book('unknown','Missing genre',['friendship']);
+ const subgenre=book('subgenre','Mythic friendship',['mythic-fantasy','friendship']);
+ assert.equal(primaryGenre(seed),'fantasy');
+ assert.deepEqual(new Set(recommend([fantasy,unrelated,unknown,subgenre],vector(['friendship']),'All',[],primaryGenre(seed)).map(x=>x.id)),new Set(['fantasy','subgenre']));
+ assert.equal(recommend([unrelated],vector(['friendship']),'All').length,1);
+});
 test('incidental sports and audience prose do not become genre or audience labels',()=>{
  assert.equal(extractTags('Magic classes and aerial sports.', ['Fantasy']).includes('sports'),false);
  assert.ok(extractTags('A basketball team competes.', ['Drama']).includes('sports'));
