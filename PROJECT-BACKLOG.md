@@ -125,3 +125,8 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 ## 2026-09-11 - Keep seed discoveries in their primary genre
 - Based-on discovery now requires the seed's primary known genre. Fantasy seeds cannot recommend non-fantasy titles solely for friendship; focused themes still rank within fantasy. Provider genre order selects the anchor, with supported subgenres as fallback. The active genre is shown in the interface.
 - Retrieval includes the anchor first, and final ranking rejects missing/nonmatching genre evidence rather than relaxing the requirement. For You and collections remain broader. Regression coverage includes friendship-only focus, fantasy subgenres and unknown genres.
+
+## 2026-09-11 - Basketball anime first
+- Based-on default All media discovery leads with the seed's media type and anime style when applicable. Diversity reranking preserves that priority; related cross-media candidates follow. Explicit media selection removes the default preference.
+- Known basketball/football/baseball seed topics are required for candidates and prioritized in retrieval, even if a shared theme is focused. The interface explains the topic and media preference. Genre constraints remain in force.
+- Regression test: basketball anime precedes basketball live-action/books; football anime is excluded; explicit Books returns basketball books. This does not guarantee provider coverage of every relevant anime.
