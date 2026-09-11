@@ -1,5 +1,7 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hybrid-ranking';
+import { compareDescriptions } from '@/lib/semantic';
 import { flushSync } from 'react-dom';
 import {
   BookOpen,
@@ -139,6 +141,8 @@ export default function Home() {
   catalogRef.current = catalog;
   const [ratings, setRatings] = useState<Ratings>({});
   const [mode, setMode] = useState('for-you');
+  const [rankingMode,setRankingMode]=useState('standard');
+  const [rankingEvidence,setRankingEvidence]=useState<{key:string;provider:RankingEvidence;semantic:SemanticScores}>({key:'',provider:{},semantic:{}});
   const [category, setCategory] = useState<Category | 'All'>('All');
   const [focusTags, setFocusTags] = useState<string[]>([]);
   const [seed, setSeed] = useState('hunger');
@@ -157,6 +161,11 @@ export default function Home() {
       ...candidates.filter((i) => inContentSection(i, adultSection)),
     ].find((i) => i.id === seed) || discoveryCatalog[0];
   useEffect(() => setFocusTags([]), [seed]);
+  const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,category,focusTags,genre,adultSection,avoided,ratings]);
+  useEffect(()=>{
+    discoveryRequest.current?.abort();
+    setDiscovering(false);
+  },[discoveryKey,rankingMode]);
   useEffect(() => {
     try {
       const saved = restoreLibrary(
@@ -390,8 +399,23 @@ export default function Home() {
       );
       if (controller.signal.aborted) return;
       setCandidates(found.items.filter((i) => !findDuplicate(catalog, i)));
+      setRankingEvidence({key:discoveryKey,provider:found.evidence,semantic:{}});
+      let aiNotice='';
+      if(rankingMode==='semantic' && mode==='based-on' && selected){
+        setDiscoveryNotice('Catalogs checked. Comparing descriptions…');
+        try{
+          const shortlist=recommend(found.items,query,category,[],primaryGenre(selected),selected).slice(0,24);
+          const semantic=await compareDescriptions(catalogApi,selected,shortlist,controller.signal);
+          if(controller.signal.aborted)return;
+          setRankingEvidence({key:discoveryKey,provider:found.evidence,semantic});
+          aiNotice=` AI compared ${Object.keys(semantic).length} descriptions; titles without a comparison retain other ranking signals.`;
+        }catch{
+          if(controller.signal.aborted)return;
+          aiNotice=' AI comparison was unavailable or descriptions were missing; using provider and tag matching.';
+        }
+      }
       setDiscoveryNotice(
-        `Checked ${found.stats.examined} unique titles across ${found.stats.pages} catalog pages; filtered out ${found.stats.rejected}. ${found.items.length} eligible candidates (${found.stats.cached} from recent searches).${found.failures.length ? ' Some sources were unavailable: ' + found.failures.join(', ') + '.' : ''} Results below are ranked within this pool, not the entire catalog.`,
+        `Checked ${found.stats.examined} unique titles across ${found.stats.pages} catalog pages; filtered out ${found.stats.rejected}. ${found.items.length} eligible candidates (${found.stats.cached} from recent searches).${found.failures.length ? ' Some sources were unavailable: ' + found.failures.join(', ') + '.' : ''}${aiNotice} Results below are ranked within this pool, not the entire catalog.`,
       );
     } catch {
       if (!controller.signal.aborted)
@@ -401,6 +425,19 @@ export default function Home() {
     }
   }
   const preferences = genrePreferences(discoveryCatalog, ratings);
+  function downloadComparison(){
+    const publicSeed=originals.find(x=>x.id===selected?.id) || candidates.find(x=>x.id===selected?.id);
+    if(!publicSeed || rankingEvidence.key!==discoveryKey)return;
+    const snapshot={label:'Unjudged Mosaic external-candidate snapshot',capturedAt:new Date().toISOString(),cases:[{
+      id:publicSeed.id,seed:{id:publicSeed.id,title:publicSeed.title,creator:publicSeed.creator,type:publicSeed.type,
+        description:publicSeed.description,tags:publicSeed.tags.filter(t=>detailedTags.includes(t)),genres:publicSeed.genres},category,requiredGenre:primaryGenre(publicSeed),
+      focusTags:focusTags.length?focusTags.filter(t=>detailedTags.includes(t)):undefined,
+      candidates,evidence:rankingEvidence.provider,semanticScores:rankingEvidence.semantic,judgments:{},
+    }]};
+    const url=URL.createObjectURL(new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'}));
+    const link=document.createElement('a');link.href=url;link.download='mosaic-comparison.json';link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
   const results = recommend(
     [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))],
     mode === 'collection'
@@ -423,8 +460,10 @@ export default function Home() {
     mode === 'based-on' ? primaryGenre(selected) : undefined,
     mode === 'based-on' ? selected : undefined,
   );
+  const rankedResults=rankingMode!=='standard' && mode==='based-on' && rankingEvidence.key===discoveryKey
+    ?hybridRank(results,rankingEvidence.provider,rankingMode==='semantic'?rankingEvidence.semantic:{}) : results;
   const filteredResults = diversify(
-    results
+    rankedResults
       .filter((i) => i.type !== 'Music')
       .filter((i) =>
         mode === 'collection'
@@ -995,6 +1034,15 @@ export default function Home() {
                 )}
               </TabsContent>
             </Tabs>
+            {mode==='based-on' && <label>
+              Recommendation method{' '}
+              <select value={rankingMode} onChange={e=>setRankingMode(e.target.value)} disabled={discovering}>
+                <option value="standard">Standard tag matching</option>
+                <option value="provider">Provider + tags (experimental)</option>
+                <option value="semantic">AI descriptions + provider + tags (experimental)</option>
+              </select>
+              {rankingMode==='semantic' && <p>Show discoveries compares up to 24 candidate descriptions with Cloudflare AI. Ratings and personal tags are not sent. Genre and topic filters stay in place.</p>}
+            </label>}
             <button
               className="add-media-button"
               disabled={
@@ -1018,6 +1066,8 @@ export default function Home() {
                 {discoveryNotice}
               </p>
             )}
+            {mode==='based-on' && candidates.length>0 && rankingEvidence.key===discoveryKey && !discovering &&
+              <button onClick={downloadComparison}>Download comparison snapshot</button>}
             <div className="results-heading">
               <h2>
                 {mode === 'based-on'
