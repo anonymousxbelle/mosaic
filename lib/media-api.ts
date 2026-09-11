@@ -679,12 +679,6 @@ export async function discoverMedia(
     try {
       if (type === 'Music') continue;
       if (type === 'Book') {
-        if (catalogApi) {
-          try {
-            const found = await gateway('discover', {type, tags: tags.slice(0,3).join(','), adult: String(adult)}, signal);
-            if (found.length) { items.push(...found); continue; }
-          } catch (error) { if (signal?.aborted) throw error; }
-        }
         const found = await (
           await import('./book-api.ts')
         ).discoverBooks(tags, signal);
