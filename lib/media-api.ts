@@ -1,4 +1,5 @@
-import { detailedPatterns, detailedFeatures } from './features.ts';
+import { detailedPatterns, detailedFeatures, primaryGenre, seedTopic, matchesGenre } from './features.ts';
+import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats } from './retrieval.ts';
 import { matureRating } from './content-rating.ts';
 import { normalizeGenres, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
@@ -671,40 +672,42 @@ async function gateway(
   return data.items.filter(validStoredItem);
 }
 export async function discoverMedia(
-  types: Category[],
-  tags: string[],
-  signal?: AbortSignal,
-  adult = false,
-): Promise<{ items: CatalogMedia[]; failures: string[] }> {
-  const items: CatalogMedia[] = [];
-  const failures: string[] = [];
-  for (const type of types) {
-    signal?.throwIfAborted();
-    try {
-      if (type === 'Music') continue;
-      if (type === 'Book') {
-        const found = await (
-          await import('./book-api.ts')
-        ).discoverBooks(tags, signal);
-        if (!found.length) failures.push(type);
-        items.push(...found);
-        continue;
-      }
-      if (!usesGateway(type)) {
-        failures.push(type);
-        continue;
-      }
-      const found = await gateway(
-        'discover',
-        { type, tags: tags.slice(0, 3).join(','), adult: String(adult) },
-        signal,
-      );
-      for (const item of found)
-        if (!findDuplicate(items, item)) items.push(item);
-    } catch (e) {
-      if (signal?.aborted) throw e;
-      failures.push(type);
-    }
-  }
-  return { items, failures };
+  types: Category[], tags:string[], signal?:AbortSignal, adult=false,
+  options:{seed?:Media;accept?:(item:CatalogMedia)=>boolean}={},
+):Promise<{items:CatalogMedia[];failures:string[];stats:RetrievalStats}>{
+ const items:CatalogMedia[]=[],failures:string[]=[],stats=emptyStats();
+ const anchor=primaryGenre(options.seed),topic=seedTopic(options.seed);
+ const accept=(item:CatalogMedia)=>
+  (!anchor || matchesGenre(item,anchor)) && (!topic || item.tags.includes(topic)) &&
+  item.tags.some(t=>tags.includes(t)) && (!options.seed || !sameWork(item,options.seed)) &&
+  (options.accept?.(item) ?? true);
+ for(const item of cachedCatalog())if(types.includes(item.type) && accept(item) && !findDuplicate(items,item)){items.push(item);stats.cached++;}
+ for(const type of types){
+  signal?.throwIfAborted();
+  try{
+   if(type==='Music')continue;
+   let result:{items:CatalogMedia[];stats:RetrievalStats};
+   if(type==='Book')result=await(await import('./book-api.ts')).retrieveBooks(tags,signal,accept,anchor,topic);
+   else {
+    if(!usesGateway(type)){failures.push(type);continue;}
+    const core=[topic,anchor].filter((x):x is string=>!!x);
+    const controlled=tags.filter(t=>Object.hasOwn(vocabulary,t));
+    const plans=[JSON.stringify({tags:[...new Set([...core,...controlled])].slice(0,3).join(',')})];
+    const broad=core.length?core:controlled.slice(0,1);
+    if(broad.length)plans.push(JSON.stringify({tags:broad.join(',')}));
+    const seed=options.seed as CatalogMedia|undefined;
+    if(seed?.provider==='TMDB' && seed.type===type)plans.unshift(JSON.stringify({related:seed.externalId}));
+    result=await retrievePages([...new Set(plans)].slice(0,3),async(plan,page)=>{
+      const data=await json(catalogApi+'/discover?'+new URLSearchParams({type,adult:String(adult),page:String(page),...JSON.parse(plan)}),signal);
+      if(!Array.isArray(data.items))throw Error('Invalid discovery response.');
+      return {items:data.items.filter(validStoredItem),hasMore:data.hasMore===true};
+    },accept,signal,30,item=> !options.seed || type!==options.seed.type || !options.seed.tags.includes('anime') || item.tags.includes('anime'));
+   }
+   for(const key of ['examined','rejected','pages','failedQueries'] as const)stats[key]+=result.stats[key];
+   if(result.stats.failedQueries)failures.push(type+' (partial)');
+   for(const item of result.items)if(!findDuplicate(items,item))items.push(item);
+  }catch(error){if(signal?.aborted)throw error;failures.push(type);}
+ }
+ rememberCatalog(items);stats.accepted=items.length;
+ return {items,failures,stats};
 }

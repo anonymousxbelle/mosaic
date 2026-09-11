@@ -2,6 +2,7 @@ import type { CatalogMedia } from './media-api';
 import { extractTags, plainText } from './media-api.ts';
 import { normalizeGenres } from './genres.ts';
 import { bookSubjects, specificity } from './features.ts';
+import { retrievePages } from './retrieval.ts';
 const cache = new Map<string, { at: number; data: any }>();
 let queue: Promise<unknown> = Promise.resolve();
 let next = 0;
@@ -117,33 +118,37 @@ export async function verifyBook(id: string, signal?: AbortSignal) {
   if (!item) throw Error('Invalid book record.');
   return item;
 }
-export async function discoverBooks(tags: string[], signal?: AbortSignal) {
-  const fiction =
-    tags.includes('fiction') ||
-    tags.includes('fantasy') ||
-    tags.includes('magic');
-  const selected = [
-    ...new Set(
-      tags
-        .filter((t) => bookSubjects[t])
-        .sort((a, b) => specificity(b) - specificity(a))
-        .map((t) => bookSubjects[t]),
-    ),
-  ].slice(0, 3);
-  if (!selected.length) return [];
-  if (tags.includes('fantasy') && !selected.includes('fantasy')) {
-    if (selected.length === 3) selected[2] = 'fantasy';
-    else selected.push('fantasy');
+export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(item:CatalogMedia)=>boolean=()=>true, anchor?:string, topic?:string) {
+  const fiction=tags.includes('fiction') || tags.includes('fantasy') || tags.includes('magic');
+  const subjects=[...new Set(tags.filter(t=>bookSubjects[t]).sort((a,b)=>specificity(b)-specificity(a)).map(t=>bookSubjects[t]))].slice(0,3);
+  const core=[anchor && bookSubjects[anchor],topic && bookSubjects[topic]].filter((x):x is string=>!!x);
+  const clauses=(values:string[])=>[...new Set(values)].map(s=>'subject:"'+s+'"').join(' AND ')+(fiction?' AND subject:fiction':'');
+  const plans=[...new Set(subjects.map(s=>clauses([...core,s])))];
+  if(core.length) { if(plans.length>=3)plans[2]=clauses(core);else plans.push(clauses(core)); }
+  const result=await retrievePages([...new Set(plans)].slice(0,3),async(q,page)=>{
+    const data=await request('/search.json?'+new URLSearchParams({q,fields,limit:'30',page:String(page),lang:'en'}),signal);
+    if(!Array.isArray(data.docs))throw Error('Unexpected book catalog response.');
+    const items=data.docs.map(openLibraryRecord).filter((x:CatalogMedia|null):x is CatalogMedia=>!!x);
+    const total=data.numFound ?? data.num_found;
+    return {items,hasMore:data.docs.length===30 && (typeof total!=='number' || page*30<total)};
+  },accept,signal);
+  // Enrich the strongest four subject matches without making every work a new request.
+  result.items.sort((a,b)=>b.tags.reduce((n,t)=>n+(tags.includes(t)?specificity(t):0),0)-a.tags.reduce((n,t)=>n+(tags.includes(t)?specificity(t):0),0));
+  const rejected=new Set<string>();
+  for(let index=0;index<Math.min(4,result.items.length);index++){
+    signal?.throwIfAborted();
+    const item=result.items[index];
+    try {
+      const work=await request('/works/'+item.externalId+'.json',signal);
+      const description=plainText(typeof work.description==='string'?work.description:work.description?.value);
+      const subjects=Array.isArray(work.subjects)?work.subjects.filter((x:unknown)=>typeof x==='string'):[];
+      const enriched={...item,description:description||item.description,tags:[...new Set([...item.tags,...extractTags(description,subjects)])],genres:[...new Set([...(item.genres||[]),...normalizeGenres(subjects)])],adult:item.adult || subjects.some((s:string)=>/\berotica|erotic fiction\b/i.test(s)) || undefined};
+      if(accept(enriched))result.items[index]=enriched;else rejected.add(item.id);
+    }catch(error){if(signal?.aborted)throw error;}
   }
-  const items: CatalogMedia[] = [];
-  // Separate subject queries preserve several interests instead of requiring every favorite to match.
-  for (const subject of selected) {
-    const found = await searchBooks(
-      'subject:"' + subject + '"' + (fiction ? ' AND subject:fiction' : ''),
-      signal,
-    );
-    for (const item of found)
-      if (!items.some((x) => x.id === item.id)) items.push(item);
-  }
-  return items;
+  result.items=result.items.filter(x=>!rejected.has(x.id));result.stats.rejected+=rejected.size;result.stats.accepted=result.items.length;
+  return result;
+}
+export async function discoverBooks(tags:string[],signal?:AbortSignal){
+ return (await retrieveBooks(tags,signal)).items;
 }
