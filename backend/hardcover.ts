@@ -1,6 +1,5 @@
 import {extractTags,plainText} from '../lib/media-api.ts';
 import {normalizeGenres} from '../lib/genres.ts';
-import {detailedTags,bookSubjects} from '../lib/features.ts';
 type Row=Record<string,any>;
 export class HardcoverError extends Error {}
 export type HardcoverEnv={HARDCOVER_TOKEN?:string};
@@ -31,8 +30,8 @@ async function query(env:HardcoverEnv,query:string,variables:Row){
   throw new HardcoverError('Hardcover query failed: '+category+'.');
  }return d.data;
 }
-async function search(env:HardcoverEnv,text:string,subjects=false){
- const q=subjects?'query Search($q: String!) { search(query: $q, query_type: "Book", per_page: 20, page: 1, fields: "genres,description", weights: "3,1") { results } }':'query Search($q: String!) { search(query: $q, query_type: "Book", per_page: 20, page: 1) { results } }';
+async function search(env:HardcoverEnv,text:string){
+ const q='query Search($q: String!) { search(query: $q, query_type: "Book", per_page: 20, page: 1) { results } }';
  const data=await query(env,q,{q:text});
  let result=data.search?.results;if(typeof result==='string'){try{result=JSON.parse(result);}catch{throw Error('Invalid Hardcover response.');}}
  if(!Array.isArray(result?.hits))throw Error('Invalid Hardcover search response.');
@@ -47,9 +46,10 @@ export async function hardcoverBooks(env:HardcoverEnv,action:string,q:string,id:
   const rich=matches.find((x:Row|null)=>x?.externalId===id);if(rich)return [rich];
   const item=hardcoverRecord({...row,author_names:row.contributions?.map((x:Row)=>x.author?.name)});return item?[item]:[];
  }
- const selected=[...new Set(tags.filter(t=>detailedTags.includes(t)||Object.hasOwn(bookSubjects,t)))].slice(0,3);
- const items:Row[]=[];for(const tag of selected){for(const item of await search(env,tag.replaceAll('-',' '),true)){if(item&&!items.some(x=>x.id===item.id))items.push(item);}}
- return items;
+ // The live search index rejected metadata-field queries. Keep discovery on
+ // Open Library subject queries until Hardcover supports a verified equivalent.
+ // Never fall back to searching genre words in book titles.
+ return [];
 }
 
 

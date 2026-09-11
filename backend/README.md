@@ -1,6 +1,8 @@
-# Catalog backend — activation pending
+# Catalog backend
 
-TMDB and IGDB adapters are implemented and tested with fixtures. They are not live: developer accounts, credentials and a Worker deployment are still required. The public site keeps using Apple, TVmaze and Wikidata until CATALOG_API_URL is set.
+TMDB and Hardcover are configured in the Cloudflare Worker. IGDB remains inactive. The public frontend uses CATALOG_API_URL for this backend. Hardcover search and ID verification have passed live requests; book discovery remains on Open Library subject queries because Hardcover metadata-field requests failed in live checks.
+
+Hardcover uses the encrypted runtime secret `HARDCOVER_TOKEN`. Its adapter sends fixed read-only GraphQL queries to `https://api.hardcover.app/v1/graphql`; it never accepts arbitrary GraphQL or accesses account/library data. Do not put tokens in repository variables, frontend environment variables, source files, or chat. Both raw tokens and tokens prefixed with `Bearer ` are accepted. See [Hardcover setup](https://docs.hardcover.app/api/getting-started/).
 
 ## Setup
 
@@ -14,7 +16,7 @@ TMDB and IGDB adapters are implemented and tested with fixtures. They are not li
 
 ## Endpoints and behavior
 
-- GET /search?type=Movie|TV|Game&q=... returns normalized records with metadata-derived tags.
+- GET /search?type=Movie|TV|Game|Book&q=... returns normalized records with metadata-derived tags.
 - GET /verify?type=...&id=... re-fetches a record, bypassing response cache.
 - GET /discover?type=...&tags=fantasy,adventure resolves supported provider genres/themes and fetches bounded candidates. Mosaic then applies its own shared-tag ranking. Unmapped custom tags may yield no matches; no fabricated tags are assigned.
 - GET /status exposes configuration booleans only.
