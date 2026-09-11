@@ -384,11 +384,14 @@ export default function Home() {
           : tags,
         controller.signal,
         adultSection,
+        {seed:mode === 'based-on'?selected:undefined,
+          accept:(item)=>inContentSection(item,adultSection) && genreAllowed(item,[],avoided) &&
+            recommendationEligible(item,ratings) && !findDuplicate(catalog,item)},
       );
       if (controller.signal.aborted) return;
       setCandidates(found.items.filter((i) => !findDuplicate(catalog, i)));
       setDiscoveryNotice(
-        `${found.items.length} catalog candidates fetched.${found.failures.length ? ' Unavailable: ' + found.failures.join(', ') + '. Genre discovery needs a connected provider; title search in My Library still works.' : ''} Only candidates sharing your tags appear below.`,
+        `Checked ${found.stats.examined} unique titles across ${found.stats.pages} catalog pages; filtered out ${found.stats.rejected}. ${found.items.length} eligible candidates (${found.stats.cached} from recent searches).${found.failures.length ? ' Some sources were unavailable: ' + found.failures.join(', ') + '.' : ''} Results below are ranked within this pool, not the entire catalog.`,
       );
     } catch {
       if (!controller.signal.aborted)
