@@ -21,7 +21,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-import { detailedFeatures, specificity, detailedTags, primaryGenre } from '@/lib/features';
+import { detailedFeatures, specificity, detailedTags, primaryGenre, seedTopic } from '@/lib/features';
 import { GenreGuide } from '@/components/media/genre-guide';
 import { DiscoveryFeedback } from '@/components/media/discovery-feedback';
 import { inContentSection, contentLabel } from '@/lib/content-rating';
@@ -380,7 +380,7 @@ export default function Home() {
       const found = await discoverMedia(
         category === 'All' ? [...discoveryCategories] : [category],
         mode === 'based-on' && primaryGenre(selected)
-          ? [...new Set([primaryGenre(selected)!, ...tags])]
+          ? [...new Set([...(seedTopic(selected) ? [seedTopic(selected)!] : []), primaryGenre(selected)!, ...tags])]
           : tags,
         controller.signal,
         adultSection,
@@ -418,6 +418,7 @@ export default function Home() {
         ? [selected?.id || seed]
         : Object.keys(ratings),
     mode === 'based-on' ? primaryGenre(selected) : undefined,
+    mode === 'based-on' ? selected : undefined,
   );
   const filteredResults = diversify(
     results
@@ -966,6 +967,8 @@ export default function Home() {
                     <legend>What did you enjoy? (optional)</legend>
                     <p>Choose up to five aspects to focus this discovery.</p>
                     {primaryGenre(selected) && <p>Staying within {primaryGenre(selected)!.replaceAll('-', ' ')}. Shared themes rank the matches within this genre.</p>}
+                    {seedTopic(selected) && <p>Keeping {seedTopic(selected)} as the topic.</p>}
+                    {category === 'All' && <p>Showing {selected.tags.includes('anime') ? 'anime in the same media type' : 'the same media type'} first. Choose another media category to explore it directly.</p>}
                     <div className="tag-options">
                       {selected.tags.map((t) => (
                         <button
