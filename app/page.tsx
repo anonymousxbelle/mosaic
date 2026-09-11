@@ -148,6 +148,7 @@ export default function Home() {
   const [rankingEvidence,setRankingEvidence]=useState<{key:string;provider:RankingEvidence;semantic:SemanticScores}>({key:'',provider:{},semantic:{}});
   const [category, setCategory] = useState<Category | 'All'>('All');
   const [focusTags, setFocusTags] = useState<string[]>([]);
+  const [mustTags,setMustTags]=useState<string[]>([]);
   const [seed, setSeed] = useState('hunger');
   const [search, setSearch] = useState('');
   const taste = useMemo(
@@ -163,8 +164,8 @@ export default function Home() {
       ...discoveryCatalog,
       ...candidates.filter((i) => inContentSection(i, adultSection)),
     ].find((i) => i.id === seed) || discoveryCatalog[0];
-  useEffect(() => setFocusTags([]), [seed]);
-  const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,category,focusTags,genre,adultSection,avoided,ratings]);
+  useEffect(() => {setFocusTags([]);setMustTags([]);}, [seed]);
+  const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,category,focusTags,mustTags,genre,adultSection,avoided,ratings]);
   useEffect(()=>{
     discoveryRequest.current?.abort();
     setDiscovering(false);
@@ -397,7 +398,7 @@ export default function Home() {
         controller.signal,
         adultSection,
         {seed:mode === 'based-on'?selected:undefined,
-          accept:(item)=>inContentSection(item,adultSection) && genreAllowed(item,[],avoided) &&
+          accept:(item)=>(mode!=='based-on' || mustTags.every(t=>item.tags.includes(t))) && inContentSection(item,adultSection) && genreAllowed(item,[],avoided) &&
             recommendationEligible(item,ratings) && !findDuplicate(catalog,item)},
       );
       if (controller.signal.aborted) return;
@@ -453,7 +454,7 @@ export default function Home() {
     setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
   const results = recommend(
-    [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))],
+    [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))].filter(i=>mode!=='based-on' || mustTags.every(t=>i.tags.includes(t))),
     mode === 'collection'
       ? vector([collection])
       : mode === 'genres'
@@ -1044,6 +1045,11 @@ export default function Home() {
                         </button>
                       ))}
                     </div>
+                    <p>Must have (optional): every selected feature is required. Other shared features help rank matches.</p>
+                    <div className="tag-options">
+                      {selected.tags.filter(t=>t!==primaryGenre(selected) && t!==seedTopic(selected)).map(t=><button key={'must-'+t} aria-pressed={mustTags.includes(t)} onClick={()=>setMustTags(v=>v.includes(t)?v.filter(x=>x!==t):v.length<5?[...v,t]:v)}>{t.replaceAll('-',' ')}</button>)}
+                    </div>
+                    <p>Missing metadata is not treated as a match. If results are sparse, remove an optional requirement or choose a different starting title. Anime remains within TV and movies.</p>
                   </fieldset>
                 )}
               </TabsContent>
