@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hybrid-ranking';
 import { compareDescriptions } from '@/lib/semantic';
+import { hasSynopsis } from '@/lib/catalog-text';
 import { flushSync } from 'react-dom';
 import {
   BookOpen,
@@ -142,6 +143,8 @@ export default function Home() {
   const [ratings, setRatings] = useState<Ratings>({});
   const [mode, setMode] = useState('for-you');
   const [rankingMode,setRankingMode]=useState('standard');
+  const [loadingSynopses,setLoadingSynopses]=useState<string[]>([]);
+  const [synopsisErrors,setSynopsisErrors]=useState<Record<string,string>>({});
   const [rankingEvidence,setRankingEvidence]=useState<{key:string;provider:RankingEvidence;semantic:SemanticScores}>({key:'',provider:{},semantic:{}});
   const [category, setCategory] = useState<Category | 'All'>('All');
   const [focusTags, setFocusTags] = useState<string[]>([]);
@@ -425,6 +428,17 @@ export default function Home() {
     }
   }
   const preferences = genrePreferences(discoveryCatalog, ratings);
+  async function loadSynopsis(id:string){
+    const record=[...added,...candidates].find(x=>x.id===id);
+    if(!record || loadingSynopses.includes(id))return;
+    setLoadingSynopses(old=>[...old,id]);setSynopsisErrors(old=>({...old,[id]:''}));
+    try{
+      const fresh=await(await import('@/lib/book-api')).enrichBook(record);
+      setCandidates(old=>old.map(x=>x.id===id?{...x,...fresh}:x));
+      setAdded(old=>old.map(x=>x.id===id?{...x,...fresh}:x));
+    }catch{setSynopsisErrors(old=>({...old,[id]:'Could not load the synopsis. Please retry.'}));}
+    finally{setLoadingSynopses(old=>old.filter(x=>x!==id));}
+  }
   function downloadComparison(){
     const publicSeed=originals.find(x=>x.id===selected?.id) || candidates.find(x=>x.id===selected?.id);
     if(!publicSeed || rankingEvidence.key!==discoveryKey)return;
@@ -1213,12 +1227,22 @@ export default function Home() {
                       </a>
                     )}
                     <p className="description">
-                      {item.description.length > 420
+                      {!hasSynopsis(item.description)
+                        ? 'Synopsis not loaded or unavailable from the catalog.'
+                        : item.description.length > 420
                         ? item.description
                             .slice(0, 420)
                             .replace(/\s+\S*$/, '') + '…'
                         : item.description}
                     </p>
+                    {!hasSynopsis(item.description) && item.id.startsWith('openlibrary:') && <>
+                      <button onClick={()=>loadSynopsis(item.id)} disabled={loadingSynopses.includes(item.id)}>
+                        {loadingSynopses.includes(item.id)?'Loading synopsis…':'Load synopsis'}
+                      </button>
+                      {synopsisErrors[item.id] && <p role="status">{synopsisErrors[item.id]}</p>}
+                      {[...added,...candidates].find(x=>x.id===item.id)?.synopsisStatus==='unavailable' &&
+                        <p>The full source record has no synopsis. Use the catalog link for more information.</p>}
+                    </>}
                     {item.description.length > 420 && (
                       <details className="full-description">
                         <summary>Read full description</summary>
