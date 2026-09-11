@@ -17,7 +17,7 @@ async function readBounded(request:Request){
  try{return JSON.parse(new TextDecoder().decode(bytes));}catch{throw new SemanticError(400,'Invalid comparison.');}
 }
 const valid=(x:any)=>x && typeof x.id==='string' && x.id.length>0 && x.id.length<=150 &&
- typeof x.text==='string' && x.text.trim().length>=32 && x.text.length<=1200;
+ typeof x.text==='string' && x.text.trim().length>=32 && x.text.length<=1200 && hasSynopsis(x.text);
 function similarity(a:number[],b:number[]){
  const dot=a.reduce((sum,x,i)=>sum+x*b[i],0);
  const norm=Math.sqrt(a.reduce((s,x)=>s+x*x,0)*b.reduce((s,x)=>s+x*x,0));
@@ -49,3 +49,4 @@ export async function semanticComparison(request:Request,env:SemanticEnv){
  while(cache.size>500)cache.delete(cache.keys().next().value!);
  return {model,scores:Object.fromEntries(input.items.map((row:any,index:number)=>[row.id,similarity(vectors[0],vectors[index+1])]))};
 }
+import { hasSynopsis } from '../lib/catalog-text.ts';

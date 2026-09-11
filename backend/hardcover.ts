@@ -1,5 +1,6 @@
 import {extractTags,plainText} from '../lib/media-api.ts';
 import {normalizeGenres} from '../lib/genres.ts';
+import {bookSynopsis,hasSynopsis} from '../lib/catalog-text.ts';
 type Row=Record<string,any>;
 export class HardcoverError extends Error {}
 export type HardcoverEnv={HARDCOVER_TOKEN?:string};
@@ -9,7 +10,7 @@ export function hardcoverRecord(row:Row){
  if(!/^[1-9]\d{0,9}$/.test(id)||!title||!/^[a-z0-9][a-z0-9-]*$/.test(slug))return null;
  const strings=(x:unknown):string[]=>Array.isArray(x)?x.filter((v):v is string=>typeof v==='string').slice(0,20):[];
  const genres=strings(row.genres),moods=strings(row.moods),tags=strings(row.tags);
- const description=plainText(row.description);
+ const description=bookSynopsis(plainText(row.description));
  const series = strings(row.series_names)[0];
  const seriesKey = series?.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N} -]/gu,'').trim().slice(0,160);
  return {id:'hardcover:'+id,externalId:id,provider:'Hardcover',type:'Book',title,creator:plainText(strings(row.author_names).join(', ')).slice(0,500)||'Author unavailable',
@@ -46,7 +47,12 @@ export async function hardcoverBooks(env:HardcoverEnv,action:string,q:string,id:
   const d=await query(env,'query Verify($id: Int!) { books(where: {id: {_eq: $id}}, limit: 1) { id title slug description contributions { author { name } } } }',{id:Number(id)});
   const row=d.books?.find((x:Row)=>String(x.id)===id);if(!row)return [];
   const matches=await search(env,String(row.title).slice(0,100));
-  const rich=matches.find((x:Row|null)=>x?.externalId===id);if(rich)return [rich];
+  const rich=matches.find((x:Row|null)=>x?.externalId===id);
+  if(rich){
+   const description=bookSynopsis(plainText(row.description));
+   return [{...rich,description:hasSynopsis(rich.description)?rich.description:description,
+    tags:[...new Set([...rich.tags,...extractTags(description,[])])]}];
+  }
   const item=hardcoverRecord({...row,author_names:row.contributions?.map((x:Row)=>x.author?.name)});return item?[item]:[];
  }
  // The live search index rejected metadata-field queries. Keep discovery on
