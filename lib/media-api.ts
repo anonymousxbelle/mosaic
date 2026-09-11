@@ -522,7 +522,7 @@ export function findDuplicate(items: Media[], item: Media): Media | undefined {
   return items.find(
     (x) =>
       sameWork(x,item) ||
-      (x.type === item.type &&
+      (x.type !== 'Book' && x.type === item.type &&
         (!('format' in x) ||
           !('format' in item) ||
           !x.format ||
