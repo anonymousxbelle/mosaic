@@ -1,0 +1,17 @@
+{
+  "label": "Synthetic harness example — not evidence of real recommendation quality",
+  "cases": [{
+    "id": "basketball-example",
+    "seed": {"id":"seed","title":"Example basketball anime","creator":"Example","type":"TV","tags":["sports","basketball","anime"],"description":""},
+    "category": "All",
+    "requiredGenre": "sports",
+    "candidates": [
+      {"id":"a","title":"A basketball anime","creator":"A","type":"TV","tags":["sports","basketball","anime"],"description":""},
+      {"id":"b","title":"B basketball anime","creator":"B","type":"TV","tags":["sports","basketball","anime"],"description":""},
+      {"id":"c","title":"Football anime","creator":"C","type":"TV","tags":["sports","football","anime"],"description":""}
+    ],
+    "evidence": {"a":[{"plan":"related","page":1,"rank":5}],"b":[{"plan":"related","page":1,"rank":1}]},
+    "judgments": {},
+    "semanticScores": {}
+  }]
+}
