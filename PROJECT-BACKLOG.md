@@ -114,3 +114,10 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 - Book discovery stays on Open Library subject queries. Hardcover metadata-field searches failed live; investigate supported discovery queries before enabling them. Never substitute genre words as title queries.
 - Book search uses Hardcover with Open Library/Apple fallbacks, preserving existing saved records and personal edits. Provider rating counts are not collaborative recommendation signals.
 - TODO (user requested): explore Google Music and YouTube Music APIs. Establish what official APIs are currently available, including relevant YouTube Data API capabilities; assess authentication, quotas/cost, metadata/genre quality, usage terms and whether they can support meaningful cross-media recommendations. Research only; music remains paused pending a quality plan.
+
+## 2026-09-11 — Metadata and matching refinement
+- Separate genre, subgenre, theme, mood, audience and style/format in Edit tags. Anime remains supported, with TMDB Japanese animation evidence and sports-anime/sports-drama combinations.
+- Audience labels require catalog subject evidence; incidental generic sports wording in a synopsis no longer creates the sports tag. Specific sport names and provider sports labels remain usable. Existing stored metadata needs Refresh catalog details to receive provider corrections.
+- Mood-only/audience-only/style-only matches receive an additional ranking penalty when a seed has substantive interests. Shared themes/subgenres lead explanations. These are heuristic weights, not validated accuracy scores.
+- Collapse explicitly labeled book editions with matching creators in discovery; retain subtitles and volume numbers. Reduce repeated series using supplied Hardcover series names and TMDB film collection IDs. Unknown metadata stays unknown; no title-based franchise guesses.
+- Limitations: illustrator/contributor differences can still prevent cross-provider edition matching; Open Library series metadata and cross-provider franchise identity are future work. User testing and field-level tag provenance remain pending.
