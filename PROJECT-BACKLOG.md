@@ -161,3 +161,9 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 - Added bounded POST semantic endpoint using Cloudflare BGE-small (384 dimensions), one-hour/500-vector in-memory cache, eight-second inference timeout, strict payload/output validation, and four uncached calls per minute per location. No model training, shared user history, or automatic AI tagging was added.
 - Added comparison snapshot download, ranking evaluation runner, twelve proposed seed/intent review tasks, and explicitly unjudged synthetic example. Real relevance judgments and held-out quality gains are pending; new modes remain experimental.
 - Next: gather reviewed snapshots; compare provider, standard, and AI variants; structured feature provenance and enrichment of uncertain metadata; durable permitted catalog storage. Supabase setup and collaborative recommendations remain pending.
+
+## 2026-09-11 - Book synopsis repair
+- Open Library search results contain subjects but usually no synopsis. Discovery now fetches full work records for the twelve leading tag-ranked/diversified results, up from four selected by tag count. Additional results offer a retryable Load synopsis action. Full source records can still lack descriptions.
+- Freshly fetched details replace stale cached records; Hardcover verification preserves a full synopsis when the search index omits it. Placeholder text is excluded from AI comparisons on both client and server.
+- A live Harry Potter retrieval check recovered descriptions for all ten leading results (twelve enriched out of eighty candidates). This checks metadata coverage, not judged recommendation quality. Sixty-eight regression tests pass.
+- Remaining: review recommendation relevance with user judgments, improve book candidate coverage and series entry-point metadata, and evaluate identity-checked cross-provider enrichment. No extra ranking weights were introduced by this repair.
