@@ -144,3 +144,20 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 - Cache up to 400 normalized catalog records for ten minutes in browser memory, reapply eligibility on reuse; cache up to 250 public TMDB responses for five minutes in the Worker. Verification bypasses the TMDB cache. This is not a persistent whole-catalog database; durable catalog storage requires separate infrastructure/provider-term review.
 - UI reports examined/rejected/accepted counts, pages and cached matches. Added regression checks for sparse first pages, additional pages, alternative-source failures, deduplication, anime retrieval depth and related-page validation.
 - Remaining: tune budgets with user relevance/latency measurements; broader book-related-title retrieval (Hardcover discovery remains unavailable), durable term-compliant cache, provider coverage and named-title recall benchmarks. More retrieval is not proof of globally best recommendations.
+
+## 2026-09-11 - Recommendation research and proposed experiments
+- Research report: [Recommendation systems for Mosaic](docs/recommendation-research.md). Literature review covers cross-media/cross-domain recommendation, semantic content, collaborative filtering, rank fusion, calibration, and evaluation. These are proposed experiments, not deployed features.
+- Priority 1: build a judged seed/intent benchmark and record per-stage retrieval/ranking evidence; compare provider order and the current tag-cosine baseline on identical candidate pools.
+- Priority 2: retain provider endpoint/query/page/rank evidence and test rank fusion, without treating repeated queries as independent votes.
+- Priority 3: field-level feature provenance, confidence categories, and enrichment before final rejection of uncertain genre/topic metadata. Preserve explicit constraints.
+- Priority 4: compare cleaned-description lexical matching and embeddings against the baseline; distinguish reranking gains from candidate-retrieval gains.
+- Priority 5: evaluate a durable permitted metadata index, interest-specific profiles, and explicit cross-media discovery intent. Supabase is not configured yet.
+- Later: consent-based shared ratings and regularized item-to-item recommendations once overlap and held-out reliability support them. Do not present provider average ratings as collaborative evidence.
+- Keep existing music API research, age verification, and genre-navigation requests in their existing backlog positions. No recommendation behavior changed in this research turn.
+
+## 2026-09-11 - First research implementation and Cloudflare AI experiment
+- Implemented transient query/page/rank evidence and experimental smoothed rank fusion. Repeated queries contribute only the best provider position, preventing duplicated votes. Standard ranking remains the default pending judged evaluation.
+- Based On discovery now offers standard, provider blend, and AI description blend. Genre/topic and same-medium tiers remain enforced. AI compares up to 24 already eligible candidates, not all retrieved titles or the full catalog.
+- Added bounded POST semantic endpoint using Cloudflare BGE-small (384 dimensions), one-hour/500-vector in-memory cache, eight-second inference timeout, strict payload/output validation, and four uncached calls per minute per location. No model training, shared user history, or automatic AI tagging was added.
+- Added comparison snapshot download, ranking evaluation runner, twelve proposed seed/intent review tasks, and explicitly unjudged synthetic example. Real relevance judgments and held-out quality gains are pending; new modes remain experimental.
+- Next: gather reviewed snapshots; compare provider, standard, and AI variants; structured feature provenance and enrichment of uncertain metadata; durable permitted catalog storage. Supabase setup and collaborative recommendations remain pending.

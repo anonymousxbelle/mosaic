@@ -10,6 +10,12 @@ GitHub Actions publishes `dist/client/mosaic` to https://anonymousxbelle.github.
 
 ## Latest update
 
+Based On discovery now offers experimental **Provider + tags** and **AI descriptions + provider + tags** methods alongside the unchanged standard default. Provider positions survive retrieval; repeated queries do not multiply votes. Cloudflare Workers AI compares up to 24 candidate synopses using BGE-small, with no ratings or personal tags sent. Missing descriptions, quotas, or AI failures fall back to other matching. This is semantic reranking of eligible candidates, not automatic tagging or a whole-catalog AI search.
+
+The AI binding and a separate rate limiter are configured in `backend/wrangler.jsonc`. Workers AI has usage limits and may incur charges under paid account billing; see [Cloudflare pricing](https://developers.cloudflare.com/workers-ai/platform/pricing/). No plan upgrade is required by this change. The cache holds up to 500 embeddings for one hour in Worker memory; it is not persistent storage. The limiter permits four uncached comparisons per minute per Cloudflare location, not a global daily spending cap.
+
+The [research report](docs/recommendation-research.md) explains the design. The [evaluation guide](evaluation/README.md) documents comparison snapshots and a reproducible runner. Human relevance judgments and an improvement claim remain pending; the synthetic example only validates the harness.
+
 Demo titles are off by default and can be enabled explicitly. Find more from live catalogs retrieves candidates from the current providers using multiple genre/topic queries and additional pages when needed, then ranks eligible metadata matches. It can return no matches and is not an exhaustive catalog search.
 
 TMDB is active for films and TV. Hardcover is connected for book search and ID verification, with Open Library and Apple search fallbacks. Book discovery uses Open Library subject queries; Hardcover metadata-field discovery is not active because live requests failed. IGDB remains inactive; games use Wikidata. Music discovery is paused. See [backend setup](backend/README.md).
@@ -33,7 +39,7 @@ TMDB is active for films and TV. Hardcover is connected for book search and ID v
 | Films | TMDB | Film ID, genres, keywords, director, content ratings |
 | Games | Wikidata | Item ID, video-game classification Q7889, genres, developer |
 
-Hardcover and TMDB queries pass through the Cloudflare backend; fallback catalog queries go directly to their providers. Tokens never reach the browser. No paid AI calls are used. Requests are abortable, cached briefly, and bounded by a timeout. Wikidata only offers directly classified game instances, so some valid titles may be absent. Catalog matching verifies existence and category; it does not guarantee metadata accuracy or comprehensive coverage. Hardcover search preserves its relevance/popularity ordering; its rating counts are catalog metadata, not Mosaic user ratings or collaborative recommendations.
+Hardcover and TMDB queries pass through the Cloudflare backend; fallback catalog queries go directly to their providers. Tokens never reach the browser. Standard discovery makes no AI calls; the optional AI comparison uses Workers AI quota. Requests are abortable, cached briefly, and bounded by a timeout. Wikidata only offers directly classified game instances, so some valid titles may be absent. Catalog matching verifies existence and category; it does not guarantee metadata accuracy or comprehensive coverage. Hardcover search preserves its relevance/popularity ordering; its rating counts are catalog metadata, not Mosaic user ratings or collaborative recommendations.
 
 [Apple API documentation](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html), [TVmaze API and CC BY-SA terms](https://www.tvmaze.com/api), [Wikidata CC0](https://www.wikidata.org/wiki/Wikidata:Licensing). Source links are retained on imported records and shown in the interface. Demo descriptions and tags are manually authored examples.
 
