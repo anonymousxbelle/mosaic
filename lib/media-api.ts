@@ -1,5 +1,5 @@
 import { detailedPatterns, detailedFeatures, primaryGenre, seedTopic, matchesGenre } from './features.ts';
-import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats } from './retrieval.ts';
+import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats, type RetrievalEvidence } from './retrieval.ts';
 import { matureRating } from './content-rating.ts';
 import { normalizeGenres, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
@@ -674,8 +674,9 @@ async function gateway(
 export async function discoverMedia(
   types: Category[], tags:string[], signal?:AbortSignal, adult=false,
   options:{seed?:Media;accept?:(item:CatalogMedia)=>boolean}={},
-):Promise<{items:CatalogMedia[];failures:string[];stats:RetrievalStats}>{
+):Promise<{items:CatalogMedia[];failures:string[];stats:RetrievalStats;evidence:Record<string,RetrievalEvidence[]>}>{
  const items:CatalogMedia[]=[],failures:string[]=[],stats=emptyStats();
+ const evidence:Record<string,RetrievalEvidence[]>={};
  const anchor=primaryGenre(options.seed),topic=seedTopic(options.seed);
  const accept=(item:CatalogMedia)=>
   (!anchor || matchesGenre(item,anchor)) && (!topic || item.tags.includes(topic)) &&
@@ -686,7 +687,7 @@ export async function discoverMedia(
   signal?.throwIfAborted();
   try{
    if(type==='Music')continue;
-   let result:{items:CatalogMedia[];stats:RetrievalStats};
+   let result:{items:CatalogMedia[];stats:RetrievalStats;evidence:Record<string,RetrievalEvidence[]>};
    if(type==='Book')result=await(await import('./book-api.ts')).retrieveBooks(tags,signal,accept,anchor,topic);
    else {
     if(!usesGateway(type)){failures.push(type);continue;}
@@ -705,9 +706,14 @@ export async function discoverMedia(
    }
    for(const key of ['examined','rejected','pages','failedQueries'] as const)stats[key]+=result.stats[key];
    if(result.stats.failedQueries)failures.push(type+' (partial)');
-   for(const item of result.items)if(!findDuplicate(items,item))items.push(item);
+   for(const item of result.items){
+    const duplicate=findDuplicate(items,item);
+    const key=duplicate?.id || item.id;
+    evidence[key]=[...(evidence[key]||[]),...(result.evidence[item.id]||[])];
+    if(!duplicate)items.push(item);
+   }
   }catch(error){if(signal?.aborted)throw error;failures.push(type);}
  }
  rememberCatalog(items);stats.accepted=items.length;
- return {items,failures,stats};
+ return {items,failures,stats,evidence};
 }
