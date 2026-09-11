@@ -517,7 +517,7 @@ const comparable = (text: string) =>
   text
     .normalize('NFKD')
     .replace(/\([^)]*\)/g, '')
-    .split('Â·')[0]
+    .split('·')[0]
     .replace(/[^a-zA-Z0-9]/g, '')
     .toLowerCase();
 export function findDuplicate(items: Media[], item: Media): Media | undefined {

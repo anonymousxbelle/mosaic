@@ -11,7 +11,7 @@ export function bookSynopsis(raw: string): string {
     .filter(Boolean);
   const kept = paragraphs.filter(
     (p) =>
-      !/^([â€œ"â€˜]|named one of|winner of|coming soon|now a major|praise for|about the author|also (by|available)|more (books|titles)|readers (love|say)|\*?\s*#?\d*\s*(new york times|sunday times|usa today)|an? instant .*bestseller)/i.test(
+      !/^([“"‘]|named one of|winner of|coming soon|now a major|praise for|about the author|also (by|available)|more (books|titles)|readers (love|say)|\*?\s*#?\d*\s*(new york times|sunday times|usa today)|an? instant .*bestseller)/i.test(
         p,
       ),
   );
