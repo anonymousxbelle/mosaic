@@ -136,6 +136,7 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
     description: description || 'No description supplied by this catalog.',
     tags: [...new Set(tags)],
     genres: normalizeGenres(names(d.genres)),
+    seriesKey: type === 'Movie' && Number.isSafeInteger(d.belongs_to_collection?.id) && d.belongs_to_collection.id > 0 ? 'tmdb:'+d.belongs_to_collection.id : undefined,
     adult: d.adult === true || certifications.some(matureRating),
     contentRating: rating || (d.adult === true ? 'Adult flag' : undefined),
     artworkUrl:

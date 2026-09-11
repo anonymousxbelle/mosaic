@@ -10,8 +10,11 @@ export function hardcoverRecord(row:Row){
  const strings=(x:unknown):string[]=>Array.isArray(x)?x.filter((v):v is string=>typeof v==='string').slice(0,20):[];
  const genres=strings(row.genres),moods=strings(row.moods),tags=strings(row.tags);
  const description=plainText(row.description);
+ const series = strings(row.series_names)[0];
+ const seriesKey = series?.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N} -]/gu,'').trim().slice(0,160);
  return {id:'hardcover:'+id,externalId:id,provider:'Hardcover',type:'Book',title,creator:plainText(strings(row.author_names).join(', ')).slice(0,500)||'Author unavailable',
  description:description||'No synopsis supplied by this catalog.',genres:normalizeGenres(genres),tags:extractTags(description,[...genres,...moods,...tags]),
+ seriesKey:seriesKey?'hardcover:'+seriesKey:undefined,
  sourceUrl:'https://hardcover.app/books/'+slug,verifiedAt:new Date().toISOString(),year:Number.isInteger(row.release_year)?String(row.release_year):undefined,
  ratingCount:Number.isSafeInteger(row.ratings_count)&&row.ratings_count>=0?row.ratings_count:undefined,
  adult:genres.some(t=>/\berotica\b/i.test(t))||undefined};
