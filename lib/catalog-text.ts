@@ -1,4 +1,8 @@
+export function hasSynopsis(value:string):boolean {
+  return !!value.trim() && !/^(?:no (?:synopsis|description)(?: supplied| available)?|(?:synopsis|description) (?:unavailable|not available|not yet loaded))/i.test(value.trim());
+}
 export function bookSynopsis(raw: string): string {
+  if(!hasSynopsis(raw))return '';
   const paragraphs = raw
     .replace(/<br\s*\/?\s*>|<\/p>|<\/div>/gi, '\n')
     .replace(/<[^>]+>/g, ' ')
@@ -7,7 +11,7 @@ export function bookSynopsis(raw: string): string {
     .filter(Boolean);
   const kept = paragraphs.filter(
     (p) =>
-      !/^([“"‘]|named one of|winner of|coming soon|now a major|praise for|about the author|also (by|available)|more (books|titles)|readers (love|say)|\*?\s*#?\d*\s*(new york times|sunday times|usa today)|an? instant .*bestseller)/i.test(
+      !/^([â€œ"â€˜]|named one of|winner of|coming soon|now a major|praise for|about the author|also (by|available)|more (books|titles)|readers (love|say)|\*?\s*#?\d*\s*(new york times|sunday times|usa today)|an? instant .*bestseller)/i.test(
         p,
       ),
   );

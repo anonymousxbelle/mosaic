@@ -3,6 +3,8 @@ import { extractTags, plainText } from './media-api.ts';
 import { normalizeGenres } from './genres.ts';
 import { bookSubjects, specificity } from './features.ts';
 import { retrievePages } from './retrieval.ts';
+import { bookSynopsis, hasSynopsis } from './catalog-text.ts';
+import { recommend, vector, diversify } from './recommendations.ts';
 const cache = new Map<string, { at: number; data: any }>();
 let queue: Promise<unknown> = Promise.resolve();
 let next = 0;
@@ -44,11 +46,11 @@ export function openLibraryRecord(row: any): CatalogMedia | null {
   const subjects = Array.isArray(row.subject)
     ? row.subject.filter((x: unknown) => typeof x === 'string').slice(0, 150)
     : [];
-  const description = plainText(
+  const description = bookSynopsis(plainText(
     typeof row.description === 'string'
       ? row.description
       : row.description?.value,
-  );
+  ));
   const tags = extractTags(description, subjects);
   return {
     id: 'openlibrary:' + id,
@@ -62,9 +64,8 @@ export function openLibraryRecord(row: any): CatalogMedia | null {
           : []
         ).join(', '),
       ) || 'Author unavailable',
-    description:
-      description ||
-      'No synopsis supplied. Subject information is available from the source.',
+    description,
+    synopsisStatus:description?'available':'pending',
     tags,
     genres: normalizeGenres(subjects),
     provider: 'Open Library',
@@ -113,10 +114,21 @@ export async function verifyBook(id: string, signal?: AbortSignal) {
     (x: any) => x.key === '/works/' + id || x.key === id,
   );
   if (!row) throw Error('Book could not be verified.');
-  const work = await request('/works/' + id + '.json', signal);
-  const item = openLibraryRecord({ ...row, description: work.description });
+  const item = openLibraryRecord(row);
   if (!item) throw Error('Invalid book record.');
-  return item;
+  return enrichBook(item,signal);
+}
+export async function enrichBook(item:CatalogMedia,signal?:AbortSignal):Promise<CatalogMedia>{
+  if(item.provider!=='Open Library' || !/^OL\d+W$/.test(item.externalId))return item;
+  const work=await request('/works/'+item.externalId+'.json',signal);
+  const description=bookSynopsis(plainText(typeof work.description==='string'?work.description:work.description?.value));
+  const subjects=Array.isArray(work.subjects)?work.subjects.filter((s:unknown)=>typeof s==='string'):[];
+  return {...item,description:description || (hasSynopsis(item.description)?item.description:''),
+    synopsisStatus:description || hasSynopsis(item.description)?'available':'unavailable',
+    tags:[...new Set([...item.tags,...extractTags(description,subjects)])],
+    genres:[...new Set([...(item.genres||[]),...normalizeGenres(subjects)])],
+    adult:item.adult || subjects.some((s:string)=>/\berotica|erotic fiction\b/i.test(s)) || undefined,
+  };
 }
 export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(item:CatalogMedia)=>boolean=()=>true, anchor?:string, topic?:string) {
   const fiction=tags.includes('fiction') || tags.includes('fantasy') || tags.includes('magic');
@@ -132,17 +144,16 @@ export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(
     const total=data.numFound ?? data.num_found;
     return {items,hasMore:data.docs.length===30 && (typeof total!=='number' || page*30<total)};
   },accept,signal);
-  // Enrich the strongest four subject matches without making every work a new request.
-  result.items.sort((a,b)=>b.tags.reduce((n,t)=>n+(tags.includes(t)?specificity(t):0),0)-a.tags.reduce((n,t)=>n+(tags.includes(t)?specificity(t):0),0));
+  // Hydrate the likely displayed matches, using the same ranking and diversity
+  // as the result list. Tag-count order used to leave top recommendations blank.
+  const leading=diversify(recommend(result.items,vector(tags),'Book',[],anchor),12);
   const rejected=new Set<string>();
-  for(let index=0;index<Math.min(4,result.items.length);index++){
+  for(const candidate of leading){
     signal?.throwIfAborted();
+    const index=result.items.findIndex(x=>x.id===candidate.id);
     const item=result.items[index];
     try {
-      const work=await request('/works/'+item.externalId+'.json',signal);
-      const description=plainText(typeof work.description==='string'?work.description:work.description?.value);
-      const subjects=Array.isArray(work.subjects)?work.subjects.filter((x:unknown)=>typeof x==='string'):[];
-      const enriched={...item,description:description||item.description,tags:[...new Set([...item.tags,...extractTags(description,subjects)])],genres:[...new Set([...(item.genres||[]),...normalizeGenres(subjects)])],adult:item.adult || subjects.some((s:string)=>/\berotica|erotic fiction\b/i.test(s)) || undefined};
+      const enriched=await enrichBook(item,signal);
       if(accept(enriched))result.items[index]=enriched;else rejected.add(item.id);
     }catch(error){if(signal?.aborted)throw error;}
   }

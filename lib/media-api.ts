@@ -14,6 +14,7 @@ export type Provider =
   | 'TMDB'
   | 'IGDB';
 export type CatalogMedia = Media & {
+  synopsisStatus?: 'pending'|'available'|'unavailable';
   provider: Provider;
   externalId: string;
   sourceUrl: string;
@@ -516,7 +517,7 @@ const comparable = (text: string) =>
   text
     .normalize('NFKD')
     .replace(/\([^)]*\)/g, '')
-    .split('·')[0]
+    .split('Â·')[0]
     .replace(/[^a-zA-Z0-9]/g, '')
     .toLowerCase();
 export function findDuplicate(items: Media[], item: Media): Media | undefined {
@@ -556,6 +557,7 @@ export function validArtwork(value: unknown): value is string {
 export function validStoredItem(value: unknown): value is CatalogMedia {
   if (!value || typeof value !== 'object') return false;
   const x = value as CatalogMedia;
+  if(x.synopsisStatus !== undefined && !['pending','available','unavailable'].includes(x.synopsisStatus)) return false;
   if(x.seriesKey !== undefined && (typeof x.seriesKey !== 'string' || !/^(hardcover|tmdb):[\p{L}\p{N} -]{1,160}$/u.test(x.seriesKey))) return false;
   if (x.artworkUrl !== undefined && !validArtwork(x.artworkUrl)) return false;
   if (
@@ -711,6 +713,7 @@ export async function discoverMedia(
     const key=duplicate?.id || item.id;
     evidence[key]=[...(evidence[key]||[]),...(result.evidence[item.id]||[])];
     if(!duplicate)items.push(item);
+    else if(duplicate.id===item.id)items[items.findIndex(x=>x.id===duplicate.id)]=item;
    }
   }catch(error){if(signal?.aborted)throw error;failures.push(type);}
  }

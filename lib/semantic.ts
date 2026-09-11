@@ -1,7 +1,8 @@
-import { bookSynopsis } from './catalog-text.ts';
+import { bookSynopsis, hasSynopsis } from './catalog-text.ts';
 import type { Media } from './recommendations';
 
 export function semanticText(item:Pick<Media,'description'>):string {
+ if(!hasSynopsis(item.description))return '';
  // Exclude titles, personal tags, and ratings. Compare the synopsis itself.
  return bookSynopsis(item.description).replace(/&(?:amp|quot|nbsp);/g,' ').replace(/\s+/g,' ').trim().slice(0,1200);
 }
