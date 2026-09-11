@@ -21,7 +21,7 @@ class ApiError extends Error {
     this.status = status;
   }
 }
-const responseCache = new Map<string, { expires: number; items: any[] }>();
+const responseCache = new Map<string, { expires: number; items: any[];hasMore:boolean }>();
 let twitch: { token: string; expires: number; client: string } | undefined;
 async function upstream(url: string, init: RequestInit = {}): Promise<any> {
   const r = await fetch(url, { ...init, signal: AbortSignal.timeout(10000) });
@@ -34,11 +34,15 @@ async function upstream(url: string, init: RequestInit = {}): Promise<any> {
     );
   return r.json();
 }
-async function tmdb(path: string, env: Env) {
+const tmdbCache=new Map<string,{expires:number;data:any}>();
+async function tmdb(path: string, env: Env, fresh=false) {
   if (!env.TMDB_TOKEN) throw new ApiError(503, 'TMDB is not configured yet.');
-  return upstream('https://api.themoviedb.org/3/' + path, {
+  const hit=tmdbCache.get(path);if(!fresh && hit && hit.expires>Date.now())return hit.data;
+  const data=await upstream('https://api.themoviedb.org/3/' + path, {
     headers: { Authorization: 'Bearer ' + env.TMDB_TOKEN },
   });
+  if(tmdbCache.size>=250)tmdbCache.delete(tmdbCache.keys().next().value!);
+  tmdbCache.set(path,{expires:Date.now()+300000,data});return data;
 }
 async function igdb(
   query: string,
@@ -239,6 +243,11 @@ export default {
       const adult = u.searchParams.get('adult') === 'true';
       const q = (u.searchParams.get('q') || '').trim();
       const id = u.searchParams.get('id') || '';
+      const pageText=u.searchParams.get('page') || '1';
+      if(!/^[1-3]$/.test(pageText))throw new ApiError(400,'Page must be 1–3.');
+      const page=Number(pageText);
+      const related=u.searchParams.get('related') || '';
+      if(related && (!['Movie','TV'].includes(type || '') || !/^[1-9]\d{0,9}$/.test(related)))throw new ApiError(400,'Invalid related title.');
       const tagText = (u.searchParams.get('tags') || '').slice(0, 100);
       const tags = tagText.split(',').slice(0, 3);
       const parentTags = Object.entries(featureGroups)
@@ -267,10 +276,11 @@ export default {
           id,
           tags: tagText,
           adult: String(adult),
+          page:pageText,related,
         });
       const hit = responseCache.get(cacheKey);
       if (u.pathname !== '/verify' && hit && hit.expires > Date.now())
-        return reply({ items: hit.items });
+        return reply({ items: hit.items,hasMore:hit.hasMore });
       if (!env.CATALOG_LIMITER)
         throw new ApiError(503, 'Catalog rate limiter is not configured.');
       if (
@@ -282,6 +292,7 @@ export default {
       )
         throw new ApiError(429, 'Catalog is busy. Please retry later.');
       let items: any[];
+      let hasMore=false;
       if (type === 'Book') {
         items = await hardcoverBooks(env,u.pathname,q,id,tags);
       } else if (type === 'Game') {
@@ -300,11 +311,12 @@ export default {
             ? `where id = ${id}; limit 1;`
             : u.pathname === '/search'
               ? `search "${escaped}"; limit 8;`
-              : `where rating_count > 10${themeIds.length ? ' & themes = (' + themeIds.join(',') + ')' : ''}; sort rating desc; limit 20;`;
+              : `where rating_count > 10${themeIds.length ? ' & themes = (' + themeIds.join(',') + ')' : ''}; sort rating desc; limit 20; offset ${(page-1)*20};`;
         const data = await igdb(fields + query, env);
         if (!Array.isArray(data))
           throw new ApiError(502, 'Invalid game catalog response.');
         items = data.map(igdbRecord).filter(Boolean);
+        hasMore=u.pathname==='/discover' && data.length===20 && page<3;
       } else {
         const kind = type === 'Movie' ? 'movie' : 'tv';
         const detail = async (id: number | string) =>
@@ -312,6 +324,7 @@ export default {
             await tmdb(
               `${kind}/${id}?append_to_response=keywords,credits,external_ids,${kind === 'movie' ? 'release_dates' : 'content_ratings'}`,
               env,
+              u.pathname === '/verify',
             ),
             type as 'Movie' | 'TV',
           );
@@ -320,7 +333,7 @@ export default {
         else {
           let genreIds: number[] = [];
           const keywordIds: number[] = [];
-          if (u.pathname === '/discover') {
+          if (u.pathname === '/discover' && !related) {
             const genres = await tmdb(`genre/${kind}/list`, env);
             if (Array.isArray(genres.genres)) genreIds = matched(genres.genres);
             const keywordNames: Record<string, string> = {
@@ -351,28 +364,27 @@ export default {
           const path =
             u.pathname === '/search'
               ? `search/${kind}?${new URLSearchParams({ query: q, include_adult: String(adult) })}`
-              : `discover/${kind}?include_adult=${adult}&sort_by=popularity.desc&with_genres=${genreIds.join('|')}&with_keywords=${keywordIds.join('|')}`;
+              : related ? `${kind}/${related}/recommendations?page=${page}`
+              : `discover/${kind}?page=${page}&include_adult=${adult}&sort_by=popularity.desc&with_genres=${genreIds.join(',')}&with_keywords=${keywordIds.join(',')}`;
           const data = await tmdb(path, env);
           if (!Array.isArray(data.results))
             throw new ApiError(502, 'Invalid film/TV catalog response.');
+          hasMore=u.pathname==='/discover' && page<3 && (typeof data.total_pages==='number'?page<data.total_pages:data.results.length===20);
           items = [];
-          for (const row of data.results.slice(
-            0,
-            u.pathname === '/search' ? 8 : 12,
-          )) {
-            if (Number.isSafeInteger(row.id)) {
-              const value = await detail(row.id);
-              if (value) items.push(value);
-            }
+          const rows=data.results.slice(0,u.pathname === '/search'?8:20);
+          // Bounded concurrency enriches every row on a discovery page; no skipped tail.
+          for(let offset=0;offset<rows.length;offset+=4){
+            const batch=await Promise.all(rows.slice(offset,offset+4).map(async(row:Data)=>Number.isSafeInteger(row.id)?detail(row.id):null));
+            items.push(...batch.filter(Boolean));
           }
         }
       }
       if (u.pathname !== '/verify') {
         if (responseCache.size >= 100)
           responseCache.delete(responseCache.keys().next().value!);
-        responseCache.set(cacheKey, { expires: Date.now() + 300000, items });
+        responseCache.set(cacheKey, { expires: Date.now() + 300000, items,hasMore });
       }
-      return reply({ items });
+      return reply({ items,hasMore });
     } catch (e) {
       return reply(
         {
