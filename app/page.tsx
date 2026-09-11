@@ -21,7 +21,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-import { detailedFeatures, specificity, detailedTags } from '@/lib/features';
+import { detailedFeatures, specificity, detailedTags, primaryGenre } from '@/lib/features';
 import { GenreGuide } from '@/components/media/genre-guide';
 import { DiscoveryFeedback } from '@/components/media/discovery-feedback';
 import { inContentSection, contentLabel } from '@/lib/content-rating';
@@ -379,7 +379,9 @@ export default function Home() {
     try {
       const found = await discoverMedia(
         category === 'All' ? [...discoveryCategories] : [category],
-        tags,
+        mode === 'based-on' && primaryGenre(selected)
+          ? [...new Set([primaryGenre(selected)!, ...tags])]
+          : tags,
         controller.signal,
         adultSection,
       );
@@ -415,6 +417,7 @@ export default function Home() {
       : mode === 'based-on'
         ? [selected?.id || seed]
         : Object.keys(ratings),
+    mode === 'based-on' ? primaryGenre(selected) : undefined,
   );
   const filteredResults = diversify(
     results
@@ -962,6 +965,7 @@ export default function Home() {
                   <fieldset>
                     <legend>What did you enjoy? (optional)</legend>
                     <p>Choose up to five aspects to focus this discovery.</p>
+                    {primaryGenre(selected) && <p>Staying within {primaryGenre(selected)!.replaceAll('-', ' ')}. Shared themes rank the matches within this genre.</p>}
                     <div className="tag-options">
                       {selected.tags.map((t) => (
                         <button
