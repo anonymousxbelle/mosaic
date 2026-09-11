@@ -137,10 +137,19 @@ export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(
   const clauses=(values:string[])=>[...new Set(values)].map(s=>'subject:"'+s+'"').join(' AND ')+(fiction?' AND subject:fiction':'');
   const plans=[...new Set(subjects.map(s=>clauses([...core,s])))];
   if(core.length) { if(plans.length>=3)plans[2]=clauses(core);else plans.push(clauses(core)); }
+  let detailBudget=8;
   const result=await retrievePages([...new Set(plans)].slice(0,3),async(q,page)=>{
     const data=await request('/search.json?'+new URLSearchParams({q,fields,limit:'30',page:String(page),lang:'en'}),signal);
     if(!Array.isArray(data.docs))throw Error('Unexpected book catalog response.');
     const items=data.docs.map(openLibraryRecord).filter((x:CatalogMedia|null):x is CatalogMedia=>!!x);
+    // Search subjects can omit defining features: inspect a bounded number of
+    // full records before rejecting uncertain candidates. Never infer a match
+    // from the fact that the provider returned the title.
+    for(let index=0;index<items.length && detailBudget>0;index++){
+      if(accept(items[index]))continue;
+      detailBudget--;
+      try{items[index]=await enrichBook(items[index],signal);}catch(error){if(signal?.aborted)throw error;}
+    }
     const total=data.numFound ?? data.num_found;
     return {items,hasMore:data.docs.length===30 && (typeof total!=='number' || page*30<total)};
   },accept,signal);
