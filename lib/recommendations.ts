@@ -1,4 +1,4 @@
-import { specificity, featureKind, matchesGenre } from './features.ts';
+import { specificity, featureKind, matchesGenre, seedTopic } from './features.ts';
 import { sameWork } from './media-identity.ts';
 export const categories = ['Book', 'Music', 'Game', 'Movie', 'TV'] as const;
 export const discoveryCategories = ['Book', 'Game', 'Movie', 'TV'] as const;
@@ -51,15 +51,21 @@ export function recommend(
   category: Category | 'All',
   exclude: string[] = [],
   requiredGenre?: string,
+  seed?: Media,
 ) {
   return catalog
     .filter(
       (i) =>
         !exclude.includes(i.id) && (category === 'All' || i.type === category) &&
-        (!requiredGenre || matchesGenre(i,requiredGenre)),
+        (!requiredGenre || matchesGenre(i,requiredGenre)) &&
+        (!seedTopic(seed) || i.tags.includes(seedTopic(seed)!)),
     )
     .map((i) => ({
       ...i,
+      // Default discovery leads with the seed's medium and style. Explicit media
+      // selection removes this tier preference, but retains the topic constraint.
+      priority: seed && category === 'All' &&
+        (i.type !== seed.type || (seed.tags.includes('anime') && !i.tags.includes('anime'))) ? 1 : 0,
       score:
         cosine(
           Object.fromEntries(
@@ -98,11 +104,11 @@ export function recommend(
       !i.tags.some(t=>query[t]>0 && !['audience','format','tone'].includes(featureKind(t))) ? 0.2 : 1
     )}))
     .filter((i) => i.score > 0)
-    .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
+    .sort((a, b) => a.priority-b.priority || b.score - a.score || a.title.localeCompare(b.title));
 }
 
 // Greedy diversity reranking only among relevant, already-filtered candidates.
-export function diversify<T extends Media & { score: number }>(
+export function diversify<T extends Media & { score: number; priority?:number }>(
   items: T[],
   limit = 30,
 ): T[] {
@@ -111,7 +117,9 @@ export function diversify<T extends Media & { score: number }>(
   while (rest.length && out.length < limit) {
     let best = 0,
       bestValue = -Infinity;
+    const priority = Math.min(...rest.map(x=>x.priority || 0));
     rest.forEach((item, index) => {
+      if((item.priority || 0) !== priority) return;
       const creatorRepeat = out.filter(
         (x) => x.creator === item.creator && x.type === item.type,
       ).length;

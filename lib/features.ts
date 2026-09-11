@@ -119,6 +119,9 @@ export const detailedPatterns = Object.fromEntries(
 export const detailedTags = Object.keys(terms);
 export const subgenres = [...new Set(Object.values(featureGroups).flat())];
 const anchorGenres = ['fantasy','science-fiction','mystery','thriller','horror','romance','sports','non-fiction','strategy'];
+export function seedTopic(item?: {tags:string[]}):string|undefined {
+  return item?.tags.find(t=>['basketball','football','baseball'].includes(t));
+}
 export function primaryGenre(item?: {genres?:string[];tags:string[]}):string|undefined {
   if(!item) return undefined;
   const labels=[...(item.genres || []),...item.tags];
