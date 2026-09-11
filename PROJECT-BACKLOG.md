@@ -121,3 +121,7 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 - Mood-only/audience-only/style-only matches receive an additional ranking penalty when a seed has substantive interests. Shared themes/subgenres lead explanations. These are heuristic weights, not validated accuracy scores.
 - Collapse explicitly labeled book editions with matching creators in discovery; retain subtitles and volume numbers. Reduce repeated series using supplied Hardcover series names and TMDB film collection IDs. Unknown metadata stays unknown; no title-based franchise guesses.
 - Limitations: illustrator/contributor differences can still prevent cross-provider edition matching; Open Library series metadata and cross-provider franchise identity are future work. User testing and field-level tag provenance remain pending.
+
+## 2026-09-11 - Keep seed discoveries in their primary genre
+- Based-on discovery now requires the seed's primary known genre. Fantasy seeds cannot recommend non-fantasy titles solely for friendship; focused themes still rank within fantasy. Provider genre order selects the anchor, with supported subgenres as fallback. The active genre is shown in the interface.
+- Retrieval includes the anchor first, and final ranking rejects missing/nonmatching genre evidence rather than relaxing the requirement. For You and collections remain broader. Regression coverage includes friendship-only focus, fantasy subgenres and unknown genres.
