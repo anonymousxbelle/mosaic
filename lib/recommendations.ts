@@ -1,4 +1,4 @@
-import { specificity, featureKind } from './features.ts';
+import { specificity, featureKind, matchesGenre } from './features.ts';
 import { sameWork } from './media-identity.ts';
 export const categories = ['Book', 'Music', 'Game', 'Movie', 'TV'] as const;
 export const discoveryCategories = ['Book', 'Game', 'Movie', 'TV'] as const;
@@ -50,11 +50,13 @@ export function recommend(
   query: Vector,
   category: Category | 'All',
   exclude: string[] = [],
+  requiredGenre?: string,
 ) {
   return catalog
     .filter(
       (i) =>
-        !exclude.includes(i.id) && (category === 'All' || i.type === category),
+        !exclude.includes(i.id) && (category === 'All' || i.type === category) &&
+        (!requiredGenre || matchesGenre(i,requiredGenre)),
     )
     .map((i) => ({
       ...i,

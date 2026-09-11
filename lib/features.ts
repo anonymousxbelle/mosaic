@@ -118,6 +118,19 @@ export const detailedPatterns = Object.fromEntries(
 );
 export const detailedTags = Object.keys(terms);
 export const subgenres = [...new Set(Object.values(featureGroups).flat())];
+const anchorGenres = ['fantasy','science-fiction','mystery','thriller','horror','romance','sports','non-fiction','strategy'];
+export function primaryGenre(item?: {genres?:string[];tags:string[]}):string|undefined {
+  if(!item) return undefined;
+  const labels=[...(item.genres || []),...item.tags];
+  // Prefer provider genres; themes such as friendship must not define the pool.
+  return labels.find(t=>anchorGenres.includes(t)) ||
+    anchorGenres.find(parent=>featureGroups[parent]?.some(t=>labels.includes(t))) ||
+    labels.find(t=>['adventure','action','drama','humor','history'].includes(t));
+}
+export function matchesGenre(item:{genres?:string[];tags:string[]},genre:string):boolean {
+  const labels=[...(item.genres || []),...item.tags];
+  return labels.includes(genre) || (featureGroups[genre] || []).some(t=>labels.includes(t));
+}
 export function featureKind(tag: string): FeatureKind {
   if (['anime','animation'].includes(tag)) return 'format';
   if (['middle-grade', 'young-adult'].includes(tag)) return 'audience';
