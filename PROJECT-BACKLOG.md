@@ -167,3 +167,10 @@ User approved pausing music discovery, preserving saved music and revisiting it 
 - Freshly fetched details replace stale cached records; Hardcover verification preserves a full synopsis when the search index omits it. Placeholder text is excluded from AI comparisons on both client and server.
 - A live Harry Potter retrieval check recovered descriptions for all ten leading results (twelve enriched out of eighty candidates). This checks metadata coverage, not judged recommendation quality. Sixty-eight regression tests pass.
 - Remaining: review recommendation relevance with user judgments, improve book candidate coverage and series entry-point metadata, and evaluate identity-checked cross-provider enrichment. No extra ranking weights were introduced by this repair.
+
+## 2026-09-11 - Core eligibility before ranking
+- Based On requires the primary genre and a controlled defining subject when present: magic/mythology for fantasy, named sports, selected science-fiction subjects, or detective fiction. These rules apply equally across books, TV, and movies and are metadata heuristics, not title-specific exceptions.
+- Fantasy + magic stays in every Open Library query; TMDB can now resolve magic as a keyword in addition to fantasy genre filtering. Related-title and cached results must also pass local eligibility. No quiet relaxation for sparse results.
+- Optional Must have tags further restrict results before ranking; they remain separate from preferred aspects. These optional restrictions are local filters, not guaranteed provider-side queries. Anime remains a format within TV/movies.
+- Up to eight uncertain Open Library search records per discovery receive full-record lookups before rejection. The bounded budget can still miss matches; requests may take longer. Seventy regression tests, typecheck and production build validate implementation, not subjective recommendation quality.
+- Next: evaluate real seed/result judgments; broaden provider label equivalence and metadata confidence; expose a user-controlled primary genre override and provider-side optional constraints.
