@@ -1,5 +1,5 @@
 'use client';
-import { detailedTags, featureGroups, detailedFeatures } from '@/lib/features';
+import { detailedTags, featureGroups, detailedFeatures, featureKind, featureLabels } from '@/lib/features';
 import { useState } from 'react';
 import {
   Dialog,
@@ -80,7 +80,9 @@ export function TagEditor({
           any that do not fit.
         </p>
         <div className="tag-options">
-          {item.tags.map((t) => (
+          {Object.entries(featureLabels).map(([kind,label]) => <section key={kind}>
+          {item.tags.some(t=>featureKind(t)===kind) && <h4>{label}</h4>}
+          {item.tags.filter(t=>featureKind(t)===kind).map((t) => (
             <button
               key={t}
               aria-pressed={!edit.hidden.includes(t)}
@@ -96,7 +98,7 @@ export function TagEditor({
               {t}
               {edit.hidden.includes(t) ? ' · hidden' : ' ✓'}
             </button>
-          ))}
+          ))}</section>)}
           {!item.tags.length && (
             <p>No automatic tags found. Add your own below.</p>
           )}
