@@ -2,6 +2,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hybrid-ranking';
 import { compareDescriptions } from '@/lib/semantic';
+import {vocabulary} from '@/lib/media-api';
+import {sameSeries} from '@/lib/story-profile';
 import { hasSynopsis } from '@/lib/catalog-text';
 import { flushSync } from 'react-dom';
 import {
@@ -142,7 +144,8 @@ export default function Home() {
   catalogRef.current = catalog;
   const [ratings, setRatings] = useState<Ratings>({});
   const [mode, setMode] = useState('for-you');
-  const [rankingMode,setRankingMode]=useState('standard');
+  const [rankingMode,setRankingMode]=useState('story');
+  const [seriesView,setSeriesView]=useState('discover');
   const [loadingSynopses,setLoadingSynopses]=useState<string[]>([]);
   const [synopsisErrors,setSynopsisErrors]=useState<Record<string,string>>({});
   const [rankingEvidence,setRankingEvidence]=useState<{key:string;provider:RankingEvidence;semantic:SemanticScores}>({key:'',provider:{},semantic:{}});
@@ -164,8 +167,8 @@ export default function Home() {
       ...discoveryCatalog,
       ...candidates.filter((i) => inContentSection(i, adultSection)),
     ].find((i) => i.id === seed) || discoveryCatalog[0];
-  useEffect(() => {setFocusTags([]);setMustTags([]);}, [seed]);
-  const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,category,focusTags,mustTags,genre,adultSection,avoided,ratings]);
+  useEffect(() => {setFocusTags([]);setMustTags([]);setSeriesView('discover');}, [seed]);
+  const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,category,focusTags,mustTags,seriesView,genre,adultSection,avoided,ratings]);
   useEffect(()=>{
     discoveryRequest.current?.abort();
     setDiscovering(false);
@@ -445,9 +448,9 @@ export default function Home() {
     if(!publicSeed || rankingEvidence.key!==discoveryKey)return;
     const snapshot={label:'Unjudged Mosaic external-candidate snapshot',capturedAt:new Date().toISOString(),cases:[{
       id:publicSeed.id,seed:{id:publicSeed.id,title:publicSeed.title,creator:publicSeed.creator,type:publicSeed.type,
-        description:publicSeed.description,tags:publicSeed.tags.filter(t=>detailedTags.includes(t)),genres:publicSeed.genres},category,requiredGenre:primaryGenre(publicSeed),
+        description:publicSeed.description,tags:publicSeed.tags.filter(t=>Object.hasOwn(vocabulary,t)),genres:publicSeed.genres,seriesKey:publicSeed.seriesKey,seriesPosition:publicSeed.seriesPosition},category,requiredGenre:primaryGenre(publicSeed),
       focusTags:focusTags.length?focusTags.filter(t=>detailedTags.includes(t)):undefined,
-      candidates,evidence:rankingEvidence.provider,semanticScores:rankingEvidence.semantic,judgments:{},
+      seriesView, candidates:candidates.filter(i=>mustTags.every(t=>i.tags.includes(t))),evidence:rankingEvidence.provider,semanticScores:rankingEvidence.semantic,judgments:{},
     }]};
     const url=URL.createObjectURL(new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'}));
     const link=document.createElement('a');link.href=url;link.download='mosaic-comparison.json';link.click();
@@ -474,8 +477,9 @@ export default function Home() {
         : Object.keys(ratings),
     mode === 'based-on' ? primaryGenre(selected) : undefined,
     mode === 'based-on' ? selected : undefined,
-  );
-  const rankedResults=rankingMode!=='standard' && mode==='based-on' && rankingEvidence.key===discoveryKey
+    rankingMode==='story',
+  ).filter(i=>mode!=='based-on' || !selected || (seriesView==='series'?sameSeries(selected,i):!sameSeries(selected,i)));
+  const rankedResults=['provider','semantic'].includes(rankingMode) && mode==='based-on' && rankingEvidence.key===discoveryKey
     ?hybridRank(results,rankingEvidence.provider,rankingMode==='semantic'?rankingEvidence.semantic:{}) : results;
   const filteredResults = diversify(
     rankedResults
@@ -1022,6 +1026,8 @@ export default function Home() {
                 {selected && (
                   <fieldset>
                     <legend>What did you enjoy? (optional)</legend>
+                    <label>Explore <select value={seriesView} onChange={e=>setSeriesView(e.target.value)}><option value="discover">Other stories</option><option value="series">Same series</option></select></label>
+                    <p>Series grouping uses known catalog metadata; unknown series may still appear in Other stories.</p>
                     <p>Choose up to five aspects to focus this discovery.</p>
                     {primaryGenre(selected) && <p>Staying within {primaryGenre(selected)!.replaceAll('-', ' ')}. Shared themes rank the matches within this genre.</p>}
                     {seedTopic(selected) && <p>Keeping {seedTopic(selected)} as the topic.</p>}
@@ -1057,6 +1063,7 @@ export default function Home() {
             {mode==='based-on' && <label>
               Recommendation method{' '}
               <select value={rankingMode} onChange={e=>setRankingMode(e.target.value)} disabled={discovering}>
+                <option value="story">Story characteristics + tags (experimental)</option>
                 <option value="standard">Standard tag matching</option>
                 <option value="provider">Provider + tags (experimental)</option>
                 <option value="semantic">AI descriptions + provider + tags (experimental)</option>
@@ -1232,6 +1239,9 @@ export default function Home() {
                         View on IMDb
                       </a>
                     )}
+                    {item.seriesPosition && <p>Book {item.seriesPosition} in its series</p>}
+                    {'storyReasons' in item && Array.isArray(item.storyReasons) && item.storyReasons.length>0 && <p>Shared story evidence: {item.storyReasons.join('; ')}</p>}
+                    {'metadataSourceUrl' in item && typeof item.metadataSourceUrl==='string' && <a href={item.metadataSourceUrl} target="_blank" rel="noreferrer">Additional book metadata: Hardcover</a>}
                     <p className="description">
                       {!hasSynopsis(item.description)
                         ? 'Synopsis not loaded or unavailable from the catalog.'
