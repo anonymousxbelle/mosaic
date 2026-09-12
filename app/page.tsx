@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hybrid-ranking';
 import { compareDescriptions } from '@/lib/semantic';
 import {vocabulary} from '@/lib/media-api';
+import {unifiedRank} from '@/lib/unified-ranking';
 import {sameSeries} from '@/lib/story-profile';
 import { hasSynopsis } from '@/lib/catalog-text';
 import { flushSync } from 'react-dom';
@@ -144,7 +145,7 @@ export default function Home() {
   catalogRef.current = catalog;
   const [ratings, setRatings] = useState<Ratings>({});
   const [mode, setMode] = useState('for-you');
-  const [rankingMode,setRankingMode]=useState('story');
+  const [rankingMode,setRankingMode]=useState('recommended');
   const [seriesView,setSeriesView]=useState('discover');
   const [loadingSynopses,setLoadingSynopses]=useState<string[]>([]);
   const [synopsisErrors,setSynopsisErrors]=useState<Record<string,string>>({});
@@ -408,10 +409,11 @@ export default function Home() {
       setCandidates(found.items.filter((i) => !findDuplicate(catalog, i)));
       setRankingEvidence({key:discoveryKey,provider:found.evidence,semantic:{}});
       let aiNotice='';
-      if(rankingMode==='semantic' && mode==='based-on' && selected){
+      if(['recommended','semantic'].includes(rankingMode) && mode==='based-on' && selected){
         setDiscoveryNotice('Catalogs checked. Comparing descriptions…');
         try{
-          const shortlist=recommend(found.items,query,category,[],primaryGenre(selected),selected).slice(0,24);
+          const base=recommend(found.items,query,category,[],primaryGenre(selected),selected);
+          const shortlist=(rankingMode==='recommended'?unifiedRank(base,selected,found.evidence):base).slice(0,24);
           const semantic=await compareDescriptions(catalogApi,selected,shortlist,controller.signal);
           if(controller.signal.aborted)return;
           setRankingEvidence({key:discoveryKey,provider:found.evidence,semantic});
@@ -479,7 +481,9 @@ export default function Home() {
     mode === 'based-on' ? selected : undefined,
     rankingMode==='story',
   ).filter(i=>mode!=='based-on' || !selected || (seriesView==='series'?sameSeries(selected,i):!sameSeries(selected,i)));
-  const rankedResults=['provider','semantic'].includes(rankingMode) && mode==='based-on' && rankingEvidence.key===discoveryKey
+  const rankedResults=rankingMode==='recommended' && mode==='based-on' && selected
+    ?unifiedRank(results,selected,rankingEvidence.key===discoveryKey?rankingEvidence.provider:{},rankingEvidence.key===discoveryKey?rankingEvidence.semantic:{})
+    :['provider','semantic'].includes(rankingMode) && mode==='based-on' && rankingEvidence.key===discoveryKey
     ?hybridRank(results,rankingEvidence.provider,rankingMode==='semantic'?rankingEvidence.semantic:{}) : results;
   const filteredResults = diversify(
     rankedResults
@@ -1063,12 +1067,13 @@ export default function Home() {
             {mode==='based-on' && <label>
               Recommendation method{' '}
               <select value={rankingMode} onChange={e=>setRankingMode(e.target.value)} disabled={discovering}>
+                <option value="recommended">Recommended: core story match + AI + providers</option>
                 <option value="story">Story characteristics + tags (experimental)</option>
                 <option value="standard">Standard tag matching</option>
                 <option value="provider">Provider + tags (experimental)</option>
                 <option value="semantic">AI descriptions + provider + tags (experimental)</option>
               </select>
-              {rankingMode==='semantic' && <p>Show discoveries compares up to 24 candidate descriptions with Cloudflare AI. Ratings and personal tags are not sent. Genre and topic filters stay in place.</p>}
+              {['recommended','semantic'].includes(rankingMode) && <p>Show discoveries compares up to 24 candidate descriptions with Cloudflare AI. Ratings and personal tags are not sent. Genre and topic filters stay in place.</p>}
             </label>}
             <button
               className="add-media-button"
@@ -1239,6 +1244,7 @@ export default function Home() {
                         View on IMDb
                       </a>
                     )}
+                    {'compatibilityNote' in item && typeof item.compatibilityNote==='string' && <p>{item.compatibilityNote}</p>}
                     {item.seriesPosition && <p>Book {item.seriesPosition} in its series</p>}
                     {'storyReasons' in item && Array.isArray(item.storyReasons) && item.storyReasons.length>0 && <p>Shared story evidence: {item.storyReasons.join('; ')}</p>}
                     {'metadataSourceUrl' in item && typeof item.metadataSourceUrl==='string' && <a href={item.metadataSourceUrl} target="_blank" rel="noreferrer">Additional book metadata: Hardcover</a>}
