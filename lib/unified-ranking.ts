@@ -1,7 +1,7 @@
 import type {Media} from './recommendations';
 import type {RankingEvidence,SemanticScores} from './hybrid-ranking';
 import {featureGroups,primaryGenre,matchesGenre,seedTopic} from './features.ts';
-import {storyProfile,storyMatch,sameSeries} from './story-profile.ts';
+import {storyProfile,storyMatch,sameSeries,definingSettings} from './story-profile.ts';
 function tier(a:string[],b:string[]){return !a.length?0:!b.length?1:a.some(x=>b.includes(x))?0:2;}
 export function unifiedRank<T extends Media & {score:number;priority?:number}>(items:T[],seed:Media,evidence:RankingEvidence={},semantic:SemanticScores={}){
  const genre=primaryGenre(seed),topic=seedTopic(seed),labels=(i:Media)=>[...new Set([...(i.genres||[]),...i.tags])];
@@ -11,7 +11,7 @@ export function unifiedRank<T extends Media & {score:number;priority?:number}>(i
  .filter(i=>!(seedSubs.includes('historical-romance') && subs(i).includes('contemporary-romance') && !subs(i).includes('historical-romance')))
  .filter(i=>!(seedSubs.includes('contemporary-romance') && subs(i).includes('historical-romance') && !subs(i).includes('contemporary-romance')))
  .map(i=>{
-  const b=storyProfile(i),sub=tier(seedSubs,subs(i)),era=tier(a.era,b.era),setting=tier(a.setting.includes('imperial court')?['imperial court']:a.setting,b.setting),premise=tier(a.premise,b.premise);
+  const b=storyProfile(i),sub=tier(seedSubs,subs(i)),era=tier(a.era,b.era),setting=tier(definingSettings(seed),definingSettings(i)),premise=tier(a.premise,b.premise);
   const story=storyMatch(seed,i);
   const positions=(evidence[i.id]||[]).map(x=>x.rank).filter(x=>Number.isInteger(x)&&x>0);
   const provider=positions.length?1/(1+Math.min(...positions)):0;

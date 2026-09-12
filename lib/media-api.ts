@@ -1,6 +1,6 @@
 import { detailedPatterns, detailedFeatures, featureGroups, primaryGenre, seedTopic, matchesGenre } from './features.ts';
 import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats, type RetrievalEvidence } from './retrieval.ts';
-import {storyProfile} from './story-profile.ts';
+import {hasStoryContext,matchesStoryContext,storySearchTerms} from './story-profile.ts';
 import { matureRating } from './content-rating.ts';
 import { normalizeGenres, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
@@ -695,7 +695,7 @@ export async function discoverMedia(
   try{
    if(type==='Music')continue;
    let result:{items:CatalogMedia[];stats:RetrievalStats;evidence:Record<string,RetrievalEvidence[]>};
-   if(type==='Book')result=await(await import('./book-api.ts')).retrieveBooks(tags,signal,accept,anchor,topic || subgenre);
+   if(type==='Book')result=await(await import('./book-api.ts')).retrieveBooks(tags,signal,accept,anchor,topic || subgenre,options.seed);
    else {
     if(!usesGateway(type)){failures.push(type);continue;}
     const core=[topic || subgenre,anchor].filter((x):x is string=>!!x);
@@ -704,15 +704,19 @@ export async function discoverMedia(
     const broad=core.length?core:controlled.slice(0,1);
     if(broad.length)plans.push(JSON.stringify({tags:broad.join(',')}));
     const seed=options.seed as CatalogMedia|undefined;
-    if(seed && anchor && storyProfile(seed).setting.includes('imperial court'))plans.unshift(JSON.stringify({tags:[anchor,'imperial-court'].join(',')}));
+    const contextual=!!seed && hasStoryContext(seed);
+    if(seed && anchor){
+     const context=storySearchTerms(seed)[0];
+     if(context)plans.unshift(JSON.stringify({tags:anchor,context}));
+    }
     if(seed?.provider==='TMDB' && seed.type===type)plans.unshift(JSON.stringify({related:seed.externalId}));
-    const court=!!seed && storyProfile(seed).setting.includes('imperial court');
-    if(court && anchor){plans.splice(2,plans.length,JSON.stringify({tags:[anchor,...(seed.tags.includes('anime')?['animation']:[])].join(',')}));}
+    // Keep a broad genre route when detailed provider metadata is sparse.
+    if(contextual && anchor && plans.length>2)plans.splice(2,plans.length,JSON.stringify({tags:[anchor,...(seed?.tags.includes('anime')?['animation']:[])].join(',')}));
     result=await retrievePages([...new Set(plans)].slice(0,3),async(plan,page)=>{
       const data=await json(catalogApi+'/discover?'+new URLSearchParams({type,adult:String(adult),page:String(page),...JSON.parse(plan)}),signal);
       if(!Array.isArray(data.items))throw Error('Invalid discovery response.');
       return {items:data.items.filter(validStoredItem),hasMore:data.hasMore===true};
-    },accept,signal,30,item=> (!court || storyProfile(item).setting.includes('imperial court')) && (!options.seed || type!==options.seed.type || !options.seed.tags.includes('anime') || item.tags.includes('anime')) ,court?6:3);
+    },accept,signal,30,item=> (!seed || matchesStoryContext(seed,item)) && (!options.seed || type!==options.seed.type || !options.seed.tags.includes('anime') || item.tags.includes('anime')) ,contextual?6:3);
    }
    for(const key of ['examined','rejected','pages','failedQueries'] as const)stats[key]+=result.stats[key];
    if(result.stats.failedQueries)failures.push(type+' (partial)');

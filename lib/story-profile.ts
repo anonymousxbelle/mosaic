@@ -55,3 +55,24 @@ export function seriesPosition(description:string):number|undefined{
  const n=words.indexOf(m[1].toLowerCase());return n>=0?n+1:Number.parseInt(m[1]);
 }
 export function sameSeries(a:Media,b:Media){return !!a.seriesKey && a.seriesKey===b.seriesKey;}
+
+// Shared context for books, television and films; never keyed by title or provider ID.
+export function definingSettings(item:Media){
+ const settings=storyProfile(item).setting;
+ return settings.includes('imperial court')?settings.filter(s=>s!=='royal court'):settings;
+}
+export function hasStoryContext(item:Media){
+ const p=storyProfile(item);return !!(p.era.length || p.setting.length || p.premise.length);
+}
+export function matchesStoryContext(seed:Media,item:Media){
+ const a=storyProfile(seed),b=storyProfile(item);
+ return [['era',a.era],['setting',definingSettings(seed)],['premise',a.premise]].every(([group,values])=>{
+  const expected=values as string[];
+  return !expected.length || expected.some(value=>b[group as string].includes(value));
+ });
+}
+export function storySearchTerms(item:Media){
+ const p=storyProfile(item);
+ const terms:Record<string,string>={'imperial court':'palace','royal court':'royalty','Regency Britain':'regency','Victorian Britain':'victorian','Second World War':'world war ii','learning magic':'magic school','solving a mystery':'mystery','second-chance romance':'second chance romance'};
+ return [...new Set([...definingSettings(item),...p.premise].map(label=>terms[label] || label))].slice(0,2);
+}
