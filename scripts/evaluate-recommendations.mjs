@@ -2,6 +2,7 @@ import {readFile} from 'node:fs/promises';
 import {recommend,vector,diversify} from '../lib/recommendations.ts';
 import {hybridRank} from '../lib/hybrid-ranking.ts';
 import {evaluateRanking} from '../lib/evaluation.ts';
+import {unifiedRank} from '../lib/unified-ranking.ts';
 import {sameSeries} from '../lib/story-profile.ts';
 const path=process.argv[2];
 if(!path)throw Error('Usage: node --experimental-strip-types scripts/evaluate-recommendations.mjs <snapshot.json>');
@@ -17,7 +18,7 @@ const results=data.cases.map(c=>{
  const evidence=c.evidence||{};
  const rank=x=>Math.min(...(evidence[x.id]||[]).map(p=>p.rank).filter(r=>Number.isInteger(r)&&r>0),Infinity);
  const provider=[...baseline].sort((a,b)=>a.priority-b.priority||rank(a)-rank(b)||a.title.localeCompare(b.title));
- const methods={story,standard:baseline,provider,providerBlend:hybridRank(baseline,evidence),semanticBlend:hybridRank(baseline,evidence,c.semanticScores||{})};
+ const methods={recommended:unifiedRank(baseline,c.seed,evidence,c.semanticScores||{}),story,standard:baseline,provider,providerBlend:hybridRank(baseline,evidence),semanticBlend:hybridRank(baseline,evidence,c.semanticScores||{})};
  return {id:c.id,candidates:c.candidates.length,eligible:baseline.length,
   retrievedJudgedRecall:evaluateRanking(c.candidates.map(x=>x.id),judgments).judgedRecall,
   methods:Object.fromEntries(Object.entries(methods).map(([method,rows])=>[method,{...evaluateRanking(rows.map(x=>x.id),judgments),top:rows.slice(0,10).map(x=>x.id),finalList:evaluateRanking(diversify(rows,10).map(x=>x.id),judgments),finalTop:diversify(rows,10).map(x=>x.id)}]))};
