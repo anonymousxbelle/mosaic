@@ -31,7 +31,7 @@ import { detailedFeatures, specificity, detailedTags, primaryGenre, seedTopic } 
 import { GenreGuide } from '@/components/media/genre-guide';
 import { DiscoveryFeedback } from '@/components/media/discovery-feedback';
 import { inContentSection, contentLabel } from '@/lib/content-rating';
-import { genreChoices, genrePreferences, genreAllowed } from '@/lib/genres';
+import { activeGenreChoices, genreChoices, genrePreferences, genreAllowed } from '@/lib/genres';
 import { catalog as sampleCatalog } from '@/lib/catalog';
 import { TagEditor } from '@/components/media/tag-editor';
 import { effectiveTags, type TagEdits } from '@/lib/tags';
@@ -128,11 +128,11 @@ export default function Home() {
     [originals, tagEdits],
   );
   const sectionCatalog = useMemo(
-    () => catalog.filter((i) => inContentSection(i, adultSection)),
+    () => catalog.filter((i) => i.type !== 'Music' && i.type !== 'Game' && inContentSection(i, adultSection)),
     [catalog, adultSection],
   );
   const discoveryCatalog = useMemo(
-    () => sectionCatalog.filter((i) => i.type !== 'Music'),
+    () => sectionCatalog.filter((i) => i.type !== 'Music' && i.type !== 'Game'),
     [sectionCatalog],
   );
   const knownTags = useMemo(
@@ -470,7 +470,7 @@ export default function Home() {
     ?hybridRank(results,rankingEvidence.provider,rankingMode==='semantic'?rankingEvidence.semantic:{}) : results;
   const filteredResults = diversify(
     rankedResults
-      .filter((i) => i.type !== 'Music')
+      .filter((i) => i.type !== 'Music' && i.type !== 'Game')
       .filter((i) =>
         recommendationEligible(i, ratings),
       )
@@ -568,7 +568,7 @@ export default function Home() {
               <p className="eyebrow">MAKE THIS YOURS · NO ACCOUNT NEEDED</p>
               <h2>Start with 3–5 favorites.</h2>
               <p>
-                Pick books, movies, shows or games you already love. A favorite
+                Pick books, movies or shows you already love. A favorite
                 starts at 5 stars; change it anytime in My Library.
               </p>
               <ol>
@@ -650,7 +650,7 @@ export default function Home() {
           <aside className="library" hidden={view !== 'library'}>
             <div className="section-heading">
               <h2>My Library</h2><a className="library-preferences-link" href="#library-preferences">Edit taste & preferences</a>
-              <span>{catalog.filter((i) => ratings[i.id]).length} rated</span>
+              <span>{sectionCatalog.filter((i) => ratings[i.id]).length} rated</span>
             </div>
             <p className="muted">
               Add media from live catalogs, then rate your favorites. Your
@@ -662,10 +662,6 @@ export default function Home() {
               adult={adultSection}
               onAdd={addItem}
             />
-            <p className="muted">
-              Music discovery is paused. Saved songs, albums, ratings and tags
-              are preserved here.
-            </p>
             <div className="shelf-tabs" role="group" aria-label="Library shelf">
               {[
                 ['all', 'All titles'],
@@ -1277,7 +1273,7 @@ export default function Home() {
               when metadata is available.
             </p>
             <div className="tag-options">
-              {genreChoices.map((g) => (
+              {activeGenreChoices.map((g) => (
                 <button
                   key={g}
                   aria-pressed={avoided.includes(g)}
