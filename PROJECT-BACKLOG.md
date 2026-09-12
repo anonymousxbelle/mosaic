@@ -202,3 +202,8 @@ User nominated Raven of the Inner Palace as a stronger match for The Apothecary 
 Follow-up live diagnosis: duplicate mandatory anime/animation keyword filtering returned an extremely small animation+mystery pool. Removed those keyword requirements while retaining the animation genre; historical court discovery also retains a broad genre/style query and continues pagination until enough court-setting matches are found or the existing page cap is reached.
 
 Historical-era evidence now excludes a generic history tag unless supported by imperial-court context; explicit period/subgenre evidence remains valid. Court-setting searches can inspect up to six pages per query, while ordinary searches keep the three-page default. The live example was absent from the first three pages, so coverage must be measured separately from ranking improvements.
+
+## Shared story-context retrieval (September 12)
+- Replaced court-only retrieval behavior with shared setting/premise query planning and context-aware pool targets for books, TV and movies. Genre filters remain in place; provider-specific subject/keyword queries have a broad fallback.
+- Fixed TMDB hasMore ending at page three despite the six-page request allowance. Context searches remain bounded to six pages.
+- Added cross-media historical-romance regression checks and a gateway pagination/keyword check. Metadata coverage still limits discovery; these tests do not establish human-rated recommendation quality.
