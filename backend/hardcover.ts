@@ -1,6 +1,7 @@
 import {extractTags,plainText} from '../lib/media-api.ts';
 import {normalizeGenres} from '../lib/genres.ts';
 import {bookSynopsis,hasSynopsis} from '../lib/catalog-text.ts';
+import {seriesPosition} from '../lib/story-profile.ts';
 type Row=Record<string,any>;
 export class HardcoverError extends Error {}
 export type HardcoverEnv={HARDCOVER_TOKEN?:string};
@@ -16,6 +17,7 @@ export function hardcoverRecord(row:Row){
  return {id:'hardcover:'+id,externalId:id,provider:'Hardcover',type:'Book',title,creator:plainText(strings(row.author_names).join(', ')).slice(0,500)||'Author unavailable',
  description:description||'No synopsis supplied by this catalog.',genres:normalizeGenres(genres),tags:extractTags(description,[...genres,...moods,...tags]),
  seriesKey:seriesKey?'hardcover:'+seriesKey:undefined,
+ seriesPosition:seriesPosition(description),
  sourceUrl:'https://hardcover.app/books/'+slug,verifiedAt:new Date().toISOString(),year:Number.isInteger(row.release_year)?String(row.release_year):undefined,
  ratingCount:Number.isSafeInteger(row.ratings_count)&&row.ratings_count>=0?row.ratings_count:undefined,
  adult:genres.some(t=>/\berotica\b/i.test(t))||undefined};
@@ -50,7 +52,7 @@ export async function hardcoverBooks(env:HardcoverEnv,action:string,q:string,id:
   const rich=matches.find((x:Row|null)=>x?.externalId===id);
   if(rich){
    const description=bookSynopsis(plainText(row.description));
-   return [{...rich,description:hasSynopsis(rich.description)?rich.description:description,
+   return [{...rich,seriesPosition:rich.seriesPosition || seriesPosition(description),description:hasSynopsis(rich.description)?rich.description:description,
     tags:[...new Set([...rich.tags,...extractTags(description,[])])]}];
   }
   const item=hardcoverRecord({...row,author_names:row.contributions?.map((x:Row)=>x.author?.name)});return item?[item]:[];
