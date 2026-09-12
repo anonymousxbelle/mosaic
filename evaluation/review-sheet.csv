@@ -1,0 +1,7 @@
+case,seed,target,intent,candidate_id,candidate_title,grade_0_to_3,reason,split
+1,Harry Potter and the Philosophers Stone,Book,Other magical fantasy series,,,,,development
+2,Kurokos Basketball,TV,Basketball anime,,,,,development
+3,The Hobbit,Movie,Fantasy quest,,,,,development
+4,Sherlock Holmes,Book,Detective mystery,,,,,held-out
+5,The Hunger Games,Movie,Dystopian competition,,,,,held-out
+6,Spirited Away,TV,Magical fantasy,,,,,held-out
