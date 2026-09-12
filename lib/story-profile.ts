@@ -76,3 +76,8 @@ export function storySearchTerms(item:Media){
  const terms:Record<string,string>={'imperial court':'palace','royal court':'royalty','Regency Britain':'regency','Victorian Britain':'victorian','Second World War':'world war ii','learning magic':'magic school','solving a mystery':'mystery','second-chance romance':'second chance romance'};
  return [...new Set([...definingSettings(item),...p.premise].map(label=>terms[label] || label))].slice(0,2);
 }
+
+// Export the supported labels for the catalog inventory without exposing regexes.
+export function storyFeatureCatalog(){
+ return {...Object.fromEntries(Object.entries(groups).map(([kind,patterns])=>[kind,Object.keys(patterns)])),era:['historical','contemporary'],audience:['middle-grade','young-adult']};
+}

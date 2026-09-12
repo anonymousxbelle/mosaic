@@ -119,7 +119,7 @@ export function extractTags(description: string, genres: string[]): string[] {
       (g) => !/^science fiction (?:&|and) fantasy$/i.test(g.trim()),
     ),
   ].join(' ');
-  return Object.entries(vocabulary)
+  const tags = Object.entries(vocabulary)
     .filter(([, pattern]) => pattern.test(text))
     .filter(([tag]) => !Object.hasOwn(detailedPatterns,tag) || detailed.has(tag))
     .map(([tag]) => tag)
@@ -127,6 +127,8 @@ export function extractTags(description: string, genres: string[]): string[] {
       (tag) =>
         tag !== 'fiction' || !normalizeGenres(genres).includes('non-fiction'),
     );
+  if(tags.includes('anime') && !tags.includes('animation'))tags.push('animation');
+  return tags;
 }
 function strings(value: unknown): string[] {
   return Array.isArray(value) ? value.filter((x) => typeof x === 'string') : [];
