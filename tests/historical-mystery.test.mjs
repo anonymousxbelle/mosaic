@@ -18,3 +18,13 @@ test('a palace mention alone does not invent a historical era',()=>{
  const futuristic={...seed,tags:['mystery'],genres:['mystery'],description:'An emperor rules from a palace on a spaceship.'};
  assert.deepEqual(storyProfile(futuristic).era,[]);
 });
+
+test('animation discovery uses genre filtering without a redundant anime keyword',async()=>{
+ const {default:worker}=await import('../backend/worker.ts');const old=fetch,calls=[];
+ globalThis.fetch=async raw=>{const url=new URL(raw);calls.push(url);return Response.json(url.pathname.includes('/genre/')?{genres:[{id:16,name:'Animation'},{id:9648,name:'Mystery'}]}:{results:[],total_pages:1});};
+ try{
+ const r=await worker.fetch(new Request('https://api.test/discover?type=TV&tags=mystery,animation,anime'),{CATALOG_LIMITER:{limit:async()=>({success:true})},TMDB_TOKEN:'test-only',ALLOWED_ORIGIN:'https://anonymousxbelle.github.io'});
+ assert.equal(r.status,200);assert.ok(!calls.some(x=>x.pathname.includes('search/keyword')));
+ const request=calls.find(x=>x.pathname.includes('discover/tv'));assert.ok(request);assert.equal(request.searchParams.get('with_genres'),'16,9648');assert.equal(request.searchParams.get('with_keywords'),'');
+ }finally{globalThis.fetch=old;}
+});
