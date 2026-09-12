@@ -351,7 +351,7 @@ export default {
               'imperial-court': 'palace',
             };
             for (const tag of tags
-              .filter((t) => detailedTags.includes(t) || ['sports','magic'].includes(t))
+              .filter((t) => !['animation','anime'].includes(t) && (detailedTags.includes(t) || ['sports','magic'].includes(t)))
               .slice(0, 2)) {
               const name = keywordNames[tag] || tag.replaceAll('-', ' ');
               const keywords = await tmdb(
