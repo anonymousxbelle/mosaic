@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import {pausedMediaTags} from '@/lib/genres';
 import {
   genreDescription,
   glossaryTags,
@@ -15,11 +16,11 @@ export function GenreGuide() {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="e.g. roguelike, sports anime"
+          placeholder="e.g. historical romance, sports anime"
         />
       </label>
       <dl>
-        {glossaryTags
+        {glossaryTags.filter(t=>!pausedMediaTags.has(t))
           .filter((t) =>
             t
               .replaceAll('-', ' ')
