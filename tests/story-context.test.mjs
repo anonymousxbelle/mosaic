@@ -24,3 +24,9 @@ void test('TMDB context searches retain the genre and advertise additional pages
  const discover=calls.find(u=>u.pathname.includes('discover/movie'));assert.equal(discover.searchParams.get('with_keywords'),'42');assert.equal(discover.searchParams.get('with_genres'),'10749');
  }finally{globalThis.fetch=old;}
 });
+
+void test('anime is a distinct subset of animation, never its synonym',async()=>{
+ const {extractTags}=await import('../lib/media-api.ts');
+ const anime=extractTags('', ['Anime']);assert.ok(anime.includes('anime'));assert.ok(anime.includes('animation'));
+ const animation=extractTags('', ['Animation']);assert.ok(animation.includes('animation'));assert.ok(!animation.includes('anime'));
+});
