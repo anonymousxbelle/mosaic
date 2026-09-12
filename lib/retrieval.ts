@@ -21,10 +21,11 @@ export async function retrievePages(
  signal?:AbortSignal,
  target=30,
  preferred:(item:CatalogMedia)=>boolean=()=>true,
+ maxPages=3,
 ){
  const items:CatalogMedia[]=[],stats=emptyStats(),seen=new Set<string>(),active=new Set(plans);
  const evidence:Record<string,RetrievalEvidence[]>={},offsets=new Map<string,number>();
- for(let page=1;page<=3 && active.size;page++){
+ for(let page=1;page<=Math.min(6,Math.max(1,maxPages)) && active.size;page++){
   for(const plan of plans){
    if(!active.has(plan))continue;
    signal?.throwIfAborted();

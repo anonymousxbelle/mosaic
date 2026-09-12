@@ -34,7 +34,7 @@ export function storyProfile(item:Media){
  const out:Record<string,string[]>={};
  for(const [group,patterns] of Object.entries(groups))out[group]=Object.entries(patterns).filter(([,p])=>p.test(text)).map(([label])=>label);
  const labels=[...item.tags,...(item.genres||[])];
- out.era=labels.some(t=>['history','historical-fiction','historical-romance'].includes(t)) || /\b(?:Regency|Victorian|medieval|ancient (?:China|Japan|Rome)|feudal|historical setting)\b/i.test(text)?['historical']:/\b(?:present[- ]day|modern[- ]day|contemporary setting)\b/i.test(text) || labels.includes('contemporary-romance')?['contemporary']:[];
+ out.era=labels.some(t=>['historical-fiction','historical-romance'].includes(t)) || (labels.includes('history') && out.setting.includes('imperial court')) || /\b(?:Regency|Victorian|medieval|ancient (?:China|Japan|Rome)|feudal|Joseon|Edo period|(?:Tang|Ming|Qing|Han) dynasty|historical setting)\b/i.test(text)?['historical']:/\b(?:present[- ]day|modern[- ]day|contemporary setting)\b/i.test(text) || labels.includes('contemporary-romance')?['contemporary']:[];
  out.audience=item.tags.filter(t=>['middle-grade','young-adult'].includes(t));
  return out;
 }
