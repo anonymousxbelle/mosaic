@@ -14,6 +14,7 @@ export type Provider =
   | 'TMDB'
   | 'IGDB';
 export type CatalogMedia = Media & {
+  metadataSourceUrl?:string;
   synopsisStatus?: 'pending'|'available'|'unavailable';
   provider: Provider;
   externalId: string;
@@ -72,7 +73,7 @@ export function plainText(value: unknown): string {
     .trim()
     .slice(0, 3000);
 }
-const vocabulary: Record<string, RegExp> = {
+export const vocabulary: Record<string, RegExp> = {
   ...detailedPatterns,
   'non-fiction': /\bnon[ -]?fiction\b/i,
   fiction: /\bfiction\b/i,
@@ -557,6 +558,8 @@ export function validArtwork(value: unknown): value is string {
 export function validStoredItem(value: unknown): value is CatalogMedia {
   if (!value || typeof value !== 'object') return false;
   const x = value as CatalogMedia;
+  if(x.metadataSourceUrl!==undefined && (typeof x.metadataSourceUrl!=='string' || !/^https:\/\/hardcover\.app\/books\/[a-z0-9][a-z0-9-]*$/.test(x.metadataSourceUrl)))return false;
+  if(x.seriesPosition!==undefined && (!Number.isInteger(x.seriesPosition) || x.seriesPosition<1 || x.seriesPosition>99))return false;
   if(x.synopsisStatus !== undefined && !['pending','available','unavailable'].includes(x.synopsisStatus)) return false;
   if(x.seriesKey !== undefined && (typeof x.seriesKey !== 'string' || !/^(hardcover|tmdb):[\p{L}\p{N} -]{1,160}$/u.test(x.seriesKey))) return false;
   if (x.artworkUrl !== undefined && !validArtwork(x.artworkUrl)) return false;

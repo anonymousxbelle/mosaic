@@ -1,4 +1,5 @@
 import { specificity, featureKind, matchesGenre, seedTopic } from './features.ts';
+import {storyMatch,sameSeries} from './story-profile.ts';
 import { sameWork } from './media-identity.ts';
 export const categories = ['Book', 'Music', 'Game', 'Movie', 'TV'] as const;
 export const discoveryCategories = ['Book', 'Game', 'Movie', 'TV'] as const;
@@ -11,6 +12,7 @@ export type Media = {
   tags: string[];
   genres?: string[];
   seriesKey?: string;
+  seriesPosition?:number;
   artworkUrl?: string;
   libraryState?: 'later' | 'experienced' | 'dismissed';
   adult?: boolean;
@@ -52,6 +54,7 @@ export function recommend(
   exclude: string[] = [],
   requiredGenre?: string,
   seed?: Media,
+  useStory=false,
 ) {
   return catalog
     .filter(
@@ -103,6 +106,12 @@ export function recommend(
       Object.keys(query).some(t=>query[t]>0 && !['audience','format','tone'].includes(featureKind(t))) &&
       !i.tags.some(t=>query[t]>0 && !['audience','format','tone'].includes(featureKind(t))) ? 0.2 : 1
     )}))
+    .map(i=>{
+      const story=seed && useStory?storyMatch(seed,i):{score:0,reasons:[] as string[]};
+      // Missing evidence adds no bonus. Later volumes are less useful entry points.
+      const entry=useStory && i.type==='Book' && (i.seriesPosition || 0)>1 && (!seed || !sameSeries(i,seed))?0.8:1;
+      return {...i,storyReasons:story.reasons,score:i.score*(1+0.3*story.score)*entry};
+    })
     .filter((i) => i.score > 0)
     .sort((a, b) => a.priority-b.priority || b.score - a.score || a.title.localeCompare(b.title));
 }

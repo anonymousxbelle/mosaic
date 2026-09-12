@@ -1,3 +1,5 @@
+import {enrichBookAcrossSources} from './book-enrichment.ts';
+import {seriesPosition} from './story-profile.ts';
 import type { CatalogMedia } from './media-api';
 import { extractTags, plainText } from './media-api.ts';
 import { normalizeGenres } from './genres.ts';
@@ -124,6 +126,7 @@ export async function enrichBook(item:CatalogMedia,signal?:AbortSignal):Promise<
   const description=bookSynopsis(plainText(typeof work.description==='string'?work.description:work.description?.value));
   const subjects=Array.isArray(work.subjects)?work.subjects.filter((s:unknown)=>typeof s==='string'):[];
   return {...item,description:description || (hasSynopsis(item.description)?item.description:''),
+    seriesPosition:seriesPosition(description) || item.seriesPosition,
     synopsisStatus:description || hasSynopsis(item.description)?'available':'unavailable',
     tags:[...new Set([...item.tags,...extractTags(description,subjects)])],
     genres:[...new Set([...(item.genres||[]),...normalizeGenres(subjects)])],
@@ -162,7 +165,8 @@ export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(
     const index=result.items.findIndex(x=>x.id===candidate.id);
     const item=result.items[index];
     try {
-      const enriched=await enrichBook(item,signal);
+      let enriched=await enrichBook(item,signal);
+      if(leading.indexOf(candidate)<6)enriched=await enrichBookAcrossSources(enriched,signal);
       if(accept(enriched))result.items[index]=enriched;else rejected.add(item.id);
     }catch(error){if(signal?.aborted)throw error;}
   }
