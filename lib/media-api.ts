@@ -706,11 +706,13 @@ export async function discoverMedia(
     const seed=options.seed as CatalogMedia|undefined;
     if(seed && anchor && storyProfile(seed).setting.includes('imperial court'))plans.unshift(JSON.stringify({tags:[anchor,'imperial-court'].join(',')}));
     if(seed?.provider==='TMDB' && seed.type===type)plans.unshift(JSON.stringify({related:seed.externalId}));
+    const court=!!seed && storyProfile(seed).setting.includes('imperial court');
+    if(court && anchor){plans.splice(2,plans.length,JSON.stringify({tags:[anchor,...(seed.tags.includes('anime')?['animation']:[])].join(',')}));}
     result=await retrievePages([...new Set(plans)].slice(0,3),async(plan,page)=>{
       const data=await json(catalogApi+'/discover?'+new URLSearchParams({type,adult:String(adult),page:String(page),...JSON.parse(plan)}),signal);
       if(!Array.isArray(data.items))throw Error('Invalid discovery response.');
       return {items:data.items.filter(validStoredItem),hasMore:data.hasMore===true};
-    },accept,signal,30,item=> !options.seed || type!==options.seed.type || !options.seed.tags.includes('anime') || item.tags.includes('anime'));
+    },accept,signal,30,item=> (!court || storyProfile(item).setting.includes('imperial court')) && (!options.seed || type!==options.seed.type || !options.seed.tags.includes('anime') || item.tags.includes('anime')));
    }
    for(const key of ['examined','rejected','pages','failedQueries'] as const)stats[key]+=result.stats[key];
    if(result.stats.failedQueries)failures.push(type+' (partial)');
