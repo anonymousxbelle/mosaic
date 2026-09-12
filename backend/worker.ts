@@ -250,7 +250,7 @@ export default {
       const q = (u.searchParams.get('q') || '').trim();
       const id = u.searchParams.get('id') || '';
       const pageText=u.searchParams.get('page') || '1';
-      if(!/^[1-3]$/.test(pageText))throw new ApiError(400,'Page must be 1–3.');
+      if(!/^[1-6]$/.test(pageText))throw new ApiError(400,'Page must be 1–6.');
       const page=Number(pageText);
       const related=u.searchParams.get('related') || '';
       if(related && (!['Movie','TV'].includes(type || '') || !/^[1-9]\d{0,9}$/.test(related)))throw new ApiError(400,'Invalid related title.');
