@@ -273,6 +273,8 @@ export default {
         throw new ApiError(400, 'Search must be 2–100 characters.');
       if (u.pathname === '/verify' && !/^[1-9]\d{0,9}$/.test(id))
         throw new ApiError(400, 'Invalid catalog ID.');
+      const context=(u.searchParams.get('context') || '').trim().toLowerCase();
+      if(context && !/^[a-z0-9 -]{1,60}$/.test(context))throw new ApiError(400,'Invalid story context.');
       const cacheKey =
         u.pathname +
         '?' +
@@ -282,7 +284,7 @@ export default {
           id,
           tags: tagText,
           adult: String(adult),
-          page:pageText,related,
+          page:pageText,related,context,
         });
       const hit = responseCache.get(cacheKey);
       if (u.pathname !== '/verify' && hit && hit.expires > Date.now())
@@ -350,10 +352,10 @@ export default {
               'magical-school': 'magic school',
               'imperial-court': 'palace',
             };
-            for (const tag of tags
-              .filter((t) => !['animation','anime'].includes(t) && (detailedTags.includes(t) || ['sports','magic'].includes(t)))
-              .slice(0, 2)) {
-              const name = keywordNames[tag] || tag.replaceAll('-', ' ');
+            const keywordQueries=[...new Set([...(context?[context]:[]),...tags
+              .filter(t=>!['animation','anime'].includes(t) && (detailedTags.includes(t) || ['sports','magic'].includes(t)))
+              .map(tag=>keywordNames[tag] || tag.replaceAll('-', ' '))])].slice(0,2);
+            for (const name of keywordQueries) {
               const keywords = await tmdb(
                 'search/keyword?' + new URLSearchParams({ query: name }),
                 env,
@@ -376,7 +378,7 @@ export default {
           const data = await tmdb(path, env);
           if (!Array.isArray(data.results))
             throw new ApiError(502, 'Invalid film/TV catalog response.');
-          hasMore=u.pathname==='/discover' && page<3 && (typeof data.total_pages==='number'?page<data.total_pages:data.results.length===20);
+          hasMore=u.pathname==='/discover' && page<6 && (typeof data.total_pages==='number'?page<data.total_pages:data.results.length===20);
           items = [];
           const rows=data.results.slice(0,u.pathname === '/search'?8:20);
           // Bounded concurrency enriches every row on a discovery page; no skipped tail.
