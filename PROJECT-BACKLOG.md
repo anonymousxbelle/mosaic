@@ -195,3 +195,6 @@ The user felt the removed Genres mode produced relatively good matches. Keep its
 
 ## Library-owned preferences (2026-09-12)
 Removed the separate Preferences navigation item. Taste preferences, avoided genres, account/cloud controls and the taste summary now belong to My Library. Library and onboarding shortcuts point to that section; genre preference controls start collapsed. Existing stored preferences and recommendation behavior are preserved.
+
+## Historical court mystery feedback (2026-09-12)
+User nominated Raven of the Inner Palace as a stronger match for The Apothecary Diaries. Live metadata confirmed both have mystery/history/anime evidence, but only the seed has detective-fiction. Removed detective-fiction as a mandatory seed topic: it is a preference, not necessary for every mystery. General imperial-court description cues now support palace-keyword retrieval and specific setting comparison; historical era is separately supported by catalog labels or explicit period language, never inferred merely from a palace. Era and setting tiers now precede subgenre tiers, preventing generic modern detective labels from overriding the desired historical setting. No title or ID rules are used. Add this pair to the human-reviewed retrieval benchmark; provider coverage and metadata gaps can still prevent retrieval.
