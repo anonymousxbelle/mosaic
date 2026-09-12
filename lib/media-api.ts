@@ -1,5 +1,6 @@
 import { detailedPatterns, detailedFeatures, featureGroups, primaryGenre, seedTopic, matchesGenre } from './features.ts';
 import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats, type RetrievalEvidence } from './retrieval.ts';
+import {storyProfile} from './story-profile.ts';
 import { matureRating } from './content-rating.ts';
 import { normalizeGenres, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
@@ -703,6 +704,7 @@ export async function discoverMedia(
     const broad=core.length?core:controlled.slice(0,1);
     if(broad.length)plans.push(JSON.stringify({tags:broad.join(',')}));
     const seed=options.seed as CatalogMedia|undefined;
+    if(seed && anchor && storyProfile(seed).setting.includes('imperial court'))plans.unshift(JSON.stringify({tags:[anchor,'imperial-court'].join(',')}));
     if(seed?.provider==='TMDB' && seed.type===type)plans.unshift(JSON.stringify({related:seed.externalId}));
     result=await retrievePages([...new Set(plans)].slice(0,3),async(plan,page)=>{
       const data=await json(catalogApi+'/discover?'+new URLSearchParams({type,adult:String(adult),page:String(page),...JSON.parse(plan)}),signal);

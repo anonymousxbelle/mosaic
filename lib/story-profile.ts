@@ -8,6 +8,7 @@ const groups:Record<string,Record<string,RegExp>>={
 };
 
 Object.assign(groups.setting,{
+ 'imperial court':/\b(?:imperial (?:court|palace)|inner palace|emperor.{0,12}palace|palace.{0,80}emperor|imperial consort)\b/i,
  'Regency Britain':/\b(?:regency|regency[- ]era|regency England)\b/i,
  'Victorian Britain':/\b(?:victorian|victorian London)\b/i,
  'medieval':/\b(?:medieval|middle ages)\b/i,
@@ -32,6 +33,8 @@ export function storyProfile(item:Media){
  const text=hasSynopsis(item.description)?item.description:'';
  const out:Record<string,string[]>={};
  for(const [group,patterns] of Object.entries(groups))out[group]=Object.entries(patterns).filter(([,p])=>p.test(text)).map(([label])=>label);
+ const labels=[...item.tags,...(item.genres||[])];
+ out.era=labels.some(t=>['history','historical-fiction','historical-romance'].includes(t)) || /\b(?:Regency|Victorian|medieval|ancient (?:China|Japan|Rome)|feudal|historical setting)\b/i.test(text)?['historical']:/\b(?:present[- ]day|modern[- ]day|contemporary setting)\b/i.test(text) || labels.includes('contemporary-romance')?['contemporary']:[];
  out.audience=item.tags.filter(t=>['middle-grade','young-adult'].includes(t));
  return out;
 }

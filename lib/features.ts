@@ -49,6 +49,7 @@ const terms: Record<string, string> = {
   football: 'football|soccer',
   baseball: 'baseball',
   anime: 'anime',
+  'imperial-court': 'imperial (?:court|palace)|inner palace|emperor.{0,12}palace|palace.{0,80}emperor|imperial consort',
   'sports-drama': 'sports drama',
   'sports-anime': 'sports anime',
   animation: 'animation|animated',
@@ -125,7 +126,6 @@ export function seedTopic(item?: {tags:string[]}):string|undefined {
     fantasy:['magic','mythic-fantasy'],
     sports:['basketball','football','baseball'],
     'science-fiction':['space-opera','time-travel','cyberpunk','first-contact'],
-    mystery:['detective-fiction'],
   };
   const genre=primaryGenre(item);
   return (subjects[genre || ''] || []).find(t=>item.tags.includes(t)) ||
