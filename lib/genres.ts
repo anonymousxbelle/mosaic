@@ -87,3 +87,7 @@ export function genreAllowed(
     (g) => blocked.includes(item.type + ':' + g) || avoid.includes(g),
   );
 }
+
+// Retain stored metadata while hiding paused media from current product controls.
+export const pausedMediaTags = new Set(['strategy','turn-based-strategy','real-time-strategy','roguelike','pop','rock','alternative','folk','electronic','jazz','hip-hop','country','classical']);
+export const activeGenreChoices=genreChoices.filter(tag=>!pausedMediaTags.has(tag));

@@ -2,7 +2,7 @@ import { specificity, featureKind, matchesGenre, seedTopic } from './features.ts
 import {storyMatch,sameSeries} from './story-profile.ts';
 import { sameWork } from './media-identity.ts';
 export const categories = ['Book', 'Music', 'Game', 'Movie', 'TV'] as const;
-export const discoveryCategories = ['Book', 'Game', 'Movie', 'TV'] as const;
+export const discoveryCategories = ['Book', 'Movie', 'TV'] as const;
 export type Category = (typeof categories)[number];
 export type Media = {
   id: string;
