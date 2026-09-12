@@ -348,6 +348,7 @@ export default {
               sports: 'sport',
               'mythic-fantasy': 'mythology',
               'magical-school': 'magic school',
+              'imperial-court': 'palace',
             };
             for (const tag of tags
               .filter((t) => detailedTags.includes(t) || ['sports','magic'].includes(t))
