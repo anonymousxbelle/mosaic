@@ -92,7 +92,6 @@ function MediaMark({ item }: { item: Media }) {
 export default function Home() {
   const [view, setView] = useState('discover');
   const [shelf, setShelf] = useState('all');
-  const [collection, setCollection] = useState('');
   const [actionBusy, setActionBusy] = useState(false);
   const [undo, setUndo] = useState<{
     id: string;
@@ -100,7 +99,6 @@ export default function Home() {
   } | null>(null);
   const [adultSection, setAdultSection] = useState(false);
   const [added, setAdded] = useState<CatalogMedia[]>([]);
-  const [genre, setGenre] = useState('fantasy');
   const [avoided, setAvoided] = useState<string[]>([]);
   const [showDemo, setShowDemo] = useState(false);
   const [candidates, setCandidates] = useState<CatalogMedia[]>([]);
@@ -169,7 +167,7 @@ export default function Home() {
       ...candidates.filter((i) => inContentSection(i, adultSection)),
     ].find((i) => i.id === seed) || discoveryCatalog[0];
   useEffect(() => {setFocusTags([]);setMustTags([]);setSeriesView('discover');}, [seed]);
-  const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,category,focusTags,mustTags,seriesView,genre,adultSection,avoided,ratings]);
+  const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,category,focusTags,mustTags,seriesView,adultSection,avoided,ratings]);
   useEffect(()=>{
     discoveryRequest.current?.abort();
     setDiscovering(false);
@@ -358,21 +356,13 @@ export default function Home() {
     return () => lifecycle.abort();
   }, []);
   async function findConnections() {
-    if (mode === 'collection') {
-      setDiscoveryNotice(
-        'Your personal collection matches saved titles below. Its private name is not sent to external catalogs.',
-      );
-      return;
-    }
     discoveryRequest.current?.abort();
     const controller = new AbortController();
     discoveryRequest.current = controller;
     setDiscovering(true);
     setDiscoveryNotice('');
     const query =
-      mode === 'genres'
-        ? vector([genre])
-        : mode === 'based-on'
+      mode === 'based-on'
           ? vector(
               focusTags.length
                 ? focusTags.filter((t) => selected?.tags.includes(t))
@@ -388,8 +378,7 @@ export default function Home() {
                 ...i.tags,
                 ...detailedFeatures(i.description, i.genres || []),
               ].includes(t),
-            )) ||
-          (mode === 'genres' && t === genre),
+            )),
       )
       .sort((a, b) => query[b] * specificity(b) - query[a] * specificity(a))
       .slice(0, 9);
@@ -460,11 +449,7 @@ export default function Home() {
   }
   const results = recommend(
     [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))].filter(i=>mode!=='based-on' || mustTags.every(t=>i.tags.includes(t))),
-    mode === 'collection'
-      ? vector([collection])
-      : mode === 'genres'
-        ? vector([genre])
-        : mode === 'based-on'
+    mode === 'based-on'
           ? vector(
               focusTags.length
                 ? focusTags.filter((t) => selected?.tags.includes(t))
@@ -472,9 +457,7 @@ export default function Home() {
             )
           : taste,
     category,
-    mode === 'collection'
-      ? []
-      : mode === 'based-on'
+    mode === 'based-on'
         ? [selected?.id || seed]
         : Object.keys(ratings),
     mode === 'based-on' ? primaryGenre(selected) : undefined,
@@ -489,9 +472,7 @@ export default function Home() {
     rankedResults
       .filter((i) => i.type !== 'Music')
       .filter((i) =>
-        mode === 'collection'
-          ? i.libraryState !== 'dismissed'
-          : recommendationEligible(i, ratings),
+        recommendationEligible(i, ratings),
       )
       .filter((i) => inContentSection(i, adultSection))
       .filter((i) => genreAllowed(i, preferences.blocked, avoided))
@@ -528,16 +509,16 @@ export default function Home() {
           <Layers3 size={30} />
           mosaic<span className="brand-dot">●</span>
         </a>
-        <span className="project-label">A CROSS-MEDIA EXPLORATION</span>
-        <span className="prototype">Seminar prototype · 02</span>
+        <span className="project-label">Your next good story starts here.</span>
+        <span className="prototype">Books · Movies · TV</span>
       </header>
       <main>
         <div className="page-intro">
           <div>
             <p className="eyebrow">CROSS-MEDIA DISCOVERY</p>
-            <h1>Find your next connection.</h1>
+            <h1>Find your next favorite.</h1>
           </div>
-          <p>Start with your favorites. Follow what connects them.</p>
+          <p>Stories that feel like your kind of thing.</p>
         </div>
         <nav className="primary-nav" aria-label="Main navigation">
           {[
@@ -625,7 +606,7 @@ export default function Home() {
               </button>
             </section>
           )}
-        <div
+        <details className="content-settings"><summary>Content preferences {adultSection ? '· 18+' : '· General'}</summary><div
           className="content-section"
           role="group"
           aria-label="Content section"
@@ -665,7 +646,7 @@ export default function Home() {
               ? '18+ movies, TV and books. Includes explicit flags and mature ratings such as R, NC-17 and TV-MA. This is a browsing preference, not age verification.'
               : 'Flagged mature movies, TV and books are kept in 18+. Missing ratings are labeled unknown; this collection is not a child-safe filter.'}
           </p>
-        </div>
+        </div></details>
         <div className="workspace focused-workspace">
           <aside className="library" hidden={view !== 'library'}>
             <div className="section-heading">
@@ -709,9 +690,8 @@ export default function Home() {
               edits={tagEdits}
               onChange={setTagEdits}
               onExplore={(tag) => {
-                setCollection(tag);
-                setMode('collection');
-                setView('discover');
+                setSearch(tag);
+                setView('library');
               }}
             />
             <label className="search">
@@ -917,14 +897,10 @@ export default function Home() {
             <Tabs value={mode} onValueChange={(v) => setMode(String(v))}>
               <div className="discovery-toolbar">
                 <TabsList className="mode-tabs">
-                  {collection && (
-                    <TabsTrigger value="collection">My collection</TabsTrigger>
-                  )}
                   <TabsTrigger value="for-you">
                     <Sparkles size={16} />
                     For You
                   </TabsTrigger>
-                  <TabsTrigger value="genres">Genres</TabsTrigger>
                   <TabsTrigger value="based-on">
                     <Layers3 size={16} />
                     Based On
@@ -951,57 +927,22 @@ export default function Home() {
                   </SelectContent>
                 </Select>
               </div>
-              <TabsContent value="collection">
-                <div className="context">
-                  <h2>{collection.replace(/-/g, ' ')}</h2>
-                  <p>
-                    Connections sharing your personal tag. Add it to more titles
-                    in My Library to build this collection.
-                  </p>
-                </div>
-              </TabsContent>
+
               <TabsContent value="for-you">
                 <div className="context">
-                  <p className="eyebrow">THE BIG PICTURE</p>
-                  <h2>A little of everything you love.</h2>
+                  <p className="eyebrow">PICKED FROM YOUR FAVORITES</p>
+                  <h2>Your taste. New possibilities.</h2>
                   <p>
                     Connections drawn from the titles you rate 3 stars or
                     higher.
                   </p>
                 </div>
               </TabsContent>
-              <TabsContent value="genres">
-                <div className="context">
-                  <h2>One genre. Different media.</h2>
-                  <p>
-                    Explore a genre across books, movies, TV and games where the
-                    catalog supplies matching metadata.
-                  </p>
-                  <Select
-                    value={genre}
-                    onValueChange={(v) => {
-                      if (v) setGenre(v);
-                    }}
-                  >
-                    <SelectTrigger aria-label="Discovery genre">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {[...new Set([...genreChoices, ...detailedTags])].map(
-                        (g) => (
-                          <SelectItem key={g} value={g}>
-                            {g.replace(/-/g, ' ')}
-                          </SelectItem>
-                        ),
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </TabsContent>
+
               <TabsContent value="based-on">
                 <div className="context">
-                  <p className="eyebrow">FOLLOW A SINGLE THREAD</p>
-                  <h2>More of what you enjoyed.</h2>
+                  <p className="eyebrow">START WITH ONE FAVORITE</p>
+                  <h2>Loved it? Find your next one.</h2>
                   <Select
                     value={seed}
                     onValueChange={(v) => {
@@ -1028,8 +969,10 @@ export default function Home() {
                   </Select>
                 </div>
                 {selected && (
+                  <details className="refine-panel">
+                    <summary>Refine your matches <span>{mustTags.length + focusTags.length ? `${mustTags.length + focusTags.length} selected` : 'Optional'}</span></summary>
                   <fieldset>
-                    <legend>What did you enjoy? (optional)</legend>
+                    <legend>What matters to you?</legend>
                     <label>Explore <select value={seriesView} onChange={e=>setSeriesView(e.target.value)}><option value="discover">Other stories</option><option value="series">Same series</option></select></label>
                     <p>Series grouping uses known catalog metadata; unknown series may still appear in Other stories.</p>
                     <p>Choose up to five aspects to focus this discovery.</p>
@@ -1061,10 +1004,11 @@ export default function Home() {
                     </div>
                     <p>Missing metadata is not treated as a match. If results are sparse, remove an optional requirement or choose a different starting title. Anime remains within TV and movies.</p>
                   </fieldset>
+                  </details>
                 )}
               </TabsContent>
             </Tabs>
-            {mode==='based-on' && <label>
+            {mode==='based-on' && <details className="advanced-panel"><summary>Advanced matching</summary><label>
               Recommendation method{' '}
               <select value={rankingMode} onChange={e=>setRankingMode(e.target.value)} disabled={discovering}>
                 <option value="recommended">Recommended: core story match + AI + providers</option>
@@ -1074,14 +1018,12 @@ export default function Home() {
                 <option value="semantic">AI descriptions + provider + tags (experimental)</option>
               </select>
               {['recommended','semantic'].includes(rankingMode) && <p>Show discoveries compares up to 24 candidate descriptions with Cloudflare AI. Ratings and personal tags are not sent. Genre and topic filters stay in place.</p>}
-            </label>}
+            </label></details>}
             <button
               className="add-media-button"
               disabled={
                 discovering ||
-                !(mode === 'genres' || mode === 'collection'
-                  ? true
-                  : mode === 'based-on'
+                !(mode === 'based-on'
                     ? selected?.tags.length || 0
                     : Object.values(taste).some((v) => v > 0))
               }
@@ -1089,17 +1031,13 @@ export default function Home() {
             >
               {discovering
                 ? 'Searching catalogs…'
-                : mode === 'collection'
-                  ? 'Explore saved collection'
-                  : 'Show discoveries'}
+                : 'Find my next favorite'}
             </button>
             {discoveryNotice && (
-              <p role="status" className="library-notice">
-                {discoveryNotice}
-              </p>
+              <div className="search-status"><p role="status">{discovering ? 'Finding stories that fit…' : discoveryNotice.includes('could not') ? 'Search could not finish. Please try again.' : 'Your matches are ready.'}</p><details><summary>Search details</summary><p>{discoveryNotice}</p></details></div>
             )}
             {mode==='based-on' && candidates.length>0 && rankingEvidence.key===discoveryKey && !discovering &&
-              <button onClick={downloadComparison}>Download comparison snapshot</button>}
+              <details className="advanced-panel"><summary>Evaluate these recommendations</summary><p>Export this result set to compare recommendation methods.</p><button onClick={downloadComparison}>Download comparison snapshot</button></details>}
             <div className="results-heading">
               <h2>
                 {mode === 'based-on'
@@ -1120,21 +1058,13 @@ export default function Home() {
                 <h3>
                   {discovering
                     ? 'Looking for connections…'
-                    : 'Let’s find another way in.'}
+                    : 'Your next favorite is waiting.'}
                 </h3>
                 <p>
-                  Add a favorite, try a broader genre, or adjust your
-                  preferences. Some catalogs may have limited matching metadata.
+                  Add something you love to your library, then find more like it.
+                  Already added favorites? Try a different starting title or fewer filters.
                 </p>
-                <button
-                  className="edit-tags"
-                  onClick={() => {
-                    setCategory('All');
-                    setMode('genres');
-                  }}
-                >
-                  Explore a genre across all media
-                </button>
+
                 <button
                   className="edit-tags"
                   onClick={() => setView('library')}
@@ -1165,33 +1095,50 @@ export default function Home() {
                     <h3>{item.title}</h3>
 
                     <p className="creator">{item.creator}</p>
-                    {[...added, ...candidates].find(
-                      (x) => x.id === item.id,
-                    ) && (
+
+
+                    {[...added, ...candidates].find((x) => x.id === item.id)
+                      ?.imdbUrl && (
                       <a
                         className="source-link"
                         href={
                           [...added, ...candidates].find(
                             (x) => x.id === item.id,
-                          )!.sourceUrl
+                          )!.imdbUrl
                         }
                         target="_blank"
                         rel="noreferrer"
                       >
-                        Source:{' '}
-                        {
-                          [...added, ...candidates].find(
-                            (x) => x.id === item.id,
-                          )!.provider
-                        }
+                        View on IMDb
                       </a>
                     )}
-                    <DiscoveryFeedback
-                      item={item}
-                      seed={selected}
-                      library={catalog}
-                      onDismiss={() => feedback(item, 'dismissed')}
-                    />
+                    {'compatibilityNote' in item && typeof item.compatibilityNote==='string' && <p className="match-context">{item.compatibilityNote}</p>}
+                    {item.seriesPosition && <p>Book {item.seriesPosition} in its series</p>}
+                    {'storyReasons' in item && Array.isArray(item.storyReasons) && item.storyReasons.length>0 && <p>Shared story evidence: {item.storyReasons.join('; ')}</p>}
+                    {'metadataSourceUrl' in item && typeof item.metadataSourceUrl==='string' && <a href={item.metadataSourceUrl} target="_blank" rel="noreferrer">Additional book metadata: Hardcover</a>}
+                    <p className="description">
+                      {!hasSynopsis(item.description)
+                        ? 'Synopsis not loaded or unavailable from the catalog.'
+                        : item.description.length > 420
+                        ? item.description
+                            .slice(0, 420)
+                            .replace(/\s+\S*$/, '') + '…'
+                        : item.description}
+                    </p>
+                    {!hasSynopsis(item.description) && item.id.startsWith('openlibrary:') && <>
+                      <button onClick={()=>loadSynopsis(item.id)} disabled={loadingSynopses.includes(item.id)}>
+                        {loadingSynopses.includes(item.id)?'Loading synopsis…':'Load synopsis'}
+                      </button>
+                      {synopsisErrors[item.id] && <p role="status">{synopsisErrors[item.id]}</p>}
+                      {[...added,...candidates].find(x=>x.id===item.id)?.synopsisStatus==='unavailable' &&
+                        <p>The full source record has no synopsis. Use the catalog link for more information.</p>}
+                    </>}
+                    {item.description.length > 420 && (
+                      <details className="full-description">
+                        <summary>Read full description</summary>
+                        <p>{item.description}</p>
+                      </details>
+                    )}
                     <div className="result-actions">
                       {[...added, ...candidates].some(
                         (x) => x.id === item.id,
@@ -1229,49 +1176,7 @@ export default function Home() {
                           : 'More like this'}
                       </button>
                     </div>
-                    {[...added, ...candidates].find((x) => x.id === item.id)
-                      ?.imdbUrl && (
-                      <a
-                        className="source-link"
-                        href={
-                          [...added, ...candidates].find(
-                            (x) => x.id === item.id,
-                          )!.imdbUrl
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        View on IMDb
-                      </a>
-                    )}
-                    {'compatibilityNote' in item && typeof item.compatibilityNote==='string' && <p>{item.compatibilityNote}</p>}
-                    {item.seriesPosition && <p>Book {item.seriesPosition} in its series</p>}
-                    {'storyReasons' in item && Array.isArray(item.storyReasons) && item.storyReasons.length>0 && <p>Shared story evidence: {item.storyReasons.join('; ')}</p>}
-                    {'metadataSourceUrl' in item && typeof item.metadataSourceUrl==='string' && <a href={item.metadataSourceUrl} target="_blank" rel="noreferrer">Additional book metadata: Hardcover</a>}
-                    <p className="description">
-                      {!hasSynopsis(item.description)
-                        ? 'Synopsis not loaded or unavailable from the catalog.'
-                        : item.description.length > 420
-                        ? item.description
-                            .slice(0, 420)
-                            .replace(/\s+\S*$/, '') + '…'
-                        : item.description}
-                    </p>
-                    {!hasSynopsis(item.description) && item.id.startsWith('openlibrary:') && <>
-                      <button onClick={()=>loadSynopsis(item.id)} disabled={loadingSynopses.includes(item.id)}>
-                        {loadingSynopses.includes(item.id)?'Loading synopsis…':'Load synopsis'}
-                      </button>
-                      {synopsisErrors[item.id] && <p role="status">{synopsisErrors[item.id]}</p>}
-                      {[...added,...candidates].find(x=>x.id===item.id)?.synopsisStatus==='unavailable' &&
-                        <p>The full source record has no synopsis. Use the catalog link for more information.</p>}
-                    </>}
-                    {item.description.length > 420 && (
-                      <details className="full-description">
-                        <summary>Read full description</summary>
-                        <p>{item.description}</p>
-                      </details>
-                    )}
-                    <div className="connection">
+                    <details className="connection"><summary>Why this matches</summary>
                       <span>THE CONNECTION</span>
                       <p>Shared tags: {item.reasons.join(' · ')}</p>
                       {connectionEvidence(
@@ -1280,13 +1185,7 @@ export default function Home() {
                           ? selected
                             ? [selected]
                             : []
-                          : mode === 'collection'
-                            ? discoveryCatalog.filter(
-                                (i) =>
-                                  i.tags.includes(collection) &&
-                                  i.libraryState !== 'dismissed',
-                              )
-                            : discoveryCatalog.filter(
+                          : discoveryCatalog.filter(
                                 (i) =>
                                   (ratings[i.id] || 0) >= 3 &&
                                   i.libraryState !== 'dismissed',
@@ -1301,19 +1200,48 @@ export default function Home() {
                         Based on catalog keyword tags and your edits, not a
                         prediction of how much you’ll like it.
                       </small>
-                    </div>
+                    </details>
+                    <details className="card-details"><summary>Details & feedback</summary>
+                    {[...added, ...candidates].find(
+                      (x) => x.id === item.id,
+                    ) && (
+                      <a
+                        className="source-link"
+                        href={
+                          [...added, ...candidates].find(
+                            (x) => x.id === item.id,
+                          )!.sourceUrl
+                        }
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Source:{' '}
+                        {
+                          [...added, ...candidates].find(
+                            (x) => x.id === item.id,
+                          )!.provider
+                        }
+                      </a>
+                    )}
+                    <DiscoveryFeedback
+                      item={item}
+                      seed={selected}
+                      library={catalog}
+                      onDismiss={() => feedback(item, 'dismissed')}
+                    />
+                    </details>
                   </article>
                 ))}
               </div>
             )}
-            <p className="data-note">
+            <details className="advanced-panel"><summary>About your recommendations</summary><p className="data-note">
               {added.length} saved catalog titles.{' '}
               {showDemo ? 'Demo titles are enabled.' : 'Demo titles are off.'}{' '}
               Live discovery fetches a bounded set of candidates, then ranks
               shared tags. Catalog keywords supply automatic tags. Edit tags to
               correct automatic tags and create your own connections. Similarity
               measures shared tags, not the probability you will like a title.
-            </p>
+            </p></details>
           </section>
         </div>
         <section className="preferences-screen" hidden={view !== 'preferences'}>
