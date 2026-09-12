@@ -524,7 +524,6 @@ export default function Home() {
           {[
             ['discover', 'Discover'],
             ['library', 'My Library'],
-            ['preferences', 'Preferences'],
           ].map(([id, label]) => (
             <button
               key={id}
@@ -585,7 +584,7 @@ export default function Home() {
                     of 3 favorites added
                   </strong>
                 </li>
-                <li>Optionally choose genres to avoid in Preferences.</li>
+                <li>Edit genres to avoid in My Library.</li>
                 <li>
                   Show discoveries when you’re ready—even one favorite can get
                   you started.
@@ -600,9 +599,9 @@ export default function Home() {
               />
               <button
                 className="edit-tags"
-                onClick={() => setView('preferences')}
+                onClick={() => {setView('library');requestAnimationFrame(()=>document.getElementById('library-preferences')?.scrollIntoView({behavior:'smooth'}));}}
               >
-                Choose preferences (optional)
+                Set preferences in My Library
               </button>
             </section>
           )}
@@ -650,7 +649,7 @@ export default function Home() {
         <div className="workspace focused-workspace">
           <aside className="library" hidden={view !== 'library'}>
             <div className="section-heading">
-              <h2>My Library</h2>
+              <h2>My Library</h2><a className="library-preferences-link" href="#library-preferences">Edit taste & preferences</a>
               <span>{catalog.filter((i) => ratings[i.id]).length} rated</span>
             </div>
             <p className="muted">
@@ -1244,8 +1243,8 @@ export default function Home() {
             </p></details>
           </section>
         </div>
-        <section className="preferences-screen" hidden={view !== 'preferences'}>
-          <h2>Your preferences</h2>{' '}
+        <section id="library-preferences" className="preferences-screen" hidden={view !== 'library'}>
+          <h2>Your taste & preferences</h2>{' '}
           <Account
             library={{ version: 1, added, ratings, tagEdits, avoided }}
             onLoad={(value) => {
@@ -1270,7 +1269,7 @@ export default function Home() {
                 );
             }}
           />
-          <details open className="genre-preferences">
+          <details className="genre-preferences">
             <summary>Genre preferences</summary>
             <p>
               Low ratings gently lower a genre’s rank; they never hide a whole
@@ -1303,7 +1302,7 @@ export default function Home() {
             )}
           </details>
         </section>
-        <section className="taste-section" hidden={view !== 'preferences'}>
+        <section className="taste-section" hidden={view !== 'library'}>
           <div>
             <p className="eyebrow">YOUR TASTE, TAKING SHAPE</p>
             <h2>The threads that connect your favorites.</h2>
