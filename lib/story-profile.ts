@@ -6,6 +6,28 @@ const groups:Record<string,Record<string,RegExp>>={
  premise:{'learning magic':/\b(?:learn|study|studies|training|school|academy)\b[^.!?]{0,80}\b(?:magic|wizard|witch|sorcer)/i,'quest':/\b(?:quest|journey to|search for|sets out to)\b/i,'competition':/\b(?:tournament|championship|compete|competition)\b/i,'solving a mystery':/\b(?:investigat|solve|solving)[^.!?]{0,60}\b(?:murder|mystery|crime)/i},
  tone:{'lighthearted':/\b(?:lighthearted|light-hearted|comedic|hilarious)\b/i,'dark':/\b(?:bleak|brutal|grim|terrifying)\b/i},
 };
+
+Object.assign(groups.setting,{
+ 'Regency Britain':/\b(?:regency|regency[- ]era|regency England)\b/i,
+ 'Victorian Britain':/\b(?:victorian|victorian London)\b/i,
+ 'medieval':/\b(?:medieval|middle ages)\b/i,
+ 'Second World War':/\b(?:world war (?:ii|two|2)|second world war|194[0-5])\b/i,
+ 'small town':/\b(?:small[- ]town|rural community)\b/i,
+ 'workplace':/\b(?:office romance|workplace|co[- ]workers|colleagues)\b/i,
+});
+Object.assign(groups.premise,{
+ 'marriage of convenience':/\b(?:marriage of convenience|convenient marriage|marry for convenience)\b/i,
+ 'forbidden love':/\b(?:forbidden love|forbidden romance|star[- ]crossed lovers)\b/i,
+ 'second-chance romance':/\b(?:second[- ]chance romance|rekindle their (?:love|romance)|former lovers)\b/i,
+ 'enemies to lovers':/\b(?:enemies[- ]to[- ]lovers|rivals[- ]to[- ]lovers)\b/i,
+ 'friends to lovers':/\b(?:friends[- ]to[- ]lovers|friendship blossoms into love)\b/i,
+ 'fake relationship':/\b(?:fake dating|fake relationship|pretend (?:engagement|relationship))\b/i,
+ 'survival':/\b(?:fight for survival|struggle to survive|survival against)\b/i,
+ 'heist':/\b(?:heist|plan a robbery|steal the treasure)\b/i,
+ 'political intrigue':/\b(?:political intrigue|struggle for the throne|court intrigue)\b/i,
+ 'family secrets':/\b(?:family secrets|secret family history)\b/i,
+});
+
 export function storyProfile(item:Media){
  const text=hasSynopsis(item.description)?item.description:'';
  const out:Record<string,string[]>={};

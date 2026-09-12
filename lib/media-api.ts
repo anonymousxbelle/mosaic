@@ -1,4 +1,4 @@
-import { detailedPatterns, detailedFeatures, primaryGenre, seedTopic, matchesGenre } from './features.ts';
+import { detailedPatterns, detailedFeatures, featureGroups, primaryGenre, seedTopic, matchesGenre } from './features.ts';
 import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats, type RetrievalEvidence } from './retrieval.ts';
 import { matureRating } from './content-rating.ts';
 import { normalizeGenres, genreChoices } from './genres.ts';
@@ -683,6 +683,7 @@ export async function discoverMedia(
  const items:CatalogMedia[]=[],failures:string[]=[],stats=emptyStats();
  const evidence:Record<string,RetrievalEvidence[]>={};
  const anchor=primaryGenre(options.seed),topic=seedTopic(options.seed);
+ const subgenre=(featureGroups[anchor || '']||[]).find(t=>[...(options.seed?.genres||[]),...(options.seed?.tags||[])].includes(t));
  const accept=(item:CatalogMedia)=>
   (!anchor || matchesGenre(item,anchor)) && (!topic || item.tags.includes(topic)) &&
   item.tags.some(t=>tags.includes(t)) && (!options.seed || !sameWork(item,options.seed)) &&
@@ -693,10 +694,10 @@ export async function discoverMedia(
   try{
    if(type==='Music')continue;
    let result:{items:CatalogMedia[];stats:RetrievalStats;evidence:Record<string,RetrievalEvidence[]>};
-   if(type==='Book')result=await(await import('./book-api.ts')).retrieveBooks(tags,signal,accept,anchor,topic);
+   if(type==='Book')result=await(await import('./book-api.ts')).retrieveBooks(tags,signal,accept,anchor,topic || subgenre);
    else {
     if(!usesGateway(type)){failures.push(type);continue;}
-    const core=[topic,anchor].filter((x):x is string=>!!x);
+    const core=[topic || subgenre,anchor].filter((x):x is string=>!!x);
     const controlled=tags.filter(t=>Object.hasOwn(vocabulary,t));
     const plans=[JSON.stringify({tags:[...new Set([...core,...controlled])].slice(0,3).join(',')})];
     const broad=core.length?core:controlled.slice(0,1);
