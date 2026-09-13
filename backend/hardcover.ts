@@ -15,7 +15,7 @@ export function hardcoverRecord(row:Row){
  const series = strings(row.series_names)[0];
  const seriesKey = series?.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N} -]/gu,'').trim().slice(0,160);
  return {id:'hardcover:'+id,externalId:id,provider:'Hardcover',type:'Book',title,creator:plainText(strings(row.author_names).join(', ')).slice(0,500)||'Author unavailable',
- description:description||'No synopsis supplied by this catalog.',genres:normalizeGenres(genres),tags:extractTags(description,[...genres,...moods,...tags]),
+ sourceGenreLabels:genres,description:description||'No synopsis supplied by this catalog.',genres:normalizeGenres(genres),tags:extractTags(description,[...genres,...moods,...tags]),
  seriesKey:seriesKey?'hardcover:'+seriesKey:undefined,
  seriesPosition:seriesPosition(description),
  sourceUrl:'https://hardcover.app/books/'+slug,verifiedAt:new Date().toISOString(),year:Number.isInteger(row.release_year)?String(row.release_year):undefined,
