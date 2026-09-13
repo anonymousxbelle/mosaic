@@ -1,6 +1,7 @@
 'use client';
-import { detailedTags, featureGroups, detailedFeatures, featureKind, featureLabels } from '@/lib/features';
+import { detailedTags, detailedFeatures, featureKind, featureLabels } from '@/lib/features';
 import { useState } from 'react';
+import {taxonomy,tagApplicable,suggestedFacets,contentClass} from '@/lib/taxonomy';
 import {
   Dialog,
   DialogContent,
@@ -35,6 +36,7 @@ export function TagEditor({
   function add(raw: string) {
     try {
       const tag = normalizeTag(raw);
+      if(!tagApplicable(tag,item))throw new Error('This tag does not fit the title’s content class or media type.');
       if (
         edit.added.includes(tag) ||
         (item.tags.includes(tag) && !edit.hidden.includes(tag))
@@ -55,7 +57,7 @@ export function TagEditor({
   const available = [...new Set([...known, ...detailedTags])]
     .filter(
       (t) =>
-        !edit.added.includes(t) &&
+        tagApplicable(t,item) && !edit.added.includes(t) &&
         (!item.tags.includes(t) || edit.hidden.includes(t)) &&
         t.includes(query.trim().toLowerCase().replace(/\s+/g, '-')),
     )
@@ -74,7 +76,7 @@ export function TagEditor({
           Reuse a tag on similar titles to connect your taste across media.
           Changes save immediately in this browser and update recommendations.
         </DialogDescription>
-        <h3>{item.id.includes(':') ? 'Automatic tags' : 'Demo tags'}</h3>
+        <h3>Automatic tags</h3>
         <p className="muted">
           Automatic tags come from catalog genres and description keywords. Hide
           any that do not fit.
@@ -104,19 +106,12 @@ export function TagEditor({
           )}
         </div>
         <details>
-          <summary>Explore subgenres and themes</summary>
-          {Object.entries(featureGroups).map(([parent, children]) => (
-            <div key={parent}>
-              <h4>{parent}</h4>
-              <div className="tag-options">
-                {children.map((t) => (
-                  <button key={t} onClick={() => add(t)}>
-                    + {t}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
+          <summary>Explore applicable genres, themes and tropes</summary>
+          <p>Content class: {contentClass(item).replaceAll('-', ' ')}. Suggestions follow this title’s genres; unknown metadata stays open.</p>
+          {Object.entries(featureLabels).map(([kind,label]) => {
+            const suggestions=suggestedFacets(item).filter(t=>taxonomy[t].kind===kind && !item.tags.includes(t));
+            return suggestions.length?<section key={kind}><h4>{label}</h4><div className="tag-options">{suggestions.map(t=><button key={t} onClick={()=>add(t)}>+ {t.replaceAll('-',' ')}</button>)}</div></section>:null;
+          })}
         </details>
         <h3>Your tags · {edit.added.length}/12</h3>
         <div className="tag-options">
