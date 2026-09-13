@@ -1059,7 +1059,7 @@ export default function Home() {
             ) : (
               <div className="results">
                 {filteredResults.map((item, index) => (
-                  <article className="result-card" key={item.id}>
+                  <article className="result-card" data-media-type={item.type} key={item.id}>
                     <div className="card-top">
                       <span className="rank">
                         {String(index + 1).padStart(2, '0')}

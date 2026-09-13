@@ -1112,9 +1112,12 @@ body { background:var(--background); }
 .refine-panel,.advanced-panel { background:#fffcf7; border-radius:8px; }
 .focused-workspace .results { gap:22px; align-items:start; }
 .result-card { position:relative; border-color:#ded9cd; border-radius:8px 22px 8px 8px; background:#fffdf8; border-top:5px solid #62877a; box-shadow:0 4px 14px #443a2710; }
-.result-card:nth-child(4n+2) { border-top-color:#c47d64; }
-.result-card:nth-child(4n+3) { border-top-color:#b99b4d; }
-.result-card:nth-child(4n) { border-top-color:#7b8ba7; }
+.result-card[data-media-type="Book"] { border-top-color:#62877a; }
+.result-card[data-media-type="Movie"] { border-top-color:#c47d64; }
+.result-card[data-media-type="TV"] { border-top-color:#7b8ba7; }
+.result-card .category-badge.book { background:#e8f0eb; color:#355e4f; }
+.result-card .category-badge.movie { background:#f7e8df; color:#914c36; }
+.result-card .category-badge.tv { background:#e8edf5; color:#4b5e7c; }
 .result-card h3 { font-family:Georgia,'Times New Roman',serif; font-weight:500; font-size:25px; }
 .result-card > .media-mark { width:84px; height:118px; border-radius:4px 10px 4px 4px; box-shadow:3px 4px 0 #e6dfd0; }
 .tag-options button { background:#f4f0e7; border-color:#ddd7c9; }
