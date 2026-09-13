@@ -1,6 +1,6 @@
 import { hardcoverBooks, HardcoverError } from './hardcover.ts';
 import { semanticComparison, SemanticError, type SemanticEnv } from './semantic.ts';
-import { featureGroups, detailedTags } from '../lib/features.ts';
+import { featureGroups, detailedTags, featureKind } from '../lib/features.ts';
 import { matureRating } from '../lib/content-rating.ts';
 import { normalizeGenres } from '../lib/genres.ts';
 import { extractTags, plainText } from '../lib/media-api.ts';
@@ -353,7 +353,7 @@ export default {
               'imperial-court': 'palace',
             };
             const keywordQueries=[...new Set([...(context?[context]:[]),...tags
-              .filter(t=>!['animation','anime'].includes(t) && (detailedTags.includes(t) || ['sports','magic'].includes(t)))
+              .filter(t=>!['animation','anime'].includes(t) && ((detailedTags.includes(t) && !['class','genre','format','audience','tone'].includes(featureKind(t))) || ['sports','magic'].includes(t)))
               .map(tag=>keywordNames[tag] || tag.replaceAll('-', ' '))])].slice(0,2);
             for (const name of keywordQueries) {
               const keywords = await tmdb(
