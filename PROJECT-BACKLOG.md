@@ -207,3 +207,11 @@ Historical-era evidence now excludes a generic history tag unless supported by i
 - Replaced court-only retrieval behavior with shared setting/premise query planning and context-aware pool targets for books, TV and movies. Genre filters remain in place; provider-specific subject/keyword queries have a broad fallback.
 - Fixed TMDB hasMore ending at page three despite the six-page request allowance. Context searches remain bounded to six pages.
 - Added cross-media historical-romance regression checks and a gateway pagination/keyword check. Metadata coverage still limits discovery; these tests do not establish human-rated recommendation quality.
+
+## September 13: taxonomy and interface requests
+- Implemented a shared fiction/nonfiction content class, genre/subgenre hierarchy and overlapping facet applicability. Unknown metadata remains unknown.
+- Anime is a subgenre of animation; animation is a format. Added catalog-label support for short film, limited series, novella and book series.
+- Added initial nonfiction subject branches, genre-specific theme/trope suggestions, setting labels, tone and audience labels. These are a foundation, not a complete catalog ontology.
+- Removed all demo-title entry points, status copy and sample-title loading from the product.
+- To workshop: expand themes and tropes for every subgenre with definitions and real cross-media examples; broaden tone and audience with evidence rules; review all setting overlaps; improve source mappings for formats and book-series membership; evaluate unknown/conflicting content classes without discarding factual works about fictional topics.
+- Keep age certification and verification separate from intended audience. Adult audience must never imply explicit content.
