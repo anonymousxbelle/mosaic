@@ -32,7 +32,6 @@ import { GenreGuide } from '@/components/media/genre-guide';
 import { DiscoveryFeedback } from '@/components/media/discovery-feedback';
 import { inContentSection, contentLabel } from '@/lib/content-rating';
 import { activeGenreChoices, genreChoices, genrePreferences, genreAllowed } from '@/lib/genres';
-import { catalog as sampleCatalog } from '@/lib/catalog';
 import { TagEditor } from '@/components/media/tag-editor';
 import { effectiveTags, type TagEdits } from '@/lib/tags';
 import { TasteCollections } from '@/components/media/taste-collections';
@@ -100,7 +99,6 @@ export default function Home() {
   const [adultSection, setAdultSection] = useState(false);
   const [added, setAdded] = useState<CatalogMedia[]>([]);
   const [avoided, setAvoided] = useState<string[]>([]);
-  const [showDemo, setShowDemo] = useState(false);
   const [candidates, setCandidates] = useState<CatalogMedia[]>([]);
   const [discovering, setDiscovering] = useState(false);
   const [discoveryNotice, setDiscoveryNotice] = useState('');
@@ -110,15 +108,7 @@ export default function Home() {
   const [storageError, setStorageError] = useState('');
   const [notice, setNotice] = useState('');
   const [tagEdits, setTagEdits] = useState<TagEdits>({});
-  const originals = useMemo(
-    () => [
-      ...added,
-      ...(showDemo
-        ? sampleCatalog.filter((i) => !findDuplicate(added, i))
-        : []),
-    ],
-    [added, showDemo],
-  );
+  const originals = added;
   const catalog = useMemo(
     () =>
       originals.map((item) => ({
@@ -176,7 +166,7 @@ export default function Home() {
     try {
       const saved = restoreLibrary(
         localStorage.getItem(STORAGE_KEY),
-        sampleCatalog,
+        [],
       );
       const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
       setAvoided(
@@ -242,7 +232,7 @@ export default function Home() {
       const candidate = previous || candidates.find((i) => i.id === item.id);
       if (!candidate)
         throw new Error(
-          'This is a demo title. Add the real catalog record to save feedback.',
+          'Add this title from a catalog to save feedback.',
         );
       if (!previous && added.length >= 200)
         throw new Error('Your library is full. Remove a title first.');
@@ -877,16 +867,7 @@ export default function Home() {
                 </p>
               )}
             </div>
-            <button
-              className="demo-button"
-              onClick={() => {
-                setShowDemo((v) => !v);
-                setCandidates([]);
-              }}
-            >
-              {showDemo ? 'Hide demo titles' : 'Explore optional demo titles'}{' '}
-              <ArrowUpRight size={16} />
-            </button>
+
           </aside>
           <section className="discovery" hidden={view !== 'discover'}>
             <Tabs value={mode} onValueChange={(v) => setMode(String(v))}>
@@ -1231,7 +1212,6 @@ export default function Home() {
             )}
             <details className="advanced-panel"><summary>About your recommendations</summary><p className="data-note">
               {added.length} saved catalog titles.{' '}
-              {showDemo ? 'Demo titles are enabled.' : 'Demo titles are off.'}{' '}
               Live discovery fetches a bounded set of candidates, then ranks
               shared tags. Catalog keywords supply automatic tags. Edit tags to
               correct automatic tags and create your own connections. Similarity
@@ -1246,7 +1226,7 @@ export default function Home() {
             onLoad={(value) => {
               const restored = restoreLibrary(
                 JSON.stringify(value),
-                sampleCatalog,
+                [],
               );
               const merged = [...added];
               for (const item of restored.added) {
