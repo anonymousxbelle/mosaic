@@ -5,6 +5,7 @@ import { compareDescriptions } from '@/lib/semantic';
 import {vocabulary} from '@/lib/media-api';
 import {unifiedRank} from '@/lib/unified-ranking';
 import {sameSeries} from '@/lib/story-profile';
+import {genreDescription} from '@/lib/genre-descriptions';
 import { hasSynopsis } from '@/lib/catalog-text';
 import { flushSync } from 'react-dom';
 import {
@@ -156,7 +157,7 @@ export default function Home() {
       ...discoveryCatalog,
       ...candidates.filter((i) => inContentSection(i, adultSection)),
     ].find((i) => i.id === seed) || discoveryCatalog[0];
-  useEffect(() => {setFocusTags([]);setMustTags([]);setSeriesView('discover');}, [seed]);
+  useEffect(() => {setFocusTags([]);setMustTags([]);setSeriesView('discover');}, [selected?.id]);
   const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,category,focusTags,mustTags,seriesView,adultSection,avoided,ratings]);
   useEffect(()=>{
     discoveryRequest.current?.abort();
@@ -947,38 +948,42 @@ export default function Home() {
                 {selected && (
                   <details className="refine-panel">
                     <summary>Refine your matches <span>{mustTags.length + focusTags.length ? `${mustTags.length + focusTags.length} selected` : 'Optional'}</span></summary>
-                  <fieldset>
-                    <legend>What matters to you?</legend>
-                    <label>Explore <select value={seriesView} onChange={e=>setSeriesView(e.target.value)}><option value="discover">Other stories</option><option value="series">Same series</option></select></label>
-                    <p>Series grouping uses known catalog metadata; unknown series may still appear in Other stories.</p>
-                    <p>Choose up to five aspects to focus this discovery.</p>
-                    {primaryGenre(selected) && <p>Staying within {primaryGenre(selected)!.replaceAll('-', ' ')}. Shared themes rank the matches within this genre.</p>}
-                    {seedTopic(selected) && <p>Keeping {seedTopic(selected)} as the topic.</p>}
-                    {category === 'All' && <p>Showing {selected.tags.includes('anime') ? 'anime in the same media type' : 'the same media type'} first. Choose another media category to explore it directly.</p>}
-                    <div className="tag-options">
-                      {selected.tags.map((t) => (
-                        <button
-                          key={t}
-                          aria-pressed={focusTags.includes(t)}
-                          onClick={() =>
-                            setFocusTags((v) =>
-                              v.includes(t)
-                                ? v.filter((x) => x !== t)
-                                : v.length < 5
-                                  ? [...v, t]
-                                  : v,
-                            )
-                          }
-                        >
-                          {t.replaceAll('-', ' ')}
-                        </button>
-                      ))}
+                  <fieldset className="match-requirements" disabled={discovering}>
+                    <legend>What would you like to keep?</legend>
+                    <p>Mosaic already compares the genre, setting and story. Use these choices to tell us which details matter most to you.</p>
+                    <div className="matching-baseline">
+                      {primaryGenre(selected) && <p><strong>Genre:</strong> staying within {primaryGenre(selected)!.replaceAll('-', ' ')}.</p>}
+                      {seedTopic(selected) && <p><strong>Topic:</strong> keeping {seedTopic(selected)}.</p>}
+                      {category === 'All' && <p>Your starting title’s media type{selected.tags.includes('anime') ? ' and anime matches' : ''} comes first. Use the media filter above to explore books, movies or TV specifically.</p>}
                     </div>
-                    <p>Must have (optional): every selected feature is required. Other shared features help rank matches.</p>
-                    <div className="tag-options">
-                      {selected.tags.filter(t=>t!==primaryGenre(selected) && t!==seedTopic(selected)).map(t=><button key={'must-'+t} aria-pressed={mustTags.includes(t)} onClick={()=>setMustTags(v=>v.includes(t)?v.filter(x=>x!==t):v.length<5?[...v,t]:v)}>{t.replaceAll('-',' ')}</button>)}
+                    {selected.seriesKey && <fieldset className="series-choice">
+                      <legend>Stay in this series or discover another story?</legend>
+                      <p>The catalog identifies this title as part of a series or collection.</p>
+                      <label><input type="radio" name="series-view" value="discover" checked={seriesView==='discover'} onChange={()=>setSeriesView('discover')} /><span><strong>Discover other stories</strong><small>Find similar works outside this known series or collection.</small></span></label>
+                      <label><input type="radio" name="series-view" value="series" checked={seriesView==='series'} onChange={()=>setSeriesView('series')} /><span><strong>Explore the same series</strong><small>Only show entries the catalog links to this series or collection. This does not browse TV seasons or episodes.</small></span></label>
+                      <p>Series details can be incomplete: other stories may include entries whose series is unknown, and same-series results may be empty.</p>
+                    </fieldset>}
+                    <div className="requirement-help" id="requirement-help">
+                      <p><strong>Automatic:</strong> let Mosaic weigh this detail normally.</p>
+                      <p><strong>Prefer:</strong> give this detail more emphasis; it is not a requirement.</p>
+                      <p><strong>Require:</strong> only show titles tagged with this detail. Every requirement must match, so missing tags can hide otherwise good choices.</p>
                     </div>
-                    <p>Missing metadata is not treated as a match. If results are sparse, remove an optional requirement or choose a different starting title. Anime remains within TV and movies.</p>
+                    <div className="requirement-heading"><p>{focusTags.length}/5 preferred · {mustTags.length}/5 required</p><button type="button" disabled={!focusTags.length && !mustTags.length} onClick={()=>{setFocusTags([]);setMustTags([]);}}>Reset tag choices</button></div>
+                    <div className="requirement-list">
+                      {selected.tags.filter(t=>t!==primaryGenre(selected) && t!==seedTopic(selected)).map(t=><label className="requirement-row" key={t}>
+                        <span><strong>{t.replaceAll('-', ' ')}</strong><small>{genreDescription(t)}</small></span>
+                        <select aria-label={'Matching preference for '+t.replaceAll('-', ' ')} aria-describedby="requirement-help" value={mustTags.includes(t)?'require':focusTags.includes(t)?'prefer':'auto'} onChange={e=>{
+                          const value=e.target.value;
+                          setFocusTags(v=>value==='prefer'?[...v.filter(x=>x!==t),t]:v.filter(x=>x!==t));
+                          setMustTags(v=>value==='require'?[...v.filter(x=>x!==t),t]:v.filter(x=>x!==t));
+                        }}>
+                          <option value="auto">Automatic</option>
+                          <option value="prefer" disabled={focusTags.length>=5 && !focusTags.includes(t)}>Prefer</option>
+                          <option value="require" disabled={mustTags.length>=5 && !mustTags.includes(t)}>Require</option>
+                        </select>
+                      </label>)}
+                    </div>
+                    <p>Choose up to five preferences and five requirements. Then select “Find my next favorite” to search with your choices. If there are too few results, change a requirement to Prefer.</p>
                   </fieldset>
                   </details>
                 )}

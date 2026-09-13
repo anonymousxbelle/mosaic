@@ -1180,3 +1180,20 @@ body { background:var(--background); }
  .discovery .mode-tabs[data-slot='tabs-list'] { width:100%; }
  .discovery .mode-tabs [role='tab'] { padding:10px 8px; }
 }
+
+/* Explain matching choices beside the controls they affect. */
+.match-requirements { min-width: 0; }
+.match-requirements p { line-height: 1.6; }
+.matching-baseline, .requirement-help { padding: 16px 20px; background: #f5f3eb; border-radius: 12px; margin: 16px 0; }
+.matching-baseline p, .requirement-help p { margin: 4px 0; }
+.series-choice { margin: 24px 0; padding: 18px; border: 1px solid #dcd7c9; border-radius: 12px; }
+.series-choice label { display: flex; align-items: flex-start; gap: 12px; padding: 12px; margin: 8px 0; border-radius: 8px; background: #faf9f5; cursor: pointer; }
+.series-choice input { width: auto; margin-top: 5px; flex: 0 0 auto; accent-color: #245e49; }
+.series-choice small, .requirement-row small { display: block; margin-top: 5px; line-height: 1.5; color: #616d68; }
+.requirement-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin: 18px 0; }
+.requirement-heading button { padding: 8px 12px; border: 1px solid #cbd5cc; border-radius: 8px; }
+.requirement-heading button:disabled { opacity: .5; }
+.requirement-list { display: grid; gap: 12px; }
+.requirement-row { display: grid; grid-template-columns: minmax(0, 1fr) 150px; align-items: center; gap: 20px; padding: 16px; border: 1px solid #dcd7c9; border-radius: 12px; }
+.requirement-row select { width: 100%; min-height: 44px; padding: 10px; background: #fff; border: 1px solid #b8c8bd; border-radius: 8px; }
+@media (max-width: 600px) { .requirement-row { grid-template-columns: 1fr; gap: 12px; } .matching-baseline, .requirement-help { padding: 14px; } }
