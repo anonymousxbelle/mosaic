@@ -25,3 +25,14 @@ test('source labels remain available while normalized classifications stay ambig
  assert.deepEqual(item.sourceGenreLabels,['Sci-Fi & Fantasy']);
  assert.ok(!item.genres.includes('science-fiction'));assert.ok(!item.tags.includes('fantasy'));
 });
+
+test('combined shelves across genres and facets remain ambiguous, including three-part lists',()=>{
+ for(const [label,tags] of [['Action & Adventure',['action','adventure']],['Mystery / Thriller / Horror',['mystery','thriller','horror']],['Romance and Drama',['romance','drama']],['Biography & Memoir',['biography','memoir']],['Friendship + Revenge',['friendship','revenge']],['Anime | Donghua',['anime','donghua']]]){
+  const found=extractTags('',[label]);
+  for(const tag of tags)assert.ok(!found.includes(tag),label+': '+tag);
+ }
+ assert.ok(normalizeGenres(['Historical Romance']).includes('historical-romance'));
+ assert.ok(extractTags('', ['Mystery','Thriller']).includes('mystery'));
+ assert.ok(extractTags('', ['Mystery','Thriller']).includes('thriller'));
+ assert.ok(extractTags('Romance and mystery intertwine in this story.',[]).includes('romance'));
+});
