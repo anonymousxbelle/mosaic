@@ -1,3 +1,4 @@
+import {taxonomy} from './taxonomy.ts';
 import { subgenres, detailedFeatures, featureGroups } from './features.ts';
 import type { Media, Ratings } from './recommendations';
 export const genreChoices = [
@@ -30,10 +31,24 @@ export const genreChoices = [
   'classical',
 ];
 // Combined shelf names are not evidence that a work belongs to both genres.
+const shelfAliases=['sci-fi','sci fi','science fiction','comedy','comedies','documentary','documentaries','biographies','memoirs','science & nature'];
+const shelfTerms=[...new Set([...Object.keys(taxonomy),...genreChoices,...shelfAliases])]
+ .sort((a,b)=>b.length-a.length)
+ .map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/[ -]+/g,'[\\s-]+'));
+// Only known labels separated by catalog-style conjunctions are ambiguous.
+// A list of independently supplied labels is processed one label at a time.
 export function withoutCombinedGenre(label:string):string {
- const science='(?:science[\\s-]*fiction|sci[\\s-]*fi)';
- const join='(?:&amp;|&|and|/|,|\\+|or)';
- return label.replace(new RegExp('\\b(?:'+science+'\\s*'+join+'\\s*fantasy|fantasy\\s*'+join+'\\s*'+science+')\\b','gi'),' ');
+ const term='(?:'+shelfTerms.join('|')+')';
+ const separator='\\s*(?:&amp;|&|and|or|/|,|\\+|\\|)\\s*';
+ return label.replace(new RegExp('\\b'+term+'(?:'+separator+term+')+\\b','gi'),phrase=>{
+  const classes=phrase.split(/\s*(?:&amp;|&|\band\b|\bor\b|\/|,|\+|\|)\s*/i).map(part=>taxonomy[part.trim().toLowerCase().replace(/[ -]+/g,'-')]?.classes);
+  const shared=['fiction','non-fiction'].filter(value=>classes.every(options=>options?.some(c=>c===value)));
+  return shared.length===1?' '+shared[0]+' ':' ';
+ });
+}
+export function withoutCatalogShelvesInSynopsis(text:string):string {
+ // Preserve actual story prose ("romance and mystery intertwine"); ignore explicit shelf references.
+ return text.replace(/\b(?:filed under|categorized as|category:|genres?:|shelves?:)\s*[^.!?\n]*/gi,phrase=>withoutCombinedGenre(phrase));
 }
 export function normalizeGenres(values: string[]): string[] {
   values = values.map(withoutCombinedGenre);

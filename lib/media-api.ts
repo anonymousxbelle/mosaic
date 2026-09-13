@@ -3,7 +3,7 @@ import { detailedPatterns, detailedFeatures, featureGroups, primaryGenre, seedTo
 import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats, type RetrievalEvidence } from './retrieval.ts';
 import {hasStoryContext,matchesStoryContext,storySearchTerms} from './story-profile.ts';
 import { matureRating } from './content-rating.ts';
-import { normalizeGenres, withoutCombinedGenre, genreChoices } from './genres.ts';
+import { normalizeGenres, withoutCombinedGenre, withoutCatalogShelvesInSynopsis, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
 import type { Category, Media } from './recommendations';
 import { sameWork } from './media-identity.ts';
@@ -114,7 +114,7 @@ export const vocabulary: Record<string, RegExp> = {
 for(const tag of Object.keys(taxonomy))if(!Object.hasOwn(vocabulary,tag))vocabulary[tag]=new RegExp('\\b'+tag.replaceAll('-','[ -]')+'\\b','i');
 // Deterministic keyword baseline: do not invent themes from the media category or title.
 export function extractTags(description: string, genres: string[]): string[] {
-  description=withoutCombinedGenre(description);
+  description=withoutCatalogShelvesInSynopsis(description);
   genres=genres.map(withoutCombinedGenre);
   const detailed = new Set(detailedFeatures(description, genres));
   const text = [
