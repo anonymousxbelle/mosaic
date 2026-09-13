@@ -103,6 +103,7 @@ export default function Home() {
   const [candidates, setCandidates] = useState<CatalogMedia[]>([]);
   const [discovering, setDiscovering] = useState(false);
   const [discoveryNotice, setDiscoveryNotice] = useState('');
+  const [completedDiscoveryKey,setCompletedDiscoveryKey]=useState('');
   const discoveryRequest = useRef<AbortController | null>(null);
   useEffect(() => () => discoveryRequest.current?.abort(), []);
   const [ready, setReady] = useState(false);
@@ -158,10 +159,12 @@ export default function Home() {
       ...candidates.filter((i) => inContentSection(i, adultSection)),
     ].find((i) => i.id === seed) || discoveryCatalog[0];
   useEffect(() => {setFocusTags([]);setMustTags([]);setSeriesView('discover');}, [selected?.id]);
-  const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,category,focusTags,mustTags,seriesView,adultSection,avoided,ratings]);
+  const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,selected?.tags,selected?.genres,category,focusTags,mustTags,seriesView,adultSection,avoided,ratings,rankingMode,tagEdits,discoveryCatalog.map(i=>[i.id,i.libraryState,i.tags,i.genres])]);
   useEffect(()=>{
     discoveryRequest.current?.abort();
     setDiscovering(false);
+    setDiscoveryNotice('');
+    setCompletedDiscoveryKey('');
   },[discoveryKey,rankingMode]);
   useEffect(() => {
     try {
@@ -351,6 +354,7 @@ export default function Home() {
     const controller = new AbortController();
     discoveryRequest.current = controller;
     setDiscovering(true);
+    setCompletedDiscoveryKey('');
     setDiscoveryNotice('');
     const query =
       mode === 'based-on'
@@ -403,6 +407,7 @@ export default function Home() {
           aiNotice=' AI comparison was unavailable or descriptions were missing; using provider and tag matching.';
         }
       }
+      setCompletedDiscoveryKey(discoveryKey);
       setDiscoveryNotice(
         `Checked ${found.stats.examined} unique titles across ${found.stats.pages} catalog pages; filtered out ${found.stats.rejected}. ${found.items.length} eligible candidates (${found.stats.cached} from recent searches).${found.failures.length ? ' Some sources were unavailable: ' + found.failures.join(', ') + '.' : ''}${aiNotice} Results below are ranked within this pool, not the entire catalog.`,
       );
@@ -459,7 +464,7 @@ export default function Home() {
     ?unifiedRank(results,selected,rankingEvidence.key===discoveryKey?rankingEvidence.provider:{},rankingEvidence.key===discoveryKey?rankingEvidence.semantic:{})
     :['provider','semantic'].includes(rankingMode) && mode==='based-on' && rankingEvidence.key===discoveryKey
     ?hybridRank(results,rankingEvidence.provider,rankingMode==='semantic'?rankingEvidence.semantic:{}) : results;
-  const filteredResults = diversify(
+  const filteredResults = completedDiscoveryKey===discoveryKey && !discovering ? diversify(
     groupSeries(rankedResults
       .filter((i) => i.type !== 'Music' && i.type !== 'Game')
       .filter((i) =>
@@ -480,7 +485,7 @@ export default function Home() {
             )),
       }))
       .sort((a, b) => b.score - a.score)),
-  );
+  ) : [];
   const visible = sectionCatalog
     .filter(
       (i) =>
@@ -1017,7 +1022,7 @@ export default function Home() {
             {discoveryNotice && (
               <div className="search-status"><p role="status">{discovering ? 'Finding stories that fit…' : discoveryNotice.includes('could not') ? 'Search could not finish. Please try again.' : 'Your matches are ready.'}</p><details><summary>Search details</summary><p>{discoveryNotice}</p></details></div>
             )}
-            {mode==='based-on' && candidates.length>0 && rankingEvidence.key===discoveryKey && !discovering &&
+            {mode==='based-on' && candidates.length>0 && completedDiscoveryKey===discoveryKey && rankingEvidence.key===discoveryKey && !discovering &&
               <details className="advanced-panel"><summary>Evaluate these recommendations</summary><p>Export this result set to compare recommendation methods.</p><button onClick={downloadComparison}>Download comparison snapshot</button></details>}
             <div className="results-heading">
               <h2>
@@ -1039,11 +1044,12 @@ export default function Home() {
                 <h3>
                   {discovering
                     ? 'Looking for connections…'
-                    : 'Your next favorite is waiting.'}
+                    : completedDiscoveryKey!==discoveryKey && selected ? 'Ready for a fresh search.' : 'Your next favorite is waiting.'}
                 </h3>
                 <p>
-                  Add something you love to your library, then find more like it.
-                  Already added favorites? Try a different starting title or fewer filters.
+                  {discovering ? 'Finding recommendations for your current choices.' : selected && completedDiscoveryKey!==discoveryKey
+                    ? 'Select “Find my next favorite” to get recommendations for these choices. Previous results are hidden when you change your starting title or matching settings.'
+                    : selected ? 'No matches found with these choices. Try changing a requirement to Prefer, or choose a different starting title.' : 'Add something you love to your library, then find more like it.'}
                 </p>
 
                 <button
