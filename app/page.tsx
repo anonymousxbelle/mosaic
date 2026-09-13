@@ -1191,6 +1191,7 @@ export default function Home() {
                       </small>
                     </details>
                     <details className="card-details"><summary>Details & feedback</summary>
+                    {!!item.sourceGenreLabels?.length && <div><p><strong>Original catalog labels:</strong> {item.sourceGenreLabels.join(' · ')}</p><p>Combined shelves such as “Sci-Fi & Fantasy” do not establish either genre. Mosaic uses more specific labels or synopsis evidence; without that evidence, the genre stays unconfirmed.</p></div>}
                     {[...added, ...candidates].find(
                       (x) => x.id === item.id,
                     ) && (
