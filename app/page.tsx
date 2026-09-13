@@ -57,6 +57,7 @@ import {
   vector,
   recommend,
   diversify,
+  preferMatches,
   type Category,
   type Ratings,
   type Media,
@@ -359,9 +360,7 @@ export default function Home() {
     const query =
       mode === 'based-on'
           ? vector(
-              focusTags.length
-                ? focusTags.filter((t) => selected?.tags.includes(t))
-                : selected?.tags || [],
+              selected?.tags || [],
             )
           : taste;
     const tags = Object.keys(query)
@@ -447,9 +446,7 @@ export default function Home() {
     [...catalog, ...candidates.filter((i) => !findDuplicate(catalog, i))].filter(i=>mode!=='based-on' || mustTags.every(t=>i.tags.includes(t))),
     mode === 'based-on'
           ? vector(
-              focusTags.length
-                ? focusTags.filter((t) => selected?.tags.includes(t))
-                : selected?.tags || [],
+              selected?.tags || [],
             )
           : taste,
     category,
@@ -465,7 +462,7 @@ export default function Home() {
     :['provider','semantic'].includes(rankingMode) && mode==='based-on' && rankingEvidence.key===discoveryKey
     ?hybridRank(results,rankingEvidence.provider,rankingMode==='semantic'?rankingEvidence.semantic:{}) : results;
   const filteredResults = completedDiscoveryKey===discoveryKey && !discovering ? diversify(
-    groupSeries(rankedResults
+    groupSeries(preferMatches(rankedResults, mode==='based-on' ? focusTags : [])
       .filter((i) => i.type !== 'Music' && i.type !== 'Game')
       .filter((i) =>
         recommendationEligible(i, ratings),
@@ -970,7 +967,7 @@ export default function Home() {
                     </fieldset>}
                     <div className="requirement-help" id="requirement-help">
                       <p><strong>Automatic:</strong> let Mosaic weigh this detail normally.</p>
-                      <p><strong>Prefer:</strong> give this detail more emphasis; it is not a requirement.</p>
+                      <p><strong>Prefer:</strong> move matching titles higher without excluding other candidates.</p>
                       <p><strong>Require:</strong> only show titles tagged with this detail. Every requirement must match, so missing tags can hide otherwise good choices.</p>
                     </div>
                     <div className="requirement-heading"><p>{focusTags.length}/5 preferred · {mustTags.length}/5 required</p><button type="button" disabled={!focusTags.length && !mustTags.length} onClick={()=>{setFocusTags([]);setMustTags([]);}}>Reset tag choices</button></div>
