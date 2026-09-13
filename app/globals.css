@@ -1197,3 +1197,8 @@ body { background:var(--background); }
 .requirement-row { display: grid; grid-template-columns: minmax(0, 1fr) 150px; align-items: center; gap: 20px; padding: 16px; border: 1px solid #dcd7c9; border-radius: 12px; }
 .requirement-row select { width: 100%; min-height: 44px; padding: 10px; background: #fff; border: 1px solid #b8c8bd; border-radius: 8px; }
 @media (max-width: 600px) { .requirement-row { grid-template-columns: 1fr; gap: 12px; } .matching-baseline, .requirement-help { padding: 14px; } }
+
+.series-entries { margin: 16px 0; padding: 14px; border: 1px solid #dcd7c9; border-radius: 12px; }
+.series-entries li { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; }
+.series-entries ul { padding:0; list-style:none; }
+.series-entries button { padding:8px 12px; border:1px solid #cbd5cc; border-radius:8px; }

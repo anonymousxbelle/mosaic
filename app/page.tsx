@@ -4,7 +4,7 @@ import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hyb
 import { compareDescriptions } from '@/lib/semantic';
 import {vocabulary} from '@/lib/media-api';
 import {unifiedRank} from '@/lib/unified-ranking';
-import {sameSeries} from '@/lib/story-profile';
+import {sameSeries, groupSeries, seriesGroupKey} from '@/lib/story-profile';
 import {genreDescription} from '@/lib/genre-descriptions';
 import { hasSynopsis } from '@/lib/catalog-text';
 import { flushSync } from 'react-dom';
@@ -454,13 +454,13 @@ export default function Home() {
     mode === 'based-on' ? primaryGenre(selected) : undefined,
     mode === 'based-on' ? selected : undefined,
     rankingMode==='story',
-  ).filter(i=>mode!=='based-on' || !selected || (seriesView==='series'?sameSeries(selected,i):!sameSeries(selected,i)));
+  ).filter(i=>mode!=='based-on' || !selected || (seriesView==='series'?!!seriesGroupKey(selected) && seriesGroupKey(selected)===seriesGroupKey(i):!sameSeries(selected,i)));
   const rankedResults=rankingMode==='recommended' && mode==='based-on' && selected
     ?unifiedRank(results,selected,rankingEvidence.key===discoveryKey?rankingEvidence.provider:{},rankingEvidence.key===discoveryKey?rankingEvidence.semantic:{})
     :['provider','semantic'].includes(rankingMode) && mode==='based-on' && rankingEvidence.key===discoveryKey
     ?hybridRank(results,rankingEvidence.provider,rankingMode==='semantic'?rankingEvidence.semantic:{}) : results;
   const filteredResults = diversify(
-    rankedResults
+    groupSeries(rankedResults
       .filter((i) => i.type !== 'Music' && i.type !== 'Game')
       .filter((i) =>
         recommendationEligible(i, ratings),
@@ -479,7 +479,7 @@ export default function Home() {
               ),
             )),
       }))
-      .sort((a, b) => b.score - a.score),
+      .sort((a, b) => b.score - a.score)),
   );
   const visible = sectionCatalog
     .filter(
@@ -960,7 +960,7 @@ export default function Home() {
                       <legend>Stay in this series or discover another story?</legend>
                       <p>The catalog identifies this title as part of a series or collection.</p>
                       <label><input type="radio" name="series-view" value="discover" checked={seriesView==='discover'} onChange={()=>setSeriesView('discover')} /><span><strong>Discover other stories</strong><small>Find similar works outside this known series or collection.</small></span></label>
-                      <label><input type="radio" name="series-view" value="series" checked={seriesView==='series'} onChange={()=>setSeriesView('series')} /><span><strong>Explore the same series</strong><small>Only show entries the catalog links to this series or collection. This does not browse TV seasons or episodes.</small></span></label>
+                      <label><input type="radio" name="series-view" value="series" checked={seriesView==='series'} onChange={()=>setSeriesView('series')} /><span><strong>Volumes & sequels in this series</strong><small>Show catalog-linked volumes or sequels in the same medium and format. Adaptations are separate works. This does not browse TV seasons or episodes.</small></span></label>
                       <p>Series details can be incomplete: other stories may include entries whose series is unknown, and same-series results may be empty.</p>
                     </fieldset>}
                     <div className="requirement-help" id="requirement-help">
@@ -1094,7 +1094,12 @@ export default function Home() {
                       </a>
                     )}
                     {'compatibilityNote' in item && typeof item.compatibilityNote==='string' && <p className="match-context">{item.compatibilityNote}</p>}
-                    {item.seriesPosition && <p>Book {item.seriesPosition} in its series</p>}
+                    {item.seriesPosition && <p>Volume / book {item.seriesPosition} · earliest available matching entry shown</p>}
+                    {item.tags.includes('donghua') && <p>Chinese animation (donghua){selected?.tags.includes('anime') ? ' · broader animation match, not Japanese anime' : ''}</p>}
+                    {item.seriesKey && <details className="series-entries"><summary>Volumes & sequels · {item.seriesEntries.length} retrieved</summary>
+                      <p>One discovery card per known series and format. This list contains matching entries we retrieved, not a complete bibliography or season guide. Adaptations stay separate.</p>
+                      <ul>{item.seriesEntries.map(entry=><li key={entry.id}><span>{entry.seriesPosition ? `#${entry.seriesPosition} · ` : ''}{entry.title}</span><button disabled={actionBusy} onClick={()=>feedback(entry,'later')}>Save this entry</button></li>)}</ul>
+                    </details>}
                     {'storyReasons' in item && Array.isArray(item.storyReasons) && item.storyReasons.length>0 && <p>Shared story evidence: {item.storyReasons.join('; ')}</p>}
                     {'metadataSourceUrl' in item && typeof item.metadataSourceUrl==='string' && <a href={item.metadataSourceUrl} target="_blank" rel="noreferrer">Additional book metadata: Hardcover</a>}
                     <p className="description">
