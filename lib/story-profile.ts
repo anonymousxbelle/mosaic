@@ -81,3 +81,24 @@ export function storySearchTerms(item:Media){
 export function storyFeatureCatalog(){
  return {...Object.fromEntries(Object.entries(groups).map(([kind,patterns])=>[kind,Object.keys(patterns)])),era:['historical','contemporary'],audience:['middle-grade','young-adult']};
 }
+
+// Keep adaptations/formats separate even when a provider reuses a series name.
+export function seriesGroupKey(item:Media){
+ if(!item.seriesKey)return undefined;
+ const format=item.tags.includes('manga')?'manga':item.tags.includes('light-novel')?'light-novel':item.tags.includes('anime')?'anime':item.tags.includes('donghua')?'donghua':item.tags.includes('animation')?'animation':'other';
+ return [item.type,format,item.seriesKey].join('|');
+}
+export function groupSeries<T extends Media>(items:T[]):Array<T & {seriesEntries:T[]}>{
+ const groups=new Map<string, T & {seriesEntries:T[]}>();
+ for(const item of items){
+  const key=seriesGroupKey(item)||'item:'+item.id;
+  const group=groups.get(key);
+  if(group)group.seriesEntries.push(item);else groups.set(key,{...item,seriesEntries:[item]});
+ }
+ return [...groups.values()].map(group=>{
+  const entries=[...group.seriesEntries].sort((a,b)=>(a.seriesPosition??Infinity)-(b.seriesPosition??Infinity));
+  // Choose the earliest known entry among eligible retrieved candidates only.
+  const representative=entries[0];
+  return {...group,...representative,seriesEntries:entries};
+ });
+}

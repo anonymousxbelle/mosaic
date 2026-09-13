@@ -25,7 +25,8 @@ const branches:Record<string,string[]>={
 for(const [parent,children] of Object.entries(branches))add('subgenre',children,taxonomy[parent].classes,[parent]);
 taxonomy['historical-fiction'].classes=['fiction'];
 add('format',['animation'],undefined,undefined,['Movie','TV']);
-add('subgenre',['anime'],undefined,['animation'],['Movie','TV']);
+add('subgenre',['anime','donghua'],undefined,['animation'],['Movie','TV']);
+add('format',['manga','light-novel'],undefined,undefined,['Book']);
 add('subgenre',['sports-anime'],['fiction'],['anime','sports'],['Movie','TV']);
 add('format',['short-film'],undefined,undefined,['Movie']);
 add('format',['limited-series'],undefined,undefined,['TV']);
@@ -52,6 +53,9 @@ add('tone',['lighthearted','heartwarming','suspenseful','emotional','reflective'
 add('audience',['children','middle-grade','young-adult','adult-audience','all-ages']);
 taxonomy['book-series'].description='A book belongs to a series; this is separate from its volume number.';
 taxonomy['adult-audience'].description='Intended for adult readers or viewers; does not imply explicit content.';
+taxonomy['donghua'].description='Chinese animation, distinct from Japanese anime and live-action Chinese dramas.';
+taxonomy['manga'].description='Japanese comics told through sequential art; individual volumes belong to a larger work when series metadata is available.';
+taxonomy['light-novel'].description='A Japanese prose publishing format, often illustrated; distinct from manga.';
 taxonomy['anime'].description='A subset of animation, recorded independently from story genres such as mystery or romance.';
 export type ClassifiedItem={tags:string[];genres?:string[];type?:string};
 export function contentClass(item:ClassifiedItem):ContentClass{

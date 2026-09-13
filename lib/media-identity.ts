@@ -9,6 +9,7 @@ export function sameWork(a:Media,b:Media):boolean {
  if(a.id===b.id) return true;
  if(a.type==='Music' || b.type==='Music') return false;
  if(!a.creator || !b.creator || /unavailable|unknown/i.test(a.creator+' '+b.creator)) return false;
+ if(a.type==='Book' && b.type==='Book' && ['manga','light-novel'].some(t=>a.tags.includes(t)!==b.tags.includes(t)))return false;
  return workIdentity(a)===workIdentity(b);
 }
 

@@ -129,7 +129,7 @@ export function extractTags(description: string, genres: string[]): string[] {
       (tag) =>
         tag !== 'fiction' || !normalizeGenres(genres).includes('non-fiction'),
     );
-  if(tags.includes('anime') && !tags.includes('animation'))tags.push('animation');
+  if((tags.includes('anime') || tags.includes('donghua')) && !tags.includes('animation'))tags.push('animation');
   return tags.filter(tag=>tagApplicable(tag,{tags,genres}));
 }
 function strings(value: unknown): string[] {

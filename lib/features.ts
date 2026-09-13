@@ -9,7 +9,7 @@ export const featureGroups: Record<string, string[]> = {
     'sports-drama',
     'sports-anime',
   ],
-  animation: ['anime'],
+  animation: ['anime', 'donghua'],
   fantasy: [
     'epic-fantasy',
     'urban-fantasy',
@@ -166,6 +166,8 @@ export function detailedFeatures(description: string, subjects: string[]) {
   const text = [description, ...subjects].join(' ');
   const found = Object.entries(detailedPatterns)
     .filter(([, p]) => p.test(text))
+    // Animation style requires catalog labels, not an adaptation mentioned in prose.
+    .filter(([tag]) => !['anime','sports-anime'].includes(tag) || subjects.some(s=>/^(?:sports[ -])?anime$/i.test(s.trim())))
     // Audience comes from catalog labels, never a character's age in a synopsis.
     .filter(([tag,p]) => featureKind(tag) !== 'audience' || subjects.some(s=>p.test(s)))
     // An incidental mention of "sports" (e.g. Quidditch) is not a sports genre.
