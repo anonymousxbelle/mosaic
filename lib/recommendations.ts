@@ -150,3 +150,10 @@ export function diversify<T extends Media & { score: number; priority?:number }>
   }
   return out;
 }
+
+// Preferences reorder eligible results; they never affect retrieval or eligibility.
+export function preferMatches<T extends Media & {score:number;priority?:number}>(items:T[],tags:string[]):T[]{
+ const preferred=[...new Set(tags)];
+ return items.map(item=>({...item,score:item.score*(1+(preferred.length?0.5*preferred.filter(t=>item.tags.includes(t)).length/preferred.length:0))}))
+ .sort((a,b)=>(a.priority||0)-(b.priority||0)||b.score-a.score);
+}
