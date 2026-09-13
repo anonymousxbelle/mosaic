@@ -3,7 +3,7 @@ import { detailedPatterns, detailedFeatures, featureGroups, primaryGenre, seedTo
 import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats, type RetrievalEvidence } from './retrieval.ts';
 import {hasStoryContext,matchesStoryContext,storySearchTerms} from './story-profile.ts';
 import { matureRating } from './content-rating.ts';
-import { normalizeGenres, genreChoices } from './genres.ts';
+import { normalizeGenres, withoutCombinedGenre, genreChoices } from './genres.ts';
 import { bookSynopsis, rankSearch } from './catalog-text.ts';
 import type { Category, Media } from './recommendations';
 import { sameWork } from './media-identity.ts';
@@ -114,6 +114,8 @@ export const vocabulary: Record<string, RegExp> = {
 for(const tag of Object.keys(taxonomy))if(!Object.hasOwn(vocabulary,tag))vocabulary[tag]=new RegExp('\\b'+tag.replaceAll('-','[ -]')+'\\b','i');
 // Deterministic keyword baseline: do not invent themes from the media category or title.
 export function extractTags(description: string, genres: string[]): string[] {
+  description=withoutCombinedGenre(description);
+  genres=genres.map(withoutCombinedGenre);
   const detailed = new Set(detailedFeatures(description, genres));
   const text = [
     description,
@@ -169,6 +171,7 @@ function appleRecord(data: Data, type: Category): CatalogMedia | null {
         ...normalizeGenres(genres),
       ]),
     ],
+    sourceGenreLabels: genres.slice(0,100),
     genres: normalizeGenres(genres),
     adult:
       data.trackExplicitness === 'explicit' ||
@@ -206,6 +209,7 @@ function tvRecord(data: Data): CatalogMedia | null {
     type: 'TV',
     description: description || 'No description supplied by this catalog.',
     tags: extractTags(description, strings(data.genres)),
+    sourceGenreLabels: strings(data.genres).slice(0,100),
     genres: normalizeGenres(strings(data.genres)),
     artworkUrl: validArtwork(data.image?.medium)
       ? data.image.medium
@@ -259,6 +263,7 @@ export function gameRecord(
         ...normalizeGenres(genres),
       ]),
     ],
+    sourceGenreLabels: genres.slice(0,100),
     genres: normalizeGenres(genres),
     provider: 'Wikidata',
     sourceUrl: `https://www.wikidata.org/wiki/${entity.id}`,
@@ -563,6 +568,7 @@ export function validArtwork(value: unknown): value is string {
 export function validStoredItem(value: unknown): value is CatalogMedia {
   if (!value || typeof value !== 'object') return false;
   const x = value as CatalogMedia;
+  if(x.sourceGenreLabels!==undefined && (!Array.isArray(x.sourceGenreLabels)||x.sourceGenreLabels.length>100||x.sourceGenreLabels.some(v=>typeof v!=='string'||v.length>500)))return false;
   if(x.metadataSourceUrl!==undefined && (typeof x.metadataSourceUrl!=='string' || !/^https:\/\/hardcover\.app\/books\/[a-z0-9][a-z0-9-]*$/.test(x.metadataSourceUrl)))return false;
   if(x.seriesPosition!==undefined && (!Number.isInteger(x.seriesPosition) || x.seriesPosition<1 || x.seriesPosition>99))return false;
   if(x.synopsisStatus !== undefined && !['pending','available','unavailable'].includes(x.synopsisStatus)) return false;

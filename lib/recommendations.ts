@@ -12,6 +12,7 @@ export type Media = {
   type: Category;
   tags: string[];
   genres?: string[];
+  sourceGenreLabels?: string[];
   seriesKey?: string;
   seriesPosition?:number;
   artworkUrl?: string;

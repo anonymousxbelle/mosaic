@@ -29,10 +29,14 @@ export const genreChoices = [
   'country',
   'classical',
 ];
+// Combined shelf names are not evidence that a work belongs to both genres.
+export function withoutCombinedGenre(label:string):string {
+ const science='(?:science[\\s-]*fiction|sci[\\s-]*fi)';
+ const join='(?:&amp;|&|and|/|,|\\+|or)';
+ return label.replace(new RegExp('\\b(?:'+science+'\\s*'+join+'\\s*fantasy|fantasy\\s*'+join+'\\s*'+science+')\\b','gi'),' ');
+}
 export function normalizeGenres(values: string[]): string[] {
-  values = values.filter(
-    (g) => !/^science fiction (?:&|and) fantasy$/i.test(g.trim()),
-  );
+  values = values.map(withoutCombinedGenre);
   const text = values.join(' ').toLowerCase();
   const out = genreChoices.filter((g) =>
     new RegExp('\\b' + g.replace(/-/g, '[ -]?') + '\\b', 'i').test(text),

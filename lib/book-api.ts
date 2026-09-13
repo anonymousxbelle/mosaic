@@ -69,6 +69,7 @@ export function openLibraryRecord(row: any): CatalogMedia | null {
     description,
     synopsisStatus:description?'available':'pending',
     tags,
+    sourceGenreLabels: subjects.slice(0,100),
     genres: normalizeGenres(subjects),
     provider: 'Open Library',
     sourceUrl: 'https://openlibrary.org/works/' + id,
@@ -129,6 +130,7 @@ export async function enrichBook(item:CatalogMedia,signal?:AbortSignal):Promise<
     seriesPosition:seriesPosition(description) || item.seriesPosition,
     synopsisStatus:description || hasSynopsis(item.description)?'available':'unavailable',
     tags:[...new Set([...item.tags,...extractTags(description,subjects)])],
+    sourceGenreLabels:[...new Set([...(item.sourceGenreLabels||[]),...subjects])].slice(0,100),
     genres:[...new Set([...(item.genres||[]),...normalizeGenres(subjects)])],
     adult:item.adult || subjects.some((s:string)=>/\berotica|erotic fiction\b/i.test(s)) || undefined,
   };
