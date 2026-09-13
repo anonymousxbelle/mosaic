@@ -123,6 +123,16 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
     certifications.find(matureRating) || certifications.find(Boolean);
 
   const tags = extractTags(description, [...names(d.genres), ...keywords]);
+  const animated = names(d.genres).includes('Animation');
+  if (!animated) {
+    for (const tag of ['anime','donghua','sports-anime','animation']) {
+      const index=tags.indexOf(tag); if(index>=0) tags.splice(index,1);
+    }
+  }
+  if (animated && (d.origin_country?.includes('CN') || ['zh','cn'].includes(d.original_language)) && !d.origin_country?.includes('JP') && d.original_language!=='ja') {
+    for (const tag of ['anime','sports-anime']) { const index=tags.indexOf(tag); if(index>=0) tags.splice(index,1); }
+    tags.push('donghua');
+  }
   if (
     names(d.genres).includes('Animation') &&
     (d.origin_country?.includes('JP') || d.original_language === 'ja')
