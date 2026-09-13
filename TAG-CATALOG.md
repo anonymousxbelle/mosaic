@@ -2,7 +2,7 @@
 
 Updated September 13, 2026.
 
-Content class (fiction/nonfiction) → genre → subgenre. Themes, tropes, settings, tone, audience and format are overlapping facets. Unknown content class is retained rather than guessed. “Belongs under” shows a more specific parent; a dash means no additional parent is shown beyond Content class. “Can apply to” shows relevant genres and media types; content-class restrictions are listed separately. Applicability guides suggestions and does not automatically assign a tag.
+Content class (fiction/nonfiction) → genre → subgenre. Themes, tropes, settings, tone, audience and format are overlapping facets. Unknown content class is retained rather than guessed. The genre table omits “Belongs under” because its parent is already shown in Content class. Elsewhere, “Belongs under” shows a more specific parent; a dash means no additional parent is shown beyond Content class. “Can apply to” shows relevant genres and media types; content-class restrictions are listed separately. Applicability guides suggestions and does not automatically assign a tag.
 
 Anime is a subgenre of the animation format; it remains a distinct tag. Biography and memoir are nonfiction genres. Adult audience does not mean adult content. New labels require explicit catalog evidence or user tagging; the existing synopsis rules recognize only a subset.
 
@@ -15,32 +15,33 @@ Anime is a subgenre of the animation format; it remains a distinct tag. Biograph
 
 ## genre
 
-| Tag | Content class | Belongs under | Can apply to | Description |
-|---|---|---|---|---|
-| action | fiction | — | No additional restriction | Physical conflict, chases or combat are prominent. |
-| adventure | fiction, non-fiction | — | No additional restriction | Journeys, quests, exploration or daring challenges. |
-| arts | non-fiction | — | No additional restriction | Factual study or criticism of artistic practices and works. |
-| biography | non-fiction | — | No additional restriction | An account of another person’s life. |
-| drama | fiction | — | No additional restriction | Character conflict and emotional relationships drive the story. |
-| fantasy | fiction | — | No additional restriction | Stories with magic, supernatural worlds or beings. |
-| history | fiction, non-fiction | — | No additional restriction | Works concerned with past events; may be fiction or nonfiction. |
-| horror | fiction | — | No additional restriction | Stories intended to create fear or dread. |
-| humor | fiction, non-fiction | — | No additional restriction | Comedy or amusement is a significant part of the work. |
-| memoir | non-fiction | — | No additional restriction | A personal account of selected life experiences. |
-| mystery | fiction | — | No additional restriction | A puzzle, unexplained event or crime drives the story. |
-| nature | non-fiction | — | No additional restriction | Factual works about wildlife, ecosystems and the natural world. |
-| philosophy | non-fiction | — | No additional restriction | Works examining knowledge, ethics, existence and reasoning. |
-| politics | non-fiction | — | No additional restriction | Factual works about government, public policy and political power. |
-| popular-science | non-fiction | — | No additional restriction | Science explained for a general audience. |
-| romance | fiction | — | No additional restriction | A central romantic relationship drives the story. |
-| science-fiction | fiction | — | No additional restriction | Speculative stories about science, technology or imagined futures. |
-| self-help | non-fiction | — | No additional restriction | Practical advice for personal improvement. |
-| sports | fiction, non-fiction | — | No additional restriction | Athletic competition, training or teams are central. |
-| strategy | Either / unclassified | — | No additional restriction | Planning and tactical decisions shape gameplay. |
-| technology | non-fiction | — | No additional restriction | Factual works about technological systems, inventions and their effects. |
-| thriller | fiction | — | No additional restriction | Tension, danger and suspense drive the story. |
-| travel | non-fiction | — | No additional restriction | Factual accounts or guidance about places and journeys. |
-| true-crime | non-fiction | — | No additional restriction | Factual accounts of crimes and investigations. |
+| Tag | Content class | Can apply to | Description |
+| --- | --- | --- | --- |
+| action | fiction | No additional restriction | Physical conflict, chases or combat are prominent. |
+| adventure | fiction, non-fiction | No additional restriction | Journeys, quests, exploration or daring challenges. |
+| arts | non-fiction | No additional restriction | Factual study or criticism of artistic practices and works. |
+| biography | non-fiction | No additional restriction | An account of another person’s life. |
+| drama | fiction | No additional restriction | Character conflict and emotional relationships drive the story. |
+| fantasy | fiction | No additional restriction | Stories with magic, supernatural worlds or beings. |
+| history | fiction, non-fiction | No additional restriction | Works concerned with past events; may be fiction or nonfiction. |
+| horror | fiction | No additional restriction | Stories intended to create fear or dread. |
+| humor | fiction, non-fiction | No additional restriction | Comedy or amusement is a significant part of the work. |
+| memoir | non-fiction | No additional restriction | A personal account of selected life experiences. |
+| mystery | fiction | No additional restriction | A puzzle, unexplained event or crime drives the story. |
+| nature | non-fiction | No additional restriction | Factual works about wildlife, ecosystems and the natural world. |
+| philosophy | non-fiction | No additional restriction | Works examining knowledge, ethics, existence and reasoning. |
+| politics | non-fiction | No additional restriction | Factual works about government, public policy and political power. |
+| popular-science | non-fiction | No additional restriction | Science explained for a general audience. |
+| romance | fiction | No additional restriction | A central romantic relationship drives the story. |
+| science-fiction | fiction | No additional restriction | Speculative stories about science, technology or imagined futures. |
+| self-help | non-fiction | No additional restriction | Practical advice for personal improvement. |
+| sports | fiction, non-fiction | No additional restriction | Athletic competition, training or teams are central. |
+| strategy | Either / unclassified | No additional restriction | Planning and tactical decisions shape gameplay. |
+| technology | non-fiction | No additional restriction | Factual works about technological systems, inventions and their effects. |
+| thriller | fiction | No additional restriction | Tension, danger and suspense drive the story. |
+| travel | non-fiction | No additional restriction | Factual accounts or guidance about places and journeys. |
+| true-crime | non-fiction | No additional restriction | Factual accounts of crimes and investigations. |
+
 
 ## subgenre
 
