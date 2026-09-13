@@ -9,7 +9,8 @@ import { bookSynopsis, rankSearch } from '../lib/catalog-text.ts';
 test('nonfiction is a genre, not fiction, and metadata aliases normalize', () => {
   assert.deepEqual(normalizeGenres(['Nonfiction']), ['non-fiction']);
   assert.ok(normalizeGenres(['Biography & Memoir']).includes('non-fiction'));
-  assert.ok(normalizeGenres(['Sci-Fi & Fantasy']).includes('science-fiction'));
+  assert.ok(!normalizeGenres(['Sci-Fi & Fantasy']).includes('science-fiction'));
+  assert.ok(normalizeGenres(['Sci-Fi']).includes('science-fiction'));
 });
 test('inferred dislikes lower ranking without blocking an entire genre', () => {
   const items = [
