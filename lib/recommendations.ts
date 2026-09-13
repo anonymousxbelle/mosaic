@@ -1,3 +1,4 @@
+import {compatibleClass} from './taxonomy.ts';
 import { specificity, featureKind, matchesGenre, seedTopic } from './features.ts';
 import {storyMatch,sameSeries} from './story-profile.ts';
 import { sameWork } from './media-identity.ts';
@@ -59,7 +60,7 @@ export function recommend(
   return catalog
     .filter(
       (i) =>
-        !exclude.includes(i.id) && (category === 'All' || i.type === category) &&
+        (!seed || compatibleClass(seed,i)) && !exclude.includes(i.id) && (category === 'All' || i.type === category) &&
         (!requiredGenre || matchesGenre(i,requiredGenre)) &&
         (!seedTopic(seed) || i.tags.includes(seedTopic(seed)!)),
     )

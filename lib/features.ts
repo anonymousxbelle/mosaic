@@ -1,5 +1,6 @@
-export type FeatureKind = 'genre' | 'subgenre' | 'theme' | 'tone' | 'audience' | 'format';
-export const featureLabels: Record<FeatureKind, string> = {genre:'Genres',subgenre:'Subgenres',theme:'Themes',tone:'Mood',audience:'Audience',format:'Style / format'};
+import {taxonomy, type TaxonomyKind} from './taxonomy.ts';
+export type FeatureKind = TaxonomyKind;
+export const featureLabels: Record<FeatureKind, string> = {class:'Fiction / nonfiction',genre:'Genres',subgenre:'Subgenres',theme:'Themes',trope:'Tropes / premises',setting:'Settings',tone:'Tone',audience:'Audience',format:'Format'};
 export const featureGroups: Record<string, string[]> = {
   sports: [
     'basketball',
@@ -117,7 +118,7 @@ export const detailedPatterns = Object.fromEntries(
     new RegExp('\\b(?:' + v + ')\\b', 'i'),
   ]),
 );
-export const detailedTags = Object.keys(terms);
+export const detailedTags = [...new Set([...Object.keys(terms),...Object.keys(taxonomy)])];
 export const subgenres = [...new Set(Object.values(featureGroups).flat())];
 const anchorGenres = ['fantasy','science-fiction','mystery','thriller','horror','romance','sports','non-fiction','strategy'];
 export function seedTopic(item?: {tags:string[]}):string|undefined {
@@ -144,7 +145,7 @@ export function matchesGenre(item:{genres?:string[];tags:string[]},genre:string)
   return labels.includes(genre) || (featureGroups[genre] || []).some(t=>labels.includes(t));
 }
 export function featureKind(tag: string): FeatureKind {
-  if (['anime','animation'].includes(tag)) return 'format';
+  if(taxonomy[tag])return taxonomy[tag].kind;
   if (['middle-grade', 'young-adult'].includes(tag)) return 'audience';
   if (['lighthearted', 'heartwarming', 'suspenseful','emotional','reflective','hope'].includes(tag))
     return 'tone';
@@ -163,13 +164,15 @@ export function specificity(tag: string): number {
 }
 export function detailedFeatures(description: string, subjects: string[]) {
   const text = [description, ...subjects].join(' ');
-  return Object.entries(detailedPatterns)
+  const found = Object.entries(detailedPatterns)
     .filter(([, p]) => p.test(text))
     // Audience comes from catalog labels, never a character's age in a synopsis.
     .filter(([tag,p]) => featureKind(tag) !== 'audience' || subjects.some(s=>p.test(s)))
     // An incidental mention of "sports" (e.g. Quidditch) is not a sports genre.
     .filter(([tag]) => tag !== 'sports' || subjects.some(s=>detailedPatterns.sports.test(s)) || /\b(basketball|football|baseball|volleyball|soccer)\b/i.test(description))
     .map(([tag]) => tag);
+  const catalogLabels=subjects.map(s=>s.toLowerCase().trim().replace(/[ _]+/g,'-'));
+  return [...new Set([...found,...Object.keys(taxonomy).filter(tag=>catalogLabels.includes(tag))])];
 }
 // Controlled subject queries only. Personal collection names never become catalog queries.
 export const bookSubjects: Record<string, string> = {

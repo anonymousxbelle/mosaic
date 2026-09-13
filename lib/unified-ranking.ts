@@ -1,3 +1,4 @@
+import {compatibleClass} from './taxonomy.ts';
 import type {Media} from './recommendations';
 import type {RankingEvidence,SemanticScores} from './hybrid-ranking';
 import {featureGroups,primaryGenre,matchesGenre,seedTopic} from './features.ts';
@@ -7,7 +8,7 @@ export function unifiedRank<T extends Media & {score:number;priority?:number}>(i
  const genre=primaryGenre(seed),topic=seedTopic(seed),labels=(i:Media)=>[...new Set([...(i.genres||[]),...i.tags])];
  const subs=(i:Media)=>(featureGroups[genre || '']||[]).filter(t=>labels(i).includes(t));
  const seedSubs=subs(seed),a=storyProfile(seed);
- return items.filter(i=>(!genre||matchesGenre(i,genre)) && (!topic||i.tags.includes(topic)))
+ return items.filter(i=>compatibleClass(seed,i) && (!genre||matchesGenre(i,genre)) && (!topic||i.tags.includes(topic)))
  .filter(i=>!(seedSubs.includes('historical-romance') && subs(i).includes('contemporary-romance') && !subs(i).includes('historical-romance')))
  .filter(i=>!(seedSubs.includes('contemporary-romance') && subs(i).includes('historical-romance') && !subs(i).includes('contemporary-romance')))
  .map(i=>{

@@ -1,3 +1,4 @@
+import {taxonomy,tagApplicable,compatibleClass} from './taxonomy.ts';
 import { detailedPatterns, detailedFeatures, featureGroups, primaryGenre, seedTopic, matchesGenre } from './features.ts';
 import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats, type RetrievalEvidence } from './retrieval.ts';
 import {hasStoryContext,matchesStoryContext,storySearchTerms} from './story-profile.ts';
@@ -110,6 +111,7 @@ export const vocabulary: Record<string, RegExp> = {
   jazz: /\b(jazz)\b/i,
   'hip-hop': /\b(hip.hop|rap)\b/i,
 };
+for(const tag of Object.keys(taxonomy))if(!Object.hasOwn(vocabulary,tag))vocabulary[tag]=new RegExp('\\b'+tag.replaceAll('-','[ -]')+'\\b','i');
 // Deterministic keyword baseline: do not invent themes from the media category or title.
 export function extractTags(description: string, genres: string[]): string[] {
   const detailed = new Set(detailedFeatures(description, genres));
@@ -121,14 +123,14 @@ export function extractTags(description: string, genres: string[]): string[] {
   ].join(' ');
   const tags = Object.entries(vocabulary)
     .filter(([, pattern]) => pattern.test(text))
-    .filter(([tag]) => !Object.hasOwn(detailedPatterns,tag) || detailed.has(tag))
+    .filter(([tag]) => !(Object.hasOwn(detailedPatterns,tag) || (Object.hasOwn(taxonomy,tag) && !['non-fiction','fiction','fantasy','adventure','survival','rebellion','dystopian','emotional','identity','reflective','romance','humor','friendship','connection','hope','mystery','science-fiction','thriller','horror','history','action','drama'].includes(tag))) || detailed.has(tag))
     .map(([tag]) => tag)
     .filter(
       (tag) =>
         tag !== 'fiction' || !normalizeGenres(genres).includes('non-fiction'),
     );
   if(tags.includes('anime') && !tags.includes('animation'))tags.push('animation');
-  return tags;
+  return tags.filter(tag=>tagApplicable(tag,{tags,genres}));
 }
 function strings(value: unknown): string[] {
   return Array.isArray(value) ? value.filter((x) => typeof x === 'string') : [];
@@ -688,7 +690,7 @@ export async function discoverMedia(
  const anchor=primaryGenre(options.seed),topic=seedTopic(options.seed);
  const subgenre=(featureGroups[anchor || '']||[]).find(t=>[...(options.seed?.genres||[]),...(options.seed?.tags||[])].includes(t));
  const accept=(item:CatalogMedia)=>
-  (!anchor || matchesGenre(item,anchor)) && (!topic || item.tags.includes(topic)) &&
+  (!options.seed || compatibleClass(options.seed,item)) && (!anchor || matchesGenre(item,anchor)) && (!topic || item.tags.includes(topic)) &&
   item.tags.some(t=>tags.includes(t)) && (!options.seed || !sameWork(item,options.seed)) &&
   (options.accept?.(item) ?? true);
  for(const item of cachedCatalog())if(types.includes(item.type) && accept(item) && !findDuplicate(items,item)){items.push(item);stats.cached++;}

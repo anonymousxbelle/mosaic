@@ -1,3 +1,4 @@
+import {tagApplicable} from './taxonomy.ts';
 import { detailedFeatures } from './features.ts';
 import type { Media } from './recommendations';
 export type TagEdits = Record<string, { added: string[]; hidden: string[] }>;
@@ -30,7 +31,7 @@ export function effectiveTags(item: Media, edit?: TagEdits[string]): string[] {
       ].filter((t) => !edit?.hidden.includes(t)),
       ...(edit?.added || []),
     ]),
-  ];
+  ].filter(tag=>tagApplicable(tag,{...item,tags:[...item.tags,...(edit?.added||[])]}));
 }
 export function restoreTagEdits(value: unknown, items: Media[]): TagEdits {
   const out: TagEdits = Object.create(null);

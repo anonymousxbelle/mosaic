@@ -1,3 +1,4 @@
+import {taxonomy} from './taxonomy.ts';
 import { featureGroups, featureKind, detailedTags } from './features.ts';
 const descriptions: Record<string, string> = {
   fantasy: 'Stories with magic, supernatural worlds or beings.',
@@ -116,13 +117,13 @@ const descriptions: Record<string, string> = {
   hope: 'Possibility of a better future is emphasized.',
 };
 export const genreDescription = (tag: string) =>
-  descriptions[tag] ||
+  descriptions[tag] || taxonomy[tag]?.description ||
   `${tag.replaceAll('-', ' ')}: a personal tag defined by the person who added it.`;
 export const glossaryTags = [
   ...new Set([...Object.keys(descriptions), ...detailedTags]),
 ].sort();
 export const parentGenre = (tag: string) =>
-  Object.entries(featureGroups).find(([, children]) =>
+  taxonomy[tag]?.parents?.join(', ') || Object.entries(featureGroups).find(([, children]) =>
     children.includes(tag),
   )?.[0];
 export { featureKind };
