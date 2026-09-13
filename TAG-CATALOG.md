@@ -47,7 +47,8 @@ Anime is a subgenre of the animation format; it remains a distinct tag. Biograph
 
 | Tag | Content class | Belongs under | Can apply to | Description |
 |---|---|---|---|---|
-| anime | Either / unclassified | animation | Movie, TV | Japanese animation, or works explicitly classified as anime by the source. |
+| anime | Either / unclassified | animation | Movie, TV | Japanese animation, supported by catalog labels or animation and Japanese origin/language metadata. |
+| donghua | Either / unclassified | animation | Movie, TV | Chinese animation; distinct from Japanese anime and live-action Chinese dramas. |
 | artist-biography | non-fiction | biography | No additional restriction | An account of a real artist’s life and creative work. |
 | astronomy | non-fiction | popular-science | No additional restriction | Factual study of celestial bodies and the universe. |
 | contemporary-romance | fiction | romance | No additional restriction | A central love story in a contemporary setting. |
@@ -204,6 +205,8 @@ Anime is a subgenre of the animation format; it remains a distinct tag. Biograph
 | animation | Either / unclassified | Movie, TV | A work made using animation; it can suit any age group. |
 | book-series | Either / unclassified | Book | A book belongs to a series; this is separate from its volume number. |
 | limited-series | Either / unclassified | TV | A television work identified as a limited or miniseries. |
+| light-novel | Either / unclassified | Book | A Japanese prose publishing format, often illustrated; distinct from manga. |
+| manga | Either / unclassified | Book | Japanese comics told through sequential art. Volumes are grouped when catalog series metadata is available. |
 | novella | Either / unclassified | Book | A prose work identified by its source as a novella. |
 | short-film | Either / unclassified | Movie | A work explicitly identified as a short film; not inferred from a guessed duration. |
 

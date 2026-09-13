@@ -215,3 +215,12 @@ Historical-era evidence now excludes a generic history tag unless supported by i
 - Removed all demo-title entry points, status copy and sample-title loading from the product.
 - To workshop: expand themes and tropes for every subgenre with definitions and real cross-media examples; broaden tone and audience with evidence rules; review all setting overlaps; improve source mappings for formats and book-series membership; evaluate unknown/conflicting content classes without discarding factual works about fictional topics.
 - Keep age certification and verification separate from intended audience. Adult audience must never imply explicit content.
+
+## Series and adaptations — September 13, 2026
+
+- Implemented: one discovery card per known series, medium and format, with retrieved volumes/sequels expandable and individually saveable. Earliest known eligible retrieved entry represents the group.
+- Implemented: manga and light novels as Book formats; donghua distinct from anime. TMDB live-action records cannot acquire animation tags from adaptation mentions.
+- To do: provider-backed work/edition/volume IDs and complete reading order; current grouping relies on available series metadata and is not a complete series browser.
+- To do: explicit adaptation relationships for “Other versions of this story”; never infer adaptation links solely from matching titles.
+- To do: complete TV season/episode tracking beneath show-level records. TV discovery currently uses show records.
+- To do: refresh previously saved catalog tags after metadata rule changes while preserving user edits.
