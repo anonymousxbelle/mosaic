@@ -2,7 +2,7 @@ import { hardcoverBooks, HardcoverError } from './hardcover.ts';
 import { semanticComparison, SemanticError, type SemanticEnv } from './semantic.ts';
 import { featureGroups, detailedTags, featureKind } from '../lib/features.ts';
 import { matureRating } from '../lib/content-rating.ts';
-import { normalizeGenres } from '../lib/genres.ts';
+import { normalizeGenres, corroboratedGenres } from '../lib/genres.ts';
 import { extractTags, plainText } from '../lib/media-api.ts';
 type Env = SemanticEnv & {
   TMDB_TOKEN?: string;
@@ -151,7 +151,7 @@ export function tmdbRecord(d: Data, type: 'Movie' | 'TV') {
     description: description || 'No description supplied by this catalog.',
     tags: [...new Set(tags)],
     sourceGenreLabels: names(d.genres).slice(0,100),
-    genres: normalizeGenres(names(d.genres)),
+    genres: corroboratedGenres(names(d.genres), keywords),
     seriesKey: type === 'Movie' && Number.isSafeInteger(d.belongs_to_collection?.id) && d.belongs_to_collection.id > 0 ? 'tmdb:'+d.belongs_to_collection.id : undefined,
     adult: d.adult === true || certifications.some(matureRating),
     contentRating: rating || (d.adult === true ? 'Adult flag' : undefined),
