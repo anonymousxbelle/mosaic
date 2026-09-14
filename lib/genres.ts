@@ -110,3 +110,14 @@ export function genreAllowed(
 // Retain stored metadata while hiding paused media from current product controls.
 export const pausedMediaTags = new Set(['strategy','turn-based-strategy','real-time-strategy','roguelike','pop','rock','alternative','folk','electronic','jazz','hip-hop','country','classical']);
 export const activeGenreChoices=genreChoices.filter(tag=>!pausedMediaTags.has(tag));
+
+// Provider adapters pass only item-level tags/keywords here, never navigation shelves.
+// Recover individual genres from a combined label only with independent evidence.
+export function corroboratedGenres(labels:string[],itemLabels:string[]):string[]{
+ const normal=normalizeGenres(labels);
+ const combinedParts=labels.filter(label=>withoutCombinedGenre(label)!==label)
+   .flatMap(label=>label.split(/\s*(?:&amp;|&|\band\b|\bor\b|\/|,|\+|\|)\s*/i));
+ const possible=normalizeGenres(combinedParts);
+ const supported=normalizeGenres(itemLabels);
+ return [...new Set([...normal,...possible.filter(genre=>supported.includes(genre))])];
+}
