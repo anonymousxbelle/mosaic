@@ -36,3 +36,13 @@ test('combined shelves across genres and facets remain ambiguous, including thre
  assert.ok(extractTags('', ['Mystery','Thriller']).includes('thriller'));
  assert.ok(extractTags('Romance and mystery intertwine in this story.',[]).includes('romance'));
 });
+
+test('TMDB item keywords can corroborate both or just one part of a combined genre',()=>{
+ const source={id:33,name:'An example',overview:'A story.',genres:[{name:'Action & Adventure'}]};
+ const both=tmdbRecord({...source,keywords:{results:[{name:'action'},{name:'adventure'}]}},'TV');
+ assert.ok(both.genres.includes('action'));assert.ok(both.genres.includes('adventure'));
+ const one=tmdbRecord({...source,keywords:{results:[{name:'adventure'}]}},'TV');
+ assert.ok(one.genres.includes('adventure'));assert.ok(!one.genres.includes('action'));
+ const ambiguous=tmdbRecord({...source,keywords:{results:[{name:'Action & Adventure'}]}},'TV');
+ assert.ok(!ambiguous.genres.includes('action'));assert.ok(!ambiguous.genres.includes('adventure'));
+});
