@@ -18,11 +18,16 @@ export function unifiedRank<T extends Media & {score:number;priority?:number}>(i
   const provider=positions.length?1/(1+Math.min(...positions)):0;
   const ai=Number.isFinite(semantic[i.id])?Math.max(0,Math.min(1,semantic[i.id])):0;
   const later=i.type==='Book' && (i.seriesPosition||0)>1 && !sameSeries(seed,i)?0.8:1;
+  // Missing external signals inherit the core score instead of counting as zero.
+  const core=story.hasContext?(0.6*i.score+0.3*story.score)/0.9:i.score;
+  const aiAvailable=Number.isFinite(semantic[i.id]),providerAvailable=positions.length>0;
+  const score=(0.9*core+0.08*(aiAvailable?ai:core)+0.02*(providerAvailable?provider:core))*later;
   // Lexicographic compatibility precedes all scores and media preferences.
   // Missing fields remain distinguishable from observed non-overlap.
   return {...i,priority:era*1000+setting*100+sub*20+premise*4+(i.priority||0),
-   score:(0.6*i.score+0.3*story.score+0.08*ai+0.02*provider)*later,
+   score,
+   rankingDetails:{storyCoverage:story.coverage,aiAvailable,providerAvailable},
    storyReasons:story.reasons,
-   compatibilityNote:era===1 || sub===1 || setting===1 || premise===1?'Some comparison metadata is missing':era===2 || sub===2 || setting===2 || premise===2?'Broader match: some story features differ':'Core story features align'};
+   compatibilityNote:era===2 || sub===2 || setting===2 || premise===2?'Broader match: some story features differ':era===1 || sub===1 || setting===1 || premise===1?'Some comparison metadata is missing':!a.era.length&&!seedSubs.length&&!definingSettings(seed).length&&!a.premise.length?'Limited story context: ranked mainly by tags':'Core story features align'};
  }).sort((a,b)=>a.priority-b.priority||b.score-a.score||a.title.localeCompare(b.title));
 }

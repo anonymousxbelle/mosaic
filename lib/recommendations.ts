@@ -99,6 +99,7 @@ export function recommend(
         ].some((t) => query[t] > 0 && i.tags.includes(t))
           ? 0.6
           : 1),
+      sharedTags: [...new Set(i.tags)].filter(t=>query[t]>0),
       reasons: i.tags
         .filter((t) => query[t] > 0)
         .sort((a, b) => query[b] * specificity(b) - query[a] * specificity(a))

@@ -32,21 +32,26 @@ Object.assign(groups.premise,{
 export function storyProfile(item:Media){
  const text=hasSynopsis(item.description)?item.description:'';
  const out:Record<string,string[]>={};
- for(const [group,patterns] of Object.entries(groups))out[group]=Object.entries(patterns).filter(([,p])=>p.test(text)).map(([label])=>label);
+ // Explicit catalog/personal facets remain usable when the synopsis is sparse.
+ const canonical=new Set([...item.tags,...(item.genres||[])].map(t=>t.toLowerCase().replace(/[ -]+/g,' ')));
+ for(const [group,patterns] of Object.entries(groups))out[group]=Object.entries(patterns).filter(([label,p])=>p.test(text)||canonical.has(label.toLowerCase().replace(/[ -]+/g,' '))).map(([label])=>label);
  const labels=[...item.tags,...(item.genres||[])];
  out.era=labels.some(t=>['historical-fiction','historical-romance'].includes(t)) || (labels.includes('history') && out.setting.includes('imperial court')) || /\b(?:Regency|Victorian|medieval|ancient (?:China|Japan|Rome)|feudal|Joseon|Edo period|(?:Tang|Ming|Qing|Han) dynasty|historical setting)\b/i.test(text)?['historical']:/\b(?:present[- ]day|modern[- ]day|contemporary setting)\b/i.test(text) || labels.includes('contemporary-romance')?['contemporary']:[];
  out.audience=item.tags.filter(t=>['middle-grade','young-adult'].includes(t));
  return out;
 }
 export function storyMatch(seed:Media,item:Media){
- const a=storyProfile(seed),b=storyProfile(item),reasons:string[]=[];let total=0,known=0;
+ const a=storyProfile(seed),b=storyProfile(item),reasons:string[]=[];let total=0,expected=0,known=0;
+ const weights:Record<string,number>={setting:3,premise:3,era:2,tone:0.5,audience:0.5};
  for(const group of Object.keys(a)){
-  if(!a[group].length || !b[group].length)continue;
+  if(!a[group].length)continue;
+  const weight=weights[group]||1;expected+=weight;
+  if(!b[group].length)continue;
   const shared=a[group].filter(x=>b[group].includes(x));
-  known++;total+=shared.length/new Set([...a[group],...b[group]]).size;
+  known+=weight;total+=weight*shared.length/new Set([...a[group],...b[group]]).size;
   reasons.push(...shared.map(x=>group+': '+x));
  }
- return {score:known?total/known:0,reasons};
+ return {score:expected?total/expected:0,coverage:expected?known/expected:0,hasContext:expected>0,reasons};
 }
 export function seriesPosition(description:string):number|undefined{
  const m=description.slice(0,280).match(/\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|\d{1,2}(?:st|nd|rd|th))\s+(?:book|novel|volume|installment)\s+(?:in|of)\b/i);
