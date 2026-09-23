@@ -1,3 +1,4 @@
+import {toUnifiedRecord} from './unified-media.ts';
 import {taxonomy,tagApplicable,compatibleClass} from './taxonomy.ts';
 import { detailedPatterns, detailedFeatures, featureGroups, primaryGenre, seedTopic, matchesGenre } from './features.ts';
 import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type RetrievalStats, type RetrievalEvidence } from './retrieval.ts';
@@ -305,7 +306,9 @@ export function queryError(query: string): string | null {
     ? 'Type at least 2 characters.'
     : n > 100
       ? 'Keep the search under 101 characters.'
-      : null;
+      : !/[\p{L}\p{N}]/u.test(query)
+        ? 'Enter a title or creator containing letters or numbers.'
+        : null;
 }
 async function json(url: string, signal?: AbortSignal): Promise<Data> {
   try {
@@ -384,7 +387,7 @@ async function gameResults(
     .filter((e): e is CatalogMedia => e !== null);
 }
 const cache = new Map<string, { time: number; items: CatalogMedia[] }>();
-export async function searchMedia(
+async function searchMediaInternal(
   type: Category,
   query: string,
   signal?: AbortSignal,
@@ -471,7 +474,7 @@ export async function searchMedia(
   cache.set(key, { time: Date.now(), items });
   return items;
 }
-export async function verifyMedia(
+async function verifyMediaInternal(
   item: CatalogMedia,
   signal?: AbortSignal,
 ): Promise<CatalogMedia> {
@@ -741,4 +744,12 @@ export async function discoverMedia(
  }
  rememberCatalog(items);stats.accepted=items.length;
  return {items,failures,stats,evidence};
+}
+
+// All user-facing search/save paths expose the same explicit metadata fields.
+export async function searchMedia(type:Category,query:string,signal?:AbortSignal,adult=false){
+ return (await searchMediaInternal(type,query,signal,adult)).map(toUnifiedRecord);
+}
+export async function verifyMedia(item:CatalogMedia,signal?:AbortSignal){
+ return toUnifiedRecord(await verifyMediaInternal(item,signal));
 }

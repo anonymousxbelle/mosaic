@@ -60,8 +60,11 @@ taxonomy['anime'].description='A subset of animation, recorded independently fro
 export type ClassifiedItem={tags:string[];genres?:string[];type?:string};
 export function contentClass(item:ClassifiedItem):ContentClass{
  const labels=[...item.tags,...(item.genres||[])];
- // Nonfiction wins over incidental fiction/fantasy labels in factual descriptions.
- if(labels.includes('non-fiction') || labels.some(t=>taxonomy[t]?.classes?.length===1 && taxonomy[t].classes![0]==='non-fiction'))return 'non-fiction';
+ // Explicit class and primary genres outrank incidental synopsis subjects.
+ if(labels.includes('non-fiction'))return 'non-fiction';
+ if(labels.includes('fiction'))return 'fiction';
+ const factualForms=['biography','memoir','popular-science','self-help','true-crime'];
+ if((item.genres||[]).some(t=>taxonomy[t]?.classes?.length===1 && taxonomy[t].classes![0]==='non-fiction') || labels.some(t=>factualForms.includes(t)))return 'non-fiction';
  if(labels.includes('fiction') || labels.some(t=>taxonomy[t]?.classes?.length===1 && taxonomy[t].classes![0]==='fiction'))return 'fiction';
  return 'unknown';
 }
