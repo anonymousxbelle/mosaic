@@ -1,0 +1,39 @@
+{
+  "capturedAt": "2026-09-22T19:03:00.918Z",
+  "request": {
+    "url": "https://api.tvmaze.com/search/shows?q=Avatar%3A+The+Last+Airbender",
+    "query": "Avatar: The Last Airbender"
+  },
+  "httpStatus": 200,
+  "provider": "TVmaze",
+  "returned": 2,
+  "selectedId": "tvmaze:38753",
+  "selectedTitle": "Avatar: The Last Airbender",
+  "verifiedById": true,
+  "productionStorageRestorePassed": true,
+  "catalogSource": "data/catalog.json",
+  "catalogCounts": {
+    "Book": 5,
+    "Game": 5,
+    "Music": 5,
+    "Movie": 5,
+    "TV": 5
+  },
+  "fixtureRatings": {
+    "hunger": 5
+  },
+  "computedProfile": {
+    "survival": 1,
+    "rebellion": 1,
+    "dystopian": 1,
+    "emotional": 1
+  },
+  "rankedFixtureIds": [
+    "resistance",
+    "severance",
+    "boniver",
+    "interstellar",
+    "arcane"
+  ],
+  "note": "Live network evidence. Preference serialization/restore checked in Node; browser persistence is evidenced separately."
+}

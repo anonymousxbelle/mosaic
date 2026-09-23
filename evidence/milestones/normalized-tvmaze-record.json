@@ -1,0 +1,37 @@
+{
+  "id": "tvmaze:38753",
+  "externalId": "38753",
+  "title": "Avatar: The Last Airbender",
+  "creator": "Netflix",
+  "type": "TV",
+  "description": "A young boy known as the Avatar must master the four elemental powers to save a world at war — and fight a ruthless enemy bent on stopping him.",
+  "tags": [
+    "fantasy",
+    "adventure",
+    "action"
+  ],
+  "sourceGenreLabels": [
+    "Action",
+    "Adventure",
+    "Fantasy"
+  ],
+  "genres": [
+    "fantasy",
+    "adventure",
+    "action"
+  ],
+  "artworkUrl": "https://static.tvmaze.com/uploads/images/medium_portrait/633/1582667.jpg",
+  "provider": "TVmaze",
+  "sourceUrl": "https://www.tvmaze.com/shows/38753",
+  "year": "2024",
+  "verifiedAt": "2026-09-22T19:03:01.079Z",
+  "schemaVersion": 1,
+  "themes": [],
+  "moods": [],
+  "creators": [],
+  "keywords": [
+    "fantasy",
+    "adventure",
+    "action"
+  ]
+}
