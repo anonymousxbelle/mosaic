@@ -1,0 +1,923 @@
+[
+  {
+    "id": "hunger",
+    "title": "The Hunger Games",
+    "creator": "Suzanne Collins",
+    "type": "Book",
+    "tags": [
+      "survival",
+      "rebellion",
+      "dystopian",
+      "emotional"
+    ],
+    "description": "A young volunteer challenges a society built around a fight for survival.",
+    "schemaVersion": 1,
+    "genres": [
+      "dystopian",
+      "science-fiction"
+    ],
+    "themes": [
+      "survival",
+      "rebellion"
+    ],
+    "moods": [
+      "emotional"
+    ],
+    "creators": [
+      "Suzanne Collins"
+    ],
+    "keywords": [
+      "survival",
+      "rebellion",
+      "dystopian",
+      "emotional"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "earthsea",
+    "title": "A Wizard of Earthsea",
+    "creator": "Ursula K. Le Guin",
+    "type": "Book",
+    "tags": [
+      "fantasy",
+      "identity",
+      "adventure",
+      "reflective"
+    ],
+    "description": "A young wizard learns the cost of power and the meaning of knowing himself.",
+    "schemaVersion": 1,
+    "genres": [
+      "fantasy",
+      "adventure"
+    ],
+    "themes": [
+      "identity"
+    ],
+    "moods": [
+      "reflective"
+    ],
+    "creators": [
+      "Ursula K. Le Guin"
+    ],
+    "keywords": [
+      "fantasy",
+      "identity",
+      "adventure",
+      "reflective"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "station",
+    "title": "Station Eleven",
+    "creator": "Emily St. John Mandel",
+    "type": "Book",
+    "tags": [
+      "survival",
+      "connection",
+      "emotional",
+      "reflective"
+    ],
+    "description": "Art and human connection endure in a world reshaped by a pandemic.",
+    "schemaVersion": 1,
+    "genres": [],
+    "themes": [
+      "survival",
+      "connection"
+    ],
+    "moods": [
+      "emotional",
+      "reflective"
+    ],
+    "creators": [
+      "Emily St. John Mandel"
+    ],
+    "keywords": [
+      "survival",
+      "connection",
+      "emotional",
+      "reflective"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "pride",
+    "title": "Pride and Prejudice",
+    "creator": "Jane Austen",
+    "type": "Book",
+    "tags": [
+      "romance",
+      "identity",
+      "humor",
+      "connection"
+    ],
+    "description": "First impressions and social expectations complicate an unlikely romance.",
+    "schemaVersion": 1,
+    "genres": [
+      "romance",
+      "humor"
+    ],
+    "themes": [
+      "identity",
+      "connection"
+    ],
+    "moods": [],
+    "creators": [
+      "Jane Austen"
+    ],
+    "keywords": [
+      "romance",
+      "identity",
+      "humor",
+      "connection"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "hobbit",
+    "title": "The Hobbit",
+    "creator": "J. R. R. Tolkien",
+    "type": "Book",
+    "tags": [
+      "fantasy",
+      "adventure",
+      "friendship",
+      "hope"
+    ],
+    "description": "An unassuming traveler finds courage on a journey far from home.",
+    "schemaVersion": 1,
+    "genres": [
+      "fantasy",
+      "adventure"
+    ],
+    "themes": [
+      "friendship"
+    ],
+    "moods": [
+      "hope"
+    ],
+    "creators": [
+      "J. R. R. Tolkien"
+    ],
+    "keywords": [
+      "fantasy",
+      "adventure",
+      "friendship",
+      "hope"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "last",
+    "title": "The Last of Us",
+    "creator": "Naughty Dog",
+    "type": "Game",
+    "tags": [
+      "survival",
+      "emotional",
+      "connection",
+      "adventure"
+    ],
+    "description": "Two survivors form an uneasy bond on a dangerous journey.",
+    "schemaVersion": 1,
+    "genres": [
+      "adventure"
+    ],
+    "themes": [
+      "survival",
+      "connection"
+    ],
+    "moods": [
+      "emotional"
+    ],
+    "creators": [
+      "Naughty Dog"
+    ],
+    "keywords": [
+      "survival",
+      "emotional",
+      "connection",
+      "adventure"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "life",
+    "title": "Life Is Strange",
+    "creator": "Dontnod Entertainment",
+    "type": "Game",
+    "tags": [
+      "identity",
+      "emotional",
+      "friendship",
+      "mystery"
+    ],
+    "description": "A student discovers that changing time comes with difficult choices.",
+    "schemaVersion": 1,
+    "genres": [
+      "mystery"
+    ],
+    "themes": [
+      "identity",
+      "friendship"
+    ],
+    "moods": [
+      "emotional"
+    ],
+    "creators": [
+      "Dontnod Entertainment"
+    ],
+    "keywords": [
+      "identity",
+      "emotional",
+      "friendship",
+      "mystery"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "journey",
+    "title": "Journey",
+    "creator": "thatgamecompany",
+    "type": "Game",
+    "tags": [
+      "adventure",
+      "reflective",
+      "connection",
+      "hope"
+    ],
+    "description": "A quiet pilgrimage unfolds through an ancient desert landscape.",
+    "schemaVersion": 1,
+    "genres": [
+      "adventure"
+    ],
+    "themes": [
+      "connection"
+    ],
+    "moods": [
+      "reflective",
+      "hope"
+    ],
+    "creators": [
+      "thatgamecompany"
+    ],
+    "keywords": [
+      "adventure",
+      "reflective",
+      "connection",
+      "hope"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "hades",
+    "title": "Hades",
+    "creator": "Supergiant Games",
+    "type": "Game",
+    "tags": [
+      "fantasy",
+      "rebellion",
+      "adventure",
+      "identity"
+    ],
+    "description": "An underworld prince battles toward freedom and family answers.",
+    "schemaVersion": 1,
+    "genres": [
+      "fantasy",
+      "adventure"
+    ],
+    "themes": [
+      "rebellion",
+      "identity"
+    ],
+    "moods": [],
+    "creators": [
+      "Supergiant Games"
+    ],
+    "keywords": [
+      "fantasy",
+      "rebellion",
+      "adventure",
+      "identity"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "stardew",
+    "title": "Stardew Valley",
+    "creator": "ConcernedApe",
+    "type": "Game",
+    "tags": [
+      "connection",
+      "hope",
+      "romance",
+      "reflective"
+    ],
+    "description": "Build a new life through farming, friendship, and a small community.",
+    "schemaVersion": 1,
+    "genres": [
+      "romance"
+    ],
+    "themes": [
+      "connection"
+    ],
+    "moods": [
+      "hope",
+      "reflective"
+    ],
+    "creators": [
+      "ConcernedApe"
+    ],
+    "keywords": [
+      "connection",
+      "hope",
+      "romance",
+      "reflective"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "interstellar",
+    "title": "Interstellar",
+    "creator": "Christopher Nolan",
+    "type": "Movie",
+    "tags": [
+      "adventure",
+      "survival",
+      "emotional",
+      "hope"
+    ],
+    "description": "A journey beyond Earth tests the bonds between a parent and child.",
+    "schemaVersion": 1,
+    "genres": [
+      "adventure"
+    ],
+    "themes": [
+      "survival"
+    ],
+    "moods": [
+      "emotional",
+      "hope"
+    ],
+    "creators": [
+      "Christopher Nolan"
+    ],
+    "keywords": [
+      "adventure",
+      "survival",
+      "emotional",
+      "hope"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "spirited",
+    "title": "Spirited Away",
+    "creator": "Hayao Miyazaki",
+    "type": "Movie",
+    "tags": [
+      "fantasy",
+      "identity",
+      "adventure",
+      "friendship"
+    ],
+    "description": "A girl finds her courage in a mysterious world of spirits.",
+    "schemaVersion": 1,
+    "genres": [
+      "fantasy",
+      "adventure"
+    ],
+    "themes": [
+      "identity",
+      "friendship"
+    ],
+    "moods": [],
+    "creators": [
+      "Hayao Miyazaki"
+    ],
+    "keywords": [
+      "fantasy",
+      "identity",
+      "adventure",
+      "friendship"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "arrival",
+    "title": "Arrival",
+    "creator": "Denis Villeneuve",
+    "type": "Movie",
+    "tags": [
+      "mystery",
+      "connection",
+      "reflective",
+      "emotional"
+    ],
+    "description": "A linguist seeks understanding when visitors arrive from another world.",
+    "schemaVersion": 1,
+    "genres": [
+      "mystery"
+    ],
+    "themes": [
+      "connection"
+    ],
+    "moods": [
+      "reflective",
+      "emotional"
+    ],
+    "creators": [
+      "Denis Villeneuve"
+    ],
+    "keywords": [
+      "mystery",
+      "connection",
+      "reflective",
+      "emotional"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "truman",
+    "title": "The Truman Show",
+    "creator": "Peter Weir",
+    "type": "Movie",
+    "tags": [
+      "identity",
+      "rebellion",
+      "mystery",
+      "hope"
+    ],
+    "description": "An ordinary man begins to question the world built around him.",
+    "schemaVersion": 1,
+    "genres": [
+      "mystery"
+    ],
+    "themes": [
+      "identity",
+      "rebellion"
+    ],
+    "moods": [
+      "hope"
+    ],
+    "creators": [
+      "Peter Weir"
+    ],
+    "keywords": [
+      "identity",
+      "rebellion",
+      "mystery",
+      "hope"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "amelie",
+    "title": "Amélie",
+    "creator": "Jean-Pierre Jeunet",
+    "type": "Movie",
+    "tags": [
+      "romance",
+      "connection",
+      "humor",
+      "hope"
+    ],
+    "description": "Small acts of kindness lead a shy Parisian toward connection.",
+    "schemaVersion": 1,
+    "genres": [
+      "romance",
+      "humor"
+    ],
+    "themes": [
+      "connection"
+    ],
+    "moods": [
+      "hope"
+    ],
+    "creators": [
+      "Jean-Pierre Jeunet"
+    ],
+    "keywords": [
+      "romance",
+      "connection",
+      "humor",
+      "hope"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "stranger",
+    "title": "Stranger Things",
+    "creator": "The Duffer Brothers",
+    "type": "TV",
+    "tags": [
+      "mystery",
+      "friendship",
+      "survival",
+      "adventure"
+    ],
+    "description": "Friends investigate strange events beneath the surface of their town.",
+    "schemaVersion": 1,
+    "genres": [
+      "mystery",
+      "adventure"
+    ],
+    "themes": [
+      "friendship",
+      "survival"
+    ],
+    "moods": [],
+    "creators": [
+      "The Duffer Brothers"
+    ],
+    "keywords": [
+      "mystery",
+      "friendship",
+      "survival",
+      "adventure"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "severance",
+    "title": "Severance",
+    "creator": "Dan Erickson",
+    "type": "TV",
+    "tags": [
+      "identity",
+      "dystopian",
+      "mystery",
+      "rebellion"
+    ],
+    "description": "Workers uncover the consequences of dividing their lives in two.",
+    "schemaVersion": 1,
+    "genres": [
+      "dystopian",
+      "mystery",
+      "science-fiction"
+    ],
+    "themes": [
+      "identity",
+      "rebellion"
+    ],
+    "moods": [],
+    "creators": [
+      "Dan Erickson"
+    ],
+    "keywords": [
+      "identity",
+      "dystopian",
+      "mystery",
+      "rebellion"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "goodplace",
+    "title": "The Good Place",
+    "creator": "Michael Schur",
+    "type": "TV",
+    "tags": [
+      "humor",
+      "friendship",
+      "reflective",
+      "hope"
+    ],
+    "description": "An unlikely group explores what it means to become better people.",
+    "schemaVersion": 1,
+    "genres": [
+      "humor"
+    ],
+    "themes": [
+      "friendship"
+    ],
+    "moods": [
+      "reflective",
+      "hope"
+    ],
+    "creators": [
+      "Michael Schur"
+    ],
+    "keywords": [
+      "humor",
+      "friendship",
+      "reflective",
+      "hope"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "avatar",
+    "title": "Avatar: The Last Airbender",
+    "creator": "DiMartino & Konietzko",
+    "type": "TV",
+    "tags": [
+      "fantasy",
+      "adventure",
+      "friendship",
+      "hope"
+    ],
+    "description": "Young companions set out to restore balance to a divided world.",
+    "schemaVersion": 1,
+    "genres": [
+      "fantasy",
+      "adventure"
+    ],
+    "themes": [
+      "friendship"
+    ],
+    "moods": [
+      "hope"
+    ],
+    "creators": [
+      "DiMartino & Konietzko"
+    ],
+    "keywords": [
+      "fantasy",
+      "adventure",
+      "friendship",
+      "hope"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "arcane",
+    "title": "Arcane",
+    "creator": "Christian Linke & Alex Yee",
+    "type": "TV",
+    "tags": [
+      "rebellion",
+      "emotional",
+      "fantasy",
+      "identity"
+    ],
+    "description": "Two sisters are pulled apart by conflict between connected cities.",
+    "schemaVersion": 1,
+    "genres": [
+      "fantasy"
+    ],
+    "themes": [
+      "rebellion",
+      "identity"
+    ],
+    "moods": [
+      "emotional"
+    ],
+    "creators": [
+      "Christian Linke & Alex Yee"
+    ],
+    "keywords": [
+      "rebellion",
+      "emotional",
+      "fantasy",
+      "identity"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "folklore",
+    "title": "folklore",
+    "creator": "Taylor Swift · Album",
+    "type": "Music",
+    "tags": [
+      "reflective",
+      "emotional",
+      "romance",
+      "connection"
+    ],
+    "description": "Intimate storytelling explores memory, longing, and imagined lives.",
+    "schemaVersion": 1,
+    "genres": [
+      "romance"
+    ],
+    "themes": [
+      "connection"
+    ],
+    "moods": [
+      "reflective",
+      "emotional"
+    ],
+    "creators": [
+      "Taylor Swift · Album"
+    ],
+    "keywords": [
+      "reflective",
+      "emotional",
+      "romance",
+      "connection"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "resistance",
+    "title": "The Resistance",
+    "creator": "Muse · Album",
+    "type": "Music",
+    "tags": [
+      "rebellion",
+      "dystopian",
+      "romance",
+      "hope"
+    ],
+    "description": "Dramatic rock moves through resistance, control, and devotion.",
+    "schemaVersion": 1,
+    "genres": [
+      "dystopian",
+      "romance",
+      "science-fiction"
+    ],
+    "themes": [
+      "rebellion"
+    ],
+    "moods": [
+      "hope"
+    ],
+    "creators": [
+      "Muse · Album"
+    ],
+    "keywords": [
+      "rebellion",
+      "dystopian",
+      "romance",
+      "hope"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "melodrama",
+    "title": "Melodrama",
+    "creator": "Lorde · Album",
+    "type": "Music",
+    "tags": [
+      "identity",
+      "emotional",
+      "romance",
+      "reflective"
+    ],
+    "description": "A vivid portrait of heartbreak, independence, and growing into yourself.",
+    "schemaVersion": 1,
+    "genres": [
+      "romance"
+    ],
+    "themes": [
+      "identity"
+    ],
+    "moods": [
+      "emotional",
+      "reflective"
+    ],
+    "creators": [
+      "Lorde · Album"
+    ],
+    "keywords": [
+      "identity",
+      "emotional",
+      "romance",
+      "reflective"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "nurture",
+    "title": "Nurture",
+    "creator": "Porter Robinson · Album",
+    "type": "Music",
+    "tags": [
+      "hope",
+      "reflective",
+      "identity",
+      "connection"
+    ],
+    "description": "Electronic songwriting searches for renewal and creative purpose.",
+    "schemaVersion": 1,
+    "genres": [],
+    "themes": [
+      "identity",
+      "connection"
+    ],
+    "moods": [
+      "hope",
+      "reflective"
+    ],
+    "creators": [
+      "Porter Robinson · Album"
+    ],
+    "keywords": [
+      "hope",
+      "reflective",
+      "identity",
+      "connection"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  },
+  {
+    "id": "boniver",
+    "title": "For Emma, Forever Ago",
+    "creator": "Bon Iver · Album",
+    "type": "Music",
+    "tags": [
+      "emotional",
+      "reflective",
+      "romance",
+      "survival"
+    ],
+    "description": "Sparse folk songs trace isolation, loss, and emotional recovery.",
+    "schemaVersion": 1,
+    "genres": [
+      "romance"
+    ],
+    "themes": [
+      "survival"
+    ],
+    "moods": [
+      "emotional",
+      "reflective"
+    ],
+    "creators": [
+      "Bon Iver · Album"
+    ],
+    "keywords": [
+      "emotional",
+      "reflective",
+      "romance",
+      "survival"
+    ],
+    "provenance": {
+      "kind": "curated-fixture",
+      "note": "Hand-authored course catalog; not a live API response or verified classification."
+    }
+  }
+]
