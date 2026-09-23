@@ -1070,8 +1070,8 @@ export default function Home() {
                         {item.type}
                       </span>
                       <span className="match">
-                        {item.reasons.length} shared{' '}
-                        {item.reasons.length === 1 ? 'tag' : 'tags'}
+                        {item.sharedTags.length} shared{' '}
+                        {item.sharedTags.length === 1 ? 'tag' : 'tags'}
                       </span>
                     </div>
                     <p className="muted">{contentLabel(item)}</p>
@@ -1167,7 +1167,11 @@ export default function Home() {
                     </div>
                     <details className="connection"><summary>Why this matches</summary>
                       <span>THE CONNECTION</span>
-                      <p>Shared tags: {item.reasons.join(' · ')}</p>
+                      <details><summary>Why this match? · {item.sharedTags.length} shared tags</summary>
+                        <p>All shared tags: {item.sharedTags.join(' · ')}. This count is not the ranking score: specific story matches carry more weight than broad labels.</p>
+                        {mode==='based-on' && <p>Core era, setting, subgenre and premise compatibility comes first in Recommended mode. Prefer choices and variety among similar results can also change the order.</p>}
+                        {'rankingDetails' in item && <p>Missing story details reduce the evidence for a close match. AI and provider scores, when available, have only a small influence.</p>}
+                      </details>
                       {connectionEvidence(
                         item,
                         mode === 'based-on'
