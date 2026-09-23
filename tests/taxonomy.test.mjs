@@ -4,6 +4,16 @@ import {contentClass,tagApplicable,compatibleClass,suggestedFacets,taxonomy} fro
 import {extractTags} from '../lib/media-api.ts';
 import {featureKind} from '../lib/features.ts';
 const factual={tags:['non-fiction','biography'],type:'Book'};
+void test('incidental factual subjects do not override fiction genres',()=>{
+ for(const type of ['TV','Movie','Book']){
+  const story={type,genres:['mystery','drama'],tags:['politics','history','imperial-court']};
+  assert.equal(contentClass(story),'fiction');
+  assert.ok(tagApplicable('solving-a-mystery',story));
+ }
+ assert.equal(contentClass({tags:['politics']}),'unknown');
+ assert.equal(contentClass({genres:['politics'],tags:[]}),'non-fiction');
+ assert.equal(contentClass({genres:['mystery'],tags:['non-fiction']}),'non-fiction');
+});
 void test('factual work about fantasy does not become fantasy fiction',()=>{
  assert.equal(contentClass(factual),'non-fiction');
  assert.ok(!tagApplicable('magical-school',factual));
