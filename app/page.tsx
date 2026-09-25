@@ -1,9 +1,11 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hybrid-ranking';
 import { compareDescriptions } from '@/lib/semantic';
 import {vocabulary} from '@/lib/media-api';
 import {unifiedRank} from '@/lib/unified-ranking';
+import {cosineDiscovery,vocabularyFor,tasteVector} from '@/lib/cosine-discovery';
 import {sameSeries, groupSeries, seriesGroupKey} from '@/lib/story-profile';
 import {genreDescription} from '@/lib/genre-descriptions';
 import { hasSynopsis } from '@/lib/catalog-text';
@@ -357,12 +359,15 @@ export default function Home() {
     setDiscovering(true);
     setCompletedDiscoveryKey('');
     setDiscoveryNotice('');
+    const signedVocabulary=vocabularyFor(catalog);
+    const signedValues=tasteVector(catalog,ratings,signedVocabulary);
+    const signedQuery=Object.fromEntries(signedVocabulary.map((t,i)=>[t,signedValues[i]]));
     const query =
       mode === 'based-on'
           ? vector(
               selected?.tags || [],
             )
-          : taste;
+          : rankingMode==='cosine'?signedQuery:taste;
     const tags = Object.keys(query)
       .filter(
         (t) =>
@@ -461,7 +466,7 @@ export default function Home() {
     ?unifiedRank(results,selected,rankingEvidence.key===discoveryKey?rankingEvidence.provider:{},rankingEvidence.key===discoveryKey?rankingEvidence.semantic:{})
     :['provider','semantic'].includes(rankingMode) && mode==='based-on' && rankingEvidence.key===discoveryKey
     ?hybridRank(results,rankingEvidence.provider,rankingMode==='semantic'?rankingEvidence.semantic:{}) : results;
-  const filteredResults = completedDiscoveryKey===discoveryKey && !discovering ? diversify(
+  const legacyResults = completedDiscoveryKey===discoveryKey && !discovering ? diversify(
     groupSeries(preferMatches(rankedResults, mode==='based-on' ? focusTags : [])
       .filter((i) => i.type !== 'Music' && i.type !== 'Game')
       .filter((i) =>
@@ -483,6 +488,13 @@ export default function Home() {
       }))
       .sort((a, b) => b.score - a.score)),
   ) : [];
+  const cosineRun=cosineDiscovery([...catalog,...candidates],{mode:mode==='based-on'?'based-on':'for-you',ratings,library:catalog,seed:mode==='based-on'?selected:undefined,category});
+  const filteredResults=rankingMode==='cosine'
+    ?completedDiscoveryKey===discoveryKey&&!discovering?cosineRun.results
+      .filter(i=>i.type!=='Music'&&i.type!=='Game'&&inContentSection(i,adultSection)&&genreAllowed(i,[],avoided))
+      .filter(i=>mode!=='based-on'||mustTags.every(t=>i.tags.includes(t)))
+      .map(i=>({...i,storyReasons:[] as string[],seriesEntries:[i]})):[]
+    :legacyResults;
   const visible = sectionCatalog
     .filter(
       (i) =>
@@ -912,8 +924,7 @@ export default function Home() {
                   <p className="eyebrow">PICKED FROM YOUR FAVORITES</p>
                   <h2>Your taste. New possibilities.</h2>
                   <p>
-                    Connections drawn from the titles you rate 3 stars or
-                    higher.
+                    {rankingMode==='cosine'?'Your complete signed profile: high ratings add features, low ratings subtract them, and 3 stars are neutral.':'Connections drawn from the titles you rate 3 stars or higher.'}
                   </p>
                 </div>
               </TabsContent>
@@ -991,24 +1002,27 @@ export default function Home() {
                 )}
               </TabsContent>
             </Tabs>
-            {mode==='based-on' && <details className="advanced-panel"><summary>Advanced matching</summary><label>
+            <details className="advanced-panel"><summary>Advanced matching</summary><label>
               Recommendation method{' '}
               <select value={rankingMode} onChange={e=>setRankingMode(e.target.value)} disabled={discovering}>
                 <option value="recommended">Recommended: core story match + AI + providers</option>
+                <option value="cosine">Week 8: signed taste profile + pure cosine</option>
                 <option value="story">Story characteristics + tags (experimental)</option>
                 <option value="standard">Standard tag matching</option>
                 <option value="provider">Provider + tags (experimental)</option>
                 <option value="semantic">AI descriptions + provider + tags (experimental)</option>
               </select>
               {['recommended','semantic'].includes(rankingMode) && <p>Show discoveries compares up to 24 candidate descriptions with Cloudflare AI. Ratings and personal tags are not sent. Genre and topic filters stay in place.</p>}
-            </label></details>}
+              {rankingMode==='cosine'&&<p>5/4/3/2/1 stars contribute +2/+1/0/−1/−2. Scores alone determine order; AI, Prefer boosts, series grouping and variety do not reorder results. Already saved titles are excluded. Catalog retrieval and explicit content/category requirements still limit the candidate pool.</p>}
+              {rankingMode==='cosine'&&<p><Link href="/week8/">Open the Week 8 course demonstration and vector evidence</Link></p>}
+            </label></details>
             <button
               className="add-media-button"
               disabled={
                 discovering ||
                 !(mode === 'based-on'
                     ? selected?.tags.length || 0
-                    : Object.values(taste).some((v) => v > 0))
+                    : rankingMode==='cosine'?cosineRun.hasPositiveSignal:Object.values(taste).some((v) => v > 0))
               }
               onClick={findConnections}
             >
@@ -1016,6 +1030,7 @@ export default function Home() {
                 ? 'Searching catalogs…'
                 : 'Find my next favorite'}
             </button>
+            {rankingMode==='cosine'&&mode!=='based-on'&&!cosineRun.hasPositiveSignal&&<p role="status">Rate a title 4 or 5 stars to build a positive taste profile. Neutral, negative or cancelling ratings alone do not generate personalized results.</p>}
             {discoveryNotice && (
               <div className="search-status"><p role="status">{discovering ? 'Finding stories that fit…' : discoveryNotice.includes('could not') ? 'Search could not finish. Please try again.' : 'Your matches are ready.'}</p><details><summary>Search details</summary><p>{discoveryNotice}</p></details></div>
             )}
@@ -1075,6 +1090,7 @@ export default function Home() {
                       </span>
                     </div>
                     <p className="muted">{contentLabel(item)}</p>
+                    {rankingMode==='cosine'&&<p>Cosine similarity: {item.score.toFixed(6)} · sorted highest first</p>}
                     <MediaMark item={item} />
                     <h3>{item.title}</h3>
 
@@ -1168,11 +1184,12 @@ export default function Home() {
                     <details className="connection"><summary>Why this matches</summary>
                       <span>THE CONNECTION</span>
                       <details><summary>Why this match? · {item.sharedTags.length} shared tags</summary>
-                        <p>All shared tags: {item.sharedTags.join(' · ')}. This count is not the ranking score: specific story matches carry more weight than broad labels.</p>
+                        <p>All shared tags: {item.sharedTags.join(' · ')}. {rankingMode==='cosine'?'These features have positive contributions to the cosine dot product. Profile weights and vector lengths determine the score.':'This count is not the ranking score: specific story matches carry more weight than broad labels.'}</p>
+                        {rankingMode==='cosine'&&<p>Negative feature contributions: {cosineRun.results.find(x=>x.id===item.id)?.contributions.filter(x=>x.contribution<0).map(x=>x.feature).join(' · ')||'None'}.</p>}
                         {mode==='based-on' && <p>Core era, setting, subgenre and premise compatibility comes first in Recommended mode. Prefer choices and variety among similar results can also change the order.</p>}
                         {'rankingDetails' in item && <p>Missing story details reduce the evidence for a close match. AI and provider scores, when available, have only a small influence.</p>}
                       </details>
-                      {connectionEvidence(
+                      {rankingMode!=='cosine'&&connectionEvidence(
                         item,
                         mode === 'based-on'
                           ? selected
