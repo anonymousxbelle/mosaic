@@ -1,0 +1,12 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {taxonomy} from '../lib/taxonomy.ts';
+import {validateTaxonomy} from '../lib/taxonomy-editor.ts';
+const path=process.argv[2];
+if(!path)throw Error('Usage: node --experimental-strip-types scripts/apply-taxonomy.mjs path/to/export.json');
+const doc=JSON.parse(readFileSync(path,'utf8'));
+const errors=validateTaxonomy(doc);
+for(const id of Object.keys(taxonomy))if(!Object.hasOwn(doc.nodes||{},id))errors.push(`Missing ${id}: archive existing tags instead of deleting their stable IDs.`);
+for(const id of ['fiction','non-fiction'])if(doc.nodes?.[id]?.retired||doc.nodes?.[id]?.kind!=='class')errors.push(`Keep ${id} as an active content class.`);
+if(errors.length)throw Error(errors.join('\n'));
+writeFileSync(new URL('../data/taxonomy-edits.json',import.meta.url),JSON.stringify(doc,null,2)+'\n');
+console.log('Applied taxonomy to the build input. Run tests, typecheck and build before publishing.');
