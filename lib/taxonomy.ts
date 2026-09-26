@@ -1,7 +1,7 @@
 // A title can have several genres and facets. Unknown content class stays unknown.
 export type ContentClass='fiction'|'non-fiction'|'unknown';
 export type TaxonomyKind='class'|'genre'|'subgenre'|'theme'|'trope'|'setting'|'tone'|'audience'|'format';
-export type TaxonomyNode={kind:TaxonomyKind;classes?:ContentClass[];parents?:string[];media?:string[];description:string};
+export type TaxonomyNode={kind:TaxonomyKind;classes?:ContentClass[];parents?:string[];media?:string[];description:string;label?:string;aliases?:string[];retired?:boolean};
 export const taxonomy:Record<string,TaxonomyNode>={};
 function add(kind:TaxonomyKind,ids:string[],classes?:ContentClass[],parents?:string[],media?:string[]){
  for(const id of ids)taxonomy[id]={kind,classes,parents,media,description:'A '+kind+' label for '+id.replaceAll('-',' ')+'.'};
@@ -70,9 +70,9 @@ export function contentClass(item:ClassifiedItem):ContentClass{
 }
 export function tagApplicable(tag:string,item:ClassifiedItem){
  const node=taxonomy[tag];if(!node)return true;
- if(node.media && item.type && !node.media.includes(item.type))return false;
+ if(node.media?.length && item.type && !node.media.includes(item.type))return false;
  const cls=contentClass(item);
- return cls==='unknown' || !node.classes || node.classes.includes(cls);
+ return cls==='unknown' || !node.classes?.length || node.classes.includes(cls);
 }
 export function compatibleClass(a:ClassifiedItem,b:ClassifiedItem){
  const x=contentClass(a),y=contentClass(b);return x==='unknown'||y==='unknown'||x===y;
@@ -80,8 +80,8 @@ export function compatibleClass(a:ClassifiedItem,b:ClassifiedItem){
 export function suggestedFacets(item:ClassifiedItem){
  const labels=new Set([...item.tags,...(item.genres||[])]);
  // Expand known subgenres to parents for applicable themes and tropes.
- for(let depth=0;depth<3;depth++)for(const tag of [...labels])for(const parent of taxonomy[tag]?.parents||[])labels.add(parent);
- return Object.keys(taxonomy).filter(tag=>tagApplicable(tag,item) && (!taxonomy[tag].parents?.length || taxonomy[tag].parents!.some(p=>labels.has(p))));
+ for(let depth=0;depth<Object.keys(taxonomy).length;depth++){const size=labels.size;for(const tag of [...labels])for(const parent of taxonomy[tag]?.parents||[])labels.add(parent);if(labels.size===size)break;}
+ return Object.keys(taxonomy).filter(tag=>!taxonomy[tag].retired && tagApplicable(tag,item) && (!taxonomy[tag].parents?.length || taxonomy[tag].parents!.some(p=>labels.has(p))));
 }
 
 const explanations:Record<string,string>={
@@ -145,3 +145,12 @@ const explanations:Record<string,string>={
  'all-ages':'A source identifies the work as intended for a broad age range; not a safety guarantee.',
 };
 for(const [id,description]of Object.entries(explanations))if(taxonomy[id])taxonomy[id].description=description;
+// Versioned editor output is bundled at build time; browser drafts never change other users' taxonomy.
+import edits from '../data/taxonomy-edits.json' with {type:'json'};
+import {validateTaxonomy,canonicalTag} from './taxonomy-editor.ts';
+const merged={...taxonomy,...edits.nodes};
+const editErrors=validateTaxonomy({version:edits.version,nodes:merged});
+if(editErrors.length)throw new Error('Invalid taxonomy edits: '+editErrors.join('; '));
+Object.assign(taxonomy,edits.nodes);
+export const taxonomyLabel=(id:string)=>taxonomy[id]?.label||id.replaceAll('-',' ');
+export const resolveTaxonomyTag=(tag:string)=>canonicalTag(tag,taxonomy);

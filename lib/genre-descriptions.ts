@@ -1,4 +1,5 @@
 import {taxonomy} from './taxonomy.ts';
+import edits from '../data/taxonomy-edits.json' with {type:'json'};
 import { featureGroups, featureKind, detailedTags } from './features.ts';
 const descriptions: Record<string, string> = {
   fantasy: 'Stories with magic, supernatural worlds or beings.',
@@ -117,7 +118,7 @@ const descriptions: Record<string, string> = {
   hope: 'Possibility of a better future is emphasized.',
 };
 export const genreDescription = (tag: string) =>
-  descriptions[tag] || taxonomy[tag]?.description ||
+  (Object.hasOwn(edits.nodes,tag)?taxonomy[tag]?.description:undefined) || descriptions[tag] || taxonomy[tag]?.description ||
   `${tag.replaceAll('-', ' ')}: a personal tag defined by the person who added it.`;
 export const glossaryTags = [
   ...new Set([...Object.keys(descriptions), ...detailedTags]),

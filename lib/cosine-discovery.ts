@@ -1,11 +1,12 @@
 import type {Media, Ratings, Category} from './recommendations';
 import {sameWork} from './media-identity.ts';
+import {resolveTaxonomyTag} from './taxonomy.ts';
 
 export type FeatureMedia=Media & {themes?:string[];moods?:string[];keywords?:string[];creators?:string[]};
 export const normalizeFeature=(value:string)=>value.normalize('NFKC').trim().toLowerCase().replace(/[\s_]+/g,'-');
 // Union, not concatenation: a genre repeated in keywords counts only once.
 export function features(item:FeatureMedia):string[]{
- return [...new Set([item.tags,item.genres,item.themes,item.moods,item.keywords].flatMap(x=>x||[]).map(normalizeFeature).filter(Boolean))].sort();
+ return [...new Set([item.tags,item.genres,item.themes,item.moods,item.keywords].flatMap(x=>x||[]).map(normalizeFeature).filter(Boolean).map(resolveTaxonomyTag))].sort();
 }
 export function vocabularyFor(items:FeatureMedia[]):string[]{return [...new Set(items.flatMap(features))].sort();}
 export function itemVector(item:FeatureMedia,vocabulary:string[]):number[]{
