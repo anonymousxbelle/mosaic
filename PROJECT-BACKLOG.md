@@ -1,5 +1,11 @@
 # Mosaic project backlog
 
+## September 25: Week 8 and taxonomy editor
+
+- Week 8 implementation: signed rating profile, stable feature vectors and pure cosine ranking shared by For You/Based On, with a separate five-media course demonstration. See `docs/WEEK8.md` for verification and limits.
+- Later, requested: a simple taxonomy editor to add, edit, rename and retire labels; manage class, genre/subgenre, theme, mood, setting, audience and applicability; preview effects before applying. Not implemented in Week 8.
+- Editor acceptance criteria: stable IDs and aliases, duplicate/cycle validation, references repaired on rename/removal, versioned JSON export/import, preview on example records, and explicit publish step to persist changes for all visitors. Label changes must reach extraction/provider mapping and ranking, not just the displayed glossary. Local preview first; authenticated authoring/publishing can follow. Historical tag mappings and user edits must survive migrations.
+
 Updated: 2026-09-08. Living record of requests and decisions from this project conversation. Keep completed requests here; update their status rather than deleting them. When revisiting Mosaic, review this file and add new “we should” ideas with date, status and acceptance criteria. Proposed work is distinguished from user requests; a proposal is not a claim of approval or completion.
 
 ## User requests and decisions

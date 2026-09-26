@@ -4,6 +4,8 @@ Cross-media story discovery for CSCI 310 Junior Seminar. The main interface supp
 
 ## Run and verify
 
+Week 8: [signed cosine profile, testing and screenshots](docs/WEEK8.md). Open `/week8/` for the five-media course demonstration, or select the Week 8 method under Advanced matching in normal Discover. The existing story-based default remains available.
+
 Use Node 22.13+. Run `npm ci`, then `npm run dev`. Validate with `npm run typecheck`, `npm test`, and `npm run build:pages`. GitHub Actions publishes main to https://anonymousxbelle.github.io/mosaic/. Secret-bearing requests use the separate Cloudflare backend.
 
 The [Week 4 / Week 6 report](docs/MILESTONES.md) contains requirement results, exact testing steps, changed files and limits. See the [architecture diagram](docs/ARCHITECTURE.md) and [working evidence](evidence/milestones/README.md).
