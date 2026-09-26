@@ -230,3 +230,8 @@ Historical-era evidence now excludes a generic history tag unless supported by i
 - To do: explicit adaptation relationships for “Other versions of this story”; never infer adaptation links solely from matching titles.
 - To do: complete TV season/episode tracking beneath show-level records. TV discovery currently uses show records.
 - To do: refresh previously saved catalog tags after metadata rule changes while preserving user edits.
+# September 26: taxonomy workshop
+
+Implemented `/taxonomy/`: searchable editor, browser drafts, versioned import/export, stable IDs, aliases, archive/restore, relationship validation and applicability preview. A validated apply script connects exports to the bundled taxonomy. See `docs/TAXONOMY-EDITOR.md` for publication steps and exact runtime scope.
+
+Still pending: authenticated shared publishing from the editor, applying aliases to all legacy matchers/provider queries, source extraction rules for new concepts, and displaying renamed labels consistently on every card. Drafts intentionally do not overwrite shared definitions or library records.
