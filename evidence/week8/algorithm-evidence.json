@@ -1,0 +1,2249 @@
+{
+  "capturedAt": "2026-09-25T14:03:39.107Z",
+  "algorithm": "signed-cosine-v1",
+  "source": "data/catalog.json — curated fixture, not live API results",
+  "ratingSignals": {
+    "1": -2,
+    "2": -1,
+    "3": 0,
+    "4": 1,
+    "5": 2
+  },
+  "before": {
+    "options": {
+      "mode": "for-you",
+      "ratings": {
+        "hunger": 5,
+        "pride": 4
+      }
+    },
+    "vocabulary": [
+      "adventure",
+      "connection",
+      "dystopian",
+      "emotional",
+      "fantasy",
+      "friendship",
+      "hope",
+      "humor",
+      "identity",
+      "mystery",
+      "rebellion",
+      "reflective",
+      "romance",
+      "science-fiction",
+      "survival"
+    ],
+    "itemExample": {
+      "id": "hunger",
+      "vector": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    "profileVector": [
+      0,
+      1,
+      2,
+      2,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      2,
+      0,
+      1,
+      2,
+      2
+    ],
+    "candidateScores": [
+      {
+        "id": "resistance",
+        "title": "The Resistance",
+        "type": "Music",
+        "score": 0.6390096504226938,
+        "contributions": [
+          {
+            "feature": "dystopian",
+            "contribution": 2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          },
+          {
+            "feature": "science-fiction",
+            "contribution": 2
+          },
+          {
+            "feature": "romance",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "severance",
+        "title": "Severance",
+        "type": "TV",
+        "score": 0.6390096504226938,
+        "contributions": [
+          {
+            "feature": "dystopian",
+            "contribution": 2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          },
+          {
+            "feature": "science-fiction",
+            "contribution": 2
+          },
+          {
+            "feature": "identity",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "arcane",
+        "title": "Arcane",
+        "type": "TV",
+        "score": 0.5103103630798288,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          },
+          {
+            "feature": "identity",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "boniver",
+        "title": "For Emma, Forever Ago",
+        "type": "Music",
+        "score": 0.5103103630798288,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 2
+          },
+          {
+            "feature": "survival",
+            "contribution": 2
+          },
+          {
+            "feature": "romance",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "last",
+        "title": "The Last of Us",
+        "type": "Game",
+        "score": 0.5103103630798288,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 2
+          },
+          {
+            "feature": "survival",
+            "contribution": 2
+          },
+          {
+            "feature": "connection",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "station",
+        "title": "Station Eleven",
+        "type": "Book",
+        "score": 0.5103103630798288,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 2
+          },
+          {
+            "feature": "survival",
+            "contribution": 2
+          },
+          {
+            "feature": "connection",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "folklore",
+        "title": "folklore",
+        "type": "Music",
+        "score": 0.4082482904638631,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 2
+          },
+          {
+            "feature": "connection",
+            "contribution": 1
+          },
+          {
+            "feature": "romance",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "interstellar",
+        "title": "Interstellar",
+        "type": "Movie",
+        "score": 0.4082482904638631,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 2
+          },
+          {
+            "feature": "survival",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "melodrama",
+        "title": "Melodrama",
+        "type": "Music",
+        "score": 0.4082482904638631,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 2
+          },
+          {
+            "feature": "identity",
+            "contribution": 1
+          },
+          {
+            "feature": "romance",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "amelie",
+        "title": "Amélie",
+        "type": "Movie",
+        "score": 0.3061862178478973,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 1
+          },
+          {
+            "feature": "humor",
+            "contribution": 1
+          },
+          {
+            "feature": "romance",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "arrival",
+        "title": "Arrival",
+        "type": "Movie",
+        "score": 0.3061862178478973,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 2
+          },
+          {
+            "feature": "connection",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "hades",
+        "title": "Hades",
+        "type": "Game",
+        "score": 0.3061862178478973,
+        "contributions": [
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          },
+          {
+            "feature": "identity",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "life",
+        "title": "Life Is Strange",
+        "type": "Game",
+        "score": 0.3061862178478973,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 2
+          },
+          {
+            "feature": "identity",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "truman",
+        "title": "The Truman Show",
+        "type": "Movie",
+        "score": 0.3061862178478973,
+        "contributions": [
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          },
+          {
+            "feature": "identity",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "nurture",
+        "title": "Nurture",
+        "type": "Music",
+        "score": 0.20412414523193154,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 1
+          },
+          {
+            "feature": "identity",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "stardew",
+        "title": "Stardew Valley",
+        "type": "Game",
+        "score": 0.20412414523193154,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 1
+          },
+          {
+            "feature": "romance",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "stranger",
+        "title": "Stranger Things",
+        "type": "TV",
+        "score": 0.20412414523193154,
+        "contributions": [
+          {
+            "feature": "survival",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "earthsea",
+        "title": "A Wizard of Earthsea",
+        "type": "Book",
+        "score": 0.10206207261596577,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "goodplace",
+        "title": "The Good Place",
+        "type": "TV",
+        "score": 0.10206207261596577,
+        "contributions": [
+          {
+            "feature": "humor",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "journey",
+        "title": "Journey",
+        "type": "Game",
+        "score": 0.10206207261596577,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "spirited",
+        "title": "Spirited Away",
+        "type": "Movie",
+        "score": 0.10206207261596577,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "avatar",
+        "title": "Avatar: The Last Airbender",
+        "type": "TV",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "hobbit",
+        "title": "The Hobbit",
+        "type": "Book",
+        "score": 0,
+        "contributions": []
+      }
+    ],
+    "finalRankedResults": [
+      {
+        "id": "resistance",
+        "title": "The Resistance",
+        "type": "Music",
+        "score": 0.6390096504226938,
+        "sharedFeatures": [
+          "dystopian",
+          "rebellion",
+          "science-fiction",
+          "romance"
+        ]
+      },
+      {
+        "id": "severance",
+        "title": "Severance",
+        "type": "TV",
+        "score": 0.6390096504226938,
+        "sharedFeatures": [
+          "dystopian",
+          "rebellion",
+          "science-fiction",
+          "identity"
+        ]
+      },
+      {
+        "id": "arcane",
+        "title": "Arcane",
+        "type": "TV",
+        "score": 0.5103103630798288,
+        "sharedFeatures": [
+          "emotional",
+          "rebellion",
+          "identity"
+        ]
+      },
+      {
+        "id": "boniver",
+        "title": "For Emma, Forever Ago",
+        "type": "Music",
+        "score": 0.5103103630798288,
+        "sharedFeatures": [
+          "emotional",
+          "survival",
+          "romance"
+        ]
+      },
+      {
+        "id": "last",
+        "title": "The Last of Us",
+        "type": "Game",
+        "score": 0.5103103630798288,
+        "sharedFeatures": [
+          "emotional",
+          "survival",
+          "connection"
+        ]
+      },
+      {
+        "id": "station",
+        "title": "Station Eleven",
+        "type": "Book",
+        "score": 0.5103103630798288,
+        "sharedFeatures": [
+          "emotional",
+          "survival",
+          "connection"
+        ]
+      },
+      {
+        "id": "folklore",
+        "title": "folklore",
+        "type": "Music",
+        "score": 0.4082482904638631,
+        "sharedFeatures": [
+          "emotional",
+          "connection",
+          "romance"
+        ]
+      },
+      {
+        "id": "interstellar",
+        "title": "Interstellar",
+        "type": "Movie",
+        "score": 0.4082482904638631,
+        "sharedFeatures": [
+          "emotional",
+          "survival"
+        ]
+      },
+      {
+        "id": "melodrama",
+        "title": "Melodrama",
+        "type": "Music",
+        "score": 0.4082482904638631,
+        "sharedFeatures": [
+          "emotional",
+          "identity",
+          "romance"
+        ]
+      },
+      {
+        "id": "amelie",
+        "title": "Amélie",
+        "type": "Movie",
+        "score": 0.3061862178478973,
+        "sharedFeatures": [
+          "connection",
+          "humor",
+          "romance"
+        ]
+      },
+      {
+        "id": "arrival",
+        "title": "Arrival",
+        "type": "Movie",
+        "score": 0.3061862178478973,
+        "sharedFeatures": [
+          "emotional",
+          "connection"
+        ]
+      },
+      {
+        "id": "hades",
+        "title": "Hades",
+        "type": "Game",
+        "score": 0.3061862178478973,
+        "sharedFeatures": [
+          "rebellion",
+          "identity"
+        ]
+      },
+      {
+        "id": "life",
+        "title": "Life Is Strange",
+        "type": "Game",
+        "score": 0.3061862178478973,
+        "sharedFeatures": [
+          "emotional",
+          "identity"
+        ]
+      },
+      {
+        "id": "truman",
+        "title": "The Truman Show",
+        "type": "Movie",
+        "score": 0.3061862178478973,
+        "sharedFeatures": [
+          "rebellion",
+          "identity"
+        ]
+      },
+      {
+        "id": "nurture",
+        "title": "Nurture",
+        "type": "Music",
+        "score": 0.20412414523193154,
+        "sharedFeatures": [
+          "connection",
+          "identity"
+        ]
+      },
+      {
+        "id": "stardew",
+        "title": "Stardew Valley",
+        "type": "Game",
+        "score": 0.20412414523193154,
+        "sharedFeatures": [
+          "connection",
+          "romance"
+        ]
+      },
+      {
+        "id": "stranger",
+        "title": "Stranger Things",
+        "type": "TV",
+        "score": 0.20412414523193154,
+        "sharedFeatures": [
+          "survival"
+        ]
+      },
+      {
+        "id": "earthsea",
+        "title": "A Wizard of Earthsea",
+        "type": "Book",
+        "score": 0.10206207261596577,
+        "sharedFeatures": [
+          "identity"
+        ]
+      },
+      {
+        "id": "goodplace",
+        "title": "The Good Place",
+        "type": "TV",
+        "score": 0.10206207261596577,
+        "sharedFeatures": [
+          "humor"
+        ]
+      },
+      {
+        "id": "journey",
+        "title": "Journey",
+        "type": "Game",
+        "score": 0.10206207261596577,
+        "sharedFeatures": [
+          "connection"
+        ]
+      },
+      {
+        "id": "spirited",
+        "title": "Spirited Away",
+        "type": "Movie",
+        "score": 0.10206207261596577,
+        "sharedFeatures": [
+          "identity"
+        ]
+      }
+    ]
+  },
+  "after": {
+    "options": {
+      "mode": "for-you",
+      "ratings": {
+        "hunger": 1,
+        "pride": 5
+      }
+    },
+    "vocabulary": [
+      "adventure",
+      "connection",
+      "dystopian",
+      "emotional",
+      "fantasy",
+      "friendship",
+      "hope",
+      "humor",
+      "identity",
+      "mystery",
+      "rebellion",
+      "reflective",
+      "romance",
+      "science-fiction",
+      "survival"
+    ],
+    "itemExample": {
+      "id": "hunger",
+      "vector": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    "profileVector": [
+      0,
+      2,
+      -2,
+      -2,
+      0,
+      0,
+      0,
+      2,
+      2,
+      0,
+      -2,
+      0,
+      2,
+      -2,
+      -2
+    ],
+    "candidateScores": [
+      {
+        "id": "amelie",
+        "title": "Amélie",
+        "type": "Movie",
+        "score": 0.5,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 2
+          },
+          {
+            "feature": "humor",
+            "contribution": 2
+          },
+          {
+            "feature": "romance",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "nurture",
+        "title": "Nurture",
+        "type": "Music",
+        "score": 0.3333333333333333,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 2
+          },
+          {
+            "feature": "identity",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "stardew",
+        "title": "Stardew Valley",
+        "type": "Game",
+        "score": 0.3333333333333333,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 2
+          },
+          {
+            "feature": "romance",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "earthsea",
+        "title": "A Wizard of Earthsea",
+        "type": "Book",
+        "score": 0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "folklore",
+        "title": "folklore",
+        "type": "Music",
+        "score": 0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 2
+          },
+          {
+            "feature": "romance",
+            "contribution": 2
+          },
+          {
+            "feature": "emotional",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "goodplace",
+        "title": "The Good Place",
+        "type": "TV",
+        "score": 0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "humor",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "journey",
+        "title": "Journey",
+        "type": "Game",
+        "score": 0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "melodrama",
+        "title": "Melodrama",
+        "type": "Music",
+        "score": 0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 2
+          },
+          {
+            "feature": "romance",
+            "contribution": 2
+          },
+          {
+            "feature": "emotional",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "spirited",
+        "title": "Spirited Away",
+        "type": "Movie",
+        "score": 0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "arrival",
+        "title": "Arrival",
+        "type": "Movie",
+        "score": 0,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 2
+          },
+          {
+            "feature": "emotional",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "avatar",
+        "title": "Avatar: The Last Airbender",
+        "type": "TV",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "hades",
+        "title": "Hades",
+        "type": "Game",
+        "score": 0,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "hobbit",
+        "title": "The Hobbit",
+        "type": "Book",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "life",
+        "title": "Life Is Strange",
+        "type": "Game",
+        "score": 0,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 2
+          },
+          {
+            "feature": "emotional",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "truman",
+        "title": "The Truman Show",
+        "type": "Movie",
+        "score": 0,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "arcane",
+        "title": "Arcane",
+        "type": "TV",
+        "score": -0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 2
+          },
+          {
+            "feature": "emotional",
+            "contribution": -2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "boniver",
+        "title": "For Emma, Forever Ago",
+        "type": "Music",
+        "score": -0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "romance",
+            "contribution": 2
+          },
+          {
+            "feature": "emotional",
+            "contribution": -2
+          },
+          {
+            "feature": "survival",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "last",
+        "title": "The Last of Us",
+        "type": "Game",
+        "score": -0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 2
+          },
+          {
+            "feature": "emotional",
+            "contribution": -2
+          },
+          {
+            "feature": "survival",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "station",
+        "title": "Station Eleven",
+        "type": "Book",
+        "score": -0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "connection",
+            "contribution": 2
+          },
+          {
+            "feature": "emotional",
+            "contribution": -2
+          },
+          {
+            "feature": "survival",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "stranger",
+        "title": "Stranger Things",
+        "type": "TV",
+        "score": -0.16666666666666666,
+        "contributions": [
+          {
+            "feature": "survival",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "resistance",
+        "title": "The Resistance",
+        "type": "Music",
+        "score": -0.29814239699997197,
+        "contributions": [
+          {
+            "feature": "romance",
+            "contribution": 2
+          },
+          {
+            "feature": "dystopian",
+            "contribution": -2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": -2
+          },
+          {
+            "feature": "science-fiction",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "severance",
+        "title": "Severance",
+        "type": "TV",
+        "score": -0.29814239699997197,
+        "contributions": [
+          {
+            "feature": "identity",
+            "contribution": 2
+          },
+          {
+            "feature": "dystopian",
+            "contribution": -2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": -2
+          },
+          {
+            "feature": "science-fiction",
+            "contribution": -2
+          }
+        ]
+      },
+      {
+        "id": "interstellar",
+        "title": "Interstellar",
+        "type": "Movie",
+        "score": -0.3333333333333333,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": -2
+          },
+          {
+            "feature": "survival",
+            "contribution": -2
+          }
+        ]
+      }
+    ],
+    "finalRankedResults": [
+      {
+        "id": "amelie",
+        "title": "Amélie",
+        "type": "Movie",
+        "score": 0.5,
+        "sharedFeatures": [
+          "connection",
+          "humor",
+          "romance"
+        ]
+      },
+      {
+        "id": "nurture",
+        "title": "Nurture",
+        "type": "Music",
+        "score": 0.3333333333333333,
+        "sharedFeatures": [
+          "connection",
+          "identity"
+        ]
+      },
+      {
+        "id": "stardew",
+        "title": "Stardew Valley",
+        "type": "Game",
+        "score": 0.3333333333333333,
+        "sharedFeatures": [
+          "connection",
+          "romance"
+        ]
+      },
+      {
+        "id": "earthsea",
+        "title": "A Wizard of Earthsea",
+        "type": "Book",
+        "score": 0.16666666666666666,
+        "sharedFeatures": [
+          "identity"
+        ]
+      },
+      {
+        "id": "folklore",
+        "title": "folklore",
+        "type": "Music",
+        "score": 0.16666666666666666,
+        "sharedFeatures": [
+          "connection",
+          "romance"
+        ]
+      },
+      {
+        "id": "goodplace",
+        "title": "The Good Place",
+        "type": "TV",
+        "score": 0.16666666666666666,
+        "sharedFeatures": [
+          "humor"
+        ]
+      },
+      {
+        "id": "journey",
+        "title": "Journey",
+        "type": "Game",
+        "score": 0.16666666666666666,
+        "sharedFeatures": [
+          "connection"
+        ]
+      },
+      {
+        "id": "melodrama",
+        "title": "Melodrama",
+        "type": "Music",
+        "score": 0.16666666666666666,
+        "sharedFeatures": [
+          "identity",
+          "romance"
+        ]
+      },
+      {
+        "id": "spirited",
+        "title": "Spirited Away",
+        "type": "Movie",
+        "score": 0.16666666666666666,
+        "sharedFeatures": [
+          "identity"
+        ]
+      }
+    ]
+  },
+  "basedOn": {
+    "options": {
+      "mode": "based-on",
+      "ratings": {},
+      "seed": {
+        "id": "hunger",
+        "title": "The Hunger Games",
+        "creator": "Suzanne Collins",
+        "type": "Book",
+        "tags": [
+          "survival",
+          "rebellion",
+          "dystopian",
+          "emotional"
+        ],
+        "description": "A young volunteer challenges a society built around a fight for survival.",
+        "schemaVersion": 1,
+        "genres": [
+          "dystopian",
+          "science-fiction"
+        ],
+        "themes": [
+          "survival",
+          "rebellion"
+        ],
+        "moods": [
+          "emotional"
+        ],
+        "creators": [
+          "Suzanne Collins"
+        ],
+        "keywords": [
+          "survival",
+          "rebellion",
+          "dystopian",
+          "emotional"
+        ],
+        "provenance": {
+          "kind": "curated-fixture",
+          "note": "Hand-authored course catalog; not a live API response or verified classification."
+        }
+      },
+      "category": "Music"
+    },
+    "vocabulary": [
+      "adventure",
+      "connection",
+      "dystopian",
+      "emotional",
+      "fantasy",
+      "friendship",
+      "hope",
+      "humor",
+      "identity",
+      "mystery",
+      "rebellion",
+      "reflective",
+      "romance",
+      "science-fiction",
+      "survival"
+    ],
+    "itemExample": {
+      "id": "hunger",
+      "vector": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    "profileVector": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1
+    ],
+    "candidateScores": [
+      {
+        "id": "resistance",
+        "title": "The Resistance",
+        "type": "Music",
+        "score": 0.6,
+        "contributions": [
+          {
+            "feature": "dystopian",
+            "contribution": 1
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 1
+          },
+          {
+            "feature": "science-fiction",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "severance",
+        "title": "Severance",
+        "type": "TV",
+        "score": 0.6,
+        "contributions": [
+          {
+            "feature": "dystopian",
+            "contribution": 1
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 1
+          },
+          {
+            "feature": "science-fiction",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "arcane",
+        "title": "Arcane",
+        "type": "TV",
+        "score": 0.4472135954999579,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 1
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "boniver",
+        "title": "For Emma, Forever Ago",
+        "type": "Music",
+        "score": 0.4472135954999579,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 1
+          },
+          {
+            "feature": "survival",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "interstellar",
+        "title": "Interstellar",
+        "type": "Movie",
+        "score": 0.4472135954999579,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 1
+          },
+          {
+            "feature": "survival",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "last",
+        "title": "The Last of Us",
+        "type": "Game",
+        "score": 0.4472135954999579,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 1
+          },
+          {
+            "feature": "survival",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "station",
+        "title": "Station Eleven",
+        "type": "Book",
+        "score": 0.4472135954999579,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 1
+          },
+          {
+            "feature": "survival",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "arrival",
+        "title": "Arrival",
+        "type": "Movie",
+        "score": 0.22360679774997896,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "folklore",
+        "title": "folklore",
+        "type": "Music",
+        "score": 0.22360679774997896,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "hades",
+        "title": "Hades",
+        "type": "Game",
+        "score": 0.22360679774997896,
+        "contributions": [
+          {
+            "feature": "rebellion",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "life",
+        "title": "Life Is Strange",
+        "type": "Game",
+        "score": 0.22360679774997896,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "melodrama",
+        "title": "Melodrama",
+        "type": "Music",
+        "score": 0.22360679774997896,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "stranger",
+        "title": "Stranger Things",
+        "type": "TV",
+        "score": 0.22360679774997896,
+        "contributions": [
+          {
+            "feature": "survival",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "truman",
+        "title": "The Truman Show",
+        "type": "Movie",
+        "score": 0.22360679774997896,
+        "contributions": [
+          {
+            "feature": "rebellion",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "amelie",
+        "title": "Amélie",
+        "type": "Movie",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "avatar",
+        "title": "Avatar: The Last Airbender",
+        "type": "TV",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "earthsea",
+        "title": "A Wizard of Earthsea",
+        "type": "Book",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "goodplace",
+        "title": "The Good Place",
+        "type": "TV",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "hobbit",
+        "title": "The Hobbit",
+        "type": "Book",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "journey",
+        "title": "Journey",
+        "type": "Game",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "nurture",
+        "title": "Nurture",
+        "type": "Music",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "pride",
+        "title": "Pride and Prejudice",
+        "type": "Book",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "spirited",
+        "title": "Spirited Away",
+        "type": "Movie",
+        "score": 0,
+        "contributions": []
+      },
+      {
+        "id": "stardew",
+        "title": "Stardew Valley",
+        "type": "Game",
+        "score": 0,
+        "contributions": []
+      }
+    ],
+    "finalRankedResults": [
+      {
+        "id": "resistance",
+        "title": "The Resistance",
+        "type": "Music",
+        "score": 0.6,
+        "sharedFeatures": [
+          "dystopian",
+          "rebellion",
+          "science-fiction"
+        ]
+      },
+      {
+        "id": "boniver",
+        "title": "For Emma, Forever Ago",
+        "type": "Music",
+        "score": 0.4472135954999579,
+        "sharedFeatures": [
+          "emotional",
+          "survival"
+        ]
+      },
+      {
+        "id": "folklore",
+        "title": "folklore",
+        "type": "Music",
+        "score": 0.22360679774997896,
+        "sharedFeatures": [
+          "emotional"
+        ]
+      },
+      {
+        "id": "melodrama",
+        "title": "Melodrama",
+        "type": "Music",
+        "score": 0.22360679774997896,
+        "sharedFeatures": [
+          "emotional"
+        ]
+      }
+    ]
+  },
+  "mixed": {
+    "options": {
+      "mode": "for-you",
+      "ratings": {
+        "hunger": 5,
+        "interstellar": 4,
+        "stranger": 5
+      }
+    },
+    "vocabulary": [
+      "adventure",
+      "connection",
+      "dystopian",
+      "emotional",
+      "fantasy",
+      "friendship",
+      "hope",
+      "humor",
+      "identity",
+      "mystery",
+      "rebellion",
+      "reflective",
+      "romance",
+      "science-fiction",
+      "survival"
+    ],
+    "itemExample": {
+      "id": "hunger",
+      "vector": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    "profileVector": [
+      3,
+      0,
+      2,
+      3,
+      0,
+      2,
+      1,
+      0,
+      0,
+      2,
+      2,
+      0,
+      0,
+      2,
+      5
+    ],
+    "candidateScores": [
+      {
+        "id": "last",
+        "title": "The Last of Us",
+        "type": "Game",
+        "score": 0.6875,
+        "contributions": [
+          {
+            "feature": "survival",
+            "contribution": 5
+          },
+          {
+            "feature": "adventure",
+            "contribution": 3
+          },
+          {
+            "feature": "emotional",
+            "contribution": 3
+          }
+        ]
+      },
+      {
+        "id": "boniver",
+        "title": "For Emma, Forever Ago",
+        "type": "Music",
+        "score": 0.5,
+        "contributions": [
+          {
+            "feature": "survival",
+            "contribution": 5
+          },
+          {
+            "feature": "emotional",
+            "contribution": 3
+          }
+        ]
+      },
+      {
+        "id": "station",
+        "title": "Station Eleven",
+        "type": "Book",
+        "score": 0.5,
+        "contributions": [
+          {
+            "feature": "survival",
+            "contribution": 5
+          },
+          {
+            "feature": "emotional",
+            "contribution": 3
+          }
+        ]
+      },
+      {
+        "id": "severance",
+        "title": "Severance",
+        "type": "TV",
+        "score": 0.4472135954999579,
+        "contributions": [
+          {
+            "feature": "dystopian",
+            "contribution": 2
+          },
+          {
+            "feature": "mystery",
+            "contribution": 2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          },
+          {
+            "feature": "science-fiction",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "life",
+        "title": "Life Is Strange",
+        "type": "Game",
+        "score": 0.4375,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 3
+          },
+          {
+            "feature": "friendship",
+            "contribution": 2
+          },
+          {
+            "feature": "mystery",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "resistance",
+        "title": "The Resistance",
+        "type": "Music",
+        "score": 0.3913118960624632,
+        "contributions": [
+          {
+            "feature": "dystopian",
+            "contribution": 2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          },
+          {
+            "feature": "science-fiction",
+            "contribution": 2
+          },
+          {
+            "feature": "hope",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "avatar",
+        "title": "Avatar: The Last Airbender",
+        "type": "TV",
+        "score": 0.375,
+        "contributions": [
+          {
+            "feature": "adventure",
+            "contribution": 3
+          },
+          {
+            "feature": "friendship",
+            "contribution": 2
+          },
+          {
+            "feature": "hope",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "hobbit",
+        "title": "The Hobbit",
+        "type": "Book",
+        "score": 0.375,
+        "contributions": [
+          {
+            "feature": "adventure",
+            "contribution": 3
+          },
+          {
+            "feature": "friendship",
+            "contribution": 2
+          },
+          {
+            "feature": "hope",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "arcane",
+        "title": "Arcane",
+        "type": "TV",
+        "score": 0.3125,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 3
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "arrival",
+        "title": "Arrival",
+        "type": "Movie",
+        "score": 0.3125,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 3
+          },
+          {
+            "feature": "mystery",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "hades",
+        "title": "Hades",
+        "type": "Game",
+        "score": 0.3125,
+        "contributions": [
+          {
+            "feature": "adventure",
+            "contribution": 3
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "spirited",
+        "title": "Spirited Away",
+        "type": "Movie",
+        "score": 0.3125,
+        "contributions": [
+          {
+            "feature": "adventure",
+            "contribution": 3
+          },
+          {
+            "feature": "friendship",
+            "contribution": 2
+          }
+        ]
+      },
+      {
+        "id": "truman",
+        "title": "The Truman Show",
+        "type": "Movie",
+        "score": 0.3125,
+        "contributions": [
+          {
+            "feature": "mystery",
+            "contribution": 2
+          },
+          {
+            "feature": "rebellion",
+            "contribution": 2
+          },
+          {
+            "feature": "hope",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "journey",
+        "title": "Journey",
+        "type": "Game",
+        "score": 0.25,
+        "contributions": [
+          {
+            "feature": "adventure",
+            "contribution": 3
+          },
+          {
+            "feature": "hope",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "earthsea",
+        "title": "A Wizard of Earthsea",
+        "type": "Book",
+        "score": 0.1875,
+        "contributions": [
+          {
+            "feature": "adventure",
+            "contribution": 3
+          }
+        ]
+      },
+      {
+        "id": "folklore",
+        "title": "folklore",
+        "type": "Music",
+        "score": 0.1875,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 3
+          }
+        ]
+      },
+      {
+        "id": "goodplace",
+        "title": "The Good Place",
+        "type": "TV",
+        "score": 0.1875,
+        "contributions": [
+          {
+            "feature": "friendship",
+            "contribution": 2
+          },
+          {
+            "feature": "hope",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "melodrama",
+        "title": "Melodrama",
+        "type": "Music",
+        "score": 0.1875,
+        "contributions": [
+          {
+            "feature": "emotional",
+            "contribution": 3
+          }
+        ]
+      },
+      {
+        "id": "amelie",
+        "title": "Amélie",
+        "type": "Movie",
+        "score": 0.0625,
+        "contributions": [
+          {
+            "feature": "hope",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "nurture",
+        "title": "Nurture",
+        "type": "Music",
+        "score": 0.0625,
+        "contributions": [
+          {
+            "feature": "hope",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "stardew",
+        "title": "Stardew Valley",
+        "type": "Game",
+        "score": 0.0625,
+        "contributions": [
+          {
+            "feature": "hope",
+            "contribution": 1
+          }
+        ]
+      },
+      {
+        "id": "pride",
+        "title": "Pride and Prejudice",
+        "type": "Book",
+        "score": 0,
+        "contributions": []
+      }
+    ],
+    "finalRankedResults": [
+      {
+        "id": "last",
+        "title": "The Last of Us",
+        "type": "Game",
+        "score": 0.6875,
+        "sharedFeatures": [
+          "survival",
+          "adventure",
+          "emotional"
+        ]
+      },
+      {
+        "id": "boniver",
+        "title": "For Emma, Forever Ago",
+        "type": "Music",
+        "score": 0.5,
+        "sharedFeatures": [
+          "survival",
+          "emotional"
+        ]
+      },
+      {
+        "id": "station",
+        "title": "Station Eleven",
+        "type": "Book",
+        "score": 0.5,
+        "sharedFeatures": [
+          "survival",
+          "emotional"
+        ]
+      },
+      {
+        "id": "severance",
+        "title": "Severance",
+        "type": "TV",
+        "score": 0.4472135954999579,
+        "sharedFeatures": [
+          "dystopian",
+          "mystery",
+          "rebellion",
+          "science-fiction"
+        ]
+      },
+      {
+        "id": "life",
+        "title": "Life Is Strange",
+        "type": "Game",
+        "score": 0.4375,
+        "sharedFeatures": [
+          "emotional",
+          "friendship",
+          "mystery"
+        ]
+      },
+      {
+        "id": "resistance",
+        "title": "The Resistance",
+        "type": "Music",
+        "score": 0.3913118960624632,
+        "sharedFeatures": [
+          "dystopian",
+          "rebellion",
+          "science-fiction",
+          "hope"
+        ]
+      },
+      {
+        "id": "avatar",
+        "title": "Avatar: The Last Airbender",
+        "type": "TV",
+        "score": 0.375,
+        "sharedFeatures": [
+          "adventure",
+          "friendship",
+          "hope"
+        ]
+      },
+      {
+        "id": "hobbit",
+        "title": "The Hobbit",
+        "type": "Book",
+        "score": 0.375,
+        "sharedFeatures": [
+          "adventure",
+          "friendship",
+          "hope"
+        ]
+      },
+      {
+        "id": "arcane",
+        "title": "Arcane",
+        "type": "TV",
+        "score": 0.3125,
+        "sharedFeatures": [
+          "emotional",
+          "rebellion"
+        ]
+      },
+      {
+        "id": "arrival",
+        "title": "Arrival",
+        "type": "Movie",
+        "score": 0.3125,
+        "sharedFeatures": [
+          "emotional",
+          "mystery"
+        ]
+      },
+      {
+        "id": "hades",
+        "title": "Hades",
+        "type": "Game",
+        "score": 0.3125,
+        "sharedFeatures": [
+          "adventure",
+          "rebellion"
+        ]
+      },
+      {
+        "id": "spirited",
+        "title": "Spirited Away",
+        "type": "Movie",
+        "score": 0.3125,
+        "sharedFeatures": [
+          "adventure",
+          "friendship"
+        ]
+      },
+      {
+        "id": "truman",
+        "title": "The Truman Show",
+        "type": "Movie",
+        "score": 0.3125,
+        "sharedFeatures": [
+          "mystery",
+          "rebellion",
+          "hope"
+        ]
+      },
+      {
+        "id": "journey",
+        "title": "Journey",
+        "type": "Game",
+        "score": 0.25,
+        "sharedFeatures": [
+          "adventure",
+          "hope"
+        ]
+      },
+      {
+        "id": "earthsea",
+        "title": "A Wizard of Earthsea",
+        "type": "Book",
+        "score": 0.1875,
+        "sharedFeatures": [
+          "adventure"
+        ]
+      },
+      {
+        "id": "folklore",
+        "title": "folklore",
+        "type": "Music",
+        "score": 0.1875,
+        "sharedFeatures": [
+          "emotional"
+        ]
+      },
+      {
+        "id": "goodplace",
+        "title": "The Good Place",
+        "type": "TV",
+        "score": 0.1875,
+        "sharedFeatures": [
+          "friendship",
+          "hope"
+        ]
+      },
+      {
+        "id": "melodrama",
+        "title": "Melodrama",
+        "type": "Music",
+        "score": 0.1875,
+        "sharedFeatures": [
+          "emotional"
+        ]
+      },
+      {
+        "id": "amelie",
+        "title": "Amélie",
+        "type": "Movie",
+        "score": 0.0625,
+        "sharedFeatures": [
+          "hope"
+        ]
+      },
+      {
+        "id": "nurture",
+        "title": "Nurture",
+        "type": "Music",
+        "score": 0.0625,
+        "sharedFeatures": [
+          "hope"
+        ]
+      },
+      {
+        "id": "stardew",
+        "title": "Stardew Valley",
+        "type": "Game",
+        "score": 0.0625,
+        "sharedFeatures": [
+          "hope"
+        ]
+      }
+    ]
+  }
+}

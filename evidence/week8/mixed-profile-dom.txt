@@ -1,0 +1,356 @@
+- main:
+  - link "← Mosaic":
+    - /url: /
+  - text: ·
+  - link "Weeks 4 & 6":
+    - /url: /milestones/
+  - heading "Week 8 · Your taste across media" [level=1]
+  - paragraph: This course workspace uses the 25 curated JSON records, including games and music. These are not live API recommendations. The normal Mosaic interface keeps its supported media and also offers this cosine method.
+  - paragraph: "Rating signals: 5 → +2; 4 → +1; 3 → 0; 2 → −1; 1 → −2. Shared negative features lower scores. Creators are excluded. Results are ordered by actual cosine score, with no AI, story tiers or variety adjustment."
+  - heading "Your ratings" [level=2]
+  - paragraph: Changes recalculate immediately and are saved separately in this browser.
+  - text: The Hunger Games
+  - generic: Book
+  - combobox "Rate The Hunger Games":
+    - option "Not rated"
+    - option "5 stars" [selected]
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: A Wizard of Earthsea
+  - generic: Book
+  - combobox "Rate A Wizard of Earthsea":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Station Eleven
+  - generic: Book
+  - combobox "Rate Station Eleven":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Pride and Prejudice
+  - generic: Book
+  - combobox "Rate Pride and Prejudice":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: The Hobbit
+  - generic: Book
+  - combobox "Rate The Hobbit":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: The Last of Us
+  - generic: Game
+  - combobox "Rate The Last of Us":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Life Is Strange
+  - generic: Game
+  - combobox "Rate Life Is Strange":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Journey
+  - generic: Game
+  - combobox "Rate Journey":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Hades
+  - generic: Game
+  - combobox "Rate Hades":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Stardew Valley
+  - generic: Game
+  - combobox "Rate Stardew Valley":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Interstellar
+  - generic: Movie
+  - combobox "Rate Interstellar":
+    - option "Not rated"
+    - option "5 stars"
+    - option "4 stars" [selected]
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Spirited Away
+  - generic: Movie
+  - combobox "Rate Spirited Away":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Arrival
+  - generic: Movie
+  - combobox "Rate Arrival":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: The Truman Show
+  - generic: Movie
+  - combobox "Rate The Truman Show":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Amélie
+  - generic: Movie
+  - combobox "Rate Amélie":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Stranger Things
+  - generic: TV
+  - combobox "Rate Stranger Things":
+    - option "Not rated"
+    - option "5 stars" [selected]
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Severance
+  - generic: TV
+  - combobox "Rate Severance":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: The Good Place
+  - generic: TV
+  - combobox "Rate The Good Place":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: "Avatar: The Last Airbender"
+  - generic: TV
+  - 'combobox "Rate Avatar: The Last Airbender"':
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Arcane
+  - generic: TV
+  - combobox "Rate Arcane":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: folklore
+  - generic: Music
+  - combobox "Rate folklore":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: The Resistance
+  - generic: Music
+  - combobox "Rate The Resistance":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Melodrama
+  - generic: Music
+  - combobox "Rate Melodrama":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: Nurture
+  - generic: Music
+  - combobox "Rate Nurture":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - text: For Emma, Forever Ago
+  - generic: Music
+  - combobox "Rate For Emma, Forever Ago":
+    - option "Not rated" [selected]
+    - option "5 stars"
+    - option "4 stars"
+    - option "3 stars"
+    - option "2 stars"
+    - option "1 stars"
+  - heading "Discover" [level=2]
+  - group "Discovery mode":
+    - button "For You" [active] [pressed]
+    - button "Based On"
+  - text: Target media
+  - combobox "Target media":
+    - option "All" [selected]
+    - option "Book"
+    - option "Music"
+    - option "Game"
+    - option "Movie"
+    - option "TV"
+  - list:
+    - heading "The Last of Us" [level=3]
+    - paragraph:
+      - text: "Game · Cosine score:"
+      - strong: "0.687500"
+    - paragraph: Recommended because it shares survival, adventure, emotional with positive features in your rated profile.
+    - heading "For Emma, Forever Ago" [level=3]
+    - paragraph:
+      - text: "Music · Cosine score:"
+      - strong: "0.500000"
+    - paragraph: Recommended because it shares survival, emotional with positive features in your rated profile.
+    - heading "Station Eleven" [level=3]
+    - paragraph:
+      - text: "Book · Cosine score:"
+      - strong: "0.500000"
+    - paragraph: Recommended because it shares survival, emotional with positive features in your rated profile.
+    - heading "Severance" [level=3]
+    - paragraph:
+      - text: "TV · Cosine score:"
+      - strong: "0.447214"
+    - paragraph: Recommended because it shares dystopian, mystery, rebellion, science-fiction with positive features in your rated profile.
+    - heading "Life Is Strange" [level=3]
+    - paragraph:
+      - text: "Game · Cosine score:"
+      - strong: "0.437500"
+    - paragraph: Recommended because it shares emotional, friendship, mystery with positive features in your rated profile.
+    - heading "The Resistance" [level=3]
+    - paragraph:
+      - text: "Music · Cosine score:"
+      - strong: "0.391312"
+    - paragraph: Recommended because it shares dystopian, rebellion, science-fiction, hope with positive features in your rated profile.
+    - 'heading "Avatar: The Last Airbender" [level=3]'
+    - paragraph:
+      - text: "TV · Cosine score:"
+      - strong: "0.375000"
+    - paragraph: Recommended because it shares adventure, friendship, hope with positive features in your rated profile.
+    - heading "The Hobbit" [level=3]
+    - paragraph:
+      - text: "Book · Cosine score:"
+      - strong: "0.375000"
+    - paragraph: Recommended because it shares adventure, friendship, hope with positive features in your rated profile.
+    - heading "Arcane" [level=3]
+    - paragraph:
+      - text: "TV · Cosine score:"
+      - strong: "0.312500"
+    - paragraph: Recommended because it shares emotional, rebellion with positive features in your rated profile.
+    - heading "Arrival" [level=3]
+    - paragraph:
+      - text: "Movie · Cosine score:"
+      - strong: "0.312500"
+    - paragraph: Recommended because it shares emotional, mystery with positive features in your rated profile.
+    - heading "Hades" [level=3]
+    - paragraph:
+      - text: "Game · Cosine score:"
+      - strong: "0.312500"
+    - paragraph: Recommended because it shares adventure, rebellion with positive features in your rated profile.
+    - heading "Spirited Away" [level=3]
+    - paragraph:
+      - text: "Movie · Cosine score:"
+      - strong: "0.312500"
+    - paragraph: Recommended because it shares adventure, friendship with positive features in your rated profile.
+    - heading "The Truman Show" [level=3]
+    - paragraph:
+      - text: "Movie · Cosine score:"
+      - strong: "0.312500"
+    - paragraph: Recommended because it shares mystery, rebellion, hope with positive features in your rated profile.
+    - heading "Journey" [level=3]
+    - paragraph:
+      - text: "Game · Cosine score:"
+      - strong: "0.250000"
+    - paragraph: Recommended because it shares adventure, hope with positive features in your rated profile.
+    - heading "A Wizard of Earthsea" [level=3]
+    - paragraph:
+      - text: "Book · Cosine score:"
+      - strong: "0.187500"
+    - paragraph: Recommended because it shares adventure with positive features in your rated profile.
+    - heading "folklore" [level=3]
+    - paragraph:
+      - text: "Music · Cosine score:"
+      - strong: "0.187500"
+    - paragraph: Recommended because it shares emotional with positive features in your rated profile.
+    - heading "The Good Place" [level=3]
+    - paragraph:
+      - text: "TV · Cosine score:"
+      - strong: "0.187500"
+    - paragraph: Recommended because it shares friendship, hope with positive features in your rated profile.
+    - heading "Melodrama" [level=3]
+    - paragraph:
+      - text: "Music · Cosine score:"
+      - strong: "0.187500"
+    - paragraph: Recommended because it shares emotional with positive features in your rated profile.
+    - heading "Amélie" [level=3]
+    - paragraph:
+      - text: "Movie · Cosine score:"
+      - strong: "0.062500"
+    - paragraph: Recommended because it shares hope with positive features in your rated profile.
+    - heading "Nurture" [level=3]
+    - paragraph:
+      - text: "Music · Cosine score:"
+      - strong: "0.062500"
+    - paragraph: Recommended because it shares hope with positive features in your rated profile.
+    - heading "Stardew Valley" [level=3]
+    - paragraph:
+      - text: "Game · Cosine score:"
+      - strong: "0.062500"
+    - paragraph: Recommended because it shares hope with positive features in your rated profile.
+  - generic "Inspect vocabulary, vectors and every candidate score"
+  - button "Download Week 8 evidence"
