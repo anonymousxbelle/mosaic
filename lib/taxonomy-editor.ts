@@ -36,5 +36,5 @@ export function canonicalTag(tag:string,nodes:Record<string,TaxonomyNode>){const
 export function previewSuggestions(nodes:Record<string,TaxonomyNode>,tags:string[],media:string,contentClass:string){
  const known=new Set(tags.map(t=>canonicalTag(t,nodes)));
  for(let i=0;i<Object.keys(nodes).length;i++){const size=known.size;for(const tag of [...known])for(const p of nodes[tag]?.parents||[])known.add(p);if(size===known.size)break;}
- return Object.entries(nodes).filter(([,n])=>!n.retired&&(!n.media?.length||n.media.includes(media))&&(!n.classes?.length||n.classes.includes(contentClass as never))&&(!n.parents?.length||n.parents.some(p=>known.has(p)))).map(([id])=>id).sort();
+ return Object.entries(nodes).filter(([id,n])=>!n.retired&&(n.kind!=='class'||id===contentClass)&&(!n.media?.length||n.media.includes(media))&&(!n.classes?.length||n.classes.includes(contentClass as never))&&(!n.parents?.length||n.parents.some(p=>known.has(p)))).map(([id])=>id).sort();
 }
