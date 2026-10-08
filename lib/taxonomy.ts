@@ -1,6 +1,6 @@
 // A title can have several genres and facets. Unknown content class stays unknown.
 export type ContentClass='fiction'|'non-fiction'|'unknown';
-export type TaxonomyKind='class'|'genre'|'subgenre'|'theme'|'trope'|'setting'|'tone'|'audience'|'format';
+export type TaxonomyKind='class'|'genre'|'subgenre'|'subject'|'theme'|'trope'|'setting'|'tone'|'audience'|'format';
 export type TaxonomyNode={kind:TaxonomyKind;classes?:ContentClass[];parents?:string[];media?:string[];description:string;label?:string;aliases?:string[];retired?:boolean};
 export const taxonomy:Record<string,TaxonomyNode>={};
 function add(kind:TaxonomyKind,ids:string[],classes?:ContentClass[],parents?:string[],media?:string[]){

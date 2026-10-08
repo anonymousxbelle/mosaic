@@ -1,6 +1,6 @@
 import {taxonomy, type TaxonomyKind} from './taxonomy.ts';
 export type FeatureKind = TaxonomyKind;
-export const featureLabels: Record<FeatureKind, string> = {class:'Fiction / nonfiction',genre:'Genres',subgenre:'Subgenres',theme:'Themes',trope:'Tropes / premises',setting:'Settings',tone:'Tone',audience:'Audience',format:'Format'};
+export const featureLabels: Record<FeatureKind, string> = {class:'Fiction / nonfiction',genre:'Genres',subgenre:'Subgenres',subject:'Subjects',theme:'Themes',trope:'Tropes / premises',setting:'Settings',tone:'Tone',audience:'Audience',format:'Format'};
 export const featureGroups: Record<string, string[]> = {
   sports: [
     'basketball',

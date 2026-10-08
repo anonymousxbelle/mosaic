@@ -1,5 +1,5 @@
 import type {TaxonomyNode} from './taxonomy.ts';
-export const kinds=['class','genre','subgenre','theme','trope','setting','tone','audience','format'] as const;
+export const kinds=['class','genre','subgenre','subject','theme','trope','setting','tone','audience','format'] as const;
 export type TaxonomyDocument={version:1;nodes:Record<string,TaxonomyNode>};
 export const slug=(s:string)=>s.normalize('NFKC').trim().toLowerCase().replace(/[\s_]+/g,'-');
 export function validateTaxonomy(value:unknown):string[]{
