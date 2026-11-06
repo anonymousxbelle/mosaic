@@ -86,7 +86,13 @@
       "classes": [
         "fiction"
       ],
-      "description": "Physical conflict, chases or combat are prominent."
+      "description": "Physical conflict, chases or combat are prominent.",
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game"
+      ]
     },
     "adventure": {
       "kind": "genre",
@@ -94,18 +100,18 @@
         "fiction",
         "non-fiction"
       ],
-      "description": "Journeys, quests, exploration or daring challenges."
+      "description": "Journeys, quests, exploration or daring challenges.",
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game"
+      ]
     },
     "history": {
-      "kind": "genre",
-      "classes": [
-        "fiction",
-        "non-fiction"
-      ],
-      "description": "Works concerned with past events; may be fiction or nonfiction.",
-      "aliases": [
-        "historical"
-      ]
+      "kind": "subject",
+      "description": "Past events, societies or historical inquiry are central subjects. This does not establish whether a work is fiction or nonfiction, or identify a particular period.",
+      "label": "History"
     },
     "humor": {
       "kind": "genre",
@@ -116,7 +122,8 @@
       "description": "Comedy or amusement is a significant part of the work.",
       "aliases": [
         "comedy"
-      ]
+      ],
+      "label": "comedy/humor"
     },
     "sports": {
       "kind": "genre",
@@ -131,10 +138,20 @@
       "classes": [
         "non-fiction"
       ],
-      "description": "An account of another personâ€™s life."
+      "description": "Factual accounts exploring the lives, experiences, relationships, achievements, and historical or cultural significance of real people.",
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game"
+      ],
+      "aliases": [
+        "biographical-works",
+        "biographies"
+      ]
     },
     "memoir": {
-      "kind": "genre",
+      "kind": "format",
       "classes": [
         "non-fiction"
       ],
@@ -155,51 +172,47 @@
       "description": "Practical advice for personal improvement."
     },
     "true-crime": {
-      "kind": "genre",
+      "kind": "subgenre",
       "classes": [
         "non-fiction"
       ],
-      "description": "Factual accounts of crimes and investigations."
+      "description": "Factual accounts of crimes and investigations.",
+      "parents": [
+        "crime"
+      ]
     },
     "nature": {
       "kind": "subject",
-      "description": "Wildlife, ecosystems or the natural world are a central subject, in fiction or nonfiction."
+      "description": "Wildlife, ecosystems or the natural world are central subjects, in fiction or nonfiction.",
+      "label": "Nature"
     },
     "travel": {
-      "kind": "genre",
-      "classes": [
-        "non-fiction"
-      ],
-      "description": "Factual accounts or guidance about places and journeys."
+      "kind": "subject",
+      "description": "Travel, journeys or experiences of places are central subjects, in factual accounts or fiction.",
+      "label": "Travel"
     },
     "politics": {
-      "kind": "genre",
-      "classes": [
-        "non-fiction"
-      ],
-      "description": "Factual works about government, public policy and political power."
+      "kind": "subject",
+      "description": "Government, political institutions, public policy or political power are central subjects.",
+      "label": "Politics"
     },
     "philosophy": {
-      "kind": "genre",
-      "classes": [
-        "non-fiction"
-      ],
-      "description": "Works examining knowledge, ethics, existence and reasoning."
+      "kind": "subject",
+      "description": "Questions of knowledge, ethics, existence or reasoning are central subjects.",
+      "label": "Philosophy"
     },
     "arts": {
       "kind": "subject",
-      "description": "Art, artists and creative practices are a central subject, in fiction or nonfiction.",
+      "description": "Art, artists and creative practices are central subjects, whether presented factually or through fiction.",
       "label": "Art",
       "aliases": [
         "art"
       ]
     },
     "technology": {
-      "kind": "genre",
-      "classes": [
-        "non-fiction"
-      ],
-      "description": "Factual works about technological systems, inventions and their effects."
+      "kind": "subject",
+      "description": "Technological systems, inventions or their effects on society are central subjects.",
+      "label": "Technology"
     },
     "epic-fantasy": {
       "kind": "subgenre",
@@ -229,7 +242,13 @@
       "parents": [
         "fantasy"
       ],
-      "description": "Fantasy with disturbing, bleak or horror elements."
+      "description": "Fantasy with disturbing, bleak or horror elements.",
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game"
+      ]
     },
     "mythic-fantasy": {
       "kind": "subgenre",
@@ -329,7 +348,12 @@
       "parents": [
         "mystery"
       ],
-      "description": "A mystery emphasizing community and investigation with limited graphic violence."
+      "description": "A mystery emphasizing community and investigation with limited graphic violence.",
+      "aliases": [
+        "cozy-mysteries",
+        "cosy-mystery",
+        "cosy-mysteries"
+      ]
     },
     "detective-fiction": {
       "kind": "subgenre",
@@ -339,7 +363,7 @@
       "parents": [
         "mystery"
       ],
-      "description": "A detective investigates and solves a mystery."
+      "description": "Fiction centered on investigators who use clues, observation, evidence or deduction to solve mysteries, with the investigative process central to the narrative."
     },
     "police-procedural": {
       "kind": "subgenre",
@@ -367,9 +391,10 @@
         "fiction"
       ],
       "parents": [
-        "thriller"
+        "thriller",
+        "crime"
       ],
-      "description": "Criminal activity creates danger and suspense."
+      "description": "Suspense-driven fiction centered on criminal activity, investigations, or the pursuit of criminals."
     },
     "spy-thriller": {
       "kind": "subgenre",
@@ -409,7 +434,10 @@
       "parents": [
         "horror"
       ],
-      "description": "Fear of vast, incomprehensible forces and human insignificance."
+      "description": "Fear of vast, incomprehensible forces and human insignificance.",
+      "aliases": [
+        "lovecraftian-horror"
+      ]
     },
     "historical-romance": {
       "kind": "subgenre",
@@ -429,7 +457,10 @@
       "parents": [
         "romance"
       ],
-      "description": "A central love story in a contemporary setting."
+      "description": "A central love story in a contemporary setting.",
+      "aliases": [
+        "modern-romance"
+      ]
     },
     "paranormal-romance": {
       "kind": "subgenre",
@@ -447,17 +478,15 @@
         "fiction"
       ],
       "parents": [
-        "romance"
+        "romance",
+        "humor"
       ],
       "description": "A romantic story with a strong comedic focus."
     },
     "historical-fiction": {
-      "kind": "subgenre",
+      "kind": "genre",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "history"
       ],
       "description": "An invented story set in a recognizable past period."
     },
@@ -477,7 +506,8 @@
         "fiction"
       ],
       "parents": [
-        "drama"
+        "drama",
+        "sports"
       ],
       "description": "A character-driven drama centered on sport."
     },
@@ -500,7 +530,7 @@
       "parents": [
         "biography"
       ],
-      "description": "An account of a real personâ€™s life focused on political activity."
+      "description": "An account of a real person’s life focused on political activity."
     },
     "scientific-biography": {
       "kind": "subgenre",
@@ -510,7 +540,7 @@
       "parents": [
         "biography"
       ],
-      "description": "An account of a real scientistâ€™s life and work."
+      "description": "An account of a real scientist’s life and work."
     },
     "artist-biography": {
       "kind": "subgenre",
@@ -520,7 +550,7 @@
       "parents": [
         "biography"
       ],
-      "description": "An account of a real artistâ€™s life and creative work."
+      "description": "An account of a real artist’s life and creative work."
     },
     "travel-memoir": {
       "kind": "subgenre",
@@ -543,34 +573,22 @@
       "description": "A personal recollection focused on real family relationships and history."
     },
     "astronomy": {
-      "kind": "subgenre",
-      "classes": [
-        "non-fiction"
+      "kind": "subject",
+      "description": "Celestial bodies, astronomical observation or the study of the universe are central subjects; a space setting alone is insufficient.",
+      "aliases": [
+        "astronomical-science"
       ],
-      "parents": [
-        "popular-science"
-      ],
-      "description": "Factual study of celestial bodies and the universe."
+      "label": "Astronomy"
     },
     "psychology": {
-      "kind": "subgenre",
-      "classes": [
-        "non-fiction"
-      ],
-      "parents": [
-        "popular-science"
-      ],
-      "description": "Factual study of mind, behavior and mental processes."
+      "kind": "subject",
+      "description": "Mind, behavior or mental processes are central subjects; this does not by itself imply psychological thriller.",
+      "label": "Psychology"
     },
     "natural-history": {
-      "kind": "subgenre",
-      "classes": [
-        "non-fiction"
-      ],
-      "parents": [
-        "popular-science"
-      ],
-      "description": "Factual observation of organisms and the natural world."
+      "kind": "subject",
+      "description": "Organisms, ecosystems and the development of the natural world are central subjects.",
+      "label": "Natural history"
     },
     "personal-growth": {
       "kind": "subgenre",
@@ -608,7 +626,14 @@
         "Movie",
         "TV"
       ],
-      "description": "A work made using animation; it can suit any age group."
+      "description": "Works created wholly or substantially through animated imagery.",
+      "aliases": [
+        "animated"
+      ],
+      "classes": [
+        "non-fiction",
+        "fiction"
+      ]
     },
     "anime": {
       "kind": "subgenre",
@@ -619,7 +644,14 @@
         "Movie",
         "TV"
       ],
-      "description": "Japanese animation, or works explicitly classified as anime by the source."
+      "description": "Japanese animation, or works explicitly classified as anime by the source.",
+      "aliases": [
+        "japanese-animation"
+      ],
+      "classes": [
+        "non-fiction",
+        "fiction"
+      ]
     },
     "donghua": {
       "kind": "subgenre",
@@ -687,7 +719,14 @@
       "media": [
         "Book"
       ],
-      "description": "A book belongs to a series; this is separate from its volume number."
+      "description": "A book belongs to a named collection of related volumes. This compatibility label does not establish volume order; series identity and position should be stored separately.",
+      "aliases": [
+        "literary-series"
+      ],
+      "classes": [
+        "fiction",
+        "non-fiction"
+      ]
     },
     "friendship": {
       "kind": "theme",
@@ -703,7 +742,7 @@
     },
     "self-discovery": {
       "kind": "theme",
-      "description": "Learning about oneâ€™s identity, values or desires."
+      "description": "Learning about one’s identity, values or desires."
     },
     "grief": {
       "kind": "theme",
@@ -715,29 +754,30 @@
     },
     "connection": {
       "kind": "theme",
-      "description": "Relationships and interpersonal bonds."
+      "description": "Relationships and interpersonal bonds.",
+      "classes": [
+        "fiction",
+        "non-fiction"
+      ],
+      "aliases": [
+        "human-connection"
+      ]
     },
     "rebellion": {
       "kind": "theme",
       "description": "Resistance against authority or an established order."
     },
     "magic": {
-      "kind": "theme",
+      "kind": "subject",
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "fantasy"
-      ],
-      "description": "Supernatural powers, spells or enchantment are present."
+      "description": "Supernatural powers, spells or enchantment are central to the fictional work. Stage illusion or factual study of magical beliefs does not by itself qualify."
     },
     "hidden-world": {
-      "kind": "theme",
+      "kind": "trope",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "fantasy"
       ],
       "description": "A secret world exists alongside ordinary life."
     },
@@ -746,152 +786,84 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "fantasy"
-      ],
       "description": "A conflict framed around opposing moral forces."
     },
     "basketball": {
-      "kind": "theme",
-      "parents": [
-        "sports"
-      ],
-      "description": "Basketball competition, players or teams are central."
+      "kind": "subject",
+      "description": "Basketball players, teams, training or competition are central subjects.",
+      "label": "Basketball"
     },
     "football": {
-      "kind": "theme",
-      "parents": [
-        "sports"
-      ],
-      "description": "Football or soccer is a central sport."
+      "kind": "subject",
+      "description": "A football code is central, but the available metadata does not distinguish association football, American football or another code. Do not assume which code is meant.",
+      "label": "Football (unspecified code)"
     },
     "baseball": {
-      "kind": "theme",
-      "parents": [
-        "sports"
-      ],
-      "description": "Baseball competition, players or teams are central."
+      "kind": "subject",
+      "description": "Baseball players, teams, training or competition are central subjects.",
+      "label": "Baseball"
     },
     "competition": {
       "kind": "theme",
-      "parents": [
-        "sports"
-      ],
-      "description": "Rivalry or contests are central to the subject or story."
+      "description": "Rivalry or contests are central to the subject or story.",
+      "classes": [
+        "fiction",
+        "non-fiction"
+      ]
     },
     "teamwork": {
       "kind": "theme",
-      "parents": [
-        "sports"
-      ],
       "description": "Cooperation among people pursuing a shared goal."
     },
     "political-intrigue": {
       "kind": "theme",
-      "parents": [
-        "history",
-        "fantasy",
-        "thriller",
-        "politics",
-        "biography"
-      ],
       "description": "Power struggles, alliances and political maneuvering."
     },
     "power-and-corruption": {
       "kind": "theme",
-      "parents": [
-        "history",
-        "fantasy",
-        "thriller",
-        "politics",
-        "biography"
-      ],
       "description": "How authority is exercised, abused or resisted."
     },
     "survival": {
       "kind": "theme",
-      "parents": [
-        "adventure",
-        "science-fiction",
-        "fantasy",
-        "travel",
-        "nature"
-      ],
       "description": "Enduring dangerous conditions or threats."
     },
     "exploration": {
       "kind": "theme",
-      "parents": [
-        "adventure",
-        "science-fiction",
-        "fantasy",
-        "travel",
-        "nature"
-      ],
       "description": "Discovering unfamiliar places or environments."
     },
     "quest": {
-      "kind": "theme",
-      "parents": [
-        "adventure",
-        "science-fiction",
-        "fantasy",
-        "travel",
-        "nature"
-      ],
+      "kind": "trope",
       "description": "A journey to accomplish an important goal."
     },
     "coming-of-age": {
       "kind": "theme",
       "classes": [
-        "fiction"
+        "fiction",
+        "non-fiction"
       ],
-      "parents": [
-        "drama",
-        "romance",
-        "fantasy"
-      ],
-      "description": "Growing maturity, identity and the transition toward adulthood."
+      "description": "Growing maturity, identity and the transition toward adulthood.",
+      "aliases": [
+        "growing-up"
+      ]
     },
     "superheroes": {
-      "kind": "theme",
+      "kind": "subject",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "action"
       ],
       "description": "Characters with extraordinary abilities undertaking heroic roles."
     },
     "martial-arts": {
-      "kind": "theme",
-      "classes": [
-        "fiction"
-      ],
-      "parents": [
-        "action"
-      ],
-      "description": "Formal combat disciplines are central."
+      "kind": "subject",
+      "description": "Martial disciplines, training, practice or their history are central subjects, in fiction or nonfiction.",
+      "label": "Martial arts"
     },
     "trust-and-betrayal": {
       "kind": "theme",
-      "parents": [
-        "mystery",
-        "thriller",
-        "romance",
-        "history",
-        "true-crime"
-      ],
       "description": "Trust, deception and broken loyalties are central."
     },
     "discovery-and-innovation": {
       "kind": "theme",
-      "parents": [
-        "science-fiction",
-        "popular-science",
-        "technology",
-        "biography"
-      ],
       "description": "Developing or uncovering new knowledge, tools or ideas."
     },
     "chosen-one": {
@@ -899,18 +871,15 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "fantasy"
-      ],
-      "description": "A character singled out for a special destiny."
+      "description": "A character singled out for a special destiny.",
+      "aliases": [
+        "chosen-hero"
+      ]
     },
     "learning-magic": {
       "kind": "trope",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "fantasy"
       ],
       "description": "A character studies or trains to use magical abilities."
     },
@@ -919,18 +888,12 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "romance"
-      ],
       "description": "A marriage begins for practical reasons rather than love."
     },
     "forbidden-love": {
       "kind": "trope",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "romance"
       ],
       "description": "A central romance faces social or external prohibitions."
     },
@@ -939,18 +902,12 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "romance"
-      ],
       "description": "Former partners have another opportunity at romance."
     },
     "enemies-to-lovers": {
       "kind": "trope",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "romance"
       ],
       "description": "An antagonistic relationship develops into romance."
     },
@@ -959,18 +916,12 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "romance"
-      ],
       "description": "An established friendship develops into romance."
     },
     "fake-relationship": {
       "kind": "trope",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "romance"
       ],
       "description": "Characters pretend to be in a relationship."
     },
@@ -979,18 +930,12 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "romance"
-      ],
       "description": "A romantic relationship develops gradually over the story."
     },
     "solving-a-mystery": {
       "kind": "trope",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "mystery"
       ],
       "description": "Uncovering the explanation of an unknown event drives the plot."
     },
@@ -999,9 +944,6 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "mystery"
-      ],
       "description": "A crime appears impossible because access or escape seems blocked."
     },
     "amateur-sleuth": {
@@ -1009,20 +951,24 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "mystery"
+      "description": "A nonprofessional investigator takes the central detective role.",
+      "aliases": [
+        "amateur-detective",
+        "amateur-investigator",
+        "non-professional-investigator",
+        "citizen-detective"
       ],
-      "description": "A nonprofessional investigator takes the central detective role."
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game"
+      ]
     },
     "heist": {
       "kind": "trope",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "thriller",
-        "mystery",
-        "action"
       ],
       "description": "Planning or carrying out a significant theft drives the plot."
     },
@@ -1031,11 +977,6 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "thriller",
-        "mystery",
-        "action"
-      ],
       "description": "The narration cannot be accepted as a dependable account."
     },
     "race-against-time": {
@@ -1043,31 +984,16 @@
       "classes": [
         "fiction"
       ],
-      "parents": [
-        "thriller",
-        "mystery",
-        "action"
-      ],
       "description": "A deadline creates urgency for the central goal."
     },
     "family-secrets": {
       "kind": "trope",
-      "parents": [
-        "drama",
-        "mystery",
-        "romance",
-        "memoir",
-        "biography"
-      ],
       "description": "Hidden family information shapes the story or account."
     },
     "magical-school": {
       "kind": "setting",
       "classes": [
         "fiction"
-      ],
-      "parents": [
-        "fantasy"
       ],
       "description": "A school where magic is learned."
     },
@@ -1085,82 +1011,30 @@
     },
     "space": {
       "kind": "setting",
-      "parents": [
-        "science-fiction",
-        "popular-science"
-      ],
-      "description": "Outer space or a spacecraft forms a significant setting or subject."
+      "description": "A substantial part of the depicted events takes place in outer space or aboard a spacecraft. Discussing astronomy alone does not establish this setting."
     },
     "royal-court": {
       "kind": "setting",
-      "parents": [
-        "history",
-        "fantasy",
-        "romance",
-        "mystery",
-        "biography",
-        "politics"
-      ],
       "description": "A royal household and its surrounding society form the setting."
     },
     "imperial-court": {
       "kind": "setting",
-      "parents": [
-        "history",
-        "fantasy",
-        "romance",
-        "mystery",
-        "biography",
-        "politics"
-      ],
-      "description": "An emperorâ€™s household and its surrounding society form the setting."
+      "description": "An emperor’s household and its surrounding society form the setting."
     },
     "regency-britain": {
       "kind": "setting",
-      "parents": [
-        "history",
-        "fantasy",
-        "romance",
-        "mystery",
-        "biography",
-        "politics"
-      ],
       "description": "A setting in Regency-era Britain."
     },
     "victorian-britain": {
       "kind": "setting",
-      "parents": [
-        "history",
-        "fantasy",
-        "romance",
-        "mystery",
-        "biography",
-        "politics"
-      ],
       "description": "A setting in Victorian-era Britain."
     },
     "medieval": {
       "kind": "setting",
-      "parents": [
-        "history",
-        "fantasy",
-        "romance",
-        "mystery",
-        "biography",
-        "politics"
-      ],
       "description": "A setting in a medieval period."
     },
     "second-world-war": {
       "kind": "setting",
-      "parents": [
-        "history",
-        "fantasy",
-        "romance",
-        "mystery",
-        "biography",
-        "politics"
-      ],
       "description": "A setting during the Second World War."
     },
     "lighthearted": {
@@ -1185,15 +1059,34 @@
     },
     "hope": {
       "kind": "tone",
-      "description": "Possibility of a better future is emphasized."
+      "description": "An emotional atmosphere emphasizing the possibility of a better future; distinct from merely discussing hope as an idea.",
+      "label": "Hopeful"
     },
     "dark": {
       "kind": "tone",
-      "description": "A bleak, disturbing or grim emotional atmosphere."
+      "description": "A bleak, disturbing or grim emotional atmosphere.",
+      "aliases": [
+        "grim"
+      ],
+      "classes": [
+        "non-fiction",
+        "fiction"
+      ]
     },
     "bittersweet": {
       "kind": "tone",
-      "description": "Positive feelings are mixed with sadness or loss."
+      "description": "Positive feelings are mixed with sadness or loss.",
+      "classes": [
+        "fiction",
+        "non-fiction"
+      ],
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game",
+        "Music"
+      ]
     },
     "whimsical": {
       "kind": "tone",
@@ -1213,11 +1106,27 @@
     },
     "children": {
       "kind": "audience",
-      "description": "A source identifies the intended audience as children."
+      "description": "Works primarily intended for children according to source or editorial audience information. This is not a content-safety rating or age-verification result.",
+      "aliases": [
+        "childrens",
+        "kids",
+        "childrens-media"
+      ],
+      "classes": [
+        "fiction",
+        "non-fiction"
+      ],
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game",
+        "Music"
+      ]
     },
     "middle-grade": {
       "kind": "audience",
-      "description": "A publishing audience category typically aimed at children around ages 8â€“12; not a safety rating."
+      "description": "A publishing audience category typically aimed at children around ages 8–12; not a safety rating."
     },
     "young-adult": {
       "kind": "audience",
@@ -1225,15 +1134,40 @@
     },
     "adult-audience": {
       "kind": "audience",
-      "description": "Intended for adult readers or viewers; does not imply explicit content."
+      "description": "Intended for adult readers or viewers; does not imply explicit content.",
+      "classes": [
+        "fiction",
+        "non-fiction"
+      ],
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game",
+        "Music"
+      ]
     },
     "all-ages": {
       "kind": "audience",
-      "description": "A source identifies the work as intended for a broad age range; not a safety guarantee."
+      "description": "Works intended for a broad range of ages according to source or editorial information; not a guarantee of suitability for every child.",
+      "aliases": [
+        "general-audience"
+      ],
+      "classes": [
+        "fiction",
+        "non-fiction"
+      ],
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game",
+        "Music"
+      ]
     },
     "comedy-humor": {
       "kind": "genre",
-      "description": "Works intended to amuse through jokes, wit, satire or comic situations.",
+      "description": "Archived duplicate of the active humor tag, whose display name is comedy/humor. Retained for compatibility with older saved records.",
       "label": "comedy/humor",
       "classes": [
         "fiction",
@@ -1248,7 +1182,7 @@
     },
     "crime": {
       "kind": "genre",
-      "description": "Criminal acts, their causes or consequences are central to the work.",
+      "description": "Works centered on criminal activity, investigations, or the consequences of crime.",
       "label": "crime",
       "classes": [
         "fiction",
@@ -1257,16 +1191,14 @@
       "media": [
         "Book",
         "Movie",
-        "TV"
+        "TV",
+        "Game"
       ]
     },
     "war": {
       "kind": "genre",
-      "description": "Armed conflict and its effects on people or societies are central.",
-      "label": "war/military",
-      "aliases": [
-        "military"
-      ],
+      "description": "Armed conflict and its effects on people, communities or societies are central to the work.",
+      "label": "war",
       "classes": [
         "fiction",
         "non-fiction"
@@ -1274,29 +1206,17 @@
     },
     "western": {
       "kind": "genre",
-      "description": "Stories associated with frontier life and conventions of the Western genre.",
+      "description": "Stories drawing on frontier life and Western genre conventions, commonly involving settlement, law, conflict or life on a frontier.",
       "label": "western"
     },
     "religious": {
-      "kind": "genre",
-      "description": "Religious beliefs, practices or spiritual traditions are central.",
-      "label": "religious/inspirational",
-      "aliases": [
-        "inspirational"
-      ],
-      "classes": [
-        "fiction",
-        "non-fiction"
-      ],
-      "media": [
-        "Book",
-        "Movie",
-        "TV"
-      ]
+      "kind": "subject",
+      "description": "Religious beliefs, practices, institutions or spiritual traditions are central subjects. This does not imply an inspirational tone.",
+      "label": "Religion"
     },
     "documentary": {
-      "kind": "genre",
-      "description": "A factual film or program presenting real events, people or subjects.",
+      "kind": "format",
+      "description": "A screen work presented primarily as a factual account of real people, events or subjects; the label does not independently verify every claim.",
       "label": "documentary",
       "classes": [
         "non-fiction"
@@ -1308,38 +1228,73 @@
     },
     "family": {
       "kind": "subject",
-      "description": "Family relationships, family life or kinship are a central subject, in fiction or nonfiction.",
-      "label": "family"
+      "description": "Family relationships, kinship or family life are central subjects; this does not mean family-friendly content.",
+      "label": "Family"
     },
     "musical": {
       "kind": "format",
-      "description": "Songs and musical performances are integral to the storytelling.",
-      "label": "musical"
+      "description": "A narrative work in which songs and musical performances are integral to the storytelling, rather than merely background music.",
+      "label": "musical",
+      "media": [
+        "Movie",
+        "TV"
+      ]
     },
     "reality-tv": {
       "kind": "format",
-      "description": "Unscripted or partly staged television following real participants.",
-      "label": "reality tv"
+      "description": "Television structured around real participants and ostensibly unscripted events, which may be edited, staged or produced.",
+      "label": "reality tv",
+      "media": [
+        "TV"
+      ],
+      "classes": [
+        "non-fiction"
+      ]
     },
     "game-show": {
       "kind": "format",
-      "description": "A program in which contestants participate in games or challenges.",
-      "label": "game show"
+      "description": "A program structured around participants playing games or completing competitive challenges.",
+      "label": "game show",
+      "media": [
+        "TV"
+      ],
+      "classes": [
+        "non-fiction"
+      ]
     },
     "talk-show": {
       "kind": "format",
-      "description": "A program structured around interviews, conversation or discussion.",
-      "label": "talk show"
+      "description": "A program structured around interviews, discussion or conversation with hosts and guests.",
+      "label": "talk show",
+      "media": [
+        "TV"
+      ],
+      "classes": [
+        "non-fiction"
+      ]
     },
     "soap-opera": {
       "kind": "format",
-      "description": "An ongoing serial drama centered on relationships and personal conflicts.",
-      "label": "soap opera"
+      "description": "An ongoing serialized drama emphasizing interconnected personal relationships and continuing conflicts.",
+      "label": "soap opera",
+      "media": [
+        "TV"
+      ],
+      "classes": [
+        "fiction"
+      ]
     },
     "sitcom": {
       "kind": "format",
-      "description": "A recurring cast encounters comic situations in a familiar setting.",
-      "label": "sitcom"
+      "description": "An episodic comedy built around recurring characters and a familiar social or domestic situation.",
+      "label": "sitcom",
+      "media": [
+        "TV"
+      ],
+      "classes": [
+        "fiction"
+      ]
     }
   }
 }
+
