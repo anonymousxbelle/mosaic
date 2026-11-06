@@ -11,7 +11,7 @@ void test('incidental factual subjects do not override fiction genres',()=>{
   assert.ok(tagApplicable('solving-a-mystery',story));
  }
  assert.equal(contentClass({tags:['politics']}),'unknown');
- assert.equal(contentClass({genres:['politics'],tags:[]}),'non-fiction');
+ assert.equal(contentClass({genres:['politics'],tags:[]}),'unknown');
  assert.equal(contentClass({genres:['mystery'],tags:['non-fiction']}),'non-fiction');
 });
 void test('factual work about fantasy does not become fantasy fiction',()=>{
@@ -28,7 +28,11 @@ void test('genres and facets can overlap without forcing unknown class',()=>{
 void test('subgenre expands to relevant themes and tropes',()=>{
  const suggestions=suggestedFacets({tags:['historical-romance'],type:'Book'});
  assert.ok(suggestions.includes('slow-burn'));assert.ok(suggestions.includes('regency-britain'));
- assert.ok(!suggestions.includes('magical-school'));
+ // Available facets are choices, not inferred assignments.
+ assert.ok(suggestions.includes('magical-school'));
+ assert.ok(!extractTags('A romance in Regency Britain.', ['Historical romance']).includes('magical-school'));
+ assert.equal(featureKind('basketball'),'subject');
+ assert.ok(tagApplicable('children',{tags:[],type:'Movie'}));
  assert.ok(!suggestedFacets(factual).includes('fantasy'));
 });
 void test('format and audience require source evidence and compatible media',()=>{
@@ -42,3 +46,4 @@ void test('biography belongs to nonfiction and magical school is a setting',()=>
  assert.equal(featureKind('biography'),'genre');assert.equal(featureKind('magical-school'),'setting');
  assert.equal(featureKind('chosen-one'),'trope');assert.equal(featureKind('fiction'),'class');
 });
+
