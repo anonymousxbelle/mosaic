@@ -32,7 +32,7 @@ test('incidental sports and audience prose do not become genre or audience label
  assert.ok(extractTags('A basketball team competes.', ['Drama']).includes('sports'));
  assert.equal(extractTags('A young adult searches for work.',[]).includes('young-adult'),false);
  assert.ok(extractTags('', ['Young adult fiction']).includes('young-adult'));
- assert.equal(featureKind('anime'),'subgenre'); assert.equal(featureKind('quest'),'theme');
+ assert.equal(featureKind('anime'),'subgenre'); assert.equal(featureKind('quest'),'trope');
 });
 test('mood and audience alone rank below substantive interests',()=>{
  const relevant=book('1','Magic story',['magic','fantasy']);
@@ -55,3 +55,4 @@ test('series diversity and edition deduplication preserve unrelated alternatives
  const out=diversify([a,duplicate,sequel,other]);
  assert.deepEqual(out.map(x=>x.id),['1','4','3']);
 });
+
