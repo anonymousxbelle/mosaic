@@ -1,7 +1,7 @@
 import { taxonomy } from '../lib/taxonomy.ts';
 import { validateSource, validateSuggestions } from '../lib/ai-tagging.ts';
 import { SemanticError } from './semantic.ts';
-export const taggingModel='@cf/meta/llama-3.1-8b-instruct';
+export const taggingModel='@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 export type TaggingEnv={
   TAGGING_REVIEW_KEY?:string;
   AI?:{run:(model:string,input:any)=>Promise<unknown>};
@@ -30,10 +30,20 @@ export async function analyzeTags(request:Request,env:TaggingEnv) {
         {role:'user',content:JSON.stringify({mediaType:input.type,sourceText:input.source.text})}],
       response_format:{type:'json_object'},max_tokens:3000,temperature:0.2,
     }),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new SemanticError(504,'Tag analysis timed out. Please retry.')),25000);})]);
-    let parsed:any;try{parsed=typeof result.response==='string'?JSON.parse(result.response):result.response;}catch{throw new SemanticError(502,'AI returned unreadable suggestions. Nothing was applied.');}
+    let parsed:any;try{parsed=typeof result?.response==='string'?JSON.parse(result?.response):result?.response;}catch{throw new SemanticError(502,'AI returned unreadable suggestions. Nothing was applied.');}
     const item={id:input.itemId,title:'',creator:'',type:input.type,tags:[],description:input.source.text};
     let suggestions;try{suggestions=validateSuggestions(parsed?.suggestions,input.source,item);}catch{throw new SemanticError(502,'AI suggestions failed evidence or taxonomy validation. Nothing was applied.');}
     return {id:crypto.randomUUID(),itemId:input.itemId,model:taggingModel,promptVersion,taxonomyRevision,createdAt:new Date().toISOString(),source:input.source,suggestions};
+  }catch(error){
+    if(error instanceof SemanticError)throw error;
+    const message=error instanceof Error?error.message:'';
+    if(/quota|daily|allocation|10000|payment|billing|neurons/i.test(message))
+      throw new SemanticError(429,'Cloudflare AI usage allowance was reached. Check Workers AI usage before retrying.');
+    if(/model.*(not found|unavailable|deprecated)|unknown model|7003/i.test(message))
+      throw new SemanticError(503,'The configured AI model is unavailable. The backend model configuration needs updating.');
+    if(/rate|too many|429/i.test(message))
+      throw new SemanticError(429,'Cloudflare AI is rate limited. Please retry in a minute.');
+    throw new SemanticError(502,'Cloudflare AI could not complete tag analysis. No tags changed. If this persists, check the Worker AI binding and provider service status.');
   }finally{if(timer)clearTimeout(timer);}
 }
 

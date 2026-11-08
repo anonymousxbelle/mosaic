@@ -1,4 +1,4 @@
-import { analyzeTags } from './tag-analysis.ts';
+import { analyzeTags, taggingModel } from './tag-analysis.ts';
 import { hardcoverBooks, HardcoverError } from './hardcover.ts';
 import { semanticComparison, SemanticError, type SemanticEnv } from './semantic.ts';
 import { featureGroups, detailedTags, featureKind } from '../lib/features.ts';
@@ -254,6 +254,7 @@ export default {
       }
       if (u.pathname === '/status')
         return reply({
+          taggingModel,
           tmdb: !!env.TMDB_TOKEN,
           semantic: !!(env.AI && env.AI_LIMITER),
           hardcover: !!env.HARDCOVER_TOKEN,

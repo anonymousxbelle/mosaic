@@ -55,3 +55,7 @@ Model: `@cf/meta/llama-3.1-8b-instruct`, structured JSON mode, temperature 0.2, 
 
 Verification recorded November 8: 121/121 automated tests passed; TypeScript check passed; Pages build rendered 5 routes with 0 skipped. Logs: evidence/ai-tagging-tests-2026-11-08.txt and evidence/ai-tagging-build-2026-11-08.txt. Model responses in tests are mocked. No live inference or deployment was performed.
 
+
+## Live failure follow-up
+Cloudflare lists the original llama-3.1-8b-instruct model ID as unavailable. Switched to @cf/meta/llama-3.3-70b-instruct-fp8-fast, which documents JSON output support and a 24,000-token context. Added sanitized AI-specific errors instead of the generic catalog failure. This diagnoses a configuration defect, not a verified provider log of the failed user request. Live inference still needs reviewer testing. Model reference: https://developers.cloudflare.com/workers-ai/models/llama-3.3-70b-instruct-fp8-fast/
+

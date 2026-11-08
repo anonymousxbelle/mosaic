@@ -57,4 +57,15 @@ test('backend is key-protected, rate limited and stamps validated pending sugges
  assert.equal(result.source.url,source.url);assert.equal(calls,1);
  await assert.rejects(()=>analyzeTags(request(),{...env,AI:{run:async()=>({response:{suggestions:[{...suggestion,quote:'invented'}]}})}}),e=>e.status===502);
 });
+test('provider failures produce safe AI-specific messages without leaking raw details',async()=>{
+ for(const [message,status,pattern] of [
+  ['Model not found: 7003 secret',503,/model is unavailable/],
+  ['daily quota exceeded secret',429,/usage allowance/],
+  ['429 too many requests secret',429,/rate limited/],
+  ['internal failure secret',502,/Cloudflare AI could not/],
+ ]){
+  const env={TAGGING_REVIEW_KEY:'test',AI_LIMITER:{limit:async()=>({success:true})},AI:{run:async()=>{throw Error(message);}}};
+  await assert.rejects(()=>analyzeTags(request(),env),e=>e.status===status && pattern.test(e.message) && !e.message.includes('secret'));
+ }
+});
 
