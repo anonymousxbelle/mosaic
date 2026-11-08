@@ -55,7 +55,8 @@ test('backend is key-protected, rate limited and stamps validated pending sugges
  const result=await analyzeTags(request(),env);
  assert.equal(result.suggestions[0].status,'pending');assert.equal(result.taxonomyRevision.length,64);
  assert.equal(result.source.url,source.url);assert.equal(calls,1);
- await assert.rejects(()=>analyzeTags(request(),{...env,AI:{run:async()=>({response:{suggestions:[{...suggestion,quote:'invented'}]}})}}),e=>e.status===502);
+ const invalid=await analyzeTags(request(),{...env,AI:{run:async()=>({response:{suggestions:[{...suggestion,quote:'invented'}]}})}});
+ assert.equal(invalid.suggestions.length,0);assert.match(invalid.validationIssues[0].reason,/quote/);
 });
 test('provider failures produce safe AI-specific messages without leaking raw details',async()=>{
  for(const [message,status,pattern] of [
@@ -67,5 +68,17 @@ test('provider failures produce safe AI-specific messages without leaking raw de
   const env={TAGGING_REVIEW_KEY:'test',AI_LIMITER:{limit:async()=>({success:true})},AI:{run:async()=>{throw Error(message);}}};
   await assert.rejects(()=>analyzeTags(request(),env),e=>e.status===status && pattern.test(e.message) && !e.message.includes('secret'));
  }
+});
+
+
+test('mixed output retains valid pending rows and persists excluded-row diagnostics',async()=>{
+ const env={TAGGING_REVIEW_KEY:'test',AI_LIMITER:{limit:async()=>({success:true})},AI:{run:async()=>({response:{suggestions:[suggestion,{...suggestion,tag:'friendship',quote:'invented'}]}})}};
+ const result=await analyzeTags(request(),env);
+ assert.equal(result.suggestions.length,1);assert.equal(result.suggestions[0].status,'pending');
+ assert.equal(result.validationIssues.length,1);assert.equal(result.validationIssues[0].tag,'friendship');
+ assert.deepEqual(acceptedAnalysisTags([result],item),[]);
+ const restored=restoreAnalyses([result],item)[0];
+ assert.deepEqual(restored.validationIssues,result.validationIssues);
+ assert.deepEqual(acceptedAnalysisTags([reviewSuggestion(restored,0,'accepted',item)],item),['found-family']);
 });
 

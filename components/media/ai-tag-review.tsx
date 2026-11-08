@@ -57,6 +57,7 @@ export function AiTagReview({item,edit,onChange}:{item:Media;edit:TagEdits[strin
       <h4>Analysis · {new Date(a.createdAt).toLocaleString()}</h4>
       <p>Source: {a.source.provider} · retrieved {a.source.retrievedAt}. This is a saved catalog snapshot, not a fresh fetch.</p>
       <details><summary>Source and analysis record</summary><p style={{overflowWrap:'anywhere'}}>{a.source.url}</p><pre style={{whiteSpace:'pre-wrap'}}>{a.source.text}</pre><p style={{overflowWrap:'anywhere'}}>Model: {a.model} · Prompt: {a.promptVersion} · Taxonomy: {a.taxonomyRevision}</p></details>
+      {!!a.validationIssues?.length && <section role="status"><h4>Suggestions excluded by validation</h4><p>These are not available to accept and cannot affect recommendations. Valid suggestions below still need your review.</p><ul>{a.validationIssues.map(v=><li key={v.index}>Suggestion {v.index+1}: {v.tag} — {v.reason}</li>)}</ul></section>}
       {a.suggestions.map((s,i)=>{const row=a.id+i;return <article key={row} style={{padding:16,marginTop:12,border:'1px solid var(--border, #ddd)',borderRadius:10}}>
         <h4>{taxonomyLabel(s.tag)} · {s.kind}{s.proposed?' · New tag proposal':''}</h4>
         {s.definition && <p>{s.definition}</p>}

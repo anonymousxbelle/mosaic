@@ -1,5 +1,5 @@
 import { taxonomy } from '../lib/taxonomy.ts';
-import { validateSource, validateSuggestions } from '../lib/ai-tagging.ts';
+import { validateSource, partitionSuggestions } from '../lib/ai-tagging.ts';
 import { SemanticError } from './semantic.ts';
 export const taggingModel='@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 export type TaggingEnv={
@@ -22,7 +22,7 @@ export async function analyzeTags(request:Request,env:TaggingEnv) {
   if(!(await env.AI_LIMITER.limit({key:'tagging-global'})).success)throw new SemanticError(429,'Analysis limit reached. Try again in a minute.');
   const approved=Object.fromEntries(Object.entries(taxonomy).filter(([,n])=>!n.retired));
   const taxonomyRevision=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(approved))))).map(x=>x.toString(16).padStart(2,'0')).join('');
-  const promptVersion='grounded-tags-v1';
+  const promptVersion='grounded-tags-v2';
   let timer:ReturnType<typeof setTimeout>|undefined;
   try {
     const result:any=await Promise.race([env.AI.run(taggingModel,{
@@ -32,8 +32,8 @@ export async function analyzeTags(request:Request,env:TaggingEnv) {
     }),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new SemanticError(504,'Tag analysis timed out. Please retry.')),25000);})]);
     let parsed:any;try{parsed=typeof result?.response==='string'?JSON.parse(result?.response):result?.response;}catch{throw new SemanticError(502,'AI returned unreadable suggestions. Nothing was applied.');}
     const item={id:input.itemId,title:'',creator:'',type:input.type,tags:[],description:input.source.text};
-    let suggestions;try{suggestions=validateSuggestions(parsed?.suggestions,input.source,item);}catch{throw new SemanticError(502,'AI suggestions failed evidence or taxonomy validation. Nothing was applied.');}
-    return {id:crypto.randomUUID(),itemId:input.itemId,model:taggingModel,promptVersion,taxonomyRevision,createdAt:new Date().toISOString(),source:input.source,suggestions};
+    let validated;try{validated=partitionSuggestions(parsed?.suggestions,input.source,item);}catch{throw new SemanticError(502,'AI returned an invalid suggestion list. Nothing was applied.');}
+    return {id:crypto.randomUUID(),itemId:input.itemId,model:taggingModel,promptVersion,taxonomyRevision,createdAt:new Date().toISOString(),source:input.source,...validated};
   }catch(error){
     if(error instanceof SemanticError)throw error;
     const message=error instanceof Error?error.message:'';

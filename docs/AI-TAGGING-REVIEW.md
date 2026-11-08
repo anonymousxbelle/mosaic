@@ -59,3 +59,6 @@ Verification recorded November 8: 121/121 automated tests passed; TypeScript che
 ## Live failure follow-up
 Cloudflare lists the original llama-3.1-8b-instruct model ID as unavailable. Switched to @cf/meta/llama-3.3-70b-instruct-fp8-fast, which documents JSON output support and a 24,000-token context. Added sanitized AI-specific errors instead of the generic catalog failure. This diagnoses a configuration defect, not a verified provider log of the failed user request. Live inference still needs reviewer testing. Model reference: https://developers.cloudflare.com/workers-ai/models/llama-3.3-70b-instruct-fp8-fast/
 
+## Per-suggestion validation follow-up
+Analysis now keeps individually valid suggestions pending and stores excluded-row diagnostics with tag, position and validation reason. Excluded rows cannot be accepted or enter vectors. This replaces whole-response rejection for malformed individual suggestions; an invalid top-level list still fails. Diagnostics survive browser persistence and evidence export. A quoted passage still requires human interpretation review. The original failed response for The Hate U Give was not retained, so its exact validation failure is unknown until another analysis.
+
