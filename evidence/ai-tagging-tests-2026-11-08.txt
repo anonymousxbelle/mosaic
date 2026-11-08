@@ -1,0 +1,680 @@
+
+> mosaic@0.1.0 test
+> node --experimental-strip-types --test tests/*.test.mjs
+
+TAP version 13
+# (node:30836) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: pending and rejected tags never alter cosine; accepted tags do and survive restoration
+ok 1 - pending and rejected tags never alter cosine; accepted tags do and survive restoration
+  ---
+  duration_ms: 9.7068
+  ...
+# Subtest: corrections preserve model evidence and new analyses do not erase review decisions
+ok 2 - corrections preserve model evidence and new analyses do not erase review decisions
+  ---
+  duration_ms: 1.1985
+  ...
+# Subtest: unknown IDs, invented quotations, invalid confidence and duplicate tags fail closed
+ok 3 - unknown IDs, invented quotations, invalid confidence and duplicate tags fail closed
+  ---
+  duration_ms: 0.7847
+  ...
+# Subtest: new proposals remain separate until taxonomy approval; can map to an existing tag
+ok 4 - new proposals remain separate until taxonomy approval; can map to an existing tag
+  ---
+  duration_ms: 0.5591
+  ...
+# Subtest: backend is key-protected, rate limited and stamps validated pending suggestions
+ok 5 - backend is key-protected, rate limited and stamps validated pending suggestions
+  ---
+  duration_ms: 77.0646
+  ...
+# (node:6260) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: TMDB normalization preserves verified IDs, keywords, directors and IMDb links
+ok 6 - TMDB normalization preserves verified IDs, keywords, directors and IMDb links
+  ---
+  duration_ms: 23.93
+  ...
+# Subtest: IGDB maps metadata into shared features and rejects invalid identifiers
+ok 7 - IGDB maps metadata into shared features and rejects invalid identifiers
+  ---
+  duration_ms: 3.237
+  ...
+# Subtest: gateway refuses wrong origins, arbitrary routes and injection-shaped IDs
+ok 8 - gateway refuses wrong origins, arbitrary routes and injection-shaped IDs
+  ---
+  duration_ms: 43.9097
+  ...
+# Subtest: missing credentials fail clearly without fabricated catalog entries
+ok 9 - missing credentials fail clearly without fabricated catalog entries
+  ---
+  duration_ms: 6.2181
+  ...
+# Subtest: gateway re-fetches TMDB record with server-side token and returns no token
+ok 10 - gateway re-fetches TMDB record with server-side token and returns no token
+  ---
+  duration_ms: 7.0267
+  ...
+# Subtest: gateway rate limit prevents upstream requests
+ok 11 - gateway rate limit prevents upstream requests
+  ---
+  duration_ms: 1.3604
+  ...
+# (node:30552) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: placeholder text is not a synopsis or an AI input
+ok 12 - placeholder text is not a synopsis or an AI input
+  ---
+  duration_ms: 65.0184
+  ...
+# Subtest: fresh work details replace a cached blank discovery record
+ok 13 - fresh work details replace a cached blank discovery record
+  ---
+  duration_ms: 2244.2146
+  ...
+# Subtest: missing or failed full records remain honest and retryable
+ok 14 - missing or failed full records remain honest and retryable
+  ---
+  duration_ms: 2206.5631
+  ...
+# Subtest: Hardcover verification retains the full synopsis when its search index has none
+ok 15 - Hardcover verification retains the full synopsis when its search index has none
+  ---
+  duration_ms: 3.8016
+  ...
+# (node:28908) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: combined catalog shelves never assign fantasy or science fiction by themselves
+ok 16 - combined catalog shelves never assign fantasy or science fiction by themselves
+  ---
+  duration_ms: 58.064
+  ...
+# Subtest: specific independent evidence resolves ambiguous shelves without title exceptions
+ok 17 - specific independent evidence resolves ambiguous shelves without title exceptions
+  ---
+  duration_ms: 1.355
+  ...
+# Subtest: source labels remain available while normalized classifications stay ambiguous
+ok 18 - source labels remain available while normalized classifications stay ambiguous
+  ---
+  duration_ms: 5.3628
+  ...
+# Subtest: combined shelves across genres and facets remain ambiguous, including three-part lists
+ok 19 - combined shelves across genres and facets remain ambiguous, including three-part lists
+  ---
+  duration_ms: 4.5062
+  ...
+# Subtest: TMDB item keywords can corroborate both or just one part of a combined genre
+ok 20 - TMDB item keywords can corroborate both or just one part of a combined genre
+  ---
+  duration_ms: 6.0467
+  ...
+# (node:20076) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: community evidence requires overlapping preferences and several independent readers
+ok 21 - community evidence requires overlapping preferences and several independent readers
+  ---
+  duration_ms: 2.4139
+  ...
+# (node:25236) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: explicit books are separated; romance and unknown ratings are not guessed
+ok 22 - explicit books are separated; romance and unknown ratings are not guessed
+  ---
+  duration_ms: 34.9419
+  ...
+# Subtest: TMDB adult flags and mature certifications are honored without treating absent ratings as safe
+ok 23 - TMDB adult flags and mature certifications are honored without treating absent ratings as safe
+  ---
+  duration_ms: 3.5764
+  ...
+# (node:15964) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: core fantasy and magic eligibility applies across media before scoring
+ok 24 - core fantasy and magic eligibility applies across media before scoring
+  ---
+  duration_ms: 16.944
+  ...
+# Subtest: book queries retain core requirements and enrich uncertain subjects before rejection
+ok 25 - book queries retain core requirements and enrich uncertain subjects before rejection
+  ---
+  duration_ms: 2218.2795
+  ...
+# (node:33852) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stable shared vocabulary unifies facets and deduplicates spelling variants
+ok 26 - stable shared vocabulary unifies facets and deduplicates spelling variants
+  ---
+  duration_ms: 2.3593
+  ...
+# Subtest: cosine is actual normalized dot product, including zero and signed vectors
+ok 27 - cosine is actual normalized dot product, including zero and signed vectors
+  ---
+  duration_ms: 2.1327
+  ...
+# Subtest: ratings produce signed weights, cancellation is safe and creator credits are excluded
+ok 28 - ratings produce signed weights, cancellation is safe and creator credits are excluded
+  ---
+  duration_ms: 0.638
+  ...
+# Subtest: changed ratings change profile and rank, unseen library items and duplicate works are excluded
+ok 29 - changed ratings change profile and rank, unseen library items and duplicate works are excluded
+  ---
+  duration_ms: 17.3999
+  ...
+# Subtest: both modes use the same vectors; category filtering preserves scores and descending order
+ok 30 - both modes use the same vectors; category filtering preserves scores and descending order
+  ---
+  duration_ms: 12.4243
+  ...
+# Subtest: explanations reflect real signed dot-product contributions and empty profiles stay empty
+ok 31 - explanations reflect real signed dot-product contributions and empty profiles stay empty
+  ---
+  duration_ms: 0.5181
+  ...
+# (node:33924) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: saved feedback survives reload and removes consumed/dismissed titles without inventing ratings
+ok 32 - saved feedback survives reload and removes consumed/dismissed titles without inventing ratings
+  ---
+  duration_ms: 18.5273
+  ...
+# Subtest: explanations name only source titles with actual shared tags
+ok 33 - explanations name only source titles with actual shared tags
+  ---
+  duration_ms: 0.4898
+  ...
+# Subtest: artwork accepts known HTTPS catalog hosts and rejects arbitrary URLs
+ok 34 - artwork accepts known HTTPS catalog hosts and rejects arbitrary URLs
+  ---
+  duration_ms: 0.2835
+  ...
+# (node:33980) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: paused music remains restorable but is not a discovery category
+ok 35 - paused music remains restorable but is not a discovery category
+  ---
+  duration_ms: 28.1456
+  ...
+# Subtest: unconfigured discovery never sends a genre as a title query
+ok 36 - unconfigured discovery never sends a genre as a title query
+  ---
+  duration_ms: 29.0109
+  ...
+# (node:34044) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: evaluation distinguishes missing judgments from bad matches
+ok 37 - evaluation distinguishes missing judgments from bad matches
+  ---
+  duration_ms: 1.337
+  ...
+# (node:34268) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: nonfiction is a genre, not fiction, and metadata aliases normalize
+ok 38 - nonfiction is a genre, not fiction, and metadata aliases normalize
+  ---
+  duration_ms: 17.1916
+  ...
+# Subtest: inferred dislikes lower ranking without blocking an entire genre
+ok 39 - inferred dislikes lower ranking without blocking an entire genre
+  ---
+  duration_ms: 0.491
+  ...
+# Subtest: explicit avoidance works without ratings
+ok 40 - explicit avoidance works without ratings
+  ---
+  duration_ms: 0.1567
+  ...
+# Subtest: book descriptions strip separate promotional blurbs and preserve synopsis
+ok 41 - book descriptions strip separate promotional blurbs and preserve synopsis
+  ---
+  duration_ms: 1.3333
+  ...
+# Subtest: exact title relevance beats a popular companion and counts break equivalent matches
+ok 42 - exact title relevance beats a popular companion and counts break equivalent matches
+  ---
+  duration_ms: 2.539
+  ...
+# (node:34284) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Hardcover records survive storage validation and reject forged source links
+ok 43 - Hardcover records survive storage validation and reject forged source links
+  ---
+  duration_ms: 48.5292
+  ...
+# Subtest: Hardcover normalizes public metadata without returning private fields
+ok 44 - Hardcover normalizes public metadata without returning private fields
+  ---
+  duration_ms: 4.53
+  ...
+# Subtest: Hardcover uses fixed read-only queries and never searches genre words as titles
+ok 45 - Hardcover uses fixed read-only queries and never searches genre words as titles
+  ---
+  duration_ms: 44.4289
+  ...
+# (node:34296) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: historical court mystery remains eligible without a detective fiction label
+ok 46 - historical court mystery remains eligible without a detective fiction label
+  ---
+  duration_ms: 16.2041
+  ...
+# Subtest: a palace mention alone does not invent a historical era
+ok 47 - a palace mention alone does not invent a historical era
+  ---
+  duration_ms: 0.8213
+  ...
+# Subtest: animation discovery uses genre filtering without a redundant anime keyword
+ok 48 - animation discovery uses genre filtering without a redundant anime keyword
+  ---
+  duration_ms: 132.7697
+  ...
+# (node:34328) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: retrieval keeps page positions and evidence from repeated queries
+ok 49 - retrieval keeps page positions and evidence from repeated queries
+  ---
+  duration_ms: 12.2164
+  ...
+# Subtest: provider evidence resolves tag ties without multiplying duplicate votes
+ok 50 - provider evidence resolves tag ties without multiplying duplicate votes
+  ---
+  duration_ms: 1.9254
+  ...
+# Subtest: hybrid never admits rejected topics or crosses the same-medium priority tier
+ok 51 - hybrid never admits rejected topics or crosses the same-medium priority tier
+  ---
+  duration_ms: 1.4062
+  ...
+# Subtest: semantic signal resolves equal matches without modifying baseline data
+ok 52 - semantic signal resolves equal matches without modifying baseline data
+  ---
+  duration_ms: 0.3161
+  ...
+# (node:34372) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Apple results validate media type and stable identifiers
+ok 53 - Apple results validate media type and stable identifiers
+  ---
+  duration_ms: 28.4894
+  ...
+# Subtest: TV metadata strips HTML and missing metadata remains usable
+ok 54 - TV metadata strips HTML and missing metadata remains usable
+  ---
+  duration_ms: 3.2518
+  ...
+# Subtest: same-name games are rejected unless classified as video games
+ok 55 - same-name games are rejected unless classified as video games
+  ---
+  duration_ms: 2.0126
+  ...
+# Subtest: tagging does not infer themes from unrelated words or media type
+ok 56 - tagging does not infer themes from unrelated words or media type
+  ---
+  duration_ms: 0.7213
+  ...
+# Subtest: input length is bounded and invalid selections never call provider
+ok 57 - input length is bounded and invalid selections never call provider
+  ---
+  duration_ms: 1.3824
+  ...
+# Subtest: library restore rejects unsafe URLs, invalid ratings, and duplicates
+ok 58 - library restore rejects unsafe URLs, invalid ratings, and duplicates
+  ---
+  duration_ms: 3.5598
+  ...
+# Subtest: catalog failures surface as errors instead of fake matches
+ok 59 - catalog failures surface as errors instead of fake matches
+  ---
+  duration_ms: 32.2288
+  ...
+# Subtest: verification re-fetches the provider record and rejects wrong categories
+ok 60 - verification re-fetches the provider record and rejects wrong categories
+  ---
+  duration_ms: 2.7214
+  ...
+# (node:34472) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: basketball anime leads default seed discovery and explicit books keep basketball
+ok 61 - basketball anime leads default seed discovery and explicit books keep basketball
+  ---
+  duration_ms: 32.1252
+  ...
+# Subtest: fantasy seed requires fantasy even when focusing only on friendship
+ok 62 - fantasy seed requires fantasy even when focusing only on friendship
+  ---
+  duration_ms: 1.1999
+  ...
+# Subtest: incidental sports and audience prose do not become genre or audience labels
+ok 63 - incidental sports and audience prose do not become genre or audience labels
+  ---
+  duration_ms: 21.3582
+  ...
+# Subtest: mood and audience alone rank below substantive interests
+ok 64 - mood and audience alone rank below substantive interests
+  ---
+  duration_ms: 0.4501
+  ...
+# Subtest: edition suffixes collapse while subtitles and volume numbers remain distinct
+ok 65 - edition suffixes collapse while subtitles and volume numbers remain distinct
+  ---
+  duration_ms: 0.317
+  ...
+# Subtest: series diversity and edition deduplication preserve unrelated alternatives
+ok 66 - series diversity and edition deduplication preserve unrelated alternatives
+  ---
+  duration_ms: 0.4503
+  ...
+# (node:34652) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 25 JSON records share one schema across five media types and feed recommendations
+ok 67 - 25 JSON records share one schema across five media types and feed recommendations
+  ---
+  duration_ms: 19.2834
+  ...
+# Subtest: unified fields represent missing metadata as empty arrays without invented creators
+ok 68 - unified fields represent missing metadata as empty arrays without invented creators
+  ---
+  duration_ms: 13.6166
+  ...
+# Subtest: empty or invalid search is rejected before fetching; unknown title can return no results
+ok 69 - empty or invalid search is rejected before fetching; unknown title can return no results
+  ---
+  duration_ms: 59.2927
+  ...
+# Subtest: failed API and malformed responses are surfaced, never replaced with fixtures
+ok 70 - failed API and malformed responses are surfaced, never replaced with fixtures
+  ---
+  duration_ms: 1.2639
+  ...
+# (node:34716) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: preferences boost matching titles without removing candidates or overriding core tiers
+ok 71 - preferences boost matching titles without removing candidates or overriding core tiers
+  ---
+  duration_ms: 1.8642
+  ...
+# (node:34788) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: specific fantasy evidence ranks a related book over broad fiction
+ok 72 - specific fantasy evidence ranks a related book over broad fiction
+  ---
+  duration_ms: 39.3212
+  ...
+# Subtest: sports anime uses metadata and does not infer tags from title alone
+ok 73 - sports anime uses metadata and does not infer tags from title alone
+  ---
+  duration_ms: 3.2069
+  ...
+# Subtest: historical fiction stays fiction and unknown descriptions stay untagged
+ok 74 - historical fiction stays fiction and unknown descriptions stay untagged
+  ---
+  duration_ms: 1.4711
+  ...
+# Subtest: new automatic tags can be hidden and survive restoration
+ok 75 - new automatic tags can be hidden and survive restoration
+  ---
+  duration_ms: 1.2243
+  ...
+# Subtest: subject retrieval is bounded, cached, and never searches a title for a tag
+ok 76 - subject retrieval is bounded, cached, and never searches a title for a tag
+  ---
+  duration_ms: 2223.7294
+  ...
+# Subtest: glossary explains all supported choices and diversification preserves candidates
+ok 77 - glossary explains all supported choices and diversification preserves candidates
+  ---
+  duration_ms: 2.3271
+  ...
+# (node:33800) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cosine handles identical, disjoint, empty and unequal-scale vectors
+ok 78 - cosine handles identical, disjoint, empty and unequal-scale vectors
+  ---
+  duration_ms: 1.364
+  ...
+# Subtest: profile uses normalized rating weights and ignores invalid ratings
+ok 79 - profile uses normalized rating weights and ignores invalid ratings
+  ---
+  duration_ms: 11.0411
+  ...
+# Subtest: low ratings do not create positive recommendations
+ok 80 - low ratings do not create positive recommendations
+  ---
+  duration_ms: 0.9086
+  ...
+# Subtest: Based On filters category, excludes seed, and ranks by similarity
+ok 81 - Based On filters category, excludes seed, and ranks by similarity
+  ---
+  duration_ms: 0.6045
+  ...
+# Subtest: rated titles are excluded and ties are deterministic
+ok 82 - rated titles are excluded and ties are deterministic
+  ---
+  duration_ms: 14.3
+  ...
+# Subtest: duplicate tags do not amplify profile or vectors
+ok 83 - duplicate tags do not amplify profile or vectors
+  ---
+  duration_ms: 0.3408
+  ...
+# (node:33940) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: rejected first pages trigger more retrieval and alternate plans retain results
+ok 84 - rejected first pages trigger more retrieval and alternate plans retain results
+  ---
+  duration_ms: 5.7514
+  ...
+# Subtest: retrieval stops at three pages and deduplicates without relaxing eligibility
+ok 85 - retrieval stops at three pages and deduplicates without relaxing eligibility
+  ---
+  duration_ms: 0.6017
+  ...
+# Subtest: a full non-anime pool does not prevent additional anime retrieval
+ok 86 - a full non-anime pool does not prevent additional anime retrieval
+  ---
+  duration_ms: 2.1161
+  ...
+# Subtest: gateway validates pagination and supports cached distinct related pages
+ok 87 - gateway validates pagination and supports cached distinct related pages
+  ---
+  duration_ms: 83.3869
+  ...
+# (node:33404) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: semantic endpoint validates input and configuration
+ok 88 - semantic endpoint validates input and configuration
+  ---
+  duration_ms: 42.7106
+  ...
+# Subtest: semantic endpoint batches, caches by text, and returns finite similarities
+ok 89 - semantic endpoint batches, caches by text, and returns finite similarities
+  ---
+  duration_ms: 9.7508
+  ...
+# Subtest: invalid or failed AI output does not leak upstream errors
+ok 90 - invalid or failed AI output does not leak upstream errors
+  ---
+  duration_ms: 4.2342
+  ...
+# Subtest: client sends only IDs and cleaned descriptions and rejects unavailable AI
+ok 91 - client sends only IDs and cleaned descriptions and rejects unavailable AI
+  ---
+  duration_ms: 5.655
+  ...
+# (node:33888) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: series collapse selects earliest eligible volume and preserves format adaptations
+ok 92 - series collapse selects earliest eligible volume and preserves format adaptations
+  ---
+  duration_ms: 2.0153
+  ...
+# Subtest: anime adaptation mentions do not label prose as anime; book formats require source labels
+ok 93 - anime adaptation mentions do not label prose as anime; book formats require source labels
+  ---
+  duration_ms: 25.1679
+  ...
+# Subtest: Chinese animation is donghua while Chinese live action is not anime
+ok 94 - Chinese animation is donghua while Chinese live action is not anime
+  ---
+  duration_ms: 18.6597
+  ...
+# (node:34220) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Book: historical romance setting outweighs provider and AI scores
+ok 95 - Book: historical romance setting outweighs provider and AI scores
+  ---
+  duration_ms: 8.7844
+  ...
+# Subtest: TV: historical romance setting outweighs provider and AI scores
+ok 96 - TV: historical romance setting outweighs provider and AI scores
+  ---
+  duration_ms: 16.0449
+  ...
+# Subtest: Movie: historical romance setting outweighs provider and AI scores
+ok 97 - Movie: historical romance setting outweighs provider and AI scores
+  ---
+  duration_ms: 1.5796
+  ...
+# Subtest: unknown metadata is not treated as confirmed context
+ok 98 - unknown metadata is not treated as confirmed context
+  ---
+  duration_ms: 1.0649
+  ...
+# Subtest: TMDB context searches retain the genre and advertise additional pages
+ok 99 - TMDB context searches retain the genre and advertise additional pages
+  ---
+  duration_ms: 133.641
+  ...
+# Subtest: anime is a distinct subset of animation, never its synonym
+ok 100 - anime is a distinct subset of animation, never its synonym
+  ---
+  duration_ms: 4.0629
+  ...
+# (node:34156) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cross-source enrichment requires both identity and a validated source
+ok 101 - cross-source enrichment requires both identity and a validated source
+  ---
+  duration_ms: 4.3064
+  ...
+# Subtest: story evidence is grouped, missing text is neutral, series position is explicit
+ok 102 - story evidence is grouped, missing text is neutral, series position is explicit
+  ---
+  duration_ms: 6.388
+  ...
+# Subtest: story method prefers matching story evidence and accessible entry points without bypassing genre
+ok 103 - story method prefers matching story evidence and accessible entry points without bypassing genre
+  ---
+  duration_ms: 15.9858
+  ...
+# (node:34248) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: personal tags normalize reuse and reject malformed or excessive labels
+ok 104 - personal tags normalize reuse and reject malformed or excessive labels
+  ---
+  duration_ms: 6.7326
+  ...
+# Subtest: personal tags create cross-media connections and hidden tags stop contributing
+ok 105 - personal tags create cross-media connections and hidden tags stop contributing
+  ---
+  duration_ms: 5.5853
+  ...
+# Subtest: persisted personal tags are bounded, validated and attached only to known titles
+ok 106 - persisted personal tags are bounded, validated and attached only to known titles
+  ---
+  duration_ms: 2.7547
+  ...
+# (node:33896) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: taxonomy drafts validate structure, aliases and graph references
+ok 107 - taxonomy drafts validate structure, aliases and graph references
+  ---
+  duration_ms: 5.5439
+  ...
+# Subtest: draft preview respects applicability and archive preserves IDs
+ok 108 - draft preview respects applicability and archive preserves IDs
+  ---
+  duration_ms: 2.0706
+  ...
+# (node:34324) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: incidental factual subjects do not override fiction genres
+ok 109 - incidental factual subjects do not override fiction genres
+  ---
+  duration_ms: 1.3943
+  ...
+# Subtest: factual work about fantasy does not become fantasy fiction
+ok 110 - factual work about fantasy does not become fantasy fiction
+  ---
+  duration_ms: 9.545
+  ...
+# Subtest: genres and facets can overlap without forcing unknown class
+ok 111 - genres and facets can overlap without forcing unknown class
+  ---
+  duration_ms: 0.1256
+  ...
+# Subtest: subgenre expands to relevant themes and tropes
+ok 112 - subgenre expands to relevant themes and tropes
+  ---
+  duration_ms: 2.5313
+  ...
+# Subtest: format and audience require source evidence and compatible media
+ok 113 - format and audience require source evidence and compatible media
+  ---
+  duration_ms: 1.0077
+  ...
+# Subtest: biography belongs to nonfiction and magical school is a setting
+ok 114 - biography belongs to nonfiction and magical school is a setting
+  ---
+  duration_ms: 0.1537
+  ...
+# (node:34644) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: explicit story facets work across media without a synopsis
+ok 115 - explicit story facets work across media without a synopsis
+  ---
+  duration_ms: 4.1043
+  ...
+# Subtest: sparse evidence cannot earn a complete story score and tone cannot outweigh setting
+ok 116 - sparse evidence cannot earn a complete story score and tone cannot outweigh setting
+  ---
+  duration_ms: 0.7319
+  ...
+# Subtest: absent external evidence does not punish an otherwise identical match
+ok 117 - absent external evidence does not punish an otherwise identical match
+  ---
+  duration_ms: 11.4878
+  ...
+# Subtest: all shared tags are counted even when top explanations show three
+ok 118 - all shared tags are counted even when top explanations show three
+  ---
+  duration_ms: 0.6503
+  ...
+# Subtest: core compatibility outranks maximum provider and AI evidence, including after diversity
+ok 119 - core compatibility outranks maximum provider and AI evidence, including after diversity
+  ---
+  duration_ms: 1.5614
+  ...
+# Subtest: missing metadata is visible and never treated as an exact match
+ok 120 - missing metadata is visible and never treated as an exact match
+  ---
+  duration_ms: 0.4542
+  ...
+# Subtest: premise precedence also applies outside romance
+ok 121 - premise precedence also applies outside romance
+  ---
+  duration_ms: 0.4732
+  ...
+1..121
+# tests 121
+# suites 0
+# pass 121
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4912.6123
+

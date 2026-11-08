@@ -1,3 +1,4 @@
+import { analyzeTags } from './tag-analysis.ts';
 import { hardcoverBooks, HardcoverError } from './hardcover.ts';
 import { semanticComparison, SemanticError, type SemanticEnv } from './semantic.ts';
 import { featureGroups, detailedTags, featureKind } from '../lib/features.ts';
@@ -5,6 +6,7 @@ import { matureRating } from '../lib/content-rating.ts';
 import { normalizeGenres, corroboratedGenres } from '../lib/genres.ts';
 import { extractTags, plainText } from '../lib/media-api.ts';
 type Env = SemanticEnv & {
+  TAGGING_REVIEW_KEY?: string;
   TMDB_TOKEN?: string;
   HARDCOVER_TOKEN?: string;
   IGDB_CLIENT_ID?: string;
@@ -236,12 +238,16 @@ export default {
     if (request.method === 'OPTIONS')
       return new Response(null, {
         status: 204,
-        headers: { ...headers, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers':'Content-Type' },
+        headers: { ...headers, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers':'Content-Type, Authorization' },
       });
-    if (request.method !== 'GET' && !(request.method==='POST' && new URL(request.url).pathname==='/semantic'))
+    if (request.method !== 'GET' && !(request.method==='POST' && ['/semantic','/analyze-tags'].includes(new URL(request.url).pathname)))
       return reply({ error: 'Method not allowed.' }, 405);
     try {
       const u = new URL(request.url);
+      if(u.pathname==='/analyze-tags'){
+        if(request.method!=='POST')return reply({error:'Use POST.'},405);
+        return reply(await analyzeTags(request,env));
+      }
       if(u.pathname==='/semantic'){
         if(request.method!=='POST')return reply({error:'Use POST.'},405);
         return reply(await semanticComparison(request,env));
@@ -419,3 +425,4 @@ export default {
     }
   },
 };
+

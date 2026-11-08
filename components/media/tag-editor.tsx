@@ -1,4 +1,5 @@
 'use client';
+import { AiTagReview } from './ai-tag-review';
 import { detailedTags, detailedFeatures, featureKind, featureLabels } from '@/lib/features';
 import { useState } from 'react';
 import {taxonomy,tagApplicable,suggestedFacets,contentClass} from '@/lib/taxonomy';
@@ -45,6 +46,7 @@ export function TagEditor({
       if (edit.added.length >= 12)
         throw new Error('Use at most 12 personal tags per title.');
       onChange({
+        ...edit,
         added: item.tags.includes(tag) ? edit.added : [...edit.added, tag],
         hidden: edit.hidden.filter((t) => t !== tag),
       });
@@ -76,6 +78,7 @@ export function TagEditor({
           Reuse a tag on similar titles to connect your taste across media.
           Changes save immediately in this browser and update recommendations.
         </DialogDescription>
+        <AiTagReview item={item} edit={edit} onChange={onChange} />
         <h3>Automatic tags</h3>
         <p className="muted">
           Automatic tags come from catalog genres and description keywords. Hide
@@ -171,13 +174,14 @@ export function TagEditor({
         <button
           className="remove-added"
           onClick={() => {
-            onChange({ added: [], hidden: [] });
+            onChange({ ...edit, added: [], hidden: [] });
             setError('');
           }}
         >
-          Reset this title’s tags
+          Reset manual additions and hidden tags
         </button>
       </DialogContent>
     </Dialog>
   );
 }
+

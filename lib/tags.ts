@@ -1,7 +1,8 @@
+import { acceptedAnalysisTags, restoreAnalyses, type TagAnalysis } from './ai-tagging.ts';
 import {tagApplicable} from './taxonomy.ts';
 import { detailedFeatures } from './features.ts';
 import type { Media } from './recommendations';
-export type TagEdits = Record<string, { added: string[]; hidden: string[] }>;
+export type TagEdits = Record<string, { added: string[]; hidden: string[]; analyses?: TagAnalysis[] }>;
 export function normalizeTag(raw: string): string {
   const tag = raw
     .normalize('NFKC')
@@ -30,6 +31,7 @@ export function effectiveTags(item: Media, edit?: TagEdits[string]): string[] {
         ]),
       ].filter((t) => !edit?.hidden.includes(t)),
       ...(edit?.added || []),
+      ...acceptedAnalysisTags(edit?.analyses || [],item).filter(t=>!edit?.hidden.includes(t)),
     ]),
   ].filter(tag=>tagApplicable(tag,{...item,tags:[...item.tags,...(edit?.added||[])]}));
 }
@@ -51,6 +53,7 @@ export function restoreTagEdits(value: unknown, items: Media[]): TagEdits {
     }
     out[item.id] = {
       added,
+      ...(Array.isArray(edit.analyses)?{analyses:restoreAnalyses(edit.analyses,item)}:{}),
       hidden: [
         ...new Set([
           ...item.tags,
@@ -61,3 +64,4 @@ export function restoreTagEdits(value: unknown, items: Media[]): TagEdits {
   }
   return out;
 }
+
