@@ -1294,6 +1294,23 @@
       "classes": [
         "fiction"
       ]
+    },
+    "medical-mystery": {
+      "kind": "subgenre",
+      "label": "Medical mystery",
+      "description": "Mystery fiction in which investigating an unexplained illness, diagnosis, poisoning or other medical puzzle is central to the story. A medical setting or a character who practices medicine alone is not sufficient.",
+      "classes": [
+        "fiction"
+      ],
+      "parents": [
+        "mystery"
+      ],
+      "media": [
+        "Book",
+        "Movie",
+        "TV",
+        "Game"
+      ]
     }
   }
 }

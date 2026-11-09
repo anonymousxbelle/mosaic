@@ -82,3 +82,14 @@ test('mixed output retains valid pending rows and persists excluded-row diagnost
  assert.deepEqual(acceptedAnalysisTags([reviewSuggestion(restored,0,'accepted',item)],item),['found-family']);
 });
 
+
+test('published medical mystery can be accepted from an older new-tag proposal without replacing other genres',()=>{
+ const medicalSource={...source,text:'The investigator is solving medical mysteries in a royal court.'};
+ const a={...analysis(),source:medicalSource,suggestions:[{...suggestion,tag:'medical-mystery',kind:'subgenre',proposed:true,definition:'Mysteries involving medical puzzles.',quote:'solving medical mysteries',status:'pending'}]};
+ const work={...item,tags:['mystery','drama']};
+ const restored=restoreAnalyses([a],work)[0];assert.ok(restored);
+ const reviewed=reviewSuggestion(restored,0,'accepted',work);
+ assert.equal(reviewed.suggestions[0].status,'accepted');
+ assert.deepEqual(new Set(effectiveTags(work,{added:[],hidden:[],analyses:[reviewed]})),new Set(['mystery','drama','medical-mystery']));
+});
+
