@@ -23,6 +23,9 @@ const comparable = (s: string) =>
     .toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, ' ')
     .trim();
+// Preserve repeated meaningful words; ignore punctuation and connecting words.
+export const titleSearchKey=(s:string)=>comparable(s).split(' ').filter(w=>!['and','the','a','an','of','or'].includes(w)).join(' ');
+export function hasCloseTitle(items:{title:string}[],query:string){const key=titleSearchKey(query);return !!key&&items.some(i=>titleSearchKey(i.title)===key);}
 export function rankSearch<
   T extends { title: string; creator: string; ratingCount?: number },
 >(items: T[], query: string): T[] {
@@ -38,7 +41,7 @@ export function rankSearch<
           ? 600
           : title.includes(q)
             ? 400
-            : 0) +
+            : titleSearchKey(title)===titleSearchKey(q) ? 800 : 0) +
       (creator === q ? 300 : creator.includes(q) ? 150 : 0) +
       words.filter((w) => (title + ' ' + creator).split(' ').includes(w))
         .length *
@@ -55,3 +58,4 @@ export function rankSearch<
     )
     .map((x) => x.item);
 }
+

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import {libraryShelf,matchesShelf,libraryOrder} from '@/lib/library-view';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hybrid-ranking';
 import { compareDescriptions } from '@/lib/semantic';
@@ -24,6 +25,7 @@ import {
   Layers3,
   Star,
   Search,
+  Settings,
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
@@ -97,6 +99,8 @@ function MediaMark({ item }: { item: Media }) {
 }
 export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const [view, setView] = useState(reviewer?'library':'discover');
+  const [preferencesOpen,setPreferencesOpen]=useState(false);
+  const [preservedResults,setPreservedResults]=useState<{key:string;items:any[]}|null>(null);
   const [removeTarget,setRemoveTarget]=useState<Media|null>(null);
   const [rateTarget,setRateTarget]=useState<Media|null>(null);
   const [shelf, setShelf] = useState('all');
@@ -166,13 +170,15 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       ...candidates.filter((i) => inContentSection(i, adultSection)),
     ].find((i) => i.id === seed) || discoveryCatalog[0];
   useEffect(() => {setFocusTags([]);setMustTags([]);setSeriesView('discover');}, [selected?.id]);
+  const controlsKey=JSON.stringify([mode,mode==='based-on'?[selected?.id,selected?.description,selected?.tags,selected?.genres]:null,category,focusTags,mustTags,seriesView,adultSection,avoided,rankingMode,tagEdits]);
   const discoveryKey=JSON.stringify([mode,selected?.id,selected?.description,selected?.tags,selected?.genres,category,focusTags,mustTags,seriesView,adultSection,avoided,ratings,rankingMode,tagEdits,discoveryCatalog.map(i=>[i.id,i.libraryState,i.tags,i.genres])]);
   useEffect(()=>{
+    if(preservedResults?.key===controlsKey)return;
     discoveryRequest.current?.abort();
     setDiscovering(false);
     setDiscoveryNotice('');
     setCompletedDiscoveryKey('');
-  },[discoveryKey,rankingMode]);
+  },[discoveryKey,rankingMode,controlsKey]);
   useEffect(() => {
     try {
       const saved = restoreLibrary(
@@ -211,6 +217,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     }
   }, [added, ratings, tagEdits, avoided, ready]);
   function addItem(item: CatalogMedia, rating?:number) {
+    if(view==='discover'&&filteredResults.length)setPreservedResults({key:controlsKey,items:filteredResults});
     setUndo(null);
     if (added.length >= 200)
       throw new Error(
@@ -247,8 +254,9 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
         throw new Error(
           'Its content rating has changed. Search in the appropriate collection.',
         );
+      setPreservedResults({key:controlsKey,items:filteredResults});
       setAdded((old) => [
-        { ...verified, libraryState: state },
+        { ...verified, libraryState: state==='later' && ratings[item.id]?'experienced':state },
         ...old.filter((i) => i.id !== item.id),
       ]);
       setUndo({ id: item.id, previous, previousRating:ratings[item.id] });
@@ -353,6 +361,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     return () => lifecycle.abort();
   }, []);
   async function findConnections() {
+    setPreservedResults(null);
     discoveryRequest.current?.abort();
     const controller = new AbortController();
     discoveryRequest.current = controller;
@@ -478,19 +487,15 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       .sort((a, b) => b.score - a.score)),
   ) : [];
   const cosineRun=cosineDiscovery([...catalog,...candidates],{mode:mode==='based-on'?'based-on':'for-you',ratings,library:catalog,seed:mode==='based-on'?selected:undefined,category});
-  const filteredResults=rankingMode==='cosine'
+  const calculatedResults=rankingMode==='cosine'
     ?completedDiscoveryKey===discoveryKey&&!discovering?cosineRun.results
       .filter(i=>i.type!=='Music'&&i.type!=='Game'&&inContentSection(i,adultSection)&&genreAllowed(i,[],avoided))
       .filter(i=>mode!=='based-on'||mustTags.every(t=>i.tags.includes(t)))
       .map(i=>({...i,storyReasons:[] as string[],seriesEntries:[i]})):[]
     :legacyResults;
-  const visible = sectionCatalog
-    .filter(
-      (i) =>
-        shelf === 'all' ||
-        i.libraryState === shelf ||
-        (shelf === 'experienced' && !!ratings[i.id]),
-    )
+  const filteredResults=preservedResults?.key===controlsKey?preservedResults.items:calculatedResults;
+  const visible = libraryOrder(sectionCatalog,ratings)
+    .filter(i=>matchesShelf(i,ratings,shelf))
     .filter((i) =>
       (i.title + ' ' + i.creator + ' ' + i.type + ' ' + i.tags.join(' '))
         .toLowerCase()
@@ -596,6 +601,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
 
             </section>
           )}
+        {view==='discover'&&<div className="discover-actions"><AddMedia items={catalog} adult={adultSection} onAdd={addItem} label="Add & rate a title"/><button className="preferences-button" aria-label="Open taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button></div>}
         <details className="content-settings" open><summary>Content preferences {adultSection ? '· 18+' : '· General'}</summary><div
           className="content-section"
           role="group"
@@ -640,8 +646,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
         <div className="workspace focused-workspace">
           <aside className="library" hidden={view !== 'library'}>
             <div className="section-heading">
-              <h2>My Library</h2><a className="library-preferences-link" href="#library-preferences">Edit taste & preferences</a>
-              <span>{sectionCatalog.filter((i) => ratings[i.id]).length} rated</span>
+              <h2>My Library</h2><button className="preferences-button" aria-label="Open taste and preferences" title="Taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button>
+              <span>{sectionCatalog.length} titles · {sectionCatalog.filter((i) => ratings[i.id]).length} rated</span>
             </div>
             <p className="muted">
               Add media from live catalogs, then rate your favorites. Your
@@ -680,42 +686,17 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               />
             </label>
             <div className="library-list">
-              {visible.map((item) => (
+              {visible.map((item,index) => (
                 <article className="library-item" key={item.id}>
+                  {shelf==='all' && libraryShelf(item,ratings)==='dismissed' && (index===0||libraryShelf(visible[index-1],ratings)!=='dismissed') && <h3 className="dismissed-heading">Not interested</h3>}
                   <MediaMark item={item} />
                   <div>
                     <span className="type-label">{item.type}</span>
                     <p className="muted">{contentLabel(item)}</p>
                     <h3>{item.title}</h3>
                     <p className="library-creator">{item.creator}</p>
-                    {item.libraryState && (
-                      <p className="muted">
-                        {item.libraryState === 'later'
-                          ? 'Saved for later'
-                          : item.libraryState === 'experienced'
-                            ? 'Already experienced'
-                            : 'Not interested'}
-                      </p>
-                    )}
-                    {item.libraryState && (
-                      <button
-                        className="edit-tags"
-                        onClick={() => {
-                          setAdded((old) =>
-                            old.map((i) =>
-                              i.id === item.id
-                                ? { ...i, libraryState: undefined }
-                                : i,
-                            ),
-                          );
-                          setNotice(
-                            'Shelf status cleared. Existing ratings still apply.',
-                          );
-                        }}
-                      >
-                        Clear shelf status
-                      </button>
-                    )}
+                    <p className="muted">{libraryShelf(item,ratings)==='later'?'Saved for later':libraryShelf(item,ratings)==='experienced'?'Already experienced':'Not interested'}</p>
+                    {libraryShelf(item,ratings)==='dismissed'&&<button className="edit-tags" onClick={()=>setAdded(old=>old.map(x=>x.id===item.id?{...x,libraryState:ratings[item.id]?'experienced':'later'}:x))}>Restore to library</button>}
                     <button
                       className="edit-tags"
                       onClick={() => {
@@ -820,7 +801,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                           aria-label={n + ' stars for ' + item.title}
                           aria-pressed={ratings[item.id] === n}
                           onClick={() =>
-                            setRatings((old) => ({ ...old, [item.id]: n }))
+                            {setRatings((old) => ({ ...old, [item.id]: n }));setAdded(old=>old.map(x=>x.id===item.id?{...x,libraryState:'experienced'}:x));}
                           }
                         >
                           <Star
@@ -1092,13 +1073,14 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                     {'compatibilityNote' in item && typeof item.compatibilityNote==='string' && <p className="match-context">{item.compatibilityNote}</p>}
                     {item.seriesPosition && <p>Volume / book {item.seriesPosition} · earliest available matching entry shown</p>}
                     {item.tags.includes('donghua') && <p>Chinese animation (donghua){selected?.tags.includes('anime') ? ' · broader animation match, not Japanese anime' : ''}</p>}
-                    {item.seriesKey && <details className="series-entries"><summary>Volumes & sequels · {item.seriesEntries.length} retrieved</summary>
-                      <p>One discovery card per known series and format. This list contains matching entries we retrieved, not a complete bibliography or season guide. Adaptations stay separate.</p>
-                      <ul>{item.seriesEntries.map(entry=><li key={entry.id}><span>{entry.seriesPosition ? `#${entry.seriesPosition} · ` : ''}{entry.title}</span><button disabled={actionBusy} onClick={()=>feedback(entry,'later')}>Save this entry</button></li>)}</ul>
+                    {item.seriesKey && item.seriesEntries.some((entry:any)=>entry.id!==item.id) && <details className="series-entries"><summary>Other volumes & sequels</summary>
+                      <p>Other entries found in this series:</p>
+                      <ul>{item.seriesEntries.filter((entry:any)=>entry.id!==item.id).map((entry:any)=><li key={entry.id}><a href={entry.sourceUrl} target="_blank" rel="noreferrer">{entry.seriesPosition ? `#${entry.seriesPosition} · ` : ''}{entry.title}</a><button disabled={actionBusy} onClick={()=>setRateTarget(entry)}>Rate this entry</button><button disabled={actionBusy} onClick={()=>feedback(entry,'later')}>Save to library · for later</button></li>)}</ul>
                     </details>}
                     {'storyReasons' in item && Array.isArray(item.storyReasons) && item.storyReasons.length>0 && <p>Story connections: {item.storyReasons.join('; ')}</p>}
                     {'metadataSourceUrl' in item && typeof item.metadataSourceUrl==='string' && <a href={item.metadataSourceUrl} target="_blank" rel="noreferrer">Additional book metadata: Hardcover</a>}
                     <AutoSynopsis item={item} />
+                    {added.some(x=>x.id===item.id)&&<p className="saved-result-status">{added.find(x=>x.id===item.id)?.libraryState==='dismissed'?'Marked Not interested':ratings[item.id]?`In My Library · ${ratings[item.id]} stars`:'Saved in My Library'}</p>}
                     <div className="result-actions">
                       {[...added, ...candidates].some(
                         (x) => x.id === item.id,
@@ -1137,14 +1119,14 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                       </button>
                     </div>
                     <details className="connection"><summary>Why this matches</summary>
-                      <p>Shared details: {item.sharedTags.map(t=>t.replaceAll('-',' ')).join(', ') || 'No shared tags are confirmed yet.'}</p>
+                      <p>{mode==='based-on'&&selected?`Similar to “${selected.title}” in: `:'Shares these details with your rated favorites: '}{item.sharedTags.map((t:string)=>t.replaceAll('-',' ')).join(', ') || 'No shared tags are confirmed yet.'}</p>
                       {reviewer && <details><summary>Scoring evidence · {item.sharedTags.length} shared tags</summary>
                         <p>All shared tags: {item.sharedTags.join(' · ')}. {rankingMode==='cosine'?'These features have positive contributions to the cosine dot product. Profile weights and vector lengths determine the score.':'This count is not the ranking score: specific story matches carry more weight than broad labels.'}</p>
                         {rankingMode==='cosine'&&<p>Negative feature contributions: {cosineRun.results.find(x=>x.id===item.id)?.contributions.filter(x=>x.contribution<0).map(x=>x.feature).join(' · ')||'None'}.</p>}
                         {mode==='based-on' && <p>Core era, setting, subgenre and premise compatibility comes first in Recommended mode. Prefer choices and variety among similar results can also change the order.</p>}
                         {'rankingDetails' in item && <p>Missing story details reduce the evidence for a close match. AI and provider scores, when available, have only a small influence.</p>}
                       </details>}
-                      {rankingMode!=='cosine'&&connectionEvidence(
+                      {reviewer && rankingMode!=='cosine'&&connectionEvidence(
                         item,
                         mode === 'based-on'
                           ? selected
@@ -1161,13 +1143,10 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                           {e.tags.slice(0, 3).join(', ')}.
                         </p>
                       ))}
-                      <small>
-                        Based on catalog keyword tags and your edits, not a
-                        prediction of how much you’ll like it.
-                      </small>
+
                     </details>
                     <details className="card-details"><summary>Details & feedback</summary>
-                    {!!item.sourceGenreLabels?.length && <div><p><strong>Original catalog labels:</strong> {item.sourceGenreLabels.join(' · ')}</p><p>Combined shelves such as “Action & Adventure” or “Mystery / Thriller” do not establish each tag individually. Mosaic uses more specific labels or synopsis evidence; without that evidence, the genre stays unconfirmed.</p></div>}
+                    {reviewer && !!item.sourceGenreLabels?.length && <div><p><strong>Original catalog labels:</strong> {item.sourceGenreLabels.join(' · ')}</p><p>Combined shelves such as “Action & Adventure” or “Mystery / Thriller” do not establish each tag individually. Mosaic uses more specific labels or synopsis evidence; without that evidence, the genre stays unconfirmed.</p></div>}
                     {[...added, ...candidates].find(
                       (x) => x.id === item.id,
                     ) && (
@@ -1201,7 +1180,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               </div>
             )}
             <details className="advanced-panel"><summary>About your recommendations</summary><p className="data-note">
-              You have {added.length} titles saved in this browser. Mosaic searches live catalogs for candidates and compares their story details with your favorites. It does not compare every title in every catalog. Match explanations describe similarities—not a guarantee that you will enjoy a title. You can correct tags from My Library.
+              You have {sectionCatalog.length} titles in this content section{added.length!==sectionCatalog.length ? ` (${added.length} stored in total, including other content sections or unsupported media)` : ''}. Mosaic searches live catalogs for candidates and compares their story details with your favorites. It does not compare every title in every catalog. Match explanations describe similarities—not a guarantee that you will enjoy a title. You can correct tags from My Library.
             </p></details>
           </section>
         </div>
@@ -1220,8 +1199,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
         </section>
         <Dialog open={!!removeTarget} onOpenChange={open=>{if(!open)setRemoveTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Remove {removeTarget?.title}?</DialogTitle><DialogDescription>This removes the title, its star rating, personal tags and AI review history from this browser’s library. It may appear in recommendations again. This does not change the catalog.</DialogDescription><div className="result-actions"><button onClick={()=>setRemoveTarget(null)}>Keep title</button><button className="destructive" onClick={()=>{if(removeTarget)removeItem(removeTarget.id);setRemoveTarget(null);}}>Remove from library</button></div></DialogContent></Dialog>
         <Dialog open={!!rateTarget} onOpenChange={open=>{if(!open)setRateTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Rate {rateTarget?.title}</DialogTitle><DialogDescription>Your rating shapes your taste profile. If you haven’t read or watched it, save it for later instead.</DialogDescription><div className="rating-choices">{[1,2,3,4,5].map(n=><button disabled={actionBusy} key={n} onClick={()=>{if(rateTarget)void feedback(rateTarget,'experienced',n);setRateTarget(null);}}>{n} ★</button>)}<button disabled={actionBusy} onClick={()=>{if(rateTarget)void feedback(rateTarget,'later');setRateTarget(null);}}>Save to library · for later</button></div></DialogContent></Dialog>
-        <section id="library-preferences" className="preferences-screen" hidden={view !== 'library'}>
-          <h2>Your taste & preferences</h2>{' '}
+<Dialog open={preferencesOpen} onOpenChange={setPreferencesOpen}><DialogContent className="add-media-dialog preferences-screen"><DialogTitle>Your taste & preferences</DialogTitle><DialogDescription>Manage exclusions and your browser-saved library.</DialogDescription>
           <Account
             library={{ version: 1, added, ratings, tagEdits, avoided }}
             onLoad={(value) => {
@@ -1251,7 +1229,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             <p>These exclusions apply to every search and stay saved in this browser. Ratings shape your taste without hiding an entire genre. To include something for just one search, use Based On → Refine your matches.</p>
             <TagChoice label="Exclude" selected={avoided} onChange={setAvoided} suggestions={Object.keys(taxonomy).filter(t=>!taxonomy[t].retired && (!taxonomy[t].media?.length || taxonomy[t].media!.some(m=>['Book','Movie','TV'].includes(m))))}/>
           </details>
-        </section>
+        </DialogContent></Dialog>
         <section className="taste-section" hidden={view !== 'library'}>
           <div>
             <p className="eyebrow">YOUR TASTE, TAKING SHAPE</p>

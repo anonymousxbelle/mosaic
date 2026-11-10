@@ -43,10 +43,11 @@ export function AutoSynopsis({item}:{item:Media}){
     observer.observe(root.current);
     return()=>{active=false;observer.disconnect();};
   },[item.id,item.description,retry]);
+  const preview=description.length>420?description.slice(0,420).replace(/\s+\S*$/,''):description;
   return <div ref={root} className="synopsis">
-    <p className="description">{hasSynopsis(description)?description.length>420?description.slice(0,420).replace(/\s+\S*$/,'')+'…':description:status==='error'?'The synopsis could not load.':status==='done'?'No synopsis is available from the catalog. Use the source link for more details.':'Loading synopsis…'}</p>
+    <p className="description">{hasSynopsis(description)?description.length>420?preview+'…':description:status==='error'?'The synopsis could not load.':status==='done'?'No synopsis is available from the catalog. Use the source link for more details.':'Loading synopsis…'}</p>
     {status==='error'&&<button onClick={()=>setRetry(n=>n+1)}>Retry synopsis</button>}
-    {hasSynopsis(description)&&description.length>420&&<details className="full-description"><summary>Read full description</summary><p>{description}</p></details>}
+    {hasSynopsis(description)&&description.length>420&&<details className="full-description"><summary>Continue reading</summary><p>{description.slice(preview.length).trimStart()}</p></details>}
   </div>;
 }
 

@@ -5,7 +5,7 @@ import { retrievePages, emptyStats, cachedCatalog, rememberCatalog, type Retriev
 import {hasStoryContext,matchesStoryContext,storySearchTerms} from './story-profile.ts';
 import { matureRating } from './content-rating.ts';
 import { normalizeGenres, withoutCombinedGenre, withoutCatalogShelvesInSynopsis, genreChoices } from './genres.ts';
-import { bookSynopsis, rankSearch } from './catalog-text.ts';
+import { bookSynopsis, rankSearch, hasCloseTitle } from './catalog-text.ts';
 import type { Category, Media } from './recommendations';
 import { sameWork } from './media-identity.ts';
 export type Provider =
@@ -404,7 +404,16 @@ async function searchMediaInternal(
     if (catalogApi) {
       try {
         const found = await gateway('search', {type, q: query.trim(), adult: String(adult)}, signal);
-        if (found.length) return found;
+        if (found.length) {
+          let combined=found;
+          if(!hasCloseTitle(found,query)){
+            try{
+              const alternatives=await(await import('./book-api.ts')).searchBooks(query.trim(),signal);
+              combined=[...found,...alternatives.filter(item=>!found.some(existing=>sameWork(existing,item)))];
+            }catch(error){if(signal?.aborted)throw error;}
+          }
+          return rankSearch(combined,query).slice(0,20);
+        }
       } catch (error) { if (signal?.aborted) throw error; }
     }
     try {
@@ -753,3 +762,4 @@ export async function searchMedia(type:Category,query:string,signal?:AbortSignal
 export async function verifyMedia(item:CatalogMedia,signal?:AbortSignal){
  return toUnifiedRecord(await verifyMediaInternal(item,signal));
 }
+

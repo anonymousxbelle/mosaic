@@ -36,11 +36,13 @@ export function AddMedia({
   items,
   adult = false,
   favorite = false,
+  label,
   onAdd,
 }: {
   items: Media[];
   adult?: boolean;
   favorite?: boolean;
+  label?: string;
   onAdd: (item: CatalogMedia, rating?: number) => void;
 }) {
   const [rating,setRating]=useState<number | null>(null);
@@ -152,7 +154,7 @@ export function AddMedia({
     >
       <DialogTrigger className="add-media-button">
         <Plus size={17} />
-        {favorite ? 'Add a favorite' : 'Add media'}
+        {label || (favorite ? 'Add a favorite' : 'Add media')}
       </DialogTrigger>
       <DialogContent className="add-media-dialog">
         <DialogTitle className="add-title">Add something you love</DialogTitle>
@@ -199,7 +201,7 @@ export function AddMedia({
         <div className="catalog-search-box">
           <input id="live-media-search" role="combobox" aria-autocomplete="list" aria-expanded={!selection && matches.length>0} aria-controls="catalog-options" aria-activedescendant={!selection && matches.length?`catalog-option-${Math.min(highlight,matches.length-1)}`:undefined} aria-describedby="search-help" placeholder="Start typing a title…" value={query} disabled={verifying}
             onChange={e=>{reset();setQuery(e.target.value);setHighlight(0);}}
-            onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();e.stopPropagation();const item=matches[Math.min(highlight,matches.length-1)];if(!selection&&item){setSelection(item);setQuery(item.title);setLoading(false);generation.current++;}}else if(e.key==='ArrowDown'){e.preventDefault();setHighlight(n=>Math.min(n+1,matches.length-1));}else if(e.key==='ArrowUp'){e.preventDefault();setHighlight(n=>Math.max(n-1,0));}}}/>
+            onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();e.stopPropagation();}else if(e.key==='ArrowDown'){e.preventDefault();setHighlight(n=>Math.min(n+1,matches.length-1));}else if(e.key==='ArrowUp'){e.preventDefault();setHighlight(n=>Math.max(n-1,0));}}}/>
           {!selection && matches.length>0 && <div id="catalog-options" role="listbox" className="catalog-options">{matches.map((item,index)=><button type="button" role="option" id={`catalog-option-${index}`} aria-selected={index===highlight} key={item.id} onClick={()=>{setSelection(item);setQuery(item.title);setLoading(false);generation.current++;}}><strong>{item.title}</strong><span>{item.creator}{item.year?' · '+item.year:''}</span><small>{item.provider}</small></button>)}</div>}
         </div>
         <p id="search-help" className="search-help" role="status">

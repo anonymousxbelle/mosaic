@@ -1272,3 +1272,13 @@ body { background:var(--background); }
 .app-shell .library-item > div { min-width:0; }.app-shell .library-item .feedback-panel { clear:both; }
 .destructive { color:#9a3d35!important; border-color:#cda49d!important; }
 
+/* Independent card flow: shorter cards no longer wait for the adjacent row. */
+.app-shell .focused-workspace .results { display:block; columns:2; column-gap:22px; }
+.app-shell .results .result-card { break-inside:avoid; margin:0 0 22px; width:100%; display:inline-flex; }
+@media(max-width:700px){.app-shell .focused-workspace .results{columns:1;}}
+.preferences-button { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border:1px solid #d4dace; border-radius:50%; background:#f4f1e8; }
+.discover-actions { display:flex; gap:12px; align-items:center; margin:14px 0; }.discover-actions .add-media-button { width:auto; padding:12px 18px; }
+.dismissed-heading { flex-basis:100%; grid-column:1 / -1; font-size:16px!important; }
+.library-item:has(.dismissed-heading) { border-top:3px solid #aab2aa; }
+.saved-result-status { font-size:13px; font-weight:600; color:#245e49; }
+
