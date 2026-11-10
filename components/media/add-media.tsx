@@ -100,6 +100,7 @@ export function AddMedia({
     };
   }, [query, type, open, retry, selection, adult]);
   function reset() {
+    setRating(null);
     generation.current++;
     verification.current?.abort();
     setMatches([]);
