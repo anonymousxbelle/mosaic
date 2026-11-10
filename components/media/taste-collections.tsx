@@ -20,8 +20,8 @@ export function TasteCollections({
     ...new Set(items.flatMap((i) => edits[i.id]?.added || [])),
   ].sort();
   return (
-    <details className="taste-collections">
-      <summary>My taste collections</summary>
+    <section className="taste-collections">
+      <h3>Your collections</h3>
       <p>
         Give a connection a name, then group titles across media. These personal
         tags also shape recommendations.
@@ -39,6 +39,7 @@ export function TasteCollections({
           event.preventDefault();
           try {
             const tag = normalizeTag(name);
+            if(!tag)throw new Error('Enter a connection name using 2–32 letters, numbers or spaces.');
             const ids = selected.filter((id) => items.some((i) => i.id === id));
             if (!ids.length) throw new Error('Choose at least one title.');
             const next = { ...edits };
@@ -99,6 +100,7 @@ export function TasteCollections({
         Manage membership with Edit tags on each title. Collections and tags are
         private to your saved library.
       </p>
-    </details>
+    </section>
   );
 }
+

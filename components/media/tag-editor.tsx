@@ -40,6 +40,7 @@ export function TagEditor({
   function add(raw: string) {
     try {
       const tag = normalizeTag(raw);
+      if(!tag)throw new Error('Use 2–32 letters, numbers or spaces.');
       if(!tagApplicable(tag,item))throw new Error('This tag does not fit the title’s content class or media type.');
       if (
         edit.added.includes(tag) ||
@@ -75,11 +76,10 @@ export function TagEditor({
       >
         Edit tags
       </DialogTrigger>
-      <DialogContent className="add-media-dialog">
+      <DialogContent className="add-media-dialog tag-editor-dialog">
         <DialogTitle>Tags for {item.title}</DialogTitle>
         <DialogDescription>
-          Reuse a tag on similar titles to connect your taste across media.
-          Changes save immediately in this browser and update recommendations.
+          Tags describe what a title is about. Keep the ones that fit, hide mistakes, or add a detail the catalog missed. Changes save in this browser and are used the next time you search.
         </DialogDescription>
         {reviewer && <AiTagReview item={item} edit={edit} onChange={onChange} />}
         {!!acceptedAnalysisTags(edit.analyses || [],item).length && <section className="accepted-tags"><h3>Reviewed tags</h3><p>Accepted suggestions are active for matching unless you hide them below.</p><div className="tag-options">{acceptedAnalysisTags(edit.analyses || [],item).map(t=><button key={t} aria-pressed={!edit.hidden.includes(t)} onClick={()=>onChange({...edit,hidden:edit.hidden.includes(t)?edit.hidden.filter(x=>x!==t):[...edit.hidden,t]})}>{t.replaceAll('-',' ')}{edit.hidden.includes(t)?' · hidden':' · active ✓'}</button>)}</div></section>}
@@ -113,10 +113,10 @@ export function TagEditor({
           )}
         </div>
         <details>
-          <summary>Explore applicable genres, themes and tropes</summary>
-          <p>Content class: {contentClass(item).replaceAll('-', ' ')}. Suggestions follow this title’s genres; unknown metadata stays open.</p>
+          <summary>Find more tags for this title</summary>
+          <p>These are possible labels, not confirmed facts about this title. Choose only ones that describe the story. Suggestions use the genres and media type we know; you can also create your own tag below.</p>
           {Object.entries(featureLabels).map(([kind,label]) => {
-            const suggestions=suggestedFacets(item).filter(t=>taxonomy[t].kind===kind && !item.tags.includes(t));
+            const suggestions=suggestedFacets(item).filter(t=>taxonomy[t].kind===kind && kind!=='class' && !item.tags.includes(t) && !edit.added.includes(t));
             return suggestions.length?<section key={kind}><h4>{label}</h4><div className="tag-options">{suggestions.map(t=><button key={t} onClick={()=>add(t)}>+ {t.replaceAll('-',' ')}</button>)}</div></section>:null;
           })}
         </details>
@@ -134,6 +134,7 @@ export function TagEditor({
             </button>
           ))}
         </div>
+        <p className="tag-explanation">For example, add “palace intrigue” to two stories with court politics. Reusing that exact tag helps Mosaic recognize their connection. A new tag applies only to this title until you add it to others; it does not automatically find or label other stories.</p>
         <form
           onSubmit={(e) => {
             e.preventDefault();

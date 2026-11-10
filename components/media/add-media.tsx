@@ -41,8 +41,10 @@ export function AddMedia({
   items: Media[];
   adult?: boolean;
   favorite?: boolean;
-  onAdd: (item: CatalogMedia) => void;
+  onAdd: (item: CatalogMedia, rating?: number) => void;
 }) {
+  const [rating,setRating]=useState<number | null>(null);
+  const [highlight,setHighlight]=useState(0);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<Category>('Book');
   const [query, setQuery] = useState('');
@@ -116,13 +118,13 @@ export function AddMedia({
       if (controller.signal.aborted) return;
       if (findDuplicate(items, verified))
         throw new Error(
-          'This title is already in your library. Find it in Your starting points to rate it.',
+          'This title is already in your library. Find it in My Library to rate it.',
         );
       if (!inContentSection(verified, adult))
         throw new Error(
           'This title belongs in the other content section. Switch sections and search again.',
         );
-      onAdd(verified);
+      onAdd({...verified,libraryState:rating?'experienced':'later'},rating || undefined);
       setOpen(false);
       setQuery('');
       reset();
@@ -143,6 +145,7 @@ export function AddMedia({
       open={open}
       onOpenChange={(value) => {
         setOpen(value);
+        if(value)setRating(null);
         if (!value) reset();
       }}
     >
@@ -192,68 +195,12 @@ export function AddMedia({
         <label className="field-label" htmlFor="live-media-search">
           Title or creator
         </label>
-        <Combobox
-          items={matches}
-          filter={null}
-          value={selection}
-          inputValue={query}
-          itemToStringLabel={(item) => item.title}
-          isItemEqualToValue={(a, b) => a.id === b.id}
-          onInputValueChange={(value, details) => {
-            if (
-              details.reason === 'input-change' ||
-              details.reason === 'input-clear'
-            ) {
-              reset();
-              setQuery(value);
-            }
-          }}
-          onValueChange={(value) => {
-            setSelection(value);
-            setQuery(value?.title || '');
-            setError('');
-            setLoading(false);
-            generation.current++;
-          }}
-        >
-          <ComboboxInput
-            id="live-media-search"
-            aria-describedby="search-help"
-            placeholder={
-              type === 'Game'
-                ? 'Try Hades or Stardew Valley'
-                : type === 'Music'
-                  ? 'Try folklore or Taylor Swift'
-                  : 'Start typing a title…'
-            }
-            showTrigger={false}
-            disabled={verifying}
-            className="live-search-input"
-          />
-          <ComboboxContent className="media-suggestions">
-            <ComboboxList>
-              {(item: CatalogMedia) => (
-                <ComboboxItem
-                  key={item.id}
-                  value={item}
-                  className="media-suggestion"
-                >
-                  <div>
-                    <strong>{item.title}</strong>
-                    <span>
-                      {item.creator}
-                      {item.year ? ' · ' + item.year : ''}
-                    </span>
-                    <small>
-                      {item.provider}
-                      {item.format ? ' · ' + item.format : ''}
-                    </small>
-                  </div>
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-          </ComboboxContent>
-        </Combobox>
+        <div className="catalog-search-box">
+          <input id="live-media-search" role="combobox" aria-autocomplete="list" aria-expanded={!selection && matches.length>0} aria-controls="catalog-options" aria-activedescendant={!selection && matches.length?`catalog-option-${Math.min(highlight,matches.length-1)}`:undefined} aria-describedby="search-help" placeholder="Start typing a title…" value={query} disabled={verifying}
+            onChange={e=>{reset();setQuery(e.target.value);setHighlight(0);}}
+            onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();e.stopPropagation();const item=matches[Math.min(highlight,matches.length-1)];if(!selection&&item){setSelection(item);setQuery(item.title);setLoading(false);generation.current++;}}else if(e.key==='ArrowDown'){e.preventDefault();setHighlight(n=>Math.min(n+1,matches.length-1));}else if(e.key==='ArrowUp'){e.preventDefault();setHighlight(n=>Math.max(n-1,0));}}}/>
+          {!selection && matches.length>0 && <div id="catalog-options" role="listbox" className="catalog-options">{matches.map((item,index)=><button type="button" role="option" id={`catalog-option-${index}`} aria-selected={index===highlight} key={item.id} onClick={()=>{setSelection(item);setQuery(item.title);setLoading(false);generation.current++;}}><strong>{item.title}</strong><span>{item.creator}{item.year?' · '+item.year:''}</span><small>{item.provider}</small></button>)}</div>}
+        </div>
         <p id="search-help" className="search-help" role="status">
           {loading
             ? 'Searching ' + providerFor(type) + '…'
@@ -303,7 +250,7 @@ export function AddMedia({
         )}
         {duplicate && (
           <p className="form-message">
-            Already in your library. Search for it in Your starting points to
+            Already in your library. Search for it in My Library to
             rate it.
           </p>
         )}
@@ -317,9 +264,11 @@ export function AddMedia({
             )}
           </div>
         )}
+        {selection && !duplicate && <fieldset className="add-rating"><legend>Have you read or watched this?</legend><p>Rate it now to shape your recommendations, or save it unrated for later.</p><div className="rating-choices">{[1,2,3,4,5].map(n=><button type="button" key={n} aria-pressed={rating===n} onClick={()=>setRating(n)}>{n} ★</button>)}<button type="button" aria-pressed={rating===0} onClick={()=>setRating(0)}>Not yet · save for later</button></div></fieldset>}
         <button
+          type="button"
           className="confirm-add"
-          disabled={!selection || !!duplicate || verifying}
+          disabled={!selection || !!duplicate || verifying || rating===null}
           onClick={add}
         >
           {verifying ? (
@@ -330,9 +279,7 @@ export function AddMedia({
           ) : (
             <>
               <Plus size={17} />
-              {favorite
-                ? 'Add as a favorite · 5 stars'
-                : 'Verify and add to library'}
+              {rating ? `Add to library · ${rating} stars` : 'Save to library for later'}
             </>
           )}
         </button>
@@ -349,3 +296,4 @@ export function AddMedia({
     </Dialog>
   );
 }
+

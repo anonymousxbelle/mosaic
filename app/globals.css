@@ -1231,3 +1231,44 @@ body { background:var(--background); }
 .tag-entry button { padding:.65rem 1rem; }
 .tag-choice .tag-options { margin-top:.75rem; }
 
+/* Participant walkthrough: compact groups and unmistakable editable controls. */
+.feedback-panel { margin:12px 0; padding:14px; border:1px solid #d8d5ca; border-radius:10px; background:#f6f3ec; }
+.feedback-panel > summary { cursor:pointer; font-weight:650; }
+.feedback-panel > p { margin:10px 0; font-size:14px; }
+.feedback-panel label { display:grid; gap:6px; margin:12px 0; font-size:14px; }
+.feedback-panel textarea,.feedback-panel select { display:block; width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #aebdb5; border-radius:8px; background:#fff; color:#263f38; }
+.feedback-panel textarea { min-height:100px; resize:vertical; }
+.feedback-panel > button { padding:10px 14px; border:1px solid #bccdc1; border-radius:8px; background:#e4eee5; margin:4px 8px 4px 0; }
+.feedback-panel option { background:white; color:#263f38; }
+.catalog-search-box input { width:100%; padding:12px; border:1px solid #aebdb5; border-radius:8px; background:white; }
+.catalog-options { max-height:260px; overflow-y:auto; margin-top:8px; border:1px solid #aebdb5; border-radius:10px; background:white; box-shadow:0 5px 16px #193e2418; }
+.catalog-options button { display:grid; gap:4px; width:100%; text-align:left; padding:12px; border-bottom:1px solid #e4e7df; }
+.catalog-options button[aria-selected='true'],.catalog-options button:hover { background:#e4eee5; }
+.catalog-options span,.catalog-options small { color:#63716a; }
+.rating-choices { display:flex; flex-wrap:wrap; gap:8px; }
+.rating-choices button { min-height:44px; padding:10px 12px; border:1px solid #afc3b5; border-radius:8px; background:#f5f7f1; }
+.rating-choices button[aria-pressed='true'] { background:#245e49; color:white; }
+.add-rating { padding:14px; border:1px solid #d8d5ca; border-radius:10px; }
+.add-rating legend { padding:0 6px; font-weight:650; }.add-rating p { margin:8px 0 12px; }
+.app-shell .result-card { gap:0; justify-content:flex-start; }
+.app-shell .result-card .description { margin:10px 0; }
+.app-shell .result-card .result-actions { margin:12px 0; }
+.app-shell .result-card .connection,.app-shell .result-card .card-details { margin:8px 0 0; padding:12px; background:#f6f3ec; border:1px solid #e1dbce; border-radius:8px; }
+.app-shell .result-card details:not([open]) { padding-block:10px; }
+.app-shell .result-card .full-description { margin:8px 0; padding:0; }
+.app-shell .discovery .context { padding:16px 0; }
+.app-shell .refine-panel fieldset { gap:8px; margin:10px 0; }
+.app-shell .matching-baseline,.app-shell .requirement-help { margin:6px 0; padding:12px 16px; }
+.app-shell .requirement-heading { margin:8px 0; }
+.tag-editor-dialog { gap:10px!important; padding:24px!important; }
+.tag-editor-dialog > h3 { margin:14px 0 0!important; }.tag-editor-dialog p { margin:4px 0 8px; }
+.tag-editor-dialog .tag-options > section { margin:0; padding:8px 0; gap:6px; }
+.tag-editor-dialog .tag-options h4 { margin:0 0 4px!important; }
+.tag-editor-dialog details { margin:10px 0!important; padding:12px; background:#f8f5ee; border:1px solid #ded9cd; border-radius:10px; }
+.tag-editor-dialog details section { margin:8px 0!important; }
+.tag-editor-dialog .tag-explanation { padding:12px; background:#f5f3eb; border-radius:8px; }
+.collections-screen { padding:24px; border:1px solid #ded9cd; border-radius:16px; background:#fffdf8; }
+.collection-prompt { padding:12px; background:#f4f0e7; border-radius:8px; }.collection-prompt button { text-decoration:underline; }
+.app-shell .library-item > div { min-width:0; }.app-shell .library-item .feedback-panel { clear:both; }
+.destructive { color:#9a3d35!important; border-color:#cda49d!important; }
+

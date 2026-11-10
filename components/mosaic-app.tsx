@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hybrid-ranking';
 import { compareDescriptions } from '@/lib/semantic';
 import {vocabulary} from '@/lib/media-api';
@@ -96,11 +97,14 @@ function MediaMark({ item }: { item: Media }) {
 }
 export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const [view, setView] = useState(reviewer?'library':'discover');
+  const [removeTarget,setRemoveTarget]=useState<Media|null>(null);
+  const [rateTarget,setRateTarget]=useState<Media|null>(null);
   const [shelf, setShelf] = useState('all');
   const [actionBusy, setActionBusy] = useState(false);
   const [undo, setUndo] = useState<{
     id: string;
     previous?: CatalogMedia;
+    previousRating?: number;
   } | null>(null);
   const [adultSection, setAdultSection] = useState(false);
   const [added, setAdded] = useState<CatalogMedia[]>([]);
@@ -206,7 +210,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       );
     }
   }, [added, ratings, tagEdits, avoided, ready]);
-  function addItem(item: CatalogMedia) {
+  function addItem(item: CatalogMedia, rating?:number) {
     setUndo(null);
     if (added.length >= 200)
       throw new Error(
@@ -216,21 +220,16 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       throw new Error('This title is already in your library.');
     setAdded((old) => [item, ...old]);
     setSearch('');
+    if(rating)setRatings(old=>({...old,[item.id]:rating}));
     setNotice(
-      item.title + ' added. Rate it below to update your taste profile.',
+      item.title + (rating ? ' added with your rating.' : ' saved in My Library for later.'),
     );
   }
-  function addFavorite(item: CatalogMedia) {
-    addItem({ ...item, libraryState: 'experienced' });
-    setRatings((old) => ({ ...old, [item.id]: 5 }));
-    setNotice(
-      item.title +
-        ' added as a favorite. You can change its rating in My Library.',
-    );
-  }
+  function addFavorite(item:CatalogMedia,rating?:number){addItem(item,rating);}
   async function feedback(
     item: Media,
     state: 'later' | 'experienced' | 'dismissed',
+    rating?:number,
   ) {
     if (actionBusy) return;
     setActionBusy(true);
@@ -252,7 +251,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
         { ...verified, libraryState: state },
         ...old.filter((i) => i.id !== item.id),
       ]);
-      setUndo({ id: item.id, previous });
+      setUndo({ id: item.id, previous, previousRating:ratings[item.id] });
+      if(rating)setRatings(old=>({...old,[item.id]:rating}));
       setNotice(
         state === 'later'
           ? 'Saved for later in My Library.'
@@ -519,6 +519,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
           {[
             ['discover', 'Discover'],
             ['library', 'My Library'],
+            ['collections', 'Collections'],
           ].map(([id, label]) => (
             <button
               key={id}
@@ -541,11 +542,12 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                       ? old.map((i) => (i.id === undo.id ? undo.previous! : i))
                       : old.filter((i) => i.id !== undo.id),
                   );
+                  setRatings(old=>{const next={...old};if(undo.previousRating)next[undo.id]=undo.previousRating;else delete next[undo.id];return next;});
                   setUndo(null);
-                  setNotice('Feedback undone.');
+                  setNotice('Last library change undone.');
                 }}
               >
-                Undo last feedback
+                Undo library change
               </button>
             )}
           </div>
@@ -563,8 +565,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               <p className="eyebrow">MAKE THIS YOURS · NO ACCOUNT NEEDED</p>
               <h2>Start with one favorite.</h2>
               <p>
-                Pick books, movies or shows you already love. A favorite
-                starts at 5 stars; change it anytime in My Library.
+                Pick a book, movie or show. Rate it when adding it, or choose “Not yet” to save it for later.
               </p>
               <ol>
                 <li>
@@ -579,7 +580,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                     favorites in your library
                   </strong>
                 </li>
-                <li>Rate it in My Library to shape your recommendations.</li>
+                <li>Ratings shape your recommendations; saved-for-later titles are bookmarks.</li>
                 <li>
                   Choose “Find my next favorite” when you’re ready—one favorite can get
                   you started.
@@ -595,7 +596,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
 
             </section>
           )}
-        <details className="content-settings"><summary>Content preferences {adultSection ? '· 18+' : '· General'}</summary><div
+        <details className="content-settings" open><summary>Content preferences {adultSection ? '· 18+' : '· General'}</summary><div
           className="content-section"
           role="group"
           aria-label="Content section"
@@ -668,17 +669,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 </button>
               ))}
             </div>
-            <TasteCollections
-              items={sectionCatalog.filter((i) =>
-                added.some((x) => x.id === i.id),
-              )}
-              edits={tagEdits}
-              onChange={setTagEdits}
-              onExplore={(tag) => {
-                setSearch(tag);
-                setView('library');
-              }}
-            />
+            {!Object.values(tagEdits).some(edit=>edit.added.length>0)&&<p className="collection-prompt">Connect your favorites with a personal collection. <button onClick={()=>setView('collections')}>Create a collection</button></p>}
             <label className="search">
               <Search size={18} />
               <input
@@ -742,7 +733,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                       <button
                         className="remove-added"
                         aria-label={'Remove ' + item.title + ' from library'}
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => setRemoveTarget(item)}
                       >
                         Remove title
                       </button>
@@ -767,7 +758,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                             : 'Mark as 18+'}
                         </button>
                       )}
-                    <DiscoveryFeedback
+                    <DiscoveryFeedback reviewer={reviewer}
                       item={item}
                       library={catalog}
                       onDismiss={() => feedback(item, 'dismissed')}
@@ -863,8 +854,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               ))}
               {!visible.length && (
                 <p className="muted">
-                  No titles on this shelf yet. Add media or save a discovery, or
-                  try All titles.
+                  {search ? 'No titles match your search. Try another title, creator or tag.' : shelf==='later' ? 'Nothing saved for later yet. Save a discovery to My Library to find it here.' : shelf==='experienced' ? 'No rated or experienced titles here yet. Add and rate something you have read or watched.' : shelf==='dismissed' ? 'No titles marked Not interested. Titles you hide from recommendations appear here.' : 'Your library is empty. Add a title you know, or save a discovery for later.'}
                 </p>
               )}
             </div>
@@ -918,7 +908,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               <TabsContent value="based-on">
                 <div className="context">
                   <p className="eyebrow">START WITH ONE FAVORITE</p>
-                  <h2>Loved it? Find your next one.</h2>
+                  <h2>{selected ? `Find stories like ${selected.title}` : 'Choose a title to find similar stories'}</h2><p>Recommendations will be based on this title’s genre, setting and story details.</p>
                   <Select
                     value={seed}
                     onValueChange={(v) => {
@@ -1118,13 +1108,13 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                             disabled={actionBusy}
                             onClick={() => feedback(item, 'later')}
                           >
-                            Save for later
+                            Save to library · for later
                           </button>
                           <button
                             disabled={actionBusy}
-                            onClick={() => feedback(item, 'experienced')}
+                            onClick={() => setRateTarget(item)}
                           >
-                            Already experienced
+                            Read or watched? Rate it
                           </button>
                           <button
                             disabled={actionBusy}
@@ -1199,7 +1189,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                         }
                       </a>
                     )}
-                    <DiscoveryFeedback
+                    <DiscoveryFeedback reviewer={reviewer}
                       item={item}
                       seed={selected}
                       library={catalog}
@@ -1215,6 +1205,21 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             </p></details>
           </section>
         </div>
+        <section className="collections-screen" hidden={view!=='collections'}><h2>My taste collections</h2><p>Group titles around a connection you care about, across books, movies and TV.</p>
+            <TasteCollections
+              items={sectionCatalog.filter((i) =>
+                added.some((x) => x.id === i.id),
+              )}
+              edits={tagEdits}
+              onChange={setTagEdits}
+              onExplore={(tag) => {
+                setSearch(tag);
+                setView('library');
+              }}
+            />
+        </section>
+        <Dialog open={!!removeTarget} onOpenChange={open=>{if(!open)setRemoveTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Remove {removeTarget?.title}?</DialogTitle><DialogDescription>This removes the title, its star rating, personal tags and AI review history from this browser’s library. It may appear in recommendations again. This does not change the catalog.</DialogDescription><div className="result-actions"><button onClick={()=>setRemoveTarget(null)}>Keep title</button><button className="destructive" onClick={()=>{if(removeTarget)removeItem(removeTarget.id);setRemoveTarget(null);}}>Remove from library</button></div></DialogContent></Dialog>
+        <Dialog open={!!rateTarget} onOpenChange={open=>{if(!open)setRateTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Rate {rateTarget?.title}</DialogTitle><DialogDescription>Your rating shapes your taste profile. If you haven’t read or watched it, save it for later instead.</DialogDescription><div className="rating-choices">{[1,2,3,4,5].map(n=><button disabled={actionBusy} key={n} onClick={()=>{if(rateTarget)void feedback(rateTarget,'experienced',n);setRateTarget(null);}}>{n} ★</button>)}<button disabled={actionBusy} onClick={()=>{if(rateTarget)void feedback(rateTarget,'later');setRateTarget(null);}}>Save to library · for later</button></div></DialogContent></Dialog>
         <section id="library-preferences" className="preferences-screen" hidden={view !== 'library'}>
           <h2>Your taste & preferences</h2>{' '}
           <Account
