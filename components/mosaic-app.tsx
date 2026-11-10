@@ -8,7 +8,9 @@ import {unifiedRank} from '@/lib/unified-ranking';
 import {cosineDiscovery,vocabularyFor,tasteVector} from '@/lib/cosine-discovery';
 import {sameSeries, groupSeries, seriesGroupKey} from '@/lib/story-profile';
 import {genreDescription} from '@/lib/genre-descriptions';
-import { hasSynopsis } from '@/lib/catalog-text';
+import { AutoSynopsis } from '@/components/media/auto-synopsis';
+import { TagChoice } from '@/components/media/tag-choice';
+import { taxonomy } from '@/lib/taxonomy';
 import { flushSync } from 'react-dom';
 import {
   BookOpen,
@@ -34,9 +36,9 @@ import { detailedFeatures, specificity, detailedTags, primaryGenre, seedTopic } 
 import { GenreGuide } from '@/components/media/genre-guide';
 import { DiscoveryFeedback } from '@/components/media/discovery-feedback';
 import { inContentSection, contentLabel } from '@/lib/content-rating';
-import { activeGenreChoices, genreChoices, genrePreferences, genreAllowed } from '@/lib/genres';
+import { genrePreferences, genreAllowed } from '@/lib/genres';
 import { TagEditor } from '@/components/media/tag-editor';
-import { effectiveTags, type TagEdits } from '@/lib/tags';
+import { effectiveTags, normalizeTag, type TagEdits } from '@/lib/tags';
 import { TasteCollections } from '@/components/media/taste-collections';
 import {
   connectionEvidence,
@@ -140,8 +142,6 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const [mode, setMode] = useState('for-you');
   const [rankingMode,setRankingMode]=useState('recommended');
   const [seriesView,setSeriesView]=useState('discover');
-  const [loadingSynopses,setLoadingSynopses]=useState<string[]>([]);
-  const [synopsisErrors,setSynopsisErrors]=useState<Record<string,string>>({});
   const [rankingEvidence,setRankingEvidence]=useState<{key:string;provider:RankingEvidence;semantic:SemanticScores}>({key:'',provider:{},semantic:{}});
   const [category, setCategory] = useState<Category | 'All'>('All');
   const [focusTags, setFocusTags] = useState<string[]>([]);
@@ -179,7 +179,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       setAvoided(
         Array.isArray(raw.avoided)
           ? raw.avoided.filter(
-              (g: unknown) => typeof g === 'string' && genreChoices.includes(g),
+              (g: unknown) => typeof g === 'string' && !!normalizeTag(g),
             )
           : [],
       );
@@ -423,17 +423,6 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     }
   }
   const preferences = genrePreferences(discoveryCatalog, ratings);
-  async function loadSynopsis(id:string){
-    const record=[...added,...candidates].find(x=>x.id===id);
-    if(!record || loadingSynopses.includes(id))return;
-    setLoadingSynopses(old=>[...old,id]);setSynopsisErrors(old=>({...old,[id]:''}));
-    try{
-      const fresh=await(await import('@/lib/book-api')).enrichBook(record);
-      setCandidates(old=>old.map(x=>x.id===id?{...x,...fresh}:x));
-      setAdded(old=>old.map(x=>x.id===id?{...x,...fresh}:x));
-    }catch{setSynopsisErrors(old=>({...old,[id]:'Could not load the synopsis. Please retry.'}));}
-    finally{setLoadingSynopses(old=>old.filter(x=>x!==id));}
-  }
   function downloadComparison(){
     const publicSeed=originals.find(x=>x.id===selected?.id) || candidates.find(x=>x.id===selected?.id);
     if(!publicSeed || rankingEvidence.key!==discoveryKey)return;
@@ -603,12 +592,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 adult={adultSection}
                 onAdd={addFavorite}
               />
-              <button
-                className="edit-tags"
-                onClick={() => {setView('library');requestAnimationFrame(()=>document.getElementById('library-preferences')?.scrollIntoView({behavior:'smooth'}));}}
-              >
-                Set preferences in My Library
-              </button>
+
             </section>
           )}
         <details className="content-settings"><summary>Content preferences {adultSection ? '· 18+' : '· General'}</summary><div
@@ -984,8 +968,9 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                       <p><strong>Require:</strong> only show titles tagged with this detail. Every requirement must match, so missing tags can hide otherwise good choices.</p>
                     </div>
                     <div className="requirement-heading"><p>{focusTags.length}/5 preferred · {mustTags.length}/5 required</p><button type="button" disabled={!focusTags.length && !mustTags.length} onClick={()=>{setFocusTags([]);setMustTags([]);}}>Reset tag choices</button></div>
+                    <TagChoice label="Include · required for this search" selected={mustTags} onChange={setMustTags} limit={5} suggestions={[...selected.tags,...Object.keys(taxonomy).filter(t=>!taxonomy[t].retired)]}/>
                     <div className="requirement-list">
-                      {selected.tags.filter(t=>t!==primaryGenre(selected) && t!==seedTopic(selected)).map(t=><label className="requirement-row" key={t}>
+                      {[...new Set([...selected.tags,...mustTags,...focusTags])].filter(t=>t!==primaryGenre(selected) && t!==seedTopic(selected)).map(t=><label className="requirement-row" key={t}>
                         <span><strong>{t.replaceAll('-', ' ')}</strong><small>{genreDescription(t)}</small></span>
                         <select aria-label={'Matching preference for '+t.replaceAll('-', ' ')} aria-describedby="requirement-help" value={mustTags.includes(t)?'require':focusTags.includes(t)?'prefer':'auto'} onChange={e=>{
                           const value=e.target.value;
@@ -1036,7 +1021,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             {discoveryNotice && (
               <div className="search-status"><p role="status">{discovering ? 'Finding stories that fit…' : discoveryNotice.includes('could not') ? 'Search could not finish. Please try again.' : 'Your matches are ready.'}</p>{reviewer && <details><summary>Search details</summary><p>{discoveryNotice}</p></details>}</div>
             )}
-            {mode==='based-on' && candidates.length>0 && completedDiscoveryKey===discoveryKey && rankingEvidence.key===discoveryKey && !discovering &&
+            {reviewer && mode==='based-on' && candidates.length>0 && completedDiscoveryKey===discoveryKey && rankingEvidence.key===discoveryKey && !discovering &&
               <details className="advanced-panel"><summary>Evaluate these recommendations</summary><p>Export this result set to compare recommendation methods.</p><button onClick={downloadComparison}>Download comparison snapshot</button></details>}
             <div className="results-heading">
               <h2>
@@ -1053,8 +1038,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               </span>
             </div>
             {!filteredResults.length ? (
-              <div className="empty-state">
-                <Sparkles size={32} />
+              <div className={"empty-state"+(discovering?" is-discovering":"")}>
+                <Sparkles className="connection-spark" size={32} />
                 <h3>
                   {discovering
                     ? 'Looking for connections…'
@@ -1123,29 +1108,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                     </details>}
                     {'storyReasons' in item && Array.isArray(item.storyReasons) && item.storyReasons.length>0 && <p>Story connections: {item.storyReasons.join('; ')}</p>}
                     {'metadataSourceUrl' in item && typeof item.metadataSourceUrl==='string' && <a href={item.metadataSourceUrl} target="_blank" rel="noreferrer">Additional book metadata: Hardcover</a>}
-                    <p className="description">
-                      {!hasSynopsis(item.description)
-                        ? 'Synopsis not loaded or unavailable from the catalog.'
-                        : item.description.length > 420
-                        ? item.description
-                            .slice(0, 420)
-                            .replace(/\s+\S*$/, '') + '…'
-                        : item.description}
-                    </p>
-                    {!hasSynopsis(item.description) && item.id.startsWith('openlibrary:') && <>
-                      <button onClick={()=>loadSynopsis(item.id)} disabled={loadingSynopses.includes(item.id)}>
-                        {loadingSynopses.includes(item.id)?'Loading synopsis…':'Load synopsis'}
-                      </button>
-                      {synopsisErrors[item.id] && <p role="status">{synopsisErrors[item.id]}</p>}
-                      {[...added,...candidates].find(x=>x.id===item.id)?.synopsisStatus==='unavailable' &&
-                        <p>The full source record has no synopsis. Use the catalog link for more information.</p>}
-                    </>}
-                    {item.description.length > 420 && (
-                      <details className="full-description">
-                        <summary>Read full description</summary>
-                        <p>{item.description}</p>
-                      </details>
-                    )}
+                    <AutoSynopsis item={item} />
                     <div className="result-actions">
                       {[...added, ...candidates].some(
                         (x) => x.id === item.id,
@@ -1248,11 +1211,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               </div>
             )}
             <details className="advanced-panel"><summary>About your recommendations</summary><p className="data-note">
-              {added.length} saved catalog titles.{' '}
-              Live discovery fetches a bounded set of candidates, then ranks
-              shared tags. Catalog keywords supply automatic tags. Edit tags to
-              correct automatic tags and create your own connections. Similarity
-              measures shared tags, not the probability you will like a title.
+              You have {added.length} titles saved in this browser. Mosaic searches live catalogs for candidates and compares their story details with your favorites. It does not compare every title in every catalog. Match explanations describe similarities—not a guarantee that you will enjoy a title. You can correct tags from My Library.
             </p></details>
           </section>
         </div>
@@ -1277,42 +1236,15 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               if (Array.isArray(raw?.avoided))
                 setAvoided((old) =>
                   [...new Set([...old, ...(raw.avoided as string[])])].filter(
-                    (g) => genreChoices.includes(g),
+                    (g) => typeof g === 'string' && !!normalizeTag(g),
                   ),
                 );
             }}
           />
           <details className="genre-preferences">
-            <summary>Genre preferences</summary>
-            <p>
-              Low ratings gently lower a genre’s rank; they never hide a whole
-              genre. Only the genres you explicitly avoid below are excluded
-              when metadata is available.
-            </p>
-            <div className="tag-options">
-              {activeGenreChoices.map((g) => (
-                <button
-                  key={g}
-                  aria-pressed={avoided.includes(g)}
-                  onClick={() =>
-                    setAvoided((old) =>
-                      old.includes(g)
-                        ? old.filter((x) => x !== g)
-                        : [...old, g],
-                    )
-                  }
-                >
-                  {avoided.includes(g) ? 'Avoiding: ' : 'Avoid '}
-                  {g}
-                </button>
-              ))}
-            </div>
-            {preferences.blocked.length > 0 && (
-              <p>
-                Hidden from ratings: {preferences.blocked.join(', ')}. Change
-                the underlying ratings to revise these preferences.
-              </p>
-            )}
+            <summary>Exclude from recommendations</summary>
+            <p>These exclusions apply to every search and stay saved in this browser. Ratings shape your taste without hiding an entire genre. To include something for just one search, use Based On → Refine your matches.</p>
+            <TagChoice label="Exclude" selected={avoided} onChange={setAvoided} suggestions={Object.keys(taxonomy).filter(t=>!taxonomy[t].retired && (!taxonomy[t].media?.length || taxonomy[t].media!.some(m=>['Book','Movie','TV'].includes(m))))}/>
           </details>
         </section>
         <section className="taste-section" hidden={view !== 'library'}>

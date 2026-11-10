@@ -1,4 +1,4 @@
-import {taxonomy} from './taxonomy.ts';
+import {taxonomy,resolveTaxonomyTag} from './taxonomy.ts';
 import { subgenres, detailedFeatures, featureGroups } from './features.ts';
 import type { Media, Ratings } from './recommendations';
 export const genreChoices = [
@@ -102,9 +102,9 @@ export function genreAllowed(
   blocked: string[],
   avoid: string[],
 ): boolean {
-  return !(item.genres || []).some(
-    (g) => blocked.includes(item.type + ':' + g) || avoid.includes(g),
-  );
+  const excluded=new Set(avoid.map(resolveTaxonomyTag));
+  return !(item.genres || []).some(g=>blocked.includes(item.type+':'+g)) &&
+    ![...(item.genres||[]),...(item.tags||[])].some(tag=>excluded.has(resolveTaxonomyTag(tag)));
 }
 
 // Retain stored metadata while hiding paused media from current product controls.
@@ -121,3 +121,4 @@ export function corroboratedGenres(labels:string[],itemLabels:string[]):string[]
  const supported=normalizeGenres(itemLabels);
  return [...new Set([...normal,...possible.filter(genre=>supported.includes(genre))])];
 }
+

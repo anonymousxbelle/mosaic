@@ -1220,3 +1220,14 @@ body { background:var(--background); }
 .app-shell .media-card{min-width:0}.app-shell .media-card h3{overflow-wrap:anywhere}
 @media(max-width:600px){.app-shell .topbar{flex-wrap:wrap;gap:12px}.app-shell .page-intro{gap:12px;flex-direction:column;align-items:flex-start}.app-shell .primary-nav{display:flex;gap:8px}.app-shell .primary-nav button{flex:1}.app-shell .discovery-toolbar{flex-wrap:wrap}.app-shell .requirement-row{grid-template-columns:1fr}.add-media-dialog{width:calc(100vw - 24px)!important;max-width:calc(100vw - 24px)!important}.app-shell .results-heading{flex-wrap:wrap;gap:12px}.reviewer-banner{padding:18px}}
 
+/* Search feedback respects reduced motion; controls wrap at narrow widths. */
+.is-discovering .connection-spark { animation: mosaic-connect 1.8s ease-in-out infinite; transform-origin: center; }
+@keyframes mosaic-connect { 0%,100% { transform: scale(.9) rotate(-8deg); opacity:.5; } 50% { transform:scale(1.15) rotate(8deg); opacity:1; } }
+@media (prefers-reduced-motion:reduce) { .is-discovering .connection-spark { animation:none; } }
+.tag-choice { padding:1rem 0; }
+.tag-choice > label { display:block; font-weight:650; margin-bottom:.6rem; }
+.tag-entry { display:flex; gap:.6rem; flex-wrap:wrap; }
+.tag-entry input { flex:1 1 180px; min-width:0; padding:.75rem; border:1px solid var(--border,#d8d6cd); border-radius:.6rem; background:white; }
+.tag-entry button { padding:.65rem 1rem; }
+.tag-choice .tag-options { margin-top:.75rem; }
+

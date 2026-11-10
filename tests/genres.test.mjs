@@ -62,3 +62,13 @@ test('exact title relevance beats a popular companion and counts break equivalen
     [100, 10, 9999],
   );
 });
+
+test('explicit exclusions match themes and custom tags across media, not synopsis substrings', () => {
+  const item={type:'TV',genres:['drama'],tags:['medical-mystery','family'],description:'A fantasy of another life'};
+  assert.equal(genreAllowed(item,[],['medical-mystery']),false);
+  assert.equal(genreAllowed(item,[],['drama']),false);
+  assert.equal(genreAllowed(item,[],['fantasy']),true);
+  assert.equal(genreAllowed({...item,tags:['my-custom-tag']},[],['my-custom-tag']),false);
+  assert.equal(genreAllowed(item,[],[]),true);
+});
+
