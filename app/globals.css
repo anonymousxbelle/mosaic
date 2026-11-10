@@ -1281,4 +1281,13 @@ body { background:var(--background); }
 .dismissed-heading { flex-basis:100%; grid-column:1 / -1; font-size:16px!important; }
 .library-item:has(.dismissed-heading) { border-top:3px solid #aab2aa; }
 .saved-result-status { font-size:13px; font-weight:600; color:#245e49; }
+.library-header-meta { margin-left:auto; display:flex; align-items:center; gap:16px; }
+.app-shell .library-header-meta > span { margin:0; }
+.app-shell .preferences-button { display:inline-flex; align-items:center; justify-content:center; flex:0 0 44px; margin:0; padding:0; }
+.app-shell .discover-actions { align-items:center; justify-content:space-between; }
+.app-shell .discover-actions .add-media-button { margin:0; }
+@media(max-width:480px){.library-header-meta{gap:8px}.library-header-meta > span{font-size:12px}}
+.feedback-inbox { margin-top:24px; padding:24px; border:1px solid #d8d5ca; border-radius:14px; background:#fffdf8; }
+.feedback-inbox > label { display:grid; gap:8px; margin:12px 0; }.feedback-inbox input[type='password']{padding:12px;border:1px solid #aebdb5;border-radius:8px;max-width:420px}
+.feedback-panel .feedback-consent { display:flex; align-items:flex-start; gap:10px; }.feedback-consent input{width:auto;flex:0 0 auto;margin-top:4px}
 

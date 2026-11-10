@@ -1,3 +1,4 @@
+import {handleFeedback,type FeedbackEnv} from './feedback.ts';
 import { analyzeTags, taggingModel } from './tag-analysis.ts';
 import { hardcoverBooks, HardcoverError } from './hardcover.ts';
 import { semanticComparison, SemanticError, type SemanticEnv } from './semantic.ts';
@@ -5,7 +6,7 @@ import { featureGroups, detailedTags, featureKind } from '../lib/features.ts';
 import { matureRating } from '../lib/content-rating.ts';
 import { normalizeGenres, corroboratedGenres } from '../lib/genres.ts';
 import { extractTags, plainText } from '../lib/media-api.ts';
-type Env = SemanticEnv & {
+type Env = SemanticEnv & FeedbackEnv & {
   TAGGING_REVIEW_KEY?: string;
   TMDB_TOKEN?: string;
   HARDCOVER_TOKEN?: string;
@@ -240,10 +241,11 @@ export default {
         status: 204,
         headers: { ...headers, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers':'Content-Type, Authorization' },
       });
-    if (request.method !== 'GET' && !(request.method==='POST' && ['/semantic','/analyze-tags'].includes(new URL(request.url).pathname)))
+    if (request.method !== 'GET' && !(request.method==='POST' && ['/semantic','/analyze-tags','/feedback','/feedback/review'].includes(new URL(request.url).pathname)))
       return reply({ error: 'Method not allowed.' }, 405);
     try {
       const u = new URL(request.url);
+      if(['/feedback','/feedback/inbox','/feedback/review'].includes(u.pathname))return reply(await handleFeedback(request,env));
       if(u.pathname==='/analyze-tags'){
         if(request.method!=='POST')return reply({error:'Use POST.'},405);
         return reply(await analyzeTags(request,env));
@@ -255,6 +257,7 @@ export default {
       if (u.pathname === '/status')
         return reply({
           taggingModel,
+          feedback:!!env.FEEDBACK_DB && !!env.FEEDBACK_LIMITER,
           tmdb: !!env.TMDB_TOKEN,
           semantic: !!(env.AI && env.AI_LIMITER),
           hardcover: !!env.HARDCOVER_TOKEN,

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import {FeedbackInbox} from '@/components/media/feedback-inbox';
 import {libraryShelf,matchesShelf,libraryOrder} from '@/lib/library-view';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hybrid-ranking';
@@ -646,8 +647,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
         <div className="workspace focused-workspace">
           <aside className="library" hidden={view !== 'library'}>
             <div className="section-heading">
-              <h2>My Library</h2><button className="preferences-button" aria-label="Open taste and preferences" title="Taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button>
-              <span>{sectionCatalog.length} titles · {sectionCatalog.filter((i) => ratings[i.id]).length} rated</span>
+              <h2>My Library</h2><div className="library-header-meta"><button className="preferences-button" aria-label="Open taste and preferences" title="Taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button>
+              <span>{sectionCatalog.length} titles · {sectionCatalog.filter((i) => ratings[i.id]).length} rated</span></div>
             </div>
             <p className="muted">
               Add media from live catalogs, then rate your favorites. Your
@@ -1253,6 +1254,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             )}
           </div>
         </section>
+        {reviewer&&<FeedbackInbox/>}
         <GenreGuide reviewer={reviewer} />
         <footer>
           <span>{reviewer?'mosaic / CSCI 310 Junior Seminar':'mosaic · stories connected'}</span>

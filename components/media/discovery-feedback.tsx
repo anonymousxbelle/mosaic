@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState,useRef,useEffect } from 'react';
+import {catalogApi} from '@/lib/media-api';
 import type { Media } from '@/lib/recommendations';
 export type FeedbackEntry = {
   id: string;
@@ -25,7 +26,13 @@ export function DiscoveryFeedback({
     [reason, setReason] = useState(''),
     [message, setMessage] = useState(''),
     [target, setTarget] = useState('');
-  function save() {
+  const [sharedReady,setSharedReady]=useState(false);
+  useEffect(()=>{let active=true;if(catalogApi)fetch(catalogApi+'/status',{signal:AbortSignal.timeout(8000)}).then(r=>r.json()).then((data:any)=>{if(active)setSharedReady(data.feedback===true);}).catch(()=>{});return()=>{active=false;};},[]);
+  const [send,setSend]=useState(false),[busy,setBusy]=useState(false);
+  const submission=useRef<{payload:string;id:string}|null>(null);
+  async function save() {
+    if(busy)return;
+    setBusy(true);
     try {
       if (reason.trim().length > 280)
         throw Error('Keep the reason to 280 characters.');
@@ -61,9 +68,18 @@ export function DiscoveryFeedback({
         'Feedback saved in this browser. It is not sent automatically or used to train the AI.',
       );
       if (kind === 'not-for-me') onDismiss();
+      if(send){
+        if(!catalogApi)throw Error('Saved locally, but shared feedback is not configured.');
+        const chosen=library.find(x=>x.id===target);
+        const payload={itemId:item.id,title:item.title.slice(0,300),type:item.type,kind,reason:reason.trim(),seedId:kind==='suggest-similar'?target:seed?.id||'',seedTitle:kind==='suggest-similar'?chosen?.title||'':seed?.title||''};
+        const fingerprint=JSON.stringify(payload);if(submission.current?.payload!==fingerprint)submission.current={payload:fingerprint,id:crypto.randomUUID()};
+        const response=await fetch(catalogApi+'/feedback',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'omit',body:JSON.stringify({...payload,submissionId:submission.current.id}),signal:AbortSignal.timeout(15000)});
+        const result=await response.json() as {error?:string};if(!response.ok)throw Error('Saved locally. Not sent: '+(result.error||'Please retry.'));
+        setMessage('Sent to the Mosaic project owner’s private inbox. This does not train the AI or automatically change catalog tags.');
+      }
     } catch (e) {
       setMessage(e instanceof Error ? e.message : 'Could not save feedback.');
-    }
+    } finally {setBusy(false);}
   }
   return (
     <details className="feedback-panel">
@@ -109,7 +125,8 @@ export function DiscoveryFeedback({
           onChange={(e) => setReason(e.target.value)}
         />
       </label>
-      <button onClick={save}>Save feedback</button>
+      <label className="feedback-consent"><input type="checkbox" disabled={!sharedReady||busy} checked={send} onChange={e=>setSend(e.target.checked)}/>Send this feedback to the Mosaic project owner</label>{!sharedReady&&<p>Shared submissions are not available yet. You can save feedback in this browser.</p>}<p>When checked, the title, starting/suggested title, feedback type and your explanation are stored privately on Cloudflare for project review. Your library, star ratings and personal tags are not sent. Do not include names, contact details or other personal information. Feedback is not used for AI training automatically.</p>
+      <button disabled={busy} onClick={save}>{busy?'Saving…':send?'Send feedback':'Save in this browser'}</button>
       {reviewer && <button
         onClick={() => {
           try {
