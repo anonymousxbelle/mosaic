@@ -1,4 +1,5 @@
 'use client';
+import { acceptedAnalysisTags } from '@/lib/ai-tagging';
 import { AiTagReview } from './ai-tag-review';
 import { detailedTags, detailedFeatures, featureKind, featureLabels } from '@/lib/features';
 import { useState } from 'react';
@@ -14,10 +15,12 @@ import { normalizeTag, type TagEdits } from '@/lib/tags';
 import type { Media } from '@/lib/recommendations';
 export function TagEditor({
   item,
+  reviewer=false,
   edit,
   known,
   onChange,
 }: {
+  reviewer?: boolean;
   item: Media;
   edit: TagEdits[string];
   known: string[];
@@ -78,14 +81,15 @@ export function TagEditor({
           Reuse a tag on similar titles to connect your taste across media.
           Changes save immediately in this browser and update recommendations.
         </DialogDescription>
-        <AiTagReview item={item} edit={edit} onChange={onChange} />
+        {reviewer && <AiTagReview item={item} edit={edit} onChange={onChange} />}
+        {!!acceptedAnalysisTags(edit.analyses || [],item).length && <section className="accepted-tags"><h3>Reviewed tags</h3><p>Accepted suggestions are active for matching unless you hide them below.</p><div className="tag-options">{acceptedAnalysisTags(edit.analyses || [],item).map(t=><button key={t} aria-pressed={!edit.hidden.includes(t)} onClick={()=>onChange({...edit,hidden:edit.hidden.includes(t)?edit.hidden.filter(x=>x!==t):[...edit.hidden,t]})}>{t.replaceAll('-',' ')}{edit.hidden.includes(t)?' · hidden':' · active ✓'}</button>)}</div></section>}
         <h3>Automatic tags</h3>
         <p className="muted">
           Automatic tags come from catalog genres and description keywords. Hide
           any that do not fit.
         </p>
         <div className="tag-options">
-          {Object.entries(featureLabels).map(([kind,label]) => <section key={kind}>
+          {Object.entries(featureLabels).filter(([kind])=>item.tags.some(t=>featureKind(t)===kind)).map(([kind,label]) => <section key={kind}>
           {item.tags.some(t=>featureKind(t)===kind) && <h4>{label}</h4>}
           {item.tags.filter(t=>featureKind(t)===kind).map((t) => (
             <button

@@ -3,7 +3,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Mosaic · Cross-media discovery',
   description:
-    'Explore connections across books, music, games, movies, and television.',
+    'Explore connections across books, movies, and television.',
 };
 export default function RootLayout({
   children,
@@ -16,3 +16,4 @@ export default function RootLayout({
     </html>
   );
 }
+

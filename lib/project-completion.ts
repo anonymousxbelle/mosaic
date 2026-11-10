@@ -1,5 +1,5 @@
 export const completionTasks = [
- ['scope','Scope','Confirm final course requirements','Record required media types, submission date, rubric and whether login is mandatory. Resolve five-media demonstration versus three-media live-product scope.'],
+ ['scope','Scope','Confirm final course requirements','Deadline: November 13. Record a 10–15 minute presentation covering problem, methodology, results/demo, challenges and solutions, and conclusion. Upload slides to Canvas in advance and post a shareable YouTube or Drive recording link in the Canvas discussion. Check the detailed requirements when received.'],
  ['baseline','Scope','Freeze the study version','Record deployed commit, taxonomy revision, ranking mode and provider configuration before collecting results.'],
  ['ui-review','User experience','Review the main journey together','Walk through add title → rate → discover → inspect → save. Agree changes before participant testing.'],
  ['ui-admin','User experience','Separate project and reviewer tools','Keep taxonomy editing, reviewer keys, milestone demonstrations and algorithm selectors outside the ordinary discovery journey. Hiding controls is not authorization.'],

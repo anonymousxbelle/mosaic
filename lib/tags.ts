@@ -58,6 +58,7 @@ export function restoreTagEdits(value: unknown, items: Media[]): TagEdits {
         ...new Set([
           ...item.tags,
           ...detailedFeatures(item.description, item.genres || []),
+          ...acceptedAnalysisTags(restoreAnalyses(edit.analyses,item),item),
         ]),
       ].filter((t) => edit.hidden.includes(t)),
     };

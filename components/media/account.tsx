@@ -52,10 +52,9 @@ export function Account({
   if (!client)
     return (
       <details className="account-panel">
-        <summary>Save across devices</summary>
+        <summary>Where your library is saved</summary>
         <p>
-          Email sign-in is prepared but awaiting account-service setup. Your
-          current library stays in this browser.
+          Your library is saved in this browser on this device. Use the library backup controls to keep a copy or move it to another device.
         </p>
       </details>
     );
@@ -203,3 +202,4 @@ export function Account({
     </details>
   );
 }
+

@@ -35,7 +35,7 @@ export function AiTagReview({item,edit,onChange}:{item:Media;edit:TagEdits[strin
   }
   function decide(a:TagAnalysis,index:number,status:'accepted'|'rejected',replacement?:string){
     try{const updated=reviewSuggestion(a,index,status,item,replacement,reasons[a.id+index] || '');
-      onChange({...edit,analyses:analyses.map(x=>x.id===a.id?updated:x)});setMessage('Review saved in this browser.');
+      onChange({...edit,hidden:status==='accepted'?edit.hidden.filter(t=>t!==(replacement || a.suggestions[index].tag)):edit.hidden,analyses:analyses.map(x=>x.id===a.id?updated:x)});setMessage(status==='accepted'?'Accepted. This tag is now active for this title and matching in your library.':'Rejected. This suggestion contributes no tag; independently supplied catalog tags are unchanged.');
     }catch(e){setMessage((e as Error).message);}
   }
   function download(){

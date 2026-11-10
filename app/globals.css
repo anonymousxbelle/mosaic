@@ -1205,3 +1205,18 @@ body { background:var(--background); }
 .series-entries li { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; }
 .series-entries ul { padding:0; list-style:none; }
 .series-entries button { padding:8px 12px; border:1px solid #cbd5cc; border-radius:8px; }
+
+/* Final-presentation UX pass: consistent spacing and keyboard/mobile access. */
+.reviewer-banner{padding:24px;margin:0 0 28px;border:1px solid #c5d2c8;border-radius:16px;background:#eef3ec}
+.reviewer-banner nav{display:flex;flex-wrap:wrap;gap:12px 24px;margin-top:16px}.reviewer-banner a{text-decoration:underline}
+.app-shell :focus-visible,.add-media-dialog :focus-visible{outline:3px solid #9b5a32;outline-offset:3px}
+.app-shell fieldset{min-width:0}.app-shell fieldset legend{padding:0 8px}
+.add-media-dialog{max-height:90dvh;overflow-y:auto;padding:clamp(20px,4vw,32px)!important}
+.add-media-dialog section,.add-media-dialog details{margin-block:18px}.add-media-dialog h3{margin-top:24px;margin-bottom:12px}
+.add-media-dialog .tag-options{gap:8px}.add-media-dialog .tag-options button{min-height:40px;padding:8px 12px;white-space:normal;overflow-wrap:anywhere}
+.accepted-tags{padding:16px;border:1px solid #bfd0c2;border-radius:12px;background:#f0f5ed}
+.app-shell .connection,.app-shell .card-details{padding:16px;margin-top:16px}.app-shell .connection p,.app-shell .card-details p{line-height:1.6;overflow-wrap:anywhere}
+.app-shell .primary-nav button,.app-shell .rating button{min-height:44px;min-width:44px}
+.app-shell .media-card{min-width:0}.app-shell .media-card h3{overflow-wrap:anywhere}
+@media(max-width:600px){.app-shell .topbar{flex-wrap:wrap;gap:12px}.app-shell .page-intro{gap:12px;flex-direction:column;align-items:flex-start}.app-shell .primary-nav{display:flex;gap:8px}.app-shell .primary-nav button{flex:1}.app-shell .discovery-toolbar{flex-wrap:wrap}.app-shell .requirement-row{grid-template-columns:1fr}.add-media-dialog{width:calc(100vw - 24px)!important;max-width:calc(100vw - 24px)!important}.app-shell .results-heading{flex-wrap:wrap;gap:12px}.reviewer-banner{padding:18px}}
+

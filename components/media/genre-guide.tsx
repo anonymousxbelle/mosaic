@@ -8,12 +8,12 @@ import {
   glossaryTags,
   parentGenre,
 } from '@/lib/genre-descriptions';
-export function GenreGuide() {
+export function GenreGuide({reviewer=false}:{reviewer?:boolean}) {
   const [q, setQ] = useState('');
   return (
     <details className="account-panel">
       <summary>What do these genres and tags mean?</summary>
-      <p><Link href="/taxonomy/">Open the taxonomy editor</Link> to draft definitions and relationships.</p>
+      {reviewer && <p><Link href="/taxonomy/">Open the taxonomy editor</Link> to draft definitions and relationships.</p>}
       <label>
         Find a genre or tag{' '}
         <input
@@ -42,3 +42,4 @@ export function GenreGuide() {
     </details>
   );
 }
+

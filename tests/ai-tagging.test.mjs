@@ -93,3 +93,12 @@ test('published medical mystery can be accepted from an older new-tag proposal w
  assert.deepEqual(new Set(effectiveTags(work,{added:[],hidden:[],analyses:[reviewed]})),new Set(['mystery','drama','medical-mystery']));
 });
 
+
+test('hiding an accepted AI tag survives library restore',()=>{
+ const accepted=reviewSuggestion(analysis(),0,'accepted',item);
+ const edit={added:[],hidden:['found-family'],analyses:[accepted]};
+ const restored=restoreTagEdits({test:edit},[item]).test;
+ assert.ok(restored.hidden.includes('found-family'));
+ assert.ok(!effectiveTags(item,restored).includes('found-family'));
+});
+
