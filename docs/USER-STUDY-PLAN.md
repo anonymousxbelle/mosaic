@@ -1,63 +1,35 @@
-# Mosaic formative study and completion plan
+# Mosaic user-study plan — revised November 11, 2026
 
-## Workspace and scope
+This revision supersedes the single-starting-title paired task as the primary study. The original plan is retained in Git history.
 
-`/project/` contains a completion checklist, local study log, descriptive summary, JSON backup/import, CSV export and proposed UI cleanup. It is a project tool, deliberately absent from ordinary discovery navigation. It is not a private authenticated admin area. All entered data stays in the browser unless explicitly exported; no study submission API or Supabase collection is implied.
+## Objective and research question
+Build a unified profile from preferences across media and generate cross-media recommendations. Ask whether combining preferences produces relevant recommendations and helps users discover media they would not otherwise explore.
 
-Do not mark milestones complete from a checkbox alone. The checklist requires evidence for Done and distinguishes implementation, verification, deployment and human evaluation. All checks start uncompleted; existing tests and deployments can be linked after confirming they meet each criterion. Deferred work does not inflate completion.
+## Primary participant workflow
+1. Add and rate at least five known titles spanning at least two of Book, Movie and TV. Record actual titles and ratings; do not require fabricated favorites.
+2. Use normal Discover -> For You with All media. Evaluate the first five results, or all available if fewer. Record the actual result count and IDs. Do not press Find more until this evaluation is complete.
+3. Read descriptions and explanations; optionally save a title. No appealing result is a valid outcome.
+4. Submit the Google Form once for this experience. It collects name/email, rated titles, overall relevance (1–5), discovery value (1–5), clarity, intent to try, ease, a chosen title, prior awareness/consideration, usual media habits and interest outside those habits.
+5. Actual enjoyment is recorded only after actual consumption; not tried is not a zero enjoyment rating. Follow up separately with participants who agreed. Record title, date, tried yes/no and enjoyment 1–5. Do not mix a follow-up into the count of new participants.
 
-Confirm the course rubric, deadline and final media scope first. The proposed live product focuses on books, movies and TV; five-media fixtures are course evidence, not five live integrations. Login/synchronization, community moderation, automatic AI acceptance, formal age verification and live music/games remain conditional or later work unless the rubric requires them. Preserve these in PROJECT-BACKLOG.md rather than claiming completion.
+Editor: https://docs.google.com/forms/d/1OpdAc-28Jzrhg_WEau10KmTUZekG9Z9GQ-C5WvgflR4/edit
+The form is updated but unpublished. No participant invitations sent. Automatic verified-email collection and the one-response sign-in requirement are off; explicit name/email questions are present. Public response summary is off. Names/emails are not anonymous codes.
 
-## Study design
+## Evidence this design can support
+Descriptive relevance, intention, novelty, usability and self-reported interest in less-usual media. It evaluates the combined profile experience. It does NOT establish that mixed-media inputs outperform single-medium inputs. Same-medium versus cross-media OUTPUT alone also does not isolate the benefit of combining INPUT preferences.
 
-Recruit approximately 5–8 voluntary participants for a small formative study after a pilot. This sample can reveal usability and relevance problems; it cannot establish population-wide effectiveness. Follow any course-specific participant approval requirements before recruitment. Use adult volunteers for this initial study. No study has yet been conducted by this implementation.
+## Optional controlled comparison needed for the comparative claim
+Use For You in both conditions: one profile has ratings from one medium; the other has ratings from multiple media. Hold number of rated titles, approximate rating distribution, target output categories, number of displayed results, version, taxonomy, provider setup and ranking mode fixed. Use isolated browser profiles or explicit backups, not deletion of a participant's real library. Counterbalance order. Record exact input/output records and which condition generated each response. Use a comparison-specific copy of the form with an explicit condition field; the current primary form does not capture that condition.
 
-Assign participant codes P01, P02, etc. The owner selected name/email collection in the study form: describe the study as confidential, not anonymous. Keep identity/contact data in a restricted response sheet and a separate code mapping; do not store it in Mosaic or GitHub. Explain the activity, what is recorded, that questions may be skipped, and how to request removal. Obtain permission before quoting feedback. Keep contact arrangements outside the exported study dataset. Decide a retention/deletion date with the course supervisor.
+Changing which titles are rated is part of the treatment and can introduce selection effects; report this limitation. A small convenience sample supports an exploratory comparison, not universal claims. Do not improvise an unlogged condition change mid-study.
 
-Use a paired design: each participant completes a same-media and cross-media session with the same starting title or profile. Alternate condition order across participants. Hold app commit, taxonomy revision, ranking mode, source, candidate-retrieval configuration and displayed result count constant. Cross-media results should explicitly target another supported medium. Capture the first five result IDs in rank order. Do not silently substitute a different seed to make a condition look better.
+## Collation and reporting
+Use one row per initial participant/session. Keep source names/emails in the restricted response sheet; analyze using row IDs if useful. Participant codes are optional administrative IDs, not required programming. Record consent to quote and follow up. Never commit raw contact information to GitHub. Fix a retention date with the supervisor.
 
-Task script:
-1. Add a favorite title, rate it, and find recommendations Based On that title.
-2. Open a recommendation, read the synopsis and explanation, and save one they might try.
-3. Repeat with the other media condition. Record assistance, hesitation, errors and task completion.
-4. Optionally test For You with multiple favorites as a separately labeled exploratory task; do not mix it into the paired comparison without noting that change.
+Report actual sample size, missing responses, completion/assistance counts, medians/ranges and illustrative anonymous quotes with permission. Novelty: distinguish never heard of, known but not considered, already considered, and already experienced. Cross-media interest: compare the selected title type with usual habits; distinguish interest from actual use. Enjoyment denominators include only people who tried and responded. With the November 13 deadline, follow-up may remain pending.
 
-Use identical questions for each condition, rated 1–5; unanswered is blank:
-- Relevance: How well do these recommendations match what you liked about the starting title? 1 = not at all; 5 = very well.
-- Discovery: How much did these results help you find appealing titles you did not already know? 1 = not at all; 5 = a lot.
-- Explanation clarity: How clear was why Mosaic recommended these titles? 1 = very unclear; 5 = very clear.
-- Intent: How likely are you to try at least one recommendation? 1 = very unlikely; 5 = very likely.
-- Ease: How easy was it to find and save a recommendation? 1 = very difficult; 5 = very easy.
+Separate tagging evaluation: independently review a varied set of source descriptions and proposed labels; classify correct/incorrect/uncertain and central/substantial/incidental. Report precision and coverage separately; model confidence is not measured accuracy. Keep evaluation titles separate from prompt-tuning examples.
 
-Ask: Which result fit best and why? Which fit least and why? What was confusing? What would you change? Record anonymous quotes only with permission. Observer completion is Yes (unaided), Partial (assistance) or No.
-
-Follow up in 3–7 days: Did you actually try a recommended title? Which one? If yes, enjoyment 1–5 (very low to very high). No response remains pending; intent is not actual use, and missing follow-up is not rejection. Log the title and follow-up date in observation notes.
-
-## Collating results
-
-The log stores one observation per participant/condition, including order, version, source/profile reference, ranked IDs, task completion, five scales, follow-up and notes. Edit records rather than creating duplicate rows. Removal has an immediate undo; export backups before bulk editing/importing. JSON preserves checklist plus study; CSV contains study rows only and escapes spreadsheet formulas.
-
-The workspace displays counts and means with their actual denominators, completed sessions and follow-up responses. It counts comparable pairs only when exactly two rows have opposite conditions and matching version/source. It does not yet calculate paired differences, confidence intervals or significance tests. Repeated sessions can overweight descriptive averages; the final analysis must identify or separate them.
-
-Final report structure:
-1. Participants, recruitment limitations, consent process and task setup.
-2. Exact app/taxonomy/ranking versions and condition order.
-3. Counts of completed tasks and unanswered questions per condition.
-4. Individual paired cross-media minus same-media ratings, median/range and distribution; averages as a supplementary summary. Report only comparable pairs; list excluded cases and why.
-5. Relevance and discovery findings tied to specific anonymous result IDs and metadata problems.
-6. Qualitative themes: classify observations as retrieval, ranking, metadata, explanation, navigation or presentation. Include supporting anonymous quotes and contrary examples.
-7. Follow-up tried/enjoyed counts with response denominators; do not infer enjoyment from intent.
-8. Changes made from findings, with before/after evidence and regression checks. If versions changed mid-study, analyze those groups separately.
-
-## Separate tagging accuracy evaluation
-
-Review 15–20 varied titles across media and genres. Preserve the exact source, taxonomy revision, model ID, prompt version, suggested IDs and review decisions. Human reviewers label each suggestion correct, incorrect or uncertain and separately record important missing tags. Report correct/(correct+incorrect), uncertain count and category-specific counts. New-tag proposals and validation exclusions should be reported separately. This is precision on reviewed suggestions, not recall; recall requires an independently prepared reference tag set. Keep a held-out subset for evaluating prompt changes. Model confidence is not measured accuracy.
-
-## UI review before participants
-
-Current separation: algorithm controls, AI review and diagnostic evidence are in the reviewer/project workspaces. Public discovery supports books, movies and TV. See UI-STATE-AUDIT-2026-11-10.md for current verification and remaining checks; earlier cleanup observations are historical.
-
-Keep the ordinary journey: For You / Based On / My Library, ratings, title search, target medium, Require versus Prefer, useful synopses, understandable reasons, sources and correction feedback. Keep required provider attribution. Move algorithms, vectors, reviewer keys and milestone evidence to dedicated project/reviewer routes; these routes still require server authorization for privileged operations. Do not use a visibility toggle as access control.
-
-Review jointly in this order: empty-library onboarding; adding/rating; Based On; category and requirement filters; result details; saving; For You; error recovery; mobile and keyboard. Identify empty sections, overlapping borders, inconsistent media colors and confusing series choices. Agree a small set of fixes, then pilot the study. Preserve technical evidence elsewhere rather than deleting it.
+## Before distribution
+Preview form on desktop/mobile, run one clearly labeled test response, verify response storage, remove/exclude that test from analysis, then freeze the deployed commit, taxonomy, ranking mode and study instructions. The reviewer-key inbox flow, controlled outage recovery and full continuation browser test remain outstanding; see FINAL-USER-WALKTHROUGH.md.
 
