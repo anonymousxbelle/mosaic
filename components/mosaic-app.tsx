@@ -518,7 +518,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       .filter(i=>mode!=='based-on'||mustTags.every(t=>i.tags.includes(t)))
       .map(i=>({...i,storyReasons:[] as string[],seriesEntries:[i]})):[]
     :legacyResults;
-  const batchResults=morePrefix?.key===controlsKey?[...morePrefix.items,...calculatedResults.filter(item=>!findDuplicate(morePrefix.items,item))]:calculatedResults;
+  const batchResults=rankingMode==='cosine'&&!discovering?calculatedResults:morePrefix?.key===controlsKey?[...morePrefix.items,...calculatedResults.filter(item=>!findDuplicate(morePrefix.items,item))]:calculatedResults;
   const filteredResults=preservedResults?.key===controlsKey?preservedResults.items:batchResults;
   const visible = libraryOrder(sectionCatalog,ratings)
     .filter(i=>matchesShelf(i,ratings,shelf))
