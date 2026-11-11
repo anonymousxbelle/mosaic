@@ -15,7 +15,7 @@ Reviewer statuses: Not reviewed, Reviewed, Rejected. Only Reviewed can be marked
 3. Bind the database to mosaic-catalog-api as FEEDBACK_DB. Record its non-secret database ID under d1_databases in backend/wrangler.jsonc, with database_name mosaic-feedback and migrations_dir migrations, so future Git builds retain the binding.
 4. Deploy. FEEDBACK_LIMITER is defined in Wrangler configuration (five requests per minute per IP digest); TAGGING_REVIEW_KEY already protects analysis and is reused for the owner inbox.
 5. Verify /status reports feedback:true. Submit a clearly labeled test through the consent checkbox, open /review/ with the key, verify the row, save a review and reload. Verify unauthenticated inbox requests return 401.
-6. Do not claim collection complete until this real write/read test passes. Currently no database binding is configured in the repository and Cloudflare sign-in is required.
+6. Do not claim collection complete until this real write/read test passes. The database and binding are now configured. See UI-STATE-AUDIT-2026-11-10.md for activation evidence and remaining owner-review verification.
 
 No credentials should be added to source, exports or chat. The D1 database ID is configuration, not a credential.
 
@@ -27,7 +27,7 @@ Actual fine-tuning changes model weights and is a separate project: collect suff
 References: https://developers.cloudflare.com/d1/worker-api/ and https://developers.cloudflare.com/workers-ai/models/llama-3.3-70b-instruct-fp8-fast/
 
 ## Validation
-140 automated tests passed, including private-route authorization, invalid fields, parameterized storage, pending/rejected evaluation gating, missing configuration and rate-limit behavior. SQLite migration/default pending status checked in an in-memory SQLite database. TypeScript passed. See evidence/feedback-inbox-tests.txt and evidence/feedback-inbox-build.txt. Live database delivery remains unverified until activation.
+140 automated tests passed, including private-route authorization, invalid fields, parameterized storage, pending/rejected evaluation gating, missing configuration and rate-limit behavior. SQLite migration/default pending status checked in an in-memory SQLite database. TypeScript passed. See evidence/feedback-inbox-tests.txt and evidence/feedback-inbox-build.txt. Live API delivery is now verified; owner-key browser review remains pending. See UI-STATE-AUDIT-2026-11-10.md.
 
 ## UI alignment
 Library settings now sit immediately before the title/rating count at the right; Discover settings sit at the right of the Add & rate row. Both buttons are vertically centered.

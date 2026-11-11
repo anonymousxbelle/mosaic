@@ -1,4 +1,5 @@
 'use client';
+import {discoveryStatus} from '@/lib/discovery-status';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import {FeedbackInbox} from '@/components/media/feedback-inbox';
@@ -1005,7 +1006,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             </button>
             {rankingMode==='cosine'&&mode!=='based-on'&&!cosineRun.hasPositiveSignal&&<p role="status">Rate a title 4 or 5 stars to build a positive taste profile. Neutral, negative or cancelling ratings alone do not generate personalized results.</p>}
             {discoveryNotice && (
-              <div className="search-status"><p role="status">{discovering ? 'Finding stories that fit…' : discoveryFailure ? 'Catalog search is temporarily unavailable. Try Find my next favorite again.' : partialDiscovery ? 'Some catalogs were unavailable. These results may be incomplete; try again for more matches.' : filteredResults.length ? 'Your matches are ready.' : 'No matches found with these choices.'}</p>{reviewer && <details><summary>Search details</summary><p>{discoveryNotice}</p></details>}</div>
+              <div className="search-status"><p role="status">{discoveryStatus({loading:discovering,failed:discoveryFailure,partial:partialDiscovery,count:filteredResults.length})}</p>{reviewer && <details><summary>Search details</summary><p>{discoveryNotice}</p></details>}</div>
             )}
             {reviewer && mode==='based-on' && candidates.length>0 && completedDiscoveryKey===discoveryKey && rankingEvidence.key===discoveryKey && !discovering &&
               <details className="advanced-panel"><summary>Evaluate these recommendations</summary><p>Export this result set to compare recommendation methods.</p><button onClick={downloadComparison}>Download comparison snapshot</button></details>}
