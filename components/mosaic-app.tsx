@@ -117,6 +117,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const [candidates, setCandidates] = useState<CatalogMedia[]>([]);
   const [discovering, setDiscovering] = useState(false);
   const [discoveryNotice, setDiscoveryNotice] = useState('');
+  const [discoveryFailure, setDiscoveryFailure] = useState(false);
+  const [partialDiscovery, setPartialDiscovery] = useState(false);
   const [completedDiscoveryKey,setCompletedDiscoveryKey]=useState('');
   const discoveryRequest = useRef<AbortController | null>(null);
   useEffect(() => () => discoveryRequest.current?.abort(), []);
@@ -178,6 +180,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     discoveryRequest.current?.abort();
     setDiscovering(false);
     setDiscoveryNotice('');
+    setDiscoveryFailure(false);
+    setPartialDiscovery(false);
     setCompletedDiscoveryKey('');
   },[discoveryKey,rankingMode,controlsKey]);
   useEffect(() => {
@@ -369,6 +373,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     setDiscovering(true);
     setCompletedDiscoveryKey('');
     setDiscoveryNotice('');
+    setDiscoveryFailure(false);
+    setPartialDiscovery(false);
     const signedVocabulary=vocabularyFor(catalog);
     const signedValues=tasteVector(catalog,ratings,signedVocabulary);
     const signedQuery=Object.fromEntries(signedVocabulary.map((t,i)=>[t,signedValues[i]]));
@@ -422,12 +428,16 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
         }
       }
       setCompletedDiscoveryKey(discoveryKey);
+      setPartialDiscovery(found.failures.length > 0);
+      setDiscoveryFailure(found.items.length === 0 && found.failures.length > 0);
       setDiscoveryNotice(
         `Checked ${found.stats.examined} unique titles across ${found.stats.pages} catalog pages; filtered out ${found.stats.rejected}. ${found.items.length} eligible candidates (${found.stats.cached} from recent searches).${found.failures.length ? ' Some sources were unavailable: ' + found.failures.join(', ') + '.' : ''}${aiNotice} Results below are ranked within this pool, not the entire catalog.`,
       );
     } catch {
-      if (!controller.signal.aborted)
+      if (!controller.signal.aborted) {
+        setDiscoveryFailure(true);
         setDiscoveryNotice('Discovery could not finish. Please retry.');
+      }
     } finally {
       if (!controller.signal.aborted) setDiscovering(false);
     }
@@ -617,6 +627,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               setDiscovering(false);
               setCandidates([]);
               setDiscoveryNotice('');
+    setDiscoveryFailure(false);
+    setPartialDiscovery(false);
               setNotice('');
               setAdultSection(false);
             }}
@@ -632,6 +644,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               setDiscovering(false);
               setCandidates([]);
               setDiscoveryNotice('');
+    setDiscoveryFailure(false);
+    setPartialDiscovery(false);
               setNotice('');
               setAdultSection(true);
             }}
@@ -991,7 +1005,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             </button>
             {rankingMode==='cosine'&&mode!=='based-on'&&!cosineRun.hasPositiveSignal&&<p role="status">Rate a title 4 or 5 stars to build a positive taste profile. Neutral, negative or cancelling ratings alone do not generate personalized results.</p>}
             {discoveryNotice && (
-              <div className="search-status"><p role="status">{discovering ? 'Finding stories that fit…' : discoveryNotice.includes('could not') ? 'Search could not finish. Please try again.' : 'Your matches are ready.'}</p>{reviewer && <details><summary>Search details</summary><p>{discoveryNotice}</p></details>}</div>
+              <div className="search-status"><p role="status">{discovering ? 'Finding stories that fit…' : discoveryFailure ? 'Catalog search is temporarily unavailable. Try Find my next favorite again.' : partialDiscovery ? 'Some catalogs were unavailable. These results may be incomplete; try again for more matches.' : filteredResults.length ? 'Your matches are ready.' : 'No matches found with these choices.'}</p>{reviewer && <details><summary>Search details</summary><p>{discoveryNotice}</p></details>}</div>
             )}
             {reviewer && mode==='based-on' && candidates.length>0 && completedDiscoveryKey===discoveryKey && rankingEvidence.key===discoveryKey && !discovering &&
               <details className="advanced-panel"><summary>Evaluate these recommendations</summary><p>Export this result set to compare recommendation methods.</p><button onClick={downloadComparison}>Download comparison snapshot</button></details>}
@@ -1015,10 +1029,11 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 <h3>
                   {discovering
                     ? 'Looking for connections…'
+                    : discoveryFailure ? 'We could not finish this search.'
                     : completedDiscoveryKey!==discoveryKey && selected ? 'Ready for a fresh search.' : 'Your next favorite is waiting.'}
                 </h3>
                 <p>
-                  {discovering ? 'Finding recommendations for your current choices.' : selected && completedDiscoveryKey!==discoveryKey
+                  {discovering ? 'Finding recommendations for your current choices.' : discoveryFailure ? 'Your library is safe. Retry using Find my next favorite above, or come back shortly.' : selected && completedDiscoveryKey!==discoveryKey
                     ? 'Select “Find my next favorite” to get recommendations for these choices. Previous results are hidden when you change your starting title or matching settings.'
                     : selected ? 'No matches found with these choices. Try changing a requirement to Prefer, or choose a different starting title.' : 'Add something you love to your library, then find more like it.'}
                 </p>

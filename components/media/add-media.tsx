@@ -207,7 +207,7 @@ export function AddMedia({
         <p id="search-help" className="search-help" role="status">
           {loading
             ? 'Searching ' + providerFor(type) + '…'
-            : queryError(query) ||
+            : error ? 'Search did not finish. Use Retry search below.' : queryError(query) ||
               (!selection && !matches.length && !error
                 ? 'No matching titles found. Check the spelling or try a different title.'
                 : !selection
@@ -288,12 +288,8 @@ export function AddMedia({
         </button>
         <p className="storage-note">
           Your library is saved in this browser, not shared with other visitors.
-          Search text is sent to {providerFor(type)}.{' '}
-          {type === 'Music'
-            ? 'Music search finds songs and albums.'
-            : type === 'Game'
-              ? 'Only records classified as video games are offered.'
-              : ''}
+          Search text is sent to {type === 'Book' ? 'Hardcover and, when needed, Open Library' : providerFor(type)}.{' '}
+
         </p>
       </DialogContent>
     </Dialog>

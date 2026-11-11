@@ -6,6 +6,7 @@
   "vars": {
     "ALLOWED_ORIGIN": "https://anonymousxbelle.github.io"
   },
+  "d1_databases": [{"binding":"FEEDBACK_DB","database_name":"mosaic-feedback","database_id":"b84ced51-7925-4699-a214-b8cddee02423","migrations_dir":"migrations"}],
   "ratelimits": [
     {"name":"FEEDBACK_LIMITER","namespace_id":"31003","simple":{"limit":5,"period":60}},
     {
