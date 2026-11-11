@@ -55,7 +55,7 @@ Review 15–20 varied titles across media and genres. Preserve the exact source,
 
 ## UI review before participants
 
-Observed in source: main discovery exposes a Week 8 cosine option and course link; tag editing includes the reviewer key and AI diagnostics; the public genre glossary links to taxonomy editing; site metadata promises games/music despite paused live controls. These are candidates for separation, not a completed browser usability audit.
+Current separation: algorithm controls, AI review and diagnostic evidence are in the reviewer/project workspaces. Public discovery supports books, movies and TV. See UI-STATE-AUDIT-2026-11-10.md for current verification and remaining checks; earlier cleanup observations are historical.
 
 Keep the ordinary journey: For You / Based On / My Library, ratings, title search, target medium, Require versus Prefer, useful synopses, understandable reasons, sources and correction feedback. Keep required provider attribution. Move algorithms, vectors, reviewer keys and milestone evidence to dedicated project/reviewer routes; these routes still require server authorization for privileged operations. Do not use a visibility toggle as access control.
 

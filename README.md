@@ -1,10 +1,10 @@
 # Mosaic
 
-Cross-media story discovery for CSCI 310 Junior Seminar. The main interface supports books, movies and TV through Discover (For You / Based On) and My Library. Preferences are inside My Library. Demo titles, games and music are not shown in normal discovery.
+Cross-media story discovery for CSCI 310 Junior Seminar. The main interface supports books, movies and TV through Discover (For You / Based On) and My Library. Preferences open from the settings button in Discover or My Library. Demo titles, games and music are not shown in normal discovery.
 
 ## Run and verify
 
-Week 8: [signed cosine profile, testing and screenshots](docs/WEEK8.md). Open `/week8/` for the five-media course demonstration, or select the Week 8 method under Advanced matching in normal Discover. The existing story-based default remains available.
+Week 8: [signed cosine profile, testing and screenshots](docs/WEEK8.md). Open `/week8/` for the five-media course demonstration, or use the algorithm controls in the separate `/review/` workspace. The existing story-based default remains available.
 
 Use Node 22.13+. Run `npm ci`, then `npm run dev`. Validate with `npm run typecheck`, `npm test`, and `npm run build:pages`. GitHub Actions publishes main to https://anonymousxbelle.github.io/mosaic/. Secret-bearing requests use the separate Cloudflare backend.
 
@@ -23,3 +23,8 @@ Recommendations retrieve bounded provider candidates and rank eligible results u
 Shared records include title, type, genres, themes, moods, creators and keywords. Missing evidence remains empty. Legacy display credits may differ from creators, especially TVmaze network names. Imported records retain source links. Provider attribution: [TVmaze](https://www.tvmaze.com/api), [Open Library](https://openlibrary.org), [Hardcover](https://hardcover.app), [Apple](https://www.apple.com/itunes/), [Wikidata](https://www.wikidata.org/wiki/Wikidata:Licensing).
 
 See [backlog](PROJECT-BACKLOG.md), [recommendation plan](RECOMMENDATION-PLAN.md), [research](docs/recommendation-research.md), and [evaluation guide](evaluation/README.md). Historical plans contain proposals as well as implemented work; the milestone report identifies the verified scope of this revision.
+
+## Submission readiness
+
+See [submission plan](docs/SUBMISSION-READINESS.md), [current UI audit](docs/UI-STATE-AUDIT-2026-11-10.md), and [participant questionnaire](docs/PARTICIPANT-QUESTIONNAIRE.md). Historical progress notes describe their recorded revision, not necessarily the current release.
+

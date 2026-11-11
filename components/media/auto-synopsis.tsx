@@ -28,6 +28,8 @@ export function AutoSynopsis({item}:{item:Media}){
   const [description,setDescription]=useState(item.description);
   const [status,setStatus]=useState<'waiting'|'loading'|'done'|'error'>('waiting');
   const [retry,setRetry]=useState(0);
+  const [expanded,setExpanded]=useState(false);
+  useEffect(()=>setExpanded(false),[item.id]);
   useEffect(()=>{
     let active=true;
     if(hasSynopsis(item.description)){setDescription(item.description);setStatus('done');return;}
@@ -45,9 +47,9 @@ export function AutoSynopsis({item}:{item:Media}){
   },[item.id,item.description,retry]);
   const preview=description.length>420?description.slice(0,420).replace(/\s+\S*$/,''):description;
   return <div ref={root} className="synopsis">
-    <p className="description">{hasSynopsis(description)?description.length>420?preview+'…':description:status==='error'?'The synopsis could not load.':status==='done'?'No synopsis is available from the catalog. Use the source link for more details.':'Loading synopsis…'}</p>
+    <p className="description">{hasSynopsis(description)?description.length>420&&!expanded?preview+'…':description:status==='error'?'The synopsis could not load.':status==='done'?'No synopsis is available from the catalog. Use the source link for more details.':'Loading synopsis…'}</p>
     {status==='error'&&<button onClick={()=>setRetry(n=>n+1)}>Retry synopsis</button>}
-    {hasSynopsis(description)&&description.length>420&&<details className="full-description"><summary>Continue reading</summary><p>{description.slice(preview.length).trimStart()}</p></details>}
+    {hasSynopsis(description)&&description.length>420&&<button type="button" className="synopsis-toggle" aria-expanded={expanded} onClick={()=>setExpanded(value=>!value)}>{expanded ? 'Show less' : 'Continue reading'}</button>}
   </div>;
 }
 
