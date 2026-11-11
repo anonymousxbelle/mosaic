@@ -62,7 +62,7 @@ export function AiTagReview({item,edit,onChange}:{item:Media;edit:TagEdits[strin
         <h4>{taxonomyLabel(s.tag)} · {s.kind}{s.proposed?' · New tag proposal':''}</h4>
         {s.definition && <p>{s.definition}</p>}
         <blockquote style={{margin:'12px 0',paddingLeft:12,borderLeft:'3px solid #718b7a'}}>{s.quote}</blockquote>
-        <p>{s.reason}</p><p>{s.basis} · Estimated confidence: {Math.round(s.confidence*100)}% · Review: {s.status}{s.reviewedTag?' as '+taxonomyLabel(s.reviewedTag):''}</p>
+        <p>{s.reason}</p><p>{s.centrality ? s.centrality+' · ' : ''}{s.basis} · Estimated confidence: {Math.round(s.confidence*100)}% · Review: {s.status}{s.reviewedTag?' as '+taxonomyLabel(s.reviewedTag):''}</p>
         {s.reviewReason && <p>Your reason: {s.reviewReason}</p>}
         <label style={{display:'grid',gap:8}}>Review reason (optional)<input maxLength={1000} value={reasons[row] || ''} onChange={e=>setReasons({...reasons,[row]:e.target.value})} placeholder="Unsupported, too broad, wrong meaning…" /></label>
         <div style={{display:'flex',gap:12,flexWrap:'wrap',marginTop:12}}>

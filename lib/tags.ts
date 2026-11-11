@@ -1,3 +1,4 @@
+import {sportsCentrality} from './tag-centrality.ts';
 import { acceptedAnalysisTags, restoreAnalyses, type TagAnalysis } from './ai-tagging.ts';
 import {tagApplicable} from './taxonomy.ts';
 import { detailedFeatures } from './features.ts';
@@ -22,6 +23,7 @@ export function normalizeTag(raw: string): string {
   return tag;
 }
 export function effectiveTags(item: Media, edit?: TagEdits[string]): string[] {
+  const role=sportsCentrality(item.description,(item as Media & {sourceGenreLabels?:string[]}).sourceGenreLabels || item.genres || []);
   return [
     ...new Set([
       ...[
@@ -29,7 +31,9 @@ export function effectiveTags(item: Media, edit?: TagEdits[string]): string[] {
           ...item.tags,
           ...detailedFeatures(item.description, item.genres || []),
         ]),
-      ].filter((t) => !edit?.hidden.includes(t)),
+      ].filter((t) => !edit?.hidden.includes(t))
+      .filter(t=>!['sports','sports-drama','sports-anime'].includes(t)||role==='central')
+      .filter(t=>!['basketball','football','baseball'].includes(t)||role!=='incidental'),
       ...(edit?.added || []),
       ...acceptedAnalysisTags(edit?.analyses || [],item).filter(t=>!edit?.hidden.includes(t)),
     ]),

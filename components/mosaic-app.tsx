@@ -117,6 +117,11 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const [avoided, setAvoided] = useState<string[]>([]);
   const [candidates, setCandidates] = useState<CatalogMedia[]>([]);
   const [discovering, setDiscovering] = useState(false);
+  const [continuation,setContinuation]=useState<Record<string,import('@/lib/retrieval').RetrievalCursor>>({});
+  const [hasMore,setHasMore]=useState(false);
+  const [moreNotice,setMoreNotice]=useState('');
+  const [morePrefix,setMorePrefix]=useState<{key:string;items:any[]}|null>(null);
+  const [resultLimit,setResultLimit]=useState(30);
   const [discoveryNotice, setDiscoveryNotice] = useState('');
   const [discoveryFailure, setDiscoveryFailure] = useState(false);
   const [partialDiscovery, setPartialDiscovery] = useState(false);
@@ -184,6 +189,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     setDiscoveryFailure(false);
     setPartialDiscovery(false);
     setCompletedDiscoveryKey('');
+    setMorePrefix(null);setContinuation({});setHasMore(false);setResultLimit(30);setMoreNotice('');
   },[discoveryKey,rankingMode,controlsKey]);
   useEffect(() => {
     try {
@@ -366,13 +372,17 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     }
     return () => lifecycle.abort();
   }, []);
-  async function findConnections() {
+  async function findConnections(more=false) {
+    if(discovering)return;
+    setMoreNotice('');
+    if(more){setMorePrefix({key:controlsKey,items:filteredResults});setResultLimit(n=>n+30);}
+    else {setMorePrefix(null);setContinuation({});setHasMore(false);setResultLimit(30);}
     setPreservedResults(null);
     discoveryRequest.current?.abort();
     const controller = new AbortController();
     discoveryRequest.current = controller;
     setDiscovering(true);
-    setCompletedDiscoveryKey('');
+    if(!more)setCompletedDiscoveryKey('');
     setDiscoveryNotice('');
     setDiscoveryFailure(false);
     setPartialDiscovery(false);
@@ -406,13 +416,15 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
           : tags,
         controller.signal,
         adultSection,
-        {seed:mode === 'based-on'?selected:undefined,
+        {seed:mode === 'based-on'?selected:undefined,cursor:more?continuation:undefined,
           accept:(item)=>(mode!=='based-on' || mustTags.every(t=>item.tags.includes(t))) && inContentSection(item,adultSection) && genreAllowed(item,[],avoided) &&
-            recommendationEligible(item,ratings) && !findDuplicate(catalog,item)},
+            recommendationEligible(item,ratings) && !findDuplicate(catalog,item) && (!more || !findDuplicate(candidates,item))},
       );
       if (controller.signal.aborted) return;
-      setCandidates(found.items.filter((i) => !findDuplicate(catalog, i)));
-      setRankingEvidence({key:discoveryKey,provider:found.evidence,semantic:{}});
+      setCandidates(previous=>more?[...previous,...found.items.filter(i=>!findDuplicate(previous,i)&&!findDuplicate(catalog,i))]:found.items.filter(i=>!findDuplicate(catalog,i)));
+      setContinuation(found.cursor);setHasMore(found.hasMore);
+      if(more)setMoreNotice(found.items.length ? 'Additional candidates checked; new eligible matches appear after your previous results.' : found.hasMore ? 'No new matches on those pages. You can try the next pages without changing your filters.' : 'No new matches found within this search budget. Try different filters to explore further.');
+      setRankingEvidence(previous=>({key:discoveryKey,provider:more?{...previous.provider,...found.evidence}:found.evidence,semantic:more?previous.semantic:{}}));
       let aiNotice='';
       if(['recommended','semantic'].includes(rankingMode) && mode==='based-on' && selected){
         setDiscoveryNotice('Catalogs checked. Comparing descriptions…');
@@ -421,7 +433,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
           const shortlist=(rankingMode==='recommended'?unifiedRank(base,selected,found.evidence):base).slice(0,24);
           const semantic=await compareDescriptions(catalogApi,selected,shortlist,controller.signal);
           if(controller.signal.aborted)return;
-          setRankingEvidence({key:discoveryKey,provider:found.evidence,semantic});
+          setRankingEvidence(previous=>({key:discoveryKey,provider:more?{...previous.provider,...found.evidence}:found.evidence,semantic:more?{...previous.semantic,...semantic}:semantic}));
           aiNotice=` AI compared ${Object.keys(semantic).length} descriptions; titles without a comparison retain other ranking signals.`;
         }catch{
           if(controller.signal.aborted)return;
@@ -497,6 +509,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             )),
       }))
       .sort((a, b) => b.score - a.score)),
+    resultLimit,
   ) : [];
   const cosineRun=cosineDiscovery([...catalog,...candidates],{mode:mode==='based-on'?'based-on':'for-you',ratings,library:catalog,seed:mode==='based-on'?selected:undefined,category});
   const calculatedResults=rankingMode==='cosine'
@@ -505,7 +518,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       .filter(i=>mode!=='based-on'||mustTags.every(t=>i.tags.includes(t)))
       .map(i=>({...i,storyReasons:[] as string[],seriesEntries:[i]})):[]
     :legacyResults;
-  const filteredResults=preservedResults?.key===controlsKey?preservedResults.items:calculatedResults;
+  const batchResults=morePrefix?.key===controlsKey?[...morePrefix.items,...calculatedResults.filter(item=>!findDuplicate(morePrefix.items,item))]:calculatedResults;
+  const filteredResults=preservedResults?.key===controlsKey?preservedResults.items:batchResults;
   const visible = libraryOrder(sectionCatalog,ratings)
     .filter(i=>matchesShelf(i,ratings,shelf))
     .filter((i) =>
@@ -998,7 +1012,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                     ? selected?.tags.length || 0
                     : rankingMode==='cosine'?cosineRun.hasPositiveSignal:Object.values(taste).some((v) => v > 0))
               }
-              onClick={findConnections}
+              onClick={()=>findConnections()}
             >
               {discovering
                 ? 'Searching catalogs…'
@@ -1196,6 +1210,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 ))}
               </div>
             )}
+            <div className="more-discoveries" aria-live="polite">{moreNotice && <p>{moreNotice}</p>}{completedDiscoveryKey===discoveryKey && (hasMore ? <button type="button" className="add-media-button" disabled={discovering} onClick={()=>findConnections(true)}>{discovering ? 'Finding more…' : 'Find more recommendations'}</button> : !discovering && <p>You have reached the end of this search batch. Try different filters or a starting title to explore more. This is not the entire catalog.</p>)}</div>
             <details className="advanced-panel"><summary>About your recommendations</summary><p className="data-note">
               You have {sectionCatalog.length} titles in this content section{added.length!==sectionCatalog.length ? ` (${added.length} stored in total, including other content sections or unsupported media)` : ''}. Mosaic searches live catalogs for candidates and compares their story details with your favorites. It does not compare every title in every catalog. Match explanations describe similarities—not a guarantee that you will enjoy a title. You can correct tags from My Library.
             </p></details>

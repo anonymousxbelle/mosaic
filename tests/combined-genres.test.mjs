@@ -46,3 +46,12 @@ test('TMDB item keywords can corroborate both or just one part of a combined gen
  const ambiguous=tmdbRecord({...source,keywords:{results:[{name:'Action & Adventure'}]}},'TV');
  assert.ok(!ambiguous.genres.includes('action'));assert.ok(!ambiguous.genres.includes('adventure'));
 });
+
+
+test('time travel does not establish science fiction without independent genre evidence',()=>{
+ assert.ok(!normalizeGenres(['Time travel']).includes('science-fiction'));
+ assert.ok(!normalizeGenres(['Fantasy','Time travel']).includes('science-fiction'));
+ assert.ok(normalizeGenres(['Science Fiction','Time travel']).includes('science-fiction'));
+ assert.ok(extractTags('A magical device enables time travel.', ['Fantasy']).includes('time-travel'));
+});
+

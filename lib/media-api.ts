@@ -701,10 +701,11 @@ async function gateway(
 }
 export async function discoverMedia(
   types: Category[], tags:string[], signal?:AbortSignal, adult=false,
-  options:{seed?:Media;accept?:(item:CatalogMedia)=>boolean}={},
-):Promise<{items:CatalogMedia[];failures:string[];stats:RetrievalStats;evidence:Record<string,RetrievalEvidence[]>}>{
+  options:{seed?:Media;accept?:(item:CatalogMedia)=>boolean;cursor?:Record<string,import('./retrieval').RetrievalCursor>}={},
+):Promise<{items:CatalogMedia[];failures:string[];stats:RetrievalStats;evidence:Record<string,RetrievalEvidence[]>;cursor:Record<string,import('./retrieval').RetrievalCursor>;hasMore:boolean}>{
  const items:CatalogMedia[]=[],failures:string[]=[],stats=emptyStats();
  const evidence:Record<string,RetrievalEvidence[]>={};
+ const cursor:Record<string,import('./retrieval').RetrievalCursor>={};let hasMore=false;
  const anchor=primaryGenre(options.seed),topic=seedTopic(options.seed);
  const subgenre=(featureGroups[anchor || '']||[]).find(t=>[...(options.seed?.genres||[]),...(options.seed?.tags||[])].includes(t));
  const accept=(item:CatalogMedia)=>
@@ -716,8 +717,8 @@ export async function discoverMedia(
   signal?.throwIfAborted();
   try{
    if(type==='Music')continue;
-   let result:{items:CatalogMedia[];stats:RetrievalStats;evidence:Record<string,RetrievalEvidence[]>};
-   if(type==='Book')result=await(await import('./book-api.ts')).retrieveBooks(tags,signal,accept,anchor,topic || subgenre,options.seed);
+   let result:{items:CatalogMedia[];stats:RetrievalStats;evidence:Record<string,RetrievalEvidence[]>;cursor:import('./retrieval').RetrievalCursor;hasMore:boolean};
+   if(type==='Book')result=await(await import('./book-api.ts')).retrieveBooks(tags,signal,accept,anchor,topic || subgenre,options.seed,options.cursor?.[type]);
    else {
     if(!usesGateway(type)){failures.push(type);continue;}
     const core=[topic || subgenre,anchor].filter((x):x is string=>!!x);
@@ -738,8 +739,9 @@ export async function discoverMedia(
       const data=await json(catalogApi+'/discover?'+new URLSearchParams({type,adult:String(adult),page:String(page),...JSON.parse(plan)}),signal);
       if(!Array.isArray(data.items))throw Error('Invalid discovery response.');
       return {items:data.items.filter(validStoredItem),hasMore:data.hasMore===true};
-    },accept,signal,30,item=> (!seed || matchesStoryContext(seed,item)) && (!options.seed || type!==options.seed.type || !options.seed.tags.includes('anime') || item.tags.includes('anime')) ,contextual?6:3);
+    },accept,signal,30,item=> (!seed || matchesStoryContext(seed,item)) && (!options.seed || type!==options.seed.type || !options.seed.tags.includes('anime') || item.tags.includes('anime')) ,contextual?3:2,options.cursor?.[type]);
    }
+   cursor[type]=result.cursor;hasMore ||= result.hasMore;
    for(const key of ['examined','rejected','pages','failedQueries'] as const)stats[key]+=result.stats[key];
    if(result.stats.failedQueries)failures.push(type+' (partial)');
    for(const item of result.items){
@@ -752,7 +754,7 @@ export async function discoverMedia(
   }catch(error){if(signal?.aborted)throw error;failures.push(type);}
  }
  rememberCatalog(items);stats.accepted=items.length;
- return {items,failures,stats,evidence};
+ return {items,failures,stats,evidence,cursor,hasMore};
 }
 
 // All user-facing search/save paths expose the same explicit metadata fields.

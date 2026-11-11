@@ -41,3 +41,22 @@ test('gateway validates pagination and supports cached distinct related pages',a
   assert.ok(urls.some(x=>x.includes('recommendations?page=2')));
  }finally{globalThis.fetch=old;}
 });
+
+test('continuation advances cursors and never refetches exhausted plans',async()=>{
+ const calls=[];
+ const fetchPage=async(plan,page)=>{calls.push([plan,page]);return {items:[item(plan+page)],hasMore:plan==='a'&&page<3};};
+ const first=await retrievePages(['a','b'],fetchPage,()=>true,undefined,1);
+ const second=await retrievePages(['a','b'],fetchPage,()=>true,undefined,1,()=>true,3,first.cursor);
+ assert.deepEqual(calls,[['a',1],['b',1],['a',2]]);
+ assert.equal(second.evidence.a2[0].rank,2);
+ const third=await retrievePages(['a','b'],fetchPage,()=>true,undefined,1,()=>true,3,second.cursor);
+ assert.equal(third.hasMore,false);
+ assert.deepEqual(first.cursor.a,{page:2,offset:1,done:false});
+});
+test('failed pages can retry and six-page budget ends continuation',async()=>{
+ const failed=await retrievePages(['a'],async()=>{throw Error('offline');},()=>true);
+ assert.equal(failed.hasMore,true);assert.equal(failed.cursor.a.page,1);
+ const last=await retrievePages(['a'],async(_,page)=>({items:[item('last'+page)],hasMore:true}),()=>true,undefined,30,()=>true,3,{a:{page:6,offset:50,done:false}});
+ assert.equal(last.hasMore,false);assert.equal(last.stats.pages,1);
+});
+

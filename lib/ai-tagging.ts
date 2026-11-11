@@ -6,7 +6,7 @@ export type TagSource = { text: string; provider: string; url: string; retrieved
 export type ReviewDecision = { status: 'accepted'|'rejected'; tag?:string; reason:string; at:string };
 export type Suggestion = {
   tag: string; kind: TaxonomyKind; definition?: string; proposed: boolean;
-  quote: string; reason: string; confidence: number; basis: 'explicit' | 'inferred';
+  centrality?: 'central'|'substantial'; quote: string; reason: string; confidence: number; basis: 'explicit' | 'inferred';
   history?: ReviewDecision[];
   status: 'pending' | 'accepted' | 'rejected'; reviewedTag?: string; reviewReason?: string; reviewedAt?: string;
 };
@@ -36,6 +36,8 @@ export function validateSuggestions(value: unknown, source: TagSource, item: Med
         typeof raw.proposed !== 'boolean' || !text(raw.quote,1500) || !source.text.includes(raw.quote) ||
         !text(raw.reason,1500) || !Number.isFinite(raw.confidence) || raw.confidence<0 || raw.confidence>1 ||
         !['explicit','inferred'].includes(raw.basis) || seen.has(raw.tag)) throw new Error('AI returned invalid or unsupported evidence.');
+    if(raw.centrality!==undefined && !['central','substantial'].includes(raw.centrality))throw new Error('Incidental mentions cannot become recommendation tags.');
+    if(raw.centrality==='substantial' && ['genre','subgenre'].includes(raw.kind))throw new Error('Genre and subgenre suggestions need central story evidence.');
     seen.add(raw.tag);
     const node=Object.hasOwn(taxonomy,raw.tag)?taxonomy[raw.tag]:undefined;
     if(raw.proposed) {
@@ -45,7 +47,7 @@ export function validateSuggestions(value: unknown, source: TagSource, item: Med
       if(node.kind!==raw.kind)throw new Error('Category does not match the approved taxonomy category.');
       if(!tagApplicable(raw.tag,item))throw new Error('Tag does not apply to this media type or content class.');
     }
-    return {tag:raw.tag,kind:raw.kind,proposed:raw.proposed,...(raw.proposed?{definition:raw.definition}:{}),quote:raw.quote,
+    return {...(raw.centrality?{centrality:raw.centrality}:{}),tag:raw.tag,kind:raw.kind,proposed:raw.proposed,...(raw.proposed?{definition:raw.definition}:{}),quote:raw.quote,
       reason:raw.reason,confidence:raw.confidence,basis:raw.basis,status:'pending'};
   });
 }

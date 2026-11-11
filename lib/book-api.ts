@@ -135,7 +135,7 @@ export async function enrichBook(item:CatalogMedia,signal?:AbortSignal):Promise<
     adult:item.adult || subjects.some((s:string)=>/\berotica|erotic fiction\b/i.test(s)) || undefined,
   };
 }
-export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(item:CatalogMedia)=>boolean=()=>true, anchor?:string, topic?:string, seed?:import('./recommendations').Media) {
+export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(item:CatalogMedia)=>boolean=()=>true, anchor?:string, topic?:string, seed?:import('./recommendations').Media, cursor:import('./retrieval').RetrievalCursor={}) {
   const fiction=tags.includes('fiction') || tags.includes('fantasy') || tags.includes('magic');
   const subjects=[...new Set(tags.filter(t=>bookSubjects[t]).sort((a,b)=>specificity(b)-specificity(a)).map(t=>bookSubjects[t]))].slice(0,3);
   const core=[anchor && bookSubjects[anchor],topic && bookSubjects[topic]].filter((x):x is string=>!!x);
@@ -161,7 +161,7 @@ export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(
     }
     const total=data.numFound ?? data.num_found;
     return {items,hasMore:data.docs.length===30 && (typeof total!=='number' || page*30<total)};
-  },accept,signal,30,item=>!seed || matchesStoryContext(seed,item),seed && hasStoryContext(seed)?6:3);
+  },accept,signal,30,item=>!seed || matchesStoryContext(seed,item),seed && hasStoryContext(seed)?3:2,cursor);
   // Hydrate the likely displayed matches, using the same ranking and diversity
   // as the result list. Tag-count order used to leave top recommendations blank.
   const leading=diversify(recommend(result.items,vector(tags),'Book',[],anchor),12);
@@ -182,3 +182,4 @@ export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(
 export async function discoverBooks(tags:string[],signal?:AbortSignal){
  return (await retrieveBooks(tags,signal)).items;
 }
+

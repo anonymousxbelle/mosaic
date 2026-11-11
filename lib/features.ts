@@ -1,3 +1,4 @@
+import {sportsCentrality} from './tag-centrality.ts';
 import {taxonomy, type TaxonomyKind} from './taxonomy.ts';
 export type FeatureKind = TaxonomyKind;
 export const featureLabels: Record<FeatureKind, string> = {class:'Fiction / nonfiction',genre:'Genres',subgenre:'Subgenres',subject:'Subjects',theme:'Themes',trope:'Tropes / premises',setting:'Settings',tone:'Tone',audience:'Audience',format:'Format'};
@@ -21,7 +22,6 @@ export const featureGroups: Record<string, string[]> = {
   'science-fiction': [
     'space-opera',
     'cyberpunk',
-    'time-travel',
     'dystopian',
     'post-apocalyptic',
     'first-contact',
@@ -126,7 +126,7 @@ export function seedTopic(item?: {tags:string[]}):string|undefined {
   const subjects:Record<string,string[]>={
     fantasy:['magic','mythic-fantasy'],
     sports:['basketball','football','baseball'],
-    'science-fiction':['space-opera','time-travel','cyberpunk','first-contact'],
+    'science-fiction':['space-opera','cyberpunk','first-contact'],
   };
   const genre=primaryGenre(item);
   return (subjects[genre || ''] || []).find(t=>item.tags.includes(t)) ||
@@ -137,7 +137,7 @@ export function primaryGenre(item?: {genres?:string[];tags:string[]}):string|und
   const labels=[...(item.genres || []),...item.tags];
   // Prefer provider genres; themes such as friendship must not define the pool.
   return labels.find(t=>anchorGenres.includes(t)) ||
-    anchorGenres.find(parent=>featureGroups[parent]?.some(t=>labels.includes(t))) ||
+    anchorGenres.find(parent=>parent!=='sports' && featureGroups[parent]?.some(t=>labels.includes(t))) ||
     labels.find(t=>['adventure','action','drama','humor','history'].includes(t));
 }
 export function matchesGenre(item:{genres?:string[];tags:string[]},genre:string):boolean {
@@ -164,14 +164,16 @@ export function specificity(tag: string): number {
 }
 export function detailedFeatures(description: string, subjects: string[]) {
   const text = [description, ...subjects].join(' ');
+  const sportsRole=sportsCentrality(description,subjects);
   const found = Object.entries(detailedPatterns)
     .filter(([, p]) => p.test(text))
     // Animation style requires catalog labels, not an adaptation mentioned in prose.
     .filter(([tag]) => !['anime','sports-anime'].includes(tag) || subjects.some(s=>/^(?:sports[ -])?anime$/i.test(s.trim())))
     // Audience comes from catalog labels, never a character's age in a synopsis.
     .filter(([tag,p]) => featureKind(tag) !== 'audience' || subjects.some(s=>p.test(s)))
-    // An incidental mention of "sports" (e.g. Quidditch) is not a sports genre.
-    .filter(([tag]) => tag !== 'sports' || subjects.some(s=>detailedPatterns.sports.test(s)) || /\b(basketball|football|baseball|volleyball|soccer)\b/i.test(description))
+    // Broad genre needs central evidence; specific sport subjects need substantive evidence.
+    .filter(([tag]) => !['sports','sports-drama','sports-anime'].includes(tag) || sportsRole==='central')
+    .filter(([tag]) => !['basketball','football','baseball'].includes(tag) || sportsRole!=='incidental')
     .map(([tag]) => tag);
   const catalogLabels=subjects.map(s=>s.toLowerCase().trim().replace(/[ _]+/g,'-'));
   return [...new Set([...found,...Object.keys(taxonomy).filter(tag=>catalogLabels.includes(tag))])];
@@ -221,3 +223,4 @@ export const bookSubjects: Record<string, string> = {
   survival: 'survival',
   rebellion: 'rebellion',
 };
+

@@ -6,7 +6,7 @@ import {cosine,vector} from '../lib/recommendations.ts';
 import {analyzeTags} from '../backend/tag-analysis.ts';
 const source={text:'A group of strangers forms a chosen family while facing difficult choices together.',provider:'Test catalog',url:'https://example.com/item',retrievedAt:'2026-11-08'};
 const item={id:'test',title:'Test',type:'Book',creator:'',description:'',tags:[]};
-const suggestion={tag:'found-family',kind:'theme',proposed:false,quote:'strangers forms a chosen family',reason:'A chosen family forms.',confidence:0.8,basis:'explicit'};
+const suggestion={tag:'found-family',kind:'theme',proposed:false,quote:'strangers forms a chosen family',reason:'A chosen family forms.',confidence:0.8,basis:'explicit',centrality:'central'};
 function analysis(){return {id:'analysis',itemId:item.id,model:'test-model',promptVersion:'v1',taxonomyRevision:'revision',createdAt:'2026-11-08',source,suggestions:validateSuggestions([suggestion],source,item)};}
 test('pending and rejected tags never alter cosine; accepted tags do and survive restoration',()=>{
  const a=analysis();const edits={added:[],hidden:[],analyses:[a]};
@@ -101,4 +101,10 @@ test('hiding an accepted AI tag survives library restore',()=>{
  assert.ok(restored.hidden.includes('found-family'));
  assert.ok(!effectiveTags(item,restored).includes('found-family'));
 });
+
+ test('incidental AI mentions and noncentral genres cannot be applied',()=>{
+ assert.throws(()=>validateSuggestions([{...suggestion,centrality:'incidental'}],source,item),/Incidental/);
+ assert.throws(()=>validateSuggestions([{...suggestion,tag:'drama',kind:'genre',centrality:'substantial'}],source,item),/central story/);
+ assert.equal(validateSuggestions([suggestion],source,item)[0].centrality,'central');
+ });
 
