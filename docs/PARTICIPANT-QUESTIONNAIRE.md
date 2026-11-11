@@ -1,13 +1,16 @@
 # Mosaic participant questionnaire — draft for Google Forms
 
-Not yet a created or published Google Form. Anonymous-code design pending owner preference. Do not require Google sign-in, collect email automatically, or ask for sensitive information. Confirm applicable course research requirements and retention date before distribution.
+Not yet a created or published Google Form. The owner selected collection of names and email addresses. This is a confidential, identifiable study, not an anonymous one. Use explicit name and email questions rather than silently collecting account information. Confirm applicable course research requirements and retention date before distribution.
 
 ## Form introduction and consent
-Mosaic is a student prototype recommending books, movies and TV. This activity takes about 10–15 minutes. Participation is voluntary; you can stop or skip feedback questions. We record your anonymous participant code, task condition, ratings and comments to evaluate the prototype for a class presentation. Avoid names or private details in comments. Ask the study organizer about withdrawal using your participant code. Recommendations are not a guarantee of enjoyment. Contact/retention details must be filled in by the organizer before sending.
+Mosaic is a student prototype recommending books, movies and TV. This activity takes about 10–15 minutes. Participation is voluntary; you can stop or skip feedback questions. We collect your name and email to associate your two sessions and contact you about follow-up, plus your task condition, ratings and comments to evaluate the prototype for a class presentation. Contact details are kept private; analysis and presentation use participant codes. Avoid additional personal details in comments. Ask the study organizer about withdrawal using your participant code. Recommendations are not a guarantee of enjoyment. Contact/retention details must be filled in by the organizer before sending.
 
 Required multiple choice: I have read the information and agree to participate. Yes -> continue; No -> end. Use adult participants for this initial study as specified in the protocol.
 
 ## Session identification
+- Name (short answer; required after consent).
+- Email address (short answer with email validation; required after consent).
+- May we email you one follow-up about whether you tried a recommendation? Yes / No. An email address is not consent to unrelated contact.
 - Participant code (short answer, assigned P01 etc.; required).
 - Condition (required choice): same medium / different medium.
 - Starting title and its media type (short answer/Book, Movie, TV).
@@ -42,8 +45,8 @@ Optional short/paragraph answers:
 - Anything else you want us to know?
 
 ## Separate follow-up, if time permits
-Use the same participant code. Have you actually tried a recommendation? Yes / No. If yes: title, date and enjoyment 1–5 (Very low–Very high). Do not collect contacts in the main response dataset. With the November 13 deadline, a 3–7 day follow-up may not be available before submission; report it as pending instead of implying it happened.
+Use the same participant code. Have you actually tried a recommendation? Yes / No. If yes: title, date and enjoyment 1–5 (Very low–Very high). Keep contact information in the restricted raw response sheet; create a separate coded analysis sheet without name/email. With the November 13 deadline, a 3–7 day follow-up may not be available before submission; report it as pending instead of implying it happened.
 
 ## Collation
-One row per participant and condition. Join using participant code plus condition; flag duplicate submissions for review rather than counting them twice. Maintain separate columns for each scale and free text. Compare same-person condition differences only for matching source/version pairs. Report sample size, completion/assistance counts, missing responses, median/range and individual paired differences; small convenience samples do not establish general effectiveness. Group comments into retrieval, metadata, ranking, explanation, navigation and presentation, retaining contrary examples. Keep identity/contact data separate if ever collected.
+One row per participant and condition. Join using participant code plus condition; flag duplicate submissions for review rather than counting them twice. Maintain separate columns for each scale and free text. Compare same-person condition differences only for matching source/version pairs. Report sample size, completion/assistance counts, missing responses, median/range and individual paired differences; small convenience samples do not establish general effectiveness. Group comments into retrieval, metadata, ranking, explanation, navigation and presentation, retaining contrary examples. Keep the name/email-to-code mapping in a restricted sheet. Never publish raw responses, names or emails to GitHub or presentation materials. Disable public response summaries and response-sheet link sharing. Name the authorized reviewers and set a retention date before sending.
 
