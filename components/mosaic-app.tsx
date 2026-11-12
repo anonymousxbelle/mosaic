@@ -3,7 +3,7 @@ import {discoveryStatus} from '@/lib/discovery-status';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import {FeedbackInbox} from '@/components/media/feedback-inbox';
-import {libraryShelf,matchesShelf,libraryOrder} from '@/lib/library-view';
+import {libraryShelf,matchesShelf,libraryOrder,notDismissed} from '@/lib/library-view';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import { hybridRank, type RankingEvidence, type SemanticScores } from '@/lib/hybrid-ranking';
 import { compareDescriptions } from '@/lib/semantic';
@@ -147,7 +147,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     [catalog, adultSection],
   );
   const discoveryCatalog = useMemo(
-    () => sectionCatalog.filter((i) => i.type !== 'Music' && i.type !== 'Game'),
+    () => sectionCatalog.filter((i) => i.type !== 'Music' && i.type !== 'Game' && notDismissed(i,sectionCatalog)),
     [sectionCatalog],
   );
   const knownTags = useMemo(
@@ -177,7 +177,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const selected =
     [
       ...discoveryCatalog,
-      ...candidates.filter((i) => inContentSection(i, adultSection)),
+      ...candidates.filter((i) => inContentSection(i, adultSection) && notDismissed(i,catalog)),
     ].find((i) => i.id === seed) || discoveryCatalog[0];
   useEffect(() => {setFocusTags([]);setMustTags([]);setSeriesView('discover');}, [selected?.id]);
   const controlsKey=JSON.stringify([mode,mode==='based-on'?[selected?.id,selected?.description,selected?.tags,selected?.genres]:null,category,focusTags,mustTags,seriesView,adultSection,avoided,rankingMode,tagEdits]);
@@ -535,7 +535,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     :legacyResults.slice(0,resultLimit);
   const hasBufferedResults=rankingMode!=='cosine' && legacyResults.length>resultLimit;
   const batchResults=rankingMode==='cosine'&&!discovering?calculatedResults:morePrefix?.key===controlsKey?[...morePrefix.items,...calculatedResults.filter(item=>!findDuplicate(morePrefix.items,item))]:calculatedResults;
-  const filteredResults=preservedResults?.key===controlsKey?preservedResults.items:batchResults;
+  const filteredResults=(preservedResults?.key===controlsKey?preservedResults.items:batchResults).filter(item=>notDismissed(item,catalog));
   const visible = libraryOrder(sectionCatalog,ratings)
     .filter(i=>matchesShelf(i,ratings,shelf))
     .filter((i) =>
@@ -745,6 +745,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                     {libraryShelf(item,ratings)==='dismissed'&&<button className="edit-tags" onClick={()=>setAdded(old=>old.map(x=>x.id===item.id?{...x,libraryState:ratings[item.id]?'experienced':'later'}:x))}>Restore to library</button>}
                     <button
                       className="edit-tags"
+                      disabled={!notDismissed(item,catalog)}
                       onClick={() => {
                         if (item.type === 'Music') return;
                         setSeed(item.id);
@@ -1245,7 +1246,9 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               }}
             />
         </section>
-        <Dialog open={!!openCollection} onOpenChange={open=>{if(!open)setOpenCollection(null);}}><DialogContent className="add-media-dialog"><DialogTitle>{openCollection?.replaceAll('-',' ')}</DialogTitle><DialogDescription>Titles you grouped with this personal tag. Opening this collection keeps you in Collections.</DialogDescription><div className="collection-list">{sectionCatalog.filter(item=>openCollection && tagEdits[item.id]?.added.includes(openCollection)).map(item=><article key={item.id}><h3>{item.title}</h3><p>{item.type} · {ratings[item.id]?`${ratings[item.id]} stars`:'Saved for later'}</p><button onClick={()=>setRateTarget(item)}>Rate title</button><button onClick={()=>{setSeed(item.id);setMode('based-on');setView('discover');setOpenCollection(null);}}>Find similar titles</button></article>)}</div></DialogContent></Dialog>
+        <Dialog open={!!openCollection} onOpenChange={open=>{if(!open)setOpenCollection(null);}}><DialogContent className="add-media-dialog collection-dialog"><DialogTitle>{openCollection?.replaceAll('-',' ')}</DialogTitle><DialogDescription>Your saved titles in this collection. Ratings and changes are shared with My Library.</DialogDescription><div className="collection-cards">{libraryOrder(sectionCatalog,ratings).filter(item=>openCollection && tagEdits[item.id]?.added.includes(openCollection)).map(item=><article className="result-card" data-media-type={item.type} key={item.id}>
+          <span className={'category-badge '+item.type.toLowerCase()}>{item.type}</span><MediaMark item={item}/><h3>{item.title}</h3><p className="library-creator">{item.creator}</p><p className="muted">{contentLabel(item)}</p><p>{ratings[item.id]?`${ratings[item.id]} stars · `:''}{libraryShelf(item,ratings)==='dismissed'?'Not interested':libraryShelf(item,ratings)==='later'?'Saved for later':'Already experienced'}</p><AutoSynopsis item={item}/><div className="tag-options">{item.tags.slice(0,8).map(tag=><span key={tag}>{tag.replaceAll('-',' ')}</span>)}</div><div className="result-actions"><button onClick={()=>setRateTarget(item)}>Rate title</button><button disabled={!notDismissed(item,catalog)} onClick={()=>{setSeed(item.id);setMode('based-on');setView('discover');setOpenCollection(null);}}>Find similar titles</button></div>
+        </article>)}</div></DialogContent></Dialog>
         <Dialog open={!!removeTarget} onOpenChange={open=>{if(!open)setRemoveTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Remove {removeTarget?.title}?</DialogTitle><DialogDescription>This removes the title, its star rating, personal tags and AI review history from this browser’s library. It may appear in recommendations again. This does not change the catalog.</DialogDescription><div className="result-actions"><button onClick={()=>setRemoveTarget(null)}>Keep title</button><button className="destructive" onClick={()=>{if(removeTarget)removeItem(removeTarget.id);setRemoveTarget(null);}}>Remove from library</button></div></DialogContent></Dialog>
         <Dialog open={!!rateTarget} onOpenChange={open=>{if(!open)setRateTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Rate {rateTarget?.title}</DialogTitle><DialogDescription>Your rating shapes your taste profile. If you haven’t read or watched it, save it for later instead.</DialogDescription><div className="rating-choices">{[1,2,3,4,5].map(n=><button disabled={actionBusy} key={n} onClick={()=>{if(rateTarget)void feedback(rateTarget,'experienced',n);setRateTarget(null);}}>{n} ★</button>)}<button disabled={actionBusy} onClick={()=>{if(rateTarget)void feedback(rateTarget,'later');setRateTarget(null);}}>Save to library · for later</button></div></DialogContent></Dialog>
 <Dialog open={preferencesOpen} onOpenChange={setPreferencesOpen}><DialogContent className="add-media-dialog preferences-screen"><DialogTitle>Your taste & preferences</DialogTitle><DialogDescription>Manage exclusions and your browser-saved library.</DialogDescription>

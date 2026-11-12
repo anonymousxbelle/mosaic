@@ -1293,3 +1293,8 @@ body { background:var(--background); }
 
 .synopsis-toggle { display:inline-flex; margin:4px 0 8px; padding:4px 0; color:var(--foreground); text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
 
+.collection-dialog { width:min(960px,calc(100vw - 32px)); max-width:960px; }
+.collection-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:20px; align-items:start; }
+.collection-cards .result-card { display:flex; flex-direction:column; gap:12px; min-width:0; padding:24px; }
+.collection-cards .result-card p { margin:0; }
+

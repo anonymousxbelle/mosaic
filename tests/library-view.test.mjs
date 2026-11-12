@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {libraryShelf,matchesShelf,libraryOrder} from '../lib/library-view.ts';
+import {libraryShelf,matchesShelf,libraryOrder,notDismissed} from '../lib/library-view.ts';
 import {hasCloseTitle,rankSearch,titleSearchKey} from '../lib/catalog-text.ts';
 test('a rated bookmark appears only on the experienced shelf',()=>{const item={id:'a',libraryState:'later'};assert.equal(libraryShelf(item,{a:5}),'experienced');assert.equal(matchesShelf(item,{a:5},'later'),false);assert.equal(matchesShelf(item,{a:5},'experienced'),true);assert.equal(matchesShelf(item,{},'later'),true);});
 test('dismissed titles stay separate even if rated and sort last without mutating input',()=>{const items=[{id:'a',libraryState:'dismissed'},{id:'b',libraryState:'later'},{id:'c'}];assert.equal(libraryShelf(items[0],{a:5}),'dismissed');assert.deepEqual(libraryOrder(items,{}).map(i=>i.id),['b','c','a']);assert.equal(items[0].id,'a');});
@@ -9,4 +9,6 @@ test('title matching ignores connecting words and punctuation but preserves repe
 test('rated titles precede bookmarks and dismissed rated titles remain last',()=>{const items=[{id:'later',libraryState:'later'},{id:'dismissed',libraryState:'dismissed'},{id:'rated'},{id:'other'}];assert.deepEqual(libraryOrder(items,{rated:5,dismissed:5}).map(i=>i.id),['rated','later','other','dismissed']);});
 
 test('exact short title survives a bounded enrichment shortlist',()=>{const rows=Array.from({length:20},(_,i)=>({title:i===19?'K':`K prefix ${i}`,creator:'',ratingCount:100-i}));assert.equal(rankSearch(rows,'K').slice(0,8)[0].title,'K');});
+
+test('dismissed works are excluded from seeds and preserved results including another provider',()=>{const item={id:'a',title:'Example Story',creator:'Writer',type:'Book',tags:[],libraryState:'dismissed'};assert.equal(notDismissed(item,[]),false);assert.equal(notDismissed({...item,id:'b',libraryState:undefined},[item]),false);assert.equal(notDismissed({...item,id:'c',title:'Different story',libraryState:undefined},[item]),true);});
 
