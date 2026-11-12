@@ -1,3 +1,4 @@
+import {rankSearch,hasCloseTitle} from '../lib/catalog-text.ts';
 import {handleFeedback,type FeedbackEnv} from './feedback.ts';
 import { analyzeTags, taggingModel } from './tag-analysis.ts';
 import { hardcoverBooks, HardcoverError } from './hardcover.ts';
@@ -402,7 +403,20 @@ export default {
             throw new ApiError(502, 'Invalid film/TV catalog response.');
           hasMore=u.pathname==='/discover' && page<6 && (typeof data.total_pages==='number'?page<data.total_pages:data.results.length===20);
           items = [];
-          const rows=data.results.slice(0,u.pathname === '/search'?8:20);
+          let searchRows=data.results;
+          if(u.pathname==='/search'){
+            const named=(rows:Data[])=>rows.map(row=>({...row,id:row.id,title:plainText(row.title || row.name),creator:'',ratingCount:Number(row.vote_count)||0}));
+            // Short titles are easily buried by popular prefix matches. Check a bounded
+            // set of pages and rank exact titles before choosing rows to enrich.
+            if(q.length<=2){
+              for(let extraPage=2;extraPage<=Math.min(3,Number(data.total_pages)||1) && !hasCloseTitle(named(searchRows),q);extraPage++){
+                const extra=await tmdb(path+'&page='+extraPage,env);
+                if(Array.isArray(extra.results))searchRows=[...searchRows,...extra.results];
+              }
+            }
+            searchRows=rankSearch(named(searchRows),q).filter((row,index,all)=>all.findIndex(x=>x.id===row.id)===index);
+          }
+          const rows=searchRows.slice(0,u.pathname === '/search'?8:20);
           // Bounded concurrency enriches every row on a discovery page; no skipped tail.
           for(let offset=0;offset<rows.length;offset+=4){
             const batch=await Promise.all(rows.slice(offset,offset+4).map(async(row:Data)=>Number.isSafeInteger(row.id)?detail(row.id):null));

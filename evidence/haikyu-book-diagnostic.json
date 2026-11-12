@@ -1,0 +1,6779 @@
+Warning: truncated output (original token count: 58925)
+Total output lines: 8891
+
+{
+  "checkedAt": "2026-11-12T02:49:17.378Z",
+  "note": "Fresh live diagnostic pool, not the participant original session or final diversified UI order",
+  "seed": {
+    "id": "tmdb:TV:60863",
+    "externalId": "60863",
+    "type": "TV",
+    "title": "Haikyu!!",
+    "creator": "Creator unavailable",
+    "description": "Inspired by a small-statured pro volleyball player, Hinata creates a volleyball team in his last year of middle school. Unfortunately the team is matched up against the \"King of the Court\" Tobio Kageyama’s team in their first tournament and inevitably lose. After the crushing defeat, Hinata vows to surpass Kageyama After entering high school, Hinata joins the volleyball team only to find that Tobio has also joined.",
+    "tags": [
+      "sports",
+      "anime",
+      "animation",
+      "humor",
+      "drama",
+      "competition",
+      "teamwork",
+      "sports-anime",
+      "sports-drama"
+    ],
+    "sourceGenreLabels": [
+      "Animation",
+      "Comedy",
+      "Drama"
+    ],
+    "genres": [
+      "animation",
+      "drama",
+      "humor",
+      "sports-drama",
+      "sports-anime",
+      "anime",
+      "sports"
+    ],
+    "adult": false,
+    "contentRating": "TV-14",
+    "artworkUrl": "https://image.tmdb.org/t/p/w342/8WEr48swcqe89Zsy5sdrGCASlIg.jpg",
+    "provider": "TMDB",
+    "sourceUrl": "https://www.themoviedb.org/tv/60863",
+    "imdbUrl": "https://www.imdb.com/title/tt3398540/",
+    "year": "2014",
+    "verifiedAt": "2026-11-12T02:48:45.335Z",
+    "schemaVersion": 1,
+    "themes": [
+      "competition",
+      "teamwork"
+    ],
+    "moods": [],
+    "creators": [],
+    "keywords": [
+      "sports",
+      "anime",
+      "animation",
+      "humor",
+      "drama",
+      "competition",
+      "teamwork",
+      "sports-anime",
+      "sports-drama"
+    ]
+  },
+  "tags": [
+    "sports",
+    "competition",
+    "teamwork",
+    "sports-anime",
+    "sports-drama",
+    "humor",
+    "drama",
+    "anime",
+    "animation"
+  ],
+  "stats": {
+    "examined": 261,
+    "rejected": 110,
+    "accepted": 149,
+    "pages": 9,
+    "failedQueries": 0,
+    "cached": 0
+  },
+  "failures": [],
+  "aiError": "",
+  "semantic": {
+    "openlibrary:OL16190865W": 0.5380209700537123,
+    "openlibrary:OL21008835W": 0.5020694983451186,
+    "openlibrary:OL2700055W": 0.5237108556516988,
+    "openlibrary:OL17874237W": 0.5969767390307434,
+    "openlibrary:OL74278W": 0.5017479847585639
+  },
+  "baseline": [
+    {
+      "id": "openlibrary:OL82560W",
+      "title": "Harry Potter and the Goblet of Fire",
+      "score": 0.17708463696297355
+    },
+    {
+      "id": "openlibrary:OL16190865W",
+      "title": "Raising the stakes",
+      "score": 0.49332333518715693
+    },
+    {
+      "id": "openlibrary:OL21008835W",
+      "title": "Sports Law",
+      "score": 0.49162333518715695
+    },
+    {
+      "id": "openlibrary:OL2700055W",
+      "title": "Winning isn't normal",
+      "score": 0.4915640759278977
+    },
+    {
+      "id": "openlibrary:OL9011805W",
+      "title": "Critical Moments During Competition",
+      "score": 0.49137889074271246
+    },
+    {
+      "id": "openlibrary:OL5838058W",
+      "title": "Gymnastics Competitions",
+      "score": 0.4912995256633474
+    },
+    {
+      "id": "openlibrary:OL11392929W",
+      "title": "Sporting body, sporting mind",
+      "score": 0.49120069367772295
+    },
+    {
+      "id": "openlibrary:OL3922561W",
+      "title": "Playing on their nerves",
+      "score": 0.4910864930818938
+    },
+    {
+      "id": "openlibrary:OL3464315W",
+      "title": "True competition",
+      "score": 0.4910797454435672
+    },
+    {
+      "id": "openlibrary:OL17874237W",
+      "title": "The Smurf championship games",
+      "score": 0.48408120933887483
+    },
+    {
+      "id": "openlibrary:OL24263839W",
+      "title": "Everyone plays sports",
+      "score": 0.4836004401081056
+    },
+    {
+      "id": "openlibrary:OL18637818W",
+      "title": "Wirtschaftlicher und sportlicher Wettbewerb",
+      "score": 0.4750100636863271
+    },
+    {
+      "id": "openlibrary:OL74278W",
+      "title": "How Tom beat Captain Najork and his hired sportsmen",
+      "score": 0.4745487325818392
+    },
+    {
+      "id": "openlibrary:OL11612318W",
+      "title": "Competitive anxiety in sport",
+      "score": 0.40627528146340763
+    },
+    {
+      "id": "openlibrary:OL16444126W",
+      "title": "Stillpower",
+      "score": 0.4027038528919791
+    },
+    {
+      "id": "openlibrary:OL8565678W",
+      "title": "Competitive Fire",
+      "score": 0.401608614796741
+    },
+    {
+      "id": "openlibrary:OL39300819W",
+      "title": "En plass på pallen",
+      "score": 0.401519183902432
+    },
+    {
+      "id": "openlibrary:OL15910356W",
+      "title": "Helena the Horseriding Fairy",
+      "score": 0.3960257388836259
+    },
+    {
+      "id": "openlibrary:OL18176320W",
+      "title": "Training for Trouble",
+      "score": 0.3932022094718612
+    },
+    {
+      "id": "openlibrary:OL15937127W",
+      "title": "Zoe the Skating Fairy",
+      "score": 0.3926507388836259
+    },
+    {
+      "id": "openlibrary:OL20522258W",
+      "title": "Win",
+      "score": 0.3500641679381164
+    },
+    {
+      "id": "openlibrary:OL3278815W",
+      "title": "Competition And State Aid",
+      "score": 0.34953969241364086
+    },
+    {
+      "id": "openlibrary:OL1800786W",
+      "title": "Megan's balancing act",
+      "score": 0.34435296120779985
+    },
+    {
+      "id": "openlibrary:OL17874268W",
+      "title": "Big Nate - Game On!",
+      "score": 0.05732799269852216
+    },
+    {
+      "id": "openlibrary:OL17566496W",
+      "title": "Archie Comics Spectacular",
+      "score": 0.05203595565311211
+    },
+    {
+      "id": "openlibrary:OL20017084W",
+      "title": "How bad do you want it?",
+      "score": 0.04726113089731328
+    },
+    {
+      "id": "openlibrary:OL36733687W",
+      "title": "The Deal / The Mistake / The Score / The Goal / The Legacy",
+      "score": 0.043927797563979944
+    },
+    {
+      "id": "openlibrary:OL19966051W",
+      "title": "Relentless",
+      "score": 0.04126113089731327
+    },
+    {
+      "id": "openlibrary:OL25181129W",
+      "title": "Games People Play",
+      "score": 0.04059446423064661
+    },
+    {
+      "id": "openlibrary:OL28454346W",
+      "title": "Blind Side",
+      "score": 0.03976113089731328
+    },
+    {
+      "id": "openlibrary:OL6438864W",
+      "title": "Relax & win",
+      "score": 0.0394833531195355
+    },
+    {
+      "id": "openlibrary:OL9851848W",
+      "title": "Coaching for the Inner Edge",
+      "score": 0.03879959243577481
+    },
+    {
+      "id": "openlibrary:OL19975980W",
+      "title": "The Champion's Mind",
+      "score": 0.03868970232588471
+    },
+    {
+      "id": "openlibrary:OL9013212W",
+      "title": "Willing to win",
+      "score": 0.03859446423064661
+    },
+    {
+      "id": "openlibrary:OL2667008W",
+      "title": "Sport in society",
+      "score": 0.03837224200842439
+    },
+    {
+      "id": "openlibrary:OL20911241W",
+      "title": "Sport 87",
+      "score": 0.03826113089731328
+    },
+    {
+      "id": "openlibrary:OL2667007W",
+      "title": "Sports in Society",
+      "score": 0.03809446423064661
+    },
+    {
+      "id": "openlibrary:OL6093781W",
+      "title": "Making a match",
+      "score": 0.03786719150337388
+    },
+    {
+      "id": "openlibrary:OL1855131W",
+      "title": "Daniels' running formula",
+      "score": 0.03777395141013379
+    },
+    {
+      "id": "openlibrary:OL18957970W",
+      "title": "Posing!",
+      "score": 0.037726247176383045
+    },
+    {
+      "id": "openlibrary:OL15830863W",
+      "title": "Gold minds",
+      "score": 0.037686662812206895
+    },
+    {
+      "id": "openlibrary:OL16416203W",
+      "title": "Athlete performance and injuries",
+      "score": 0.037669294162619396
+    },
+    {
+      "id": "openlibrary:OL4299652W",
+      "title": "The biomechanics of sports techniques",
+      "score": 0.037669294162619396
+    },
+    {
+      "id": "openlibrary:OL5829125W",
+      "title": "Guide des mouvements de musculation",
+      "score": 0.03766113089731327
+    },
+    {
+      "id": "openlibrary:OL10376012W",
+      "title": "Interaction among personality, anxiety, situational criticality, and athletic performance",
+      "score": 0.03765328776005837
+    },
+    {
+      "id": "openlibrary:OL18703601W",
+      "title": "Strategic sport communication",
+      "score": 0.03764574628192866
+    },
+    {
+      "id": "openlibrary:OL5001976W",
+      "title": "Physical and psychological effects of athletic competition on children and youth",
+      "score": 0.03760595848352017
+    },
+    {
+      "id": "openlibrary:OL3281478W",
+      "title": "Gold Minds",
+      "score": 0.037600113948160735
+    },
+    {
+      "id": "openlibrary:OL18722601W",
+      "title": "Kỷ yếu Đại hội thể dục thể thao sinh viên Đông Nam Á lần thứ 13 / Bộ giáo dục và đào tạo = The 13th ASEAN University Games official report / Ministry of Education and Training",
+      "score": 0.03758899974977229
+    },
+    {
+      "id": "openlibrary:OL23069143W",
+      "title": "World beaters",
+      "score": 0.037578591214773596
+    },
+    {
+      "id": "openlibrary:OL2741039W",
+      "title": "In Pursuit of Excellence",
+      "score": 0.037573630897313276
+    },
+    {
+      "id": "openlibrary:OL2893160W",
+      "title": "Law in sport and physical activity",
+      "score": 0.037573630897313276
+    },
+    {
+      "id": "openlibrary:OL44828179W",
+      "title": "אליפות ישראל בהתעמלות 2015",
+      "score": 0.037573630897313276
+    },
+    {
+      "id": "openlibrary:OL17078341W",
+      "title": "Becoming a Supple Leopard",
+      "score": 0.03756882320500558
+    },
+    {
+      "id": "openlibrary:OL20501621W",
+      "title": "Ti yu sai shi guan li",
+      "score": 0.03756882320500558
+    },
+    {
+      "id": "openlibrary:OL8980642W",
+      "title": "Competition and the ultimate athletic experience",
+      "score": 0.03756416120034358
+    },
+    {
+      "id": "openlibrary:OL21191011W",
+      "title": "Contemporary Sport Management",
+      "score": 0.03755963835999984
+    },
+    {
+      "id": "openlibrary:OL1927247W",
+      "title": "Physiology of sport and exercise",
+      "score": 0.0375552485443721
+    },
+    {
+      "id": "openlibrary:OL26772020W",
+      "title": "Chess Openings",
+      "score": 0.03754282103815835
+    },
+    {
+      "id": "openlibrary:OL3239940W",
+      "title": "Little girls in pretty boxes",
+      "score": 0.037538908675091055
+    },
+    {
+      "id": "openlibrary:OL20521188W",
+      "title": "Sport Leadership in the 21st Century",
+      "score": 0.037535103500053
+    },
+    {
+      "id": "openlibrary:OL19166307W",
+      "title": "Principles and practice of sport management",
+      "score": 0.03753140116758354
+    },
+    {
+      "id": "openlibrary:OL2625392W",
+      "title": "Peak performance",
+      "score": 0.037524288792050116
+    },
+    {
+      "id": "openlibrary:OL3264554W",
+      "title": "From ritual to record",
+      "score": 0.037502094752734964
+    },
+    {
+      "id": "openlibrary:OL17845529W",
+      "title": "Kettlebell Simple & Sinister",
+      "score": 0.03749642501496033
+    },
+    {
+      "id": "openlibrary:OL18908792W",
+      "title": "La couverture médicale des compétitions sportives",
+      "score": 0.03749368903684816
+    },
+    {
+      "id": "openlibrary:OL20161976W",
+      "title": "Training for the Uphill Athlete",
+      "score": 0.03748091111709349
+    },
+    {
+      "id": "openlibrary:OL6029078W",
+      "title": "Try your best",
+      "score": 0.033135304511102914
+    },
+    {
+      "id": "openlibrary:OL20332538W",
+      "title": "Amelia Bedelia Shapes Up!",
+      "score": 0.032635304511102914
+    },
+    {
+      "id": "openlibrary:OL1850154W",
+      "title": "Who Sir? Me, Sir? (Handi-read)",
+      "score": 0.03245348632928473
+    },
+    {
+      "id": "openlibrary:OL3454734W",
+      "title": "Whale Talk",
+      "score": 0.032301971177769576
+    },
+    {
+      "id": "openlibrary:OL2650175W",
+      "title": "Sports camp",
+      "score": 0.031504869728494214
+    },
+    {
+      "id": "openlibrary:OL2704583W",
+      "title": "The Contender",
+      "score": 0.03132495968351671
+    },
+    {
+      "id": "openlibrary:OL17486561W",
+      "title": "Fly Away",
+      "score": 0.031161620300576596
+    },
+    {
+      "id": "openlibrary:OL19665373W",
+      "title": "Jabari jumps",
+      "score": 0.03111149498729339
+    },
+    {
+      "id": "openlibrary:OL15152385W",
+      "title": "Snow monsters do drink hot chocolate",
+      "score": 0.03111149498729339
+    },
+    {
+      "id": "openlibrary:OL73105W",
+      "title": "Clifford's Sports Day (Clifford the Big Red Dog)",
+      "score": 0.031035304511102913
+    },
+    {
+      "id": "openlibrary:OL109560W",
+      "title": "The last-place sports poems of Jeremy Bloom",
+      "score": 0.031019919895718298
+    },
+    {
+      "id": "openlibrary:OL16036303W",
+      "title": "The teacher from the Black Lagoon and other stories",
+      "score": 0.030963173363561927
+    },
+    {
+      "id": "openlibrary:OL44397094W",
+      "title": "אתגר הנינג'ה",
+      "score": 0.030888469068064937
+    },
+    {
+      "id": "openlibrary:OL27018905W",
+      "title": "Le jour de sport dans la jungle",
+      "score": 0.030857526733325133
+    },
+    {
+      "id": "openlibrary:OL15406979W",
+      "title": "Big Nate Strikes Again",
+      "score": 0.0291952934349477
+    },
+    {
+      "id": "openlibrary:OL42539351W",
+      "title": "Grumpy Darling",
+      "score": 0.02866399634926108
+    },
+    {
+      "id": "openlibrary:OL5841923W",
+      "title": "The $40 million slaves",
+      "score": 0.026792042776614254
+    },
+    {
+      "id": "openlibrary:OL15072222W",
+      "title": "Greek and Roman sport",
+      "score": 0.026692425918376707
+    },
+    {
+      "id": "openlibrary:OL39084627W",
+      "title": "Sportstadt Berlin im Kalten Krieg",
+      "score": 0.026625376109947585
+    },
+    {
+      "id": "openlibrary:OL21580127W",
+      "title": "A Diamond Deal with the Greek",
+      "score": 0.026580156471704693
+    },
+    {
+      "id": "openlibrary:OL21028365W",
+      "title": "The Dare",
+      "score": 0.026577483389641072
+    },
+    {
+      "id": "openlibrary:OL36042862W",
+      "title": "Pucking Around",
+      "score": 0.026325464457572095
+    },
+    {
+      "id": "openlibrary:OL26576654W",
+      "title": "Game Changer / Heated Rivalry / Tough Guy",
+      "score": 0.02610901424112188
+    },
+    {
+      "id": "openlibrary:OL55304W",
+      "title": "Sly the sleuth and the sports mysteries",
+      "score": 0.021811681525047207
+    },
+    {
+      "id": "openlibrary:OL17820489W",
+      "title": "Big Nate, thunka, thunka, thunka",
+      "score": 0.020917246069964868
+    },
+    {
+      "id": "openlibrary:OL20890956W",
+      "title": "Game Changer",
+      "score": 0.019250833440778357
+    },
+    {
+      "id": "openlibrary:OL1337122W",
+      "title": "The Gold Bat",
+      "score": 0.018835728161207203
+    },
+    {
+      "id": "openlibrary:OL2043477W",
+      "title": "The ultimate guide to marathons",
+      "score": 0.018250955264188688
+    },
+    {
+      "id": "openlibrary:OL21780511W",
+      "title": "The Foxhole Court",
+      "score": 0.017645987152710044
+    },
+    {
+      "id": "openlibrary:OL77104W",
+      "title": "Maniac Magee",
+      "score": 0.01723982671512616
+    },
+    {
+      "id": "openlibrary:OL20942096W",
+      "title": "The Raven King",
+      "score": 0.016848266354989247
+    },
+    {
+      "id": "openlibrary:OL20641835W",
+      "title": "The King's Men",
+      "score": 0.016713586220309114
+    },
+    {
+      "id": "openlibrary:OL66259W",
+      "title": "Junie B. Jones is Captain Field Day",
+      "score": 0.014738938350097187
+    },
+    {
+      "id": "openlibrary:OL8119615W",
+      "title": "Quidditch Through the Ages",
+      "score": 0.01411571730573348
+    },
+    {
+      "id": "openlibrary:OL27916409W",
+      "title": "Game Changer",
+      "score": 0.013519453186257973
+    },
+    {
+      "id": "openlibrary:OL2005230W",
+      "title": "Foundations of sport and exercise psychology",
+      "score": 0.012982405023949758
+    },
+    {
+      "id": "openlibrary:OL5726550W",
+      "title": "Hapkido",
+      "score": 0.0127010751006761
+    },
+    {
+      "id": "openlibrary:OL2965186W",
+      "title": "Sport psychology",
+      "score": 0.012504996669303553
+    },
+    {
+      "id": "openlibrary:OL20014613W",
+      "title": "Losers take all",
+      "score": 0.012483902517177304
+    },
+    {
+      "id": "openlibrary:OL10352057W",
+      "title": "A developmental analysis of competitive orientation in team sports and individual sports",
+      "score": 0.012476476170194817
+    },
+    {
+      "id": "openlibrary:OL26085843W",
+      "title": "The Long Game",
+      "score": 0.012471834138638926
+    },
+    {
+      "id": "openlibrary:OL10351874W",
+      "title": "The arousal-performance relationship",
+      "score": 0.012411347269245022
+    },
+    {
+      "id": "openlibrary:OL15037862W",
+      "title": "Motocross Double-Cross",
+      "score": 0.012405471144628285
+    },
+    {
+      "id": "openlibrary:OL282347W",
+      "title": "Mind gym",
+      "score": 0.01237950647322512
+    },
+    {
+      "id": "openlibrary:OL15037868W",
+      "title": "Snowboard Duel",
+      "score": 0.012261680294955083
+    },
+    {
+      "id": "openlibrary:OL20808612W",
+      "title": "The Chase",
+      "score": 0.012233738900543687
+    },
+    {
+      "id": "openlibrary:OL15145578W",
+      "title": "Mack McGinn's big win",
+      "score": 0.012083902517177305
+    },
+    {
+      "id": "openlibrary:OL36042699W",
+      "title": "Mile High",
+      "score": 0.012034279846406625
+    },
+    {
+      "id": "openlibrary:OL20890969W",
+      "title": "Common Goal",
+      "score": 0.011796184608311387
+    },
+    {
+      "id": "openlibrary:OL24625151W",
+      "title": "Role Model",
+      "score": 0.01173846455059133
+    },
+    {
+      "id": "openlibrary:OL20605820W",
+      "title": "The Bromance Club",
+      "score": 0.011700946513073292
+    },
+    {
+      "id": "openlibrary:OL16113672W",
+      "title": "Stink and the ultimate thumb-wrestling smackdown",
+      "score": 0.009454606453117595
+    },
+    {
+      "id": "openlibrary:OL19745610W",
+      "title": "Indian horse",
+      "score": 0.009247649056459702
+    },
+    {
+      "id": "openlibrary:OL883475W",
+      "title": "The power of one",
+      "score": 0.008599627775628735
+    },
+    {
+      "id": "openlibrary:OL13729530W",
+      "title": "Initial D",
+      "score": 0.007499048404551789
+    },
+    {
+      "id": "openlibrary:OL15520733W",
+      "title": "Always War",
+      "score": 0.00672350903733797
+    },
+    {
+      "id": "openlibrary:OL19731176W",
+      "title": "ハイキュー!! 20",
+      "score": 0.005650811332802851
+    },
+    {
+      "id": "openlibrary:OL34955908W",
+      "title": "Wildfire",
+      "score": 0.022193133250234007
+    },
+    {
+      "id": "openlibrary:OL42430111W",
+      "title": "The Deal",
+      "score": 0.01711987657306054
+    },
+    {
+      "id": "openlibrary:OL20260984W",
+      "title": "Bully",
+      "score": 0.011420476561971052
+    },
+    {
+      "id": "openlibrary:OL45345941W",
+      "title": "Tempting Venom",
+      "score": 0.011063790468913594
+    },
+    {
+      "id": "openlibrary:OL30861265W",
+      "title": "Tryst Six Venom",
+      "score": 0.008957228029388933
+    },
+    {
+      "id": "openlibrary:OL24640741W",
+      "title": "I Dare You",
+      "score": 0.008121832565854756
+    },
+    {
+      "id": "openlibrary:OL28952677W",
+      "title": "Icebreaker",
+      "score": 0.0076029317266862965
+    },
+    {
+      "id": "openlibrary:OL16085966W",
+      "title": "The Art of Team Coaching - How Sun Tsu would Coach Coaches",
+      "score": 0.33421575742997683
+    },
+    {
+      "id": "openlibrary:OL2727955W",
+      "title": "Summer Ball",
+      "score": 0.3172312555366113
+    },
+    {
+      "id": "openlibrary:OL8817092W",
+      "title": "Trapped!",
+      "score": 0.29340717226039953
+    },
+    {
+      "id": "openlibrary:OL16557709W",
+      "title": "H.O.R.S.E.",
+      "score": 0.28048595730069714
+    },
+    {
+      "id": "openlibrary:OL8783182W",
+      "title": "Eyeshield 21",
+      "score": 0.021972931210106416
+    },
+    {
+      "id": "openlibrary:OL4124702W",
+      "title": "Among the thugs",
+      "score": 0.013289310394793748
+    },
+    {
+      "id": "openlibrary:OL5708904W",
+      "title": "The Playground Problem",
+      "score": 0.012817235850510637
+    },
+    {
+      "id": "openlibrary:OL2951563W",
+      "title": "Twelve Mighty Orphans",
+      "score": 0.012490198297124491
+    },
+    {
+      "id": "openlibrary:OL19752375W",
+      "title": "Here to Stay",
+      "score": 0.011649720641740188
+    },
+    {
+      "id": "openlibrary:OL76979W",
+      "title": "Bleachers",
+      "score": 0.010600714595571752
+    },
+    {
+      "id": "openlibrary:OL36043513W",
+      "title": "Right Move",
+      "score": 0.009013405968723956
+    },
+    {
+      "id": "openlibrary:OL37583785W",
+      "title": "Play Along",
+      "score": 0.008983072298349841
+    },
+    {
+      "id": "openlibrary:OL45346035W",
+      "title": "The Keeper",
+      "score": 0.008911926053290551
+    },
+    {
+      "id": "openlibrary:OL8783725W",
+      "title": "Slam Dunk, Vol. 1",
+      "score": 0.00851891293887781
+    },
+    {
+      "id": "openlibrary:OL8783076W",
+      "title": "Whistle!",
+      "score": 0.007534785954750827
+    },
+    {
+      "id": "openlibrary:OL8941234W",
+      "title": "Sports Illustrated",
+      "score": 0.007503527430383348
+    },
+    {
+      "id": "openlibrary:OL8911377W",
+      "title": "Rebound",
+      "score": 0.007172430237791684
+    },
+    {
+      "id": "openlibrary:OL36807745W",
+      "title": "Caught Up",
+      "score": 0.0068617752156748275
+    }
+  ],
+  "ranked": [
+    {
+      "id": "openlibrary:OL82560W",
+      "externalId": "OL82560W",
+      "type": "Book",
+      "title": "Harry Potter and the Goblet of Fire",
+      "creator": "J. K. Rowling",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "magic",
+        "friendship",
+        "middle-grade",
+        "fiction",
+        "fantasy",
+        "adventure",
+        "connection",
+        "drama",
+        "school",
+        "family"
+      ],
+      "sourceGenreLabels": [
+        "orphans",
+        "foster homes",
+        "Waisenkind",
+        "Intrige",
+        "Wiederbelebung",
+        "Bewährung",
+        "Wettkampf",
+        "Junge",
+        "Sport",
+        "Rettung",
+        "Jugendbuch",
+        "Mord",
+        "magier",
+        "fictitious schools",
+        "juvenile works",
+        "juvenile audience",
+        "juvenile literature",
+        "children's stories",
+        "Fiction",
+        "Hugo Award Winner",
+        "Wizards",
+        "New York Times bestseller",
+        "nyt:series_books=2006-09-16",
+        "Schools",
+        "award:hugo_award=novel",
+        "School",
+        "Magic",
+        "Open Library Staff Picks",
+        "Sorcellerie",
+        "Écoles",
+        "award:hugo_award=2001",
+        "Sorciers",
+        "Romans nouvelles etc. pour la jeunesse",
+        "Hogwarts School of Witchcraft and Wizardry (Imaginary organization)",
+        "Hermione Granger (Fictitious character)",
+        "Juvenile fiction",
+        "Ron Weasley (Fictitious character)",
+        "Harry Potter (Fictitious character)",
+        "Magia",
+        "Magos",
+        "Ficción juvenil",
+        "Escuelas",
+        "Ficción",
+        "Translations from English",
+        "Magi",
+        "Chinese fiction",
+        "Family",
+        "Fantasy fiction",
+        "Hogwarts School of Witchcraft and Wizardry (Imaginary place)",
+        "Orphans & Foster Homes",
+        "Social Themes",
+        "Fantasy & Magic",
+        "Friendship",
+        "Hugo Award",
+        "School stories",
+        "Harry Potter (Fictional character)",
+        "Reading Level-Grade 9",
+        "Reading Level-Grade 11",
+        "Reading Level-Grade 10",
+        "Reading Level-Grade 12",
+        "Large type books",
+        "Potter, harry (fictitious character), fiction",
+        "Children's fiction",
+        "England, fiction",
+        "Schools, fiction",
+        "Wizards, fiction",
+        "Magic, fiction",
+        "Hogwarts school of witchcraft and wizardry (imaginary organization), fiction",
+        "English literature",
+        "Potter, harry (fictitious character)",
+        "Fantasy",
+        "Juvenile films",
+        "Drama",
+        "Películas cinematográficas juveniles",
+        "Film adaptations",
+        "Hechiceros",
+        "Potter, Harry (Personaje literario)",
+        "Novela juvenil",
+        "Inglaterra",
+        "Novelas inglesas",
+        "Children's stories, English",
+        "Adventure and adventurers, fiction",
+        "Action & Adventure",
+        "Friendship, fiction",
+        "Poudlard (Organisation imaginaire)",
+        "Romans, nouvelles, etc. pour la jeunesse",
+        "French language",
+        "Reading materials",
+        "Korean language materials",
+        "Angol irodalom",
+        "Ifjúsági regény",
+        "English Fantasy literature",
+        "Translations into Marathi"
+      ],
+      "genres": [
+        "fantasy",
+        "adventure",
+        "fiction",
+        "drama"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL82560W",
+      "verifiedAt": "2026-11-12T02:48:46.444Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/12059372-M.jpg",
+      "year": "2000",
+      "ratingCount": 370,
+      "priority": 24,
+      "score": 0.17708463696297355,
+      "sharedTags": [
+        "sports",
+        "drama"
+      ],
+      "reasons": [
+        "sports",
+        "drama"
+      ],
+      "storyReasons": [
+        "setting: school"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL16190865W",
+      "externalId": "OL16190865W",
+      "type": "Book",
+      "title": "Raising the stakes",
+      "creator": "T. L. Taylor",
+      "description": "Competitive video and computer game play is nothing new: the documentary King of Kong memorably portrays a Donkey Kong player's attempts to achieve the all-time highest score; the television show Starcade (1982--1984) featured competitions among arcade game players; and first-person shooter games of the 1990s became multiplayer through network play. A new development in the world of digital gaming, however, is the emergence of professional computer game play, complete with star players, team owners, tournaments, sponsorships, and spectators. In Raising the Stakes, T. L. Taylor explores the emerging scene of professional computer gaming and the accompanying efforts to make a sport out of this form of play. In the course of her explorations, Taylor travels to tournaments, including the World Cyber Games Grand Finals (which considers itself the computer gaming equivalent of the Olympics), and interviews participants from players to broadcasters. She examines pro-gaming, with its highly paid players, play-by-play broadcasts, and mass audience; discusses whether or not e-sports should even be considered sports; traces the player's path from amateur to professional (and how a hobby becomes work); and describes the importance of leagues, teams, owners, organizers, referees, sponsors, and fans in shaping the structure and culture of pro-gaming. Taylor connects professional computer gaming to broader issues: our notions of play, work, and sport; the nature of spectatorship; the influence of money on sports. And she examines the ongoing struggle over the gendered construction of play through the lens of male-dominated pro-gaming. Ultimately, the evolution of professional computer gaming illuminates the contemporary struggle to convert playful passions into serious play.",
+      "synopsisStatus": "available",
+      "tags": [
+        "sports",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Computer network resources",
+        "Internet games",
+        "Sports",
+        "Social aspects",
+        "Case studies",
+        "Psychological aspects",
+        "Competition (Psychology)",
+        "Computer games",
+        "Sports, computer network resources",
+        "Sports, psychological aspects",
+        "Competition",
+        "Sociological aspects"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL16190865W",
+      "verifiedAt": "2026-11-12T02:48:56.049Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/12629317-M.jpg",
+      "year": "2012",
+      "ratingCount": 1,
+      "priority": 120,
+      "score": 0.49629780175576765,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": true,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL2700055W",
+      "externalId": "OL2700055W",
+      "type": "Book",
+      "title": "Winning isn't normal",
+      "creator": "Keith F. Bell",
+      "description": "A sports psychology book that is a guide for doing what it takes to win in competitive swimming, though it is advice applicable to all sports.",
+      "synopsisStatus": "available",
+      "tags": [
+        "sports",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Competition (Psychology)",
+        "Psychological aspects",
+        "Psychological aspects of Sports",
+        "Psychological aspects of Swimming",
+        "Sports",
+        "Success",
+        "Swimming",
+        "Winning and losing",
+        "Competition (psychology)",
+        "Competition"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL2700055W",
+      "verifiedAt": "2026-11-12T02:48:56.088Z",
+      "year": "1982",
+      "priority": 120,
+      "score": 0.49339373334434733,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": true,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL17874237W",
+      "externalId": "OL17874237W",
+      "type": "Book",
+      "title": "The Smurf championship games",
+      "creator": "Peyo",
+      "description": "A skill-building reader published to coincide with the Olympics finds Hefty Smurf organizing the first-ever Smurf Championship Games to raise awareness about exercise, a competition that concerns an insecure Weakling Smurf.",
+      "synopsisStatus": "available",
+      "tags": [
+        "sports",
+        "middle-grade",
+        "fiction",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Confidence",
+        "Humorous stories",
+        "Readers",
+        "Juvenile fiction",
+        "Competition",
+        "Smurfs (Fictional characters)",
+        "Olympics",
+        "Exercise",
+        "Fiction",
+        "Sports",
+        "Smurfs (Fictitious characters)"
+      ],
+      "genres": [
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL17874237W",
+      "verifiedAt": "2026-11-12T02:48:56.061Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/8882523-M.jpg",
+      "year": "2012",
+      "ratingCount": 0,
+      "priority": 120,
+      "score": 0.4924245558622425,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": true,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL21008835W",
+      "externalId": "OL21008835W",
+      "type": "Book",
+      "title": "Sports Law",
+      "creator": "David Thorpe, Antonio Buti, Chris Davies, Saul Fridman, Paul Jonson",
+      "description": "Sports Law examines all the various principles of law, including tort and criminal liability, taxation, contract, intellectual property and industrial relations, and the role they play in the world of Australian sport. Aust authors: Buti (Univ WA), Davies (JCU), Fridman (Curtin), Jonson & Thorpe (Univ of Tech, Sydney).",
+      "synopsisStatus": "available",
+      "tags": [
+        "sports",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Sports, law and legislation",
+        "Sports, australia",
+        "Law, australia",
+        "Sports",
+        "Law and legislation",
+        "Australia",
+        "Sport",
+        "Torts",
+        "Doping",
+        "Marketing",
+        "Competition",
+        "Commercial law",
+        "Sports--law and legislation",
+        "Sports--law and legislation--australia",
+        "Ku1585 .t47 2017",
+        "344.94099"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL21008835W",
+      "verifiedAt": "2026-11-12T02:48:56.086Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/11955618-M.jpg",
+      "year": "2008",
+      "priority": 120,
+      "score": 0.4917216840190802,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": true,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL9011805W",
+      "externalId": "OL9011805W",
+      "type": "Book",
+      "title": "Critical Moments During Competition",
+      "creator": "Roland Carlstedt",
+      "description": "",
+      "synopsisStatus": "unavailable",
+      "tags": [
+        "sports",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Achievement motivation",
+        "Sports",
+        "Psychological aspects",
+        "Competition",
+        "Motivation d'accomplissement",
+        "SPORTS & RECREATION",
+        "Sports Psychology"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL9011805W",
+      "verifiedAt": "2026-11-12T02:48:59.380Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/2018342-M.jpg",
+      "year": "2004",
+      "priority": 120,
+      "score": 0.49137889074271246,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL5838058W",
+      "externalId": "OL5838058W",
+      "type": "Book",
+      "title": "Gymnastics Competitions",
+      "creator": "Jen Jones",
+      "description": "",
+      "synopsisStatus": "unavailable",
+      "tags": [
+        "sports",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Gymnastics",
+        "Juvenile literature",
+        "Competitions",
+        "Competition",
+        "Gymnasts",
+        "Sports",
+        "Gymnastics, juvenile literature"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL5838058W",
+      "verifiedAt": "2026-11-12T02:48:59.386Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/2561026-M.jpg",
+      "year": "2006",
+      "priority": 120,
+      "score": 0.4912995256633474,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL11392929W",
+      "externalId": "OL11392929W",
+      "type": "Book",
+      "title": "Sporting body, sporting mind",
+      "creator": "John D. Syer",
+      "description": "",
+      "synopsisStatus": "unavailable",
+      "tags": [
+        "sports",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Competition (Psychology)",
+        "Psychological aspects",
+        "Psychological aspects of Sports",
+        "Sports",
+        "Psychoregulatives Training",
+        "Sports, psychological aspects",
+        "Competition"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL11392929W",
+      "verifiedAt": "2026-11-12T02:48:59.394Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/11718533-M.jpg",
+      "year": "1984",
+      "priority": 120,
+      "score": 0.49120069367772295,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL3922561W",
+      "externalId": "OL3922561W",
+      "type": "Book",
+      "title": "Playing on their nerves",
+      "creator": "Angela Patmore",
+      "description": "",
+      "synopsisStatus": "unavailable",
+      "tags": [
+        "sports",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Competition (Psychology)",
+        "Psychological aspects",
+        "Psychological aspects of Sports",
+        "Sports",
+        "Sports, psychological aspects",
+        "Competition"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL3922561W",
+      "verifiedAt": "2026-11-12T02:49:02.840Z",
+      "year": "1979",
+      "priority": 120,
+      "score": 0.4910864930818938,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL3464315W",
+      "externalId": "OL3464315W",
+      "type": "Book",
+      "title": "True competition",
+      "creator": "David Lyle Shields",
+      "description": "",
+      "synopsisStatus": "unavailable",
+      "tags": [
+        "sports",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Competition",
+        "Psychological aspects",
+        "Psychological aspects of Sports",
+        "Sociological aspects",
+        "Sociological aspects of Sports",
+        "Sports",
+        "Success",
+        "Sports, social aspects",
+        "Sports, psychological aspects"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL3464315W",
+      "verifiedAt": "2026-11-12T02:49:02.844Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10222848-M.jpg",
+      "year": "2009",
+      "priority": 120,
+      "score": 0.4910797454435672,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL24263839W",
+      "externalId": "OL24263839W",
+      "type": "Book",
+      "title": "Everyone plays sports",
+      "creator": "Amy Popalis",
+      "description": "",
+      "synopsisStatus": "unavailable",
+      "tags": [
+        "sports",
+        "middle-grade",
+        "fiction",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Sports",
+        "Juvenile literature",
+        "Children's fiction",
+        "Sports, fiction",
+        "Recreation",
+        "Athletes",
+        "Sportsmanship",
+        "Sports teams",
+        "Competition"
+      ],
+      "genres": [
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL24263839W",
+      "verifiedAt": "2026-11-12T02:48:56.087Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10753331-M.jpg",
+      "year": "2015",
+      "priority": 120,
+      "score": 0.4836004401081056,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL74278W",
+      "externalId": "OL74278W",
+      "type": "Book",
+      "title": "How Tom beat Captain Najork and his hired sportsmen",
+      "creator": "Russell Hoban",
+      "description": "Because Tom's aunt disapproves of his constant fooling around she calls in Captain Najork to teach him a lesson. Tom, however, has a splendid idea.",
+      "synopsisStatus": "available",
+      "tags": [
+        "sports",
+        "middle-grade",
+        "fiction",
+        "adventure",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Children's stories",
+        "Children: Grades 2-3",
+        "Play",
+        "Fiction",
+        "Sports",
+        "Children's fiction",
+        "Play, fiction",
+        "Sports, fiction",
+        "Adventure games",
+        "Juvenile fiction",
+        "Aunts",
+        "Competition",
+        "English literature",
+        "Child and youth fiction",
+        "Adventure and adventurers, fiction"
+      ],
+      "genres": [
+        "sports",
+        "adventure",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL74278W",
+      "verifiedAt": "2026-11-12T02:48:56.042Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/810263-M.jpg",
+      "year": "1974",
+      "ratingCount": 2,
+      "priority": 120,
+      "score": 0.4764941170021021,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": true,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL18637818W",
+      "externalId": "OL18637818W",
+      "type": "Book",
+      "title": "Wirtschaftlicher und sportlicher Wettbewerb",
+      "creator": "Rainer Gömmel, Markus A. Denzel, Margarete Wagner-Braun",
+      "description": "",
+      "synopsisStatus": "unavailable",
+      "tags": [
+        "sports",
+        "history",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Industries",
+        "Competition",
+        "Sports",
+        "History",
+        "Psychological aspects",
+        "Competition (Psychology)",
+        "Industries, germany",
+        "Sports, germany"
+      ],
+      "genres": [
+        "sports",
+        "history"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL18637818W",
+      "verifiedAt": "2026-11-12T02:49:02.850Z",
+      "year": "2009",
+      "priority": 120,
+      "score": 0.4750100636863271,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL11612318W",
+      "externalId": "OL11612318W",
+      "type": "Book",
+      "title": "Competitive anxiety in sport",
+      "creator": "Rainer Martens",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "psychology",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Anxiety",
+        "Competition (Psychology)",
+        "Psychological aspects",
+        "Sports",
+        "Testing",
+        "psychological aspects of Sports",
+        "Sports, physiological aspects",
+        "Competition",
+        "Psychology"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL11612318W",
+      "verifiedAt": "2026-11-12T02:48:56.043Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/5312110-M.jpg",
+      "year": "1990",
+      "priority": 120,
+      "score": 0.40627528146340763,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL16444126W",
+      "externalId": "OL16444126W",
+      "type": "Book",
+      "title": "Stillpower",
+      "creator": "Garret Kramer",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "psychology",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Sports",
+        "Competition (Psychology)",
+        "Athletes",
+        "Psychology",
+        "Psychological aspects",
+        "Sports, psychological aspects",
+        "Competition"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL16444126W",
+      "verifiedAt": "2026-11-12T02:48:56.059Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/12479609-M.jpg",
+      "year": "2011",
+      "priority": 120,
+      "score": 0.4027038528919791,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL8565678W",
+      "externalId": "OL8565678W",
+      "type": "Book",
+      "title": "Competitive Fire",
+      "creator": "Michael Clarkson",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "psychology",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Competitions",
+        "Athletic ability",
+        "Mind and body",
+        "Psychology",
+        "Psychological aspects",
+        "Athletes",
+        "Sports",
+        "SPORTS & RECREATION",
+        "Sports Psychology",
+        "Competition",
+        "Sports, psychological aspects"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL8565678W",
+      "verifiedAt": "2026-11-12T02:48:59.402Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/676864-M.jpg",
+      "year": "1999",
+      "priority": 120,
+      "score": 0.401608614796741,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL39300819W",
+      "externalId": "OL39300819W",
+      "type": "Book",
+      "title": "En plass på pallen",
+      "creator": "Svein Olaf Thorbjørnsen",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "philosophy",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Etikk",
+        "Filosofi",
+        "Konkurranse",
+        "Sport",
+        "Sports",
+        "Philosophy",
+        "Competition"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL39300819W",
+      "verifiedAt": "2026-11-12T02:49:02.846Z",
+      "year": "2011",
+      "priority": 120,
+      "score": 0.401519183902432,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL15910356W",
+      "externalId": "OL15910356W",
+      "type": "Book",
+      "title": "Helena the Horseriding Fairy",
+      "creator": "Daisy Meadows",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "magic",
+        "middle-grade",
+        "fiction",
+        "fantasy",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Horses",
+        "Jack Frost",
+        "Kirsty Tate (Fictitious character)",
+        "Magic",
+        "Juvenile fiction",
+        "Fairies",
+        "Fiction",
+        "Goblins",
+        "Sports stories",
+        "Jack Frost (Legendary character)",
+        "Olympics",
+        "Sports",
+        "Rachel Walker (Fictitious character)",
+        "Fantasy fiction",
+        "Horsemanship",
+        "Children's fiction",
+        "Fairies, fiction",
+        "Olympics, fiction",
+        "Horse racing, fiction",
+        "Competition",
+        "Fées",
+        "Romans, nouvelles, etc. pour la jeunesse",
+        "Équitation",
+        "Lutins",
+        "Horses, fiction",
+        "Magic, fiction",
+        "Sports, fiction"
+      ],
+      "genres": [
+        "sports",
+        "fantasy",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL15910356W",
+      "verifiedAt": "2026-11-12T02:48:56.046Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10087540-M.jpg",
+      "year": "2008",
+      "ratingCount": 4,
+      "priority": 120,
+      "score": 0.3960257388836259,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL18176320W",
+      "externalId": "OL18176320W",
+      "type": "Book",
+      "title": "Training for Trouble",
+      "creator": "Leslie McFarlane",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "detective-fiction",
+        "middle-grade",
+        "fiction",
+        "mystery",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Mystery and detective stories",
+        "Hardy Boys (Fictitious characters)",
+        "Detective and mystery stories",
+        "Fiction",
+        "Children's fiction",
+        "Fiction, mystery & detective, general",
+        "Hardy boys (fictitious characters), fiction",
+        "Juvenile fiction",
+        "Competition",
+        "Sports stories",
+        "Sports",
+        "Boy detectives",
+        "Teenage boy detectives",
+        "series:HardyBoys",
+        "collectionID:HBMS3"
+      ],
+      "genres": [
+        "sports",
+        "mystery",
+        "fiction",
+        "detective-fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL18176320W",
+      "verifiedAt": "2026-11-12T02:48:56.063Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/9312865-M.jpg",
+      "year": "2000",
+      "ratingCount": 1,
+      "priority": 120,
+      "score": 0.3932022094718612,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL15937127W",
+      "externalId": "OL15937127W",
+      "type": "Book",
+      "title": "Zoe the Skating Fairy",
+      "creator": "Daisy Meadows",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "magic",
+        "middle-grade",
+        "fiction",
+        "fantasy",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Jack Frost (Legendary character)",
+        "Jack Frost",
+        "Kirsty Tate (Fictitious character)",
+        "Magic",
+        "Juvenile fiction",
+        "Fairies",
+        "Sports",
+        "Goblins",
+        "Sports stories",
+        "Olympics",
+        "Fiction",
+        "In-line skating",
+        "Rachel Walker (Fictitious character)",
+        "Fantasy fiction",
+        "Children's fiction",
+        "Fairies, fiction",
+        "Olympics, fiction",
+        "Roller skating",
+        "Skateboarding",
+        "Competition",
+        "Skating",
+        "In-line skates",
+        "Theft",
+        "Jack Frost (Personnage légendaire)",
+        "Romans, nouvelles, etc. pour la jeunesse",
+        "Fées",
+        "Magie",
+        "Patinage artistique",
+        "Jeux olympiques",
+        "Voleurs",
+        "Lutins",
+        "Merveilleux",
+        "Romans",
+        "Bonhomme hiver (Personnage légendaire)",
+        "Magic, fiction",
+        "Sports, fiction",
+        "Skating, fiction"
+      ],
+      "genres": [
+        "sports",
+        "fantasy",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL15937127W",
+      "verifiedAt": "2026-11-12T02:48:59.376Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/9798387-M.jpg",
+      "year": "2008",
+      "ratingCount": 2,
+      "priority": 120,
+      "score": 0.3926507388836259,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20522258W",
+      "externalId": "OL20522258W",
+      "type": "Book",
+      "title": "Win",
+      "creator": "Brent Pope, Jason Brennan",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Competition",
+        "Success",
+        "Sports, psychological aspects"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20522258W",
+      "verifiedAt": "2026-11-12T02:48:56.083Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/9172771-M.jpg",
+      "year": "2019",
+      "priority": 120,
+      "score": 0.3500641679381164,
+      "sharedTags": [
+        "competition"
+      ],
+      "reasons": [
+        "competition"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL3278815W",
+      "externalId": "OL3278815W",
+      "type": "Book",
+      "title": "Competition And State Aid",
+      "creator": "Alberto Santa Maria",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Subsidies",
+        "Law and legislation",
+        "Competition",
+        "Bankruptcy",
+        "Professional sports"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL3278815W",
+      "verifiedAt": "2026-11-12T02:48:59.393Z",
+      "year": "2007",
+      "priority": 120,
+      "score": 0.34953969241364086,
+      "sharedTags": [
+        "competition"
+      ],
+      "reasons": [
+        "competition"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL1800786W",
+      "externalId": "OL1800786W",
+      "type": "Book",
+      "title": "Megan's balancing act",
+      "creator": "Susan Korman",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "middle-grade",
+        "fiction",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Fiction",
+        "Perfectionism (Personality trait)",
+        "Imagination",
+        "Gymnastics",
+        "Juvenile fiction",
+        "Gymnastics -",
+        "Competition",
+        "Teamwork (Sports)"
+      ],
+      "genres": [
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL1800786W",
+      "verifiedAt": "2026-11-12T02:49:02.846Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/12283515-M.jpg",
+      "year": "1996",
+      "priority": 120,
+      "score": 0.34435296120779985,
+      "sharedTags": [
+        "competition"
+      ],
+      "reasons": [
+        "competition"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL17874268W",
+      "externalId": "OL17874268W",
+      "type": "Book",
+      "title": "Big Nate - Game On!",
+      "creator": "Lincoln Peirce",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "middle-grade",
+        "fiction",
+        "humor"
+      ],
+      "sourceGenreLabels": [
+        "Middle school students",
+        "Conduct of life",
+        "Middle schools",
+        "School stories",
+        "Juvenile fiction",
+        "Comic books, strips",
+        "Boys",
+        "Humorous graphic novels",
+        "Schools",
+        "Humor",
+        "Fiction",
+        "Sports",
+        "Big Nate (Fictitious character)",
+        "Cartoons and comics",
+        "Comic books, strips, etc.",
+        "Children's fiction",
+        "Schools, fiction",
+        "Sports, fiction"
+      ],
+      "genres": [
+        "sports",
+        "fiction",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL17874268W",
+      "verifiedAt": "2026-11-12T02:48:46.420Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/9378949-M.jpg",
+      "year": "2013",
+      "ratingCount": 23,
+      "priority": 124,
+      "score": 0.05732799269852216,
+      "sharedTags": [
+        "sports",
+        "humor"
+      ],
+      "reasons": [
+        "sports",
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL17566496W",
+      "externalId": "OL17566496W",
+      "type": "Book",
+      "title": "Archie Comics Spectacular",
+      "creator": "Archie Superstars",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "fiction",
+        "humor"
+      ],
+      "sourceGenreLabels": [
+        "Archie Andrews (Fictitious character)",
+        "School sports",
+        "Teenagers",
+        "Sports",
+        "Wit and humor",
+        "Cartoons and comics",
+        "High schools",
+        "Fiction",
+        "Comic books, strips",
+        "Comics & graphic novels, general",
+        "Andrews, archie (fictitious character), fiction"
+      ],
+      "genres": [
+        "sports",
+        "fiction",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL17566496W",
+      "verifiedAt": "2026-11-12T02:49:01.751Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/7834561-M.jpg",
+      "year": "2014",
+      "ratingCount": 0,
+      "priority": 124,
+      "score": 0.05203595565311211,
+      "sharedTags": [
+        "sports",
+        "humor"
+      ],
+      "reasons": [
+        "sports",
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20017084W",
+      "externalId": "OL20017084W",
+      "type": "Book",
+      "title": "How bad do you want it?",
+      "creator": "Matt Fitzgerald",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Competitions",
+        "Physiological aspects",
+        "Attitude (Psychology)",
+        "Physical fitness",
+        "Anecdotes",
+        "Psychological aspects",
+        "Sports",
+        "Sports, psychological aspects",
+        "Attitude (psychology)"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20017084W",
+      "verifiedAt": "2026-11-12T02:48:56.040Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/12865360-M.jpg",
+      "year": "2015",
+      "priority": 124,
+      "score": 0.04726113089731328,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL36733687W",
+      "externalId": "OL36733687W",
+      "type": "Book",
+      "title": "The Deal / The Mistake / The Score / The Goal / The Legacy",
+      "creator": "Elle Kennedy",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Anthology",
+        "Sports"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL36733687W",
+      "verifiedAt": "2026-11-12T02:48:57.290Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/15217419-M.jpg",
+      "year": "2021",
+      "ratingCount": 10,
+      "priority": 124,
+      "score": 0.043927797563979944,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL19966051W",
+      "externalId": "OL19966051W",
+      "type": "Book",
+      "title": "Relentless",
+      "creator": "Tim Grover, Tim S. Grover, Shari Wenk",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Motivation (Psychology)",
+        "Sports",
+        "Psychological aspects",
+        "Sports, psychological aspects"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL19966051W",
+      "verifiedAt": "2026-11-12T02:48:57.290Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/13270543-M.jpg",
+      "year": "2013",
+      "ratingCount": 5,
+      "priority": 124,
+      "score": 0.04126113089731327,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL25181129W",
+      "externalId": "OL25181129W",
+      "type": "Book",
+      "title": "Games People Play",
+      "creator": "Robert Ellis",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Sports, religious aspects",
+        "Sports",
+        "Religious aspects",
+        "Moral and ethical aspects",
+        "Competition (Psychology)"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL25181129W",
+      "verifiedAt": "2026-11-12T02:48:56.047Z",
+      "year": "2014",
+      "priority": 124,
+      "score": 0.04059446423064661,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL28454346W",
+      "externalId": "OL28454346W",
+      "type": "Book",
+      "title": "Blind Side",
+      "creator": "Kandi Steiner",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Fiction, romance, general",
+        "Sports"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL28454346W",
+      "verifiedAt": "2026-11-12T02:48:57.294Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/12854338-M.jpg",
+      "year": "2022",
+      "ratingCount": 3,
+      "priority": 124,
+      "score": 0.03976113089731328,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL6438864W",
+      "externalId": "OL6438864W",
+      "type": "Book",
+      "title": "Relax & win",
+      "creator": "Bud Winter",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Psychological aspects",
+        "Psychological aspects of Sports",
+        "Relaxation",
+        "Sports",
+        "Stress (Psychology)"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL6438864W",
+      "verifiedAt": "2026-11-12T02:48:57.294Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/9368754-M.jpg",
+      "year": "1981",
+      "ratingCount": 4,
+      "priority": 124,
+      "score": 0.0394833531195355,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL9851848W",
+      "externalId": "OL9851848W",
+      "type": "Book",
+      "title": "Coaching for the Inner Edge",
+      "creator": "Robin S. Vealey",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Sports",
+        "Psychological aspects",
+        "Competition (Psychology)",
+        "Sports, psychological aspects"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL9851848W",
+      "verifiedAt": "2026-11-12T02:48:56.059Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/3027517-M.jpg",
+      "year": "2005",
+      "priority": 124,
+      "score": 0.03879959243577481,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL19975980W",
+      "externalId": "OL19975980W",
+      "type": "Book",
+      "title": "The Champion's Mind",
+      "creator": "James A. Afremow, Jim Afremow",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Physical education and training",
+        "Sports",
+        "Psychological aspects",
+        "SPORTS & RECREATION / Sports Psychology",
+        "Sports, psychological aspects"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL19975980W",
+      "verifiedAt": "2026-11-12T02:48:57.301Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/14370897-M.jpg",
+      "year": "2013",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.03868970232588471,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL9013212W",
+      "externalId": "OL9013212W",
+      "type": "Book",
+      "title": "Willing to win",
+      "creator": "Willi Railo",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Competition (Psychology)",
+        "Motivation (Psychology)",
+        "Psychological aspects",
+        "Psychological aspects of Sports",
+        "Sports"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL9013212W",
+      "verifiedAt": "2026-11-12T02:48:56.060Z",
+      "year": "1986",
+      "priority": 124,
+      "score": 0.03859446423064661,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL2667008W",
+      "externalId": "OL2667008W",
+      "type": "Book",
+      "title": "Sport in society",
+      "creator": "Jay J. Coakley",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Sports",
+        "Social aspects",
+        "Psychological aspects of Sports",
+        "Social aspects of Sports",
+        "Psychological aspects",
+        "Sports - Aspect social",
+        "Aspect social",
+        "Sportsoziologie",
+        "Aspect psychologique",
+        "Sports - Aspect psychologique",
+        "Sociological aspects",
+        "Sports, social aspects",
+        "Sports, psychological aspects",
+        "Sportsociologie",
+        "Sportpsychologie"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL2667008W",
+      "verifiedAt": "2026-11-12T02:48:57.307Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/1084565-M.jpg",
+      "year": "1978",
+      "ratingCount": 0,
+      "priority": 124,
+      "score": 0.03837224200842439,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20911241W",
+      "externalId": "OL20911241W",
+      "type": "Book",
+      "title": "Sport 87",
+      "creator": "Manfred Seifert",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Compétitions",
+        "Sportifs",
+        "Sports"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20911241W",
+      "verifiedAt": "2026-11-12T02:48:56.065Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10269529-M.jpg",
+      "year": "1988",
+      "priority": 124,
+      "score": 0.03826113089731328,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL2667007W",
+      "externalId": "OL2667007W",
+      "type": "Book",
+      "title": "Sports in Society",
+      "creator": "Jay J. Coakley",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Psychological aspects",
+        "Psychological aspects of Sports",
+        "Social aspects",
+        "Social aspects of Sports",
+        "Sports",
+        "Sports, social aspects",
+        "Sports, psychological aspects",
+        "Textbooks",
+        "Manuels d'enseignement supérieur",
+        "Aspect social",
+        "Sociology of sports",
+        "Sports psychology"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL2667007W",
+      "verifiedAt": "2026-11-12T02:48:57.316Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10202679-M.jpg",
+      "year": "2003",
+      "priority": 124,
+      "score": 0.03809446423064661,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL6093781W",
+      "externalId": "OL6093781W",
+      "type": "Book",
+      "title": "Making a match",
+      "creator": "Mel Welch",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Competitions",
+        "Management",
+        "Sports"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL6093781W",
+      "verifiedAt": "2026-11-12T02:48:59.377Z",
+      "year": "1994",
+      "priority": 124,
+      "score": 0.03786719150337388,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL1855131W",
+      "externalId": "OL1855131W",
+      "type": "Book",
+      "title": "Daniels' running formula",
+      "creator": "Jack Daniels",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Running",
+        "Training",
+        "SPORTS & RECREATION",
+        "Track & Field",
+        "Sports",
+        "Fisheries",
+        "Congresses",
+        "Pêches",
+        "Congrès"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL1855131W",
+      "verifiedAt": "2026-11-12T02:49:00.638Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/462272-M.jpg",
+      "year": "1998",
+      "ratingCount": 3,
+      "priority": 124,
+      "score": 0.03777395141013379,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL18957970W",
+      "externalId": "OL18957970W",
+      "type": "Book",
+      "title": "Posing!",
+      "creator": "Kennedy, Robert, Robert Kennedy",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Bodybuilding",
+        "Competitions",
+        "Rules",
+        "Sports",
+        "Sports & Recreation",
+        "General",
+        "Individual Artist",
+        "Massage & Reflexotherapy"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL18957970W",
+      "verifiedAt": "2026-11-12T02:48:59.386Z",
+      "year": "1988",
+      "priority": 124,
+      "score": 0.037726247176383045,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL15830863W",
+      "externalId": "OL15830863W",
+      "type": "Book",
+      "title": "Gold minds",
+      "creator": "Audrius Barzdukas",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Sports",
+        "Psychological aspects",
+        "Competition (Psychology)",
+        "Success",
+        "Swimming",
+        "Psychological aspects of Sports",
+        "Psychological aspects of Swimming"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL15830863W",
+      "verifiedAt": "2026-11-12T02:48:59.390Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/6794993-M.jpg",
+      "year": "1995",
+      "priority": 124,
+      "score": 0.037686662812206895,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL16416203W",
+      "externalId": "OL16416203W",
+      "type": "Book",
+      "title": "Athlete performance and injuries",
+      "creator": "João H. Bastos, Andreia C. Silva",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Competitions",
+        "Sports injuries",
+        "Sports"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL16416203W",
+      "verifiedAt": "2026-11-12T02:48:59.392Z",
+      "year": "2011",
+      "priority": 124,
+      "score": 0.037669294162619396,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL4299652W",
+      "externalId": "OL4299652W",
+      "type": "Book",
+      "title": "The biomechanics of sports techniques",
+      "creator": "James G. Hay",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Human mechanics",
+        "Physiological aspects",
+        "Physiological aspects of Sports",
+        "Sports",
+        "Biomechanics",
+        "Physiology",
+        "Sports, physiological aspects",
+        "Child development",
+        "Biomechanical Phenomena",
+        "Sports Medicine"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL4299652W",
+      "verifiedAt": "2026-11-12T02:49:00.652Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/84545-M.jpg",
+      "year": "1973",
+      "priority": 124,
+      "score": 0.037669294162619396,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL5829125W",
+      "externalId": "OL5829125W",
+      "type": "Book",
+      "title": "Guide des mouvements de musculation",
+      "creator": "Frédéric Delavier",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Anatomy",
+        "Muscle strength",
+        "Muscles",
+        "Weight training",
+        "Fitness",
+        "Guides",
+        "Bodybuilding",
+        "Sport",
+        "Culturisme",
+        "Atlases",
+        "Entrai nement (sport)",
+        "Force musculaire",
+        "Exercice musculaire",
+        "[manuel]",
+        "Anatomie",
+        "Musculation",
+        "Muscle",
+        "Entraînement (sport)",
+        "Músculos",
+        "Musculação",
+        "Krachttraining",
+        "Anatomy & histology",
+        "Weight lifting",
+        "Physiology",
+        "Styrketräning",
+        "Human anatomy",
+        "Metody",
+        "Siła mięśni",
+        "Ćwiczenia fizyczne",
+        "Wychowanie fizyczne i trening",
+        "Exercise Movement Techniques",
+        "Methods",
+        "Physical education and training",
+        "Exercise"
+      ],
+      "genres": [],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL5829125W",
+      "verifiedAt": "2026-11-12T02:49:00.655Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/462291-M.jpg",
+      "year": "2001",
+      "ratingCount": 4,
+      "priority": 124,
+      "score": 0.03766113089731327,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL10376012W",
+      "externalId": "OL10376012W",
+      "type": "Book",
+      "title": "Interaction among personality, anxiety, situational criticality, and athletic performance",
+      "creator": "Jørn Ravnholt Petersen",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Anxiety",
+        "Athletes",
+        "Competition (Psychology)",
+        "Personality",
+        "Psychological aspects",
+        "Psychological aspects of Sports",
+        "Sports"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL10376012W",
+      "verifiedAt": "2026-11-12T02:48:59.393Z",
+      "year": "1983",
+      "priority": 124,
+      "score": 0.03765328776005837,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL18703601W",
+      "externalId": "OL18703601W",
+      "type": "Book",
+      "title": "Strategic sport communication",
+      "creator": "Paul M. Pedersen, Kimberly S. Miloch, Pamela C. Laucella",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Management",
+        "Communication in sports",
+        "Sports",
+        "Recreation",
+        "Sports administration"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL18703601W",
+      "verifiedAt": "2026-11-12T02:49:00.657Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/2560094-M.jpg",
+      "year": "2007",
+      "priority": 124,
+      "score": 0.03764574628192866,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL5001976W",
+      "externalId": "OL5001976W",
+      "type": "Book",
+      "title": "Physical and psychological effects of athletic competition on children and youth",
+      "creator": "Vern Seefeldt",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Competition (Psychology) in children",
+        "Physiological aspects of Sports",
+        "Psychological aspects of Sports",
+        "Sports"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL5001976W",
+      "verifiedAt": "2026-11-12T02:48:59.400Z",
+      "year": "1980",
+      "priority": 124,
+      "score": 0.03760595848352017,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL3281478W",
+      "externalId": "OL3281478W",
+      "type": "Book",
+      "title": "Gold Minds",
+      "creator": "Brian Miller",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "Sports",
+        "Psychological aspects",
+        "Competition (Psychology)",
+        "Aspect psychologique",
+        "Sports, psychological aspects",
+        "Sports - general & miscellaneous"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL3281478W",
+      "verifiedAt": "2026-11-12T02:48:59.401Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/3015236-M.jpg",
+      "year": "1997",
+      "priority": 124,
+      "score": 0.037600113948160735,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      …13925 tokens truncated…vailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20890956W",
+      "externalId": "OL20890956W",
+      "type": "Book",
+      "title": "Game Changer",
+      "creator": "Margaret Peterson Haddix",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "middle-grade",
+        "young-adult",
+        "fiction",
+        "adventure",
+        "science-fiction"
+      ],
+      "sourceGenreLabels": [
+        "Science Fiction",
+        "Young adult fiction",
+        "Adventure fiction",
+        "Sports Fiction",
+        "Individuality",
+        "Middle schools",
+        "Schools",
+        "Fiction",
+        "Space and time",
+        "Sports",
+        "Children's fiction",
+        "War, fiction",
+        "Computers, fiction",
+        "Science fiction",
+        "Adventure and adventurers, fiction",
+        "Sports, fiction"
+      ],
+      "genres": [
+        "sports",
+        "science-fiction",
+        "adventure",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20890956W",
+      "verifiedAt": "2026-11-12T02:48:58.388Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10230379-M.jpg",
+      "year": "2011",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.019250833440778357,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL1337122W",
+      "externalId": "OL1337122W",
+      "type": "Book",
+      "title": "The Gold Bat",
+      "creator": "P. G. Wodehouse",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "middle-grade",
+        "fiction",
+        "humor"
+      ],
+      "sourceGenreLabels": [
+        "Classic Literature",
+        "Fiction",
+        "Schools",
+        "Cricket",
+        "English Humorous stories",
+        "Cricket bats",
+        "Humor, general",
+        "Sports, fiction",
+        "Children's fiction",
+        "Fiction, humorous",
+        "Great britain, fiction",
+        "Humorous stories, English",
+        "Boys -- Conduct of life -- Juvenile fiction",
+        "Schools -- Juvenile fiction",
+        "Sports -- Juvenile fiction",
+        "Children’s"
+      ],
+      "genres": [
+        "sports",
+        "fiction",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL1337122W",
+      "verifiedAt": "2026-11-12T02:48:58.365Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/4979469-M.jpg",
+      "year": "1923",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.018835728161207203,
+      "sharedTags": [
+        "humor"
+      ],
+      "reasons": [
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL2043477W",
+      "externalId": "OL2043477W",
+      "type": "Book",
+      "title": "The ultimate guide to marathons",
+      "creator": "Dennis Craythorn, Rich Hanna",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "country"
+      ],
+      "sourceGenreLabels": [
+        "Competitions",
+        "Marathon running",
+        "Cross-country running",
+        "Running",
+        "Sports & Recreation",
+        "Sports",
+        "SPO",
+        "SPO035000",
+        "Running & Jogging"
+      ],
+      "genres": [
+        "sports",
+        "country"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL2043477W",
+      "verifiedAt": "2026-11-12T02:49:02.832Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/729768-M.jpg",
+      "year": "1996",
+      "priority": 124,
+      "score": 0.018250955264188688,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL21780511W",
+      "externalId": "OL21780511W",
+      "type": "Book",
+      "title": "The Foxhole Court",
+      "creator": "Nora Sakavic",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "found-family",
+        "young-adult",
+        "fiction",
+        "romance",
+        "connection",
+        "thriller",
+        "drama"
+      ],
+      "sourceGenreLabels": [
+        "Series:All-for-the-Game",
+        "sports",
+        "queer",
+        "angst",
+        "romance",
+        "drama",
+        "thriller",
+        "violence",
+        "College sports",
+        "College sports -- Fiction",
+        "Contemporary",
+        "LGBT",
+        "Young Adult",
+        "Fiction",
+        "M M Romance",
+        "Found Family",
+        "LGBTQ+",
+        "asexual"
+      ],
+      "genres": [
+        "sports",
+        "thriller",
+        "romance",
+        "fiction",
+        "drama"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL21780511W",
+      "verifiedAt": "2026-11-12T02:48:57.301Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10404984-M.jpg",
+      "year": "2013",
+      "ratingCount": 11,
+      "priority": 124,
+      "score": 0.017645987152710044,
+      "sharedTags": [
+        "sports",
+        "drama"
+      ],
+      "reasons": [
+        "sports",
+        "drama"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL77104W",
+      "externalId": "OL77104W",
+      "type": "Book",
+      "title": "Maniac Magee",
+      "creator": "Jerry Spinelli",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "friendship",
+        "middle-grade",
+        "fiction",
+        "humor",
+        "connection"
+      ],
+      "sourceGenreLabels": [
+        "Fiction",
+        "Juvenile works",
+        "Juvenile fiction",
+        "athletes",
+        "folklore",
+        "orphans",
+        "Juvenile Fiction - Family - Orphans & Foster Homes",
+        "Juvenile Fiction - Social Themes - Runaways",
+        "Juvenile Fiction - Social Themes - Prejudice & Racism",
+        "Legends",
+        "Newbery Medal",
+        "Sports",
+        "Running",
+        "Sports stories",
+        "Heroes",
+        "Death",
+        "Runaway children",
+        "Parents",
+        "Friendship",
+        "Race relations",
+        "Prejudices",
+        "Wit and humor",
+        "Children's fiction",
+        "Athletics, fiction",
+        "Race",
+        "Large type books",
+        "Children's stories, American",
+        "Children's literature",
+        "award:Newbery_award",
+        "lexile:820",
+        "lexile_range:801-900",
+        "age:min:9",
+        "age:max:11"
+      ],
+      "genres": [
+        "sports",
+        "fiction",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL77104W",
+      "verifiedAt": "2026-11-12T02:49:03.924Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10134677-M.jpg",
+      "year": "1990",
+      "ratingCount": 40,
+      "priority": 124,
+      "score": 0.01723982671512616,
+      "sharedTags": [
+        "sports",
+        "humor"
+      ],
+      "reasons": [
+        "sports",
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20942096W",
+      "externalId": "OL20942096W",
+      "type": "Book",
+      "title": "The Raven King",
+      "creator": "Nora Sakavic",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "found-family",
+        "young-adult",
+        "fiction",
+        "romance",
+        "connection",
+        "thriller",
+        "drama"
+      ],
+      "sourceGenreLabels": [
+        "Series:All-for-the-Game",
+        "sports",
+        "lgbt",
+        "angst",
+        "romance",
+        "drama",
+        "thriller",
+        "drug mention",
+        "violence",
+        "mafia",
+        "sexual violence",
+        "abusive parents",
+        "College sports",
+        "College sports -- Fiction",
+        "LGBTQ+",
+        "Contemporary",
+        "Young Adult",
+        "Queer",
+        "Fiction",
+        "Found Family",
+        "New Adult",
+        "M M Romance",
+        "Asexual"
+      ],
+      "genres": [
+        "sports",
+        "thriller",
+        "romance",
+        "fiction",
+        "drama"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20942096W",
+      "verifiedAt": "2026-11-12T02:48:57.320Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10310406-M.jpg",
+      "year": "2013",
+      "ratingCount": 13,
+      "priority": 124,
+      "score": 0.016848266354989247,
+      "sharedTags": [
+        "sports",
+        "drama"
+      ],
+      "reasons": [
+        "sports",
+        "drama"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20641835W",
+      "externalId": "OL20641835W",
+      "type": "Book",
+      "title": "The King's Men",
+      "creator": "Nora Sakavic",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "found-family",
+        "young-adult",
+        "fiction",
+        "romance",
+        "connection",
+        "thriller",
+        "drama"
+      ],
+      "sourceGenreLabels": [
+        "Series:All-for-the-Game",
+        "sports",
+        "lgbt",
+        "angst",
+        "romance",
+        "drama",
+        "thriller",
+        "drug mentions",
+        "violence",
+        "mafia",
+        "College sports",
+        "College sports -- Fiction",
+        "LGBTQ+",
+        "Asexual",
+        "Contemporary",
+        "Young Adult",
+        "Queer",
+        "Fiction",
+        "Found Family",
+        "M M Romance",
+        "New Adult"
+      ],
+      "genres": [
+        "sports",
+        "thriller",
+        "romance",
+        "fiction",
+        "drama"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20641835W",
+      "verifiedAt": "2026-11-12T02:49:00.631Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/9260966-M.jpg",
+      "year": "2014",
+      "ratingCount": 6,
+      "priority": 124,
+      "score": 0.016713586220309114,
+      "sharedTags": [
+        "sports",
+        "drama"
+      ],
+      "reasons": [
+        "sports",
+        "drama"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL66259W",
+      "externalId": "OL66259W",
+      "type": "Book",
+      "title": "Junie B. Jones is Captain Field Day",
+      "creator": "Barbara Park",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "middle-grade",
+        "fiction",
+        "adventure",
+        "humor"
+      ],
+      "sourceGenreLabels": [
+        "Fiction",
+        "Humor (Fiction)",
+        "Juvenile fiction",
+        "Kindergarten",
+        "Kindergarten in fiction",
+        "Schools",
+        "Schools in fiction",
+        "Wining and losing",
+        "Winning and losing",
+        "Winning and losing in fiction",
+        "School stories",
+        "Junie B. Jones (Fictitious character)",
+        "Children's fiction",
+        "Humorous stories",
+        "Jones, junie b. (fictitious character), fiction",
+        "Girls, fiction",
+        "Adventure and adventurers, fiction",
+        "JUVENILE FICTION",
+        "Humorous Stories",
+        "Reader",
+        "Chapter Books",
+        "Sports & Recreation",
+        "Games",
+        "Winning and losing, fiction",
+        "Kindergarten, fiction",
+        "Schools, fiction",
+        "Spanish language materials",
+        "Jardins d'enfants",
+        "Romans, nouvelles",
+        "Ganar y perder",
+        "Novela infantil",
+        "Jardines de infantes",
+        "Escuelas",
+        "Novela juvenil"
+      ],
+      "genres": [
+        "sports",
+        "adventure",
+        "fiction",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL66259W",
+      "verifiedAt": "2026-11-12T02:48:58.351Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/233598-M.jpg",
+      "year": "2001",
+      "ratingCount": 7,
+      "priority": 124,
+      "score": 0.014738938350097187,
+      "sharedTags": [
+        "humor"
+      ],
+      "reasons": [
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL8119615W",
+      "externalId": "OL8119615W",
+      "type": "Book",
+      "title": "Quidditch Through the Ages",
+      "creator": "J. K. Rowling",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "magic",
+        "middle-grade",
+        "fiction",
+        "fantasy",
+        "history"
+      ],
+      "sourceGenreLabels": [
+        "Miscellanea",
+        "Sports",
+        "Fantasy",
+        "History",
+        "Quidditch",
+        "Games",
+        "Fiction",
+        "Harry Potter (Fictitious character)",
+        "Children's fiction",
+        "Fantasy fiction",
+        "Wizards, fiction",
+        "Juvenile fiction",
+        "Knowledge",
+        "Characters",
+        "Characters and characteristics",
+        "Harry Potter (Fictional character)",
+        "Mythical Animals",
+        "Wizards",
+        "Sports stories",
+        "Hogwarts School of Witchcraft and Wizardry (Imaginary organization)",
+        "Juvenile miscellanea",
+        "Deportes",
+        "Miscelánea",
+        "Ficción juvenil"
+      ],
+      "genres": [
+        "sports",
+        "fantasy",
+        "history",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL8119615W",
+      "verifiedAt": "2026-11-12T02:48:46.434Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/8273320-M.jpg",
+      "year": "2001",
+      "ratingCount": 35,
+      "priority": 124,
+      "score": 0.01411571730573348,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL27916409W",
+      "externalId": "OL27916409W",
+      "type": "Book",
+      "title": "Game Changer",
+      "creator": "Rachel Reid",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "contemporary-romance",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "Series:Game-Changers",
+        "LGTBI",
+        "Fiction, romance, contemporary",
+        "Romance",
+        "Sports Romance",
+        "Hockey",
+        "M M Romance",
+        "Sports",
+        "Contemporary",
+        "Queer",
+        "Contemporary Romance",
+        "LGBTQ romance"
+      ],
+      "genres": [
+        "contemporary-romance",
+        "sports",
+        "romance"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL27916409W",
+      "verifiedAt": "2026-11-12T02:48:57.295Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/11050489-M.jpg",
+      "year": "2018",
+      "ratingCount": 9,
+      "priority": 124,
+      "score": 0.013519453186257973,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL2005230W",
+      "externalId": "OL2005230W",
+      "type": "Book",
+      "title": "Foundations of sport and exercise psychology",
+      "creator": "Robert S. Weinberg",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "psychology"
+      ],
+      "sourceGenreLabels": [
+        "Psychological aspects of Sports",
+        "Psychological aspects",
+        "Psychological aspects of Exercise",
+        "Sports",
+        "Exercise",
+        "Psychology",
+        "Exercices",
+        "Aspects philosophiques",
+        "Exercice",
+        "Aspect psychologique",
+        "Psychologie",
+        "Behavior",
+        "Sportpsychologie",
+        "Effort physique",
+        "Aspects psychologiques",
+        "Sport",
+        "Conditietraining",
+        "Sports Psychology",
+        "Psicologia do esporte",
+        "Trainingslehre",
+        "Sports, psychological aspects",
+        "Sports psychology",
+        "Sports medicine",
+        "Mental health",
+        "Allied health & medical -> medical -> sports medicine",
+        "Biological sciences & nutrition -> health -> activities & sports",
+        "Allied health & medical -> medical -> mental health"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL2005230W",
+      "verifiedAt": "2026-11-12T02:48:57.315Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/1364042-M.jpg",
+      "year": "1995",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.012982405023949758,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL5726550W",
+      "externalId": "OL5726550W",
+      "type": "Book",
+      "title": "Hapkido",
+      "creator": "Marc Tedeschi",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "martial-arts"
+      ],
+      "sourceGenreLabels": [
+        "Hapkido",
+        "Martial arts",
+        "Sports"
+      ],
+      "genres": [
+        "martial-arts",
+        "sports",
+        "action"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL5726550W",
+      "verifiedAt": "2026-11-12T02:49:00.632Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/635118-M.jpg",
+      "year": "2000",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.0127010751006761,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL2965186W",
+      "externalId": "OL2965186W",
+      "type": "Book",
+      "title": "Sport psychology",
+      "creator": "Arnold D. LeUnes, Arnold D. Le Unes, Jack R. Nation, Arnold Leunes, Jack Nation",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "psychology"
+      ],
+      "sourceGenreLabels": [
+        "Sports",
+        "Psychological aspects of Sports",
+        "Psychological aspects",
+        "Aspect psychologique",
+        "Einfuhrung",
+        "Sportpsychologie",
+        "Psychology Of Sports",
+        "Sports & Recreation",
+        "SPO041000",
+        "SPO",
+        "Sports Psychology",
+        "Occupational & industrial psychology",
+        "Psychology",
+        "Sports, psychological aspects"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL2965186W",
+      "verifiedAt": "2026-11-12T02:49:00.656Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/4343020-M.jpg",
+      "year": "1989",
+      "priority": 124,
+      "score": 0.012504996669303553,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20014613W",
+      "externalId": "OL20014613W",
+      "type": "Book",
+      "title": "Losers take all",
+      "creator": "David Klass",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "friendship",
+        "middle-grade",
+        "fiction"
+      ],
+      "sourceGenreLabels": [
+        "Individuality",
+        "High schools",
+        "Schools",
+        "Juvenile fiction",
+        "Sports",
+        "Friendship",
+        "Fiction",
+        "Children's fiction",
+        "Sports, fiction",
+        "Schools, fiction",
+        "Individuality, fiction",
+        "Friendship, fiction",
+        "JUVENILE FICTION / Social Issues / Friendship",
+        "JUVENILE FICTION / Sports & Recreation / General",
+        "JUVENILE FICTION / School & Education"
+      ],
+      "genres": [
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20014613W",
+      "verifiedAt": "2026-11-12T02:48:46.505Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/13101010-M.jpg",
+      "year": "2015",
+      "priority": 124,
+      "score": 0.012483902517177304,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL10352057W",
+      "externalId": "OL10352057W",
+      "type": "Book",
+      "title": "A developmental analysis of competitive orientation in team sports and individual sports",
+      "creator": "Thomas A. Crawford",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "coming-of-age"
+      ],
+      "sourceGenreLabels": [
+        "Adolescent psychology",
+        "Competition (Psychology)",
+        "Competition (Psychology) in adolescence",
+        "Competition (Psychology) in children",
+        "Individual sports",
+        "Psychological aspects",
+        "Psychological aspects of Individual sports",
+        "Psychological aspects of School sports",
+        "Psychological aspects of Sports",
+        "Psychological aspects of Sports for children",
+        "School sports",
+        "Sports",
+        "Sports for children"
+      ],
+      "genres": [
+        "sports",
+        "coming-of-age",
+        "drama"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL10352057W",
+      "verifiedAt": "2026-11-12T02:48:59.397Z",
+      "year": "1989",
+      "priority": 124,
+      "score": 0.012476476170194817,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL26085843W",
+      "externalId": "OL26085843W",
+      "type": "Book",
+      "title": "The Long Game",
+      "creator": "Rachel Reid",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "contemporary-romance",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "Series:Game-Changers",
+        "LGTBI",
+        "Fiction, romance, contemporary",
+        "Romance",
+        "Sports Romance",
+        "Hockey",
+        "M M Romance",
+        "Sports",
+        "Contemporary",
+        "Queer",
+        "Contemporary Romance",
+        "LGBTQ romance"
+      ],
+      "genres": [
+        "contemporary-romance",
+        "sports",
+        "romance"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL26085843W",
+      "verifiedAt": "2026-11-12T02:48:57.310Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/13229174-M.jpg",
+      "year": "2022",
+      "ratingCount": 3,
+      "priority": 124,
+      "score": 0.012471834138638926,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL10351874W",
+      "externalId": "OL10351874W",
+      "type": "Book",
+      "title": "The arousal-performance relationship",
+      "creator": "Vicki Ebbeck",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "psychology"
+      ],
+      "sourceGenreLabels": [
+        "Arousal (Physiology)",
+        "Competition (Psychology) in youth",
+        "Psychological aspects",
+        "Psychological aspects of Sports",
+        "Psychology",
+        "Sports",
+        "Track and field athletes"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL10351874W",
+      "verifiedAt": "2026-11-12T02:49:02.831Z",
+      "year": "1986",
+      "priority": 124,
+      "score": 0.012411347269245022,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL15037862W",
+      "externalId": "OL15037862W",
+      "type": "Book",
+      "title": "Motocross Double-Cross",
+      "creator": "Jane bingham",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "friendship",
+        "middle-grade",
+        "fiction"
+      ],
+      "sourceGenreLabels": [
+        "Fiction",
+        "Juvenile Fiction",
+        "Motocross",
+        "Sports",
+        "Juvenile fiction",
+        "Realistic fiction",
+        "Best friends",
+        "Competition (Psychology)",
+        "Friendship",
+        "Motorcycle racing",
+        "Children's fiction",
+        "Motorcycles, fiction",
+        "Competition (psychology), fiction"
+      ],
+      "genres": [
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL15037862W",
+      "verifiedAt": "2026-11-12T02:48:59.379Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/2972264-M.jpg",
+      "year": "2007",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.012405471144628285,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL282347W",
+      "externalId": "OL282347W",
+      "type": "Book",
+      "title": "Mind gym",
+      "creator": "Gary Mack, David Casstevens",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "psychology"
+      ],
+      "sourceGenreLabels": [
+        "Psychological aspects",
+        "Sports",
+        "Music",
+        "Psychology",
+        "Success",
+        "Athletes",
+        "Psychological aspects of Sports",
+        "Psychological aspects of Music",
+        "Psychological aspects of Success",
+        "Sports, anecdotes"
+      ],
+      "genres": [
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL282347W",
+      "verifiedAt": "2026-11-12T02:49:03.936Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/58091-M.jpg",
+      "year": "2001",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.01237950647322512,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL15037868W",
+      "externalId": "OL15037868W",
+      "type": "Book",
+      "title": "Snowboard Duel",
+      "creator": "Jane bingham",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "friendship",
+        "middle-grade",
+        "fiction"
+      ],
+      "sourceGenreLabels": [
+        "Discrimination",
+        "Competition (Psychology)",
+        "Snowboarding",
+        "Fiction",
+        "Juvenile fiction",
+        "Sports",
+        "Best friends",
+        "Sports stories",
+        "Realistic fiction",
+        "Resorts",
+        "Friendship",
+        "Sexism",
+        "Children's fiction",
+        "Competition (psychology), fiction",
+        "Discrimination, fiction"
+      ],
+      "genres": [
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL15037868W",
+      "verifiedAt": "2026-11-12T02:48:59.389Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/2972263-M.jpg",
+      "year": "2007",
+      "priority": 124,
+      "score": 0.012261680294955083,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20808612W",
+      "externalId": "OL20808612W",
+      "type": "Book",
+      "title": "The Chase",
+      "creator": "Elle Kennedy",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "contemporary-romance",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "American literature",
+        "Romance",
+        "Sports Romance",
+        "Sports",
+        "New Adult",
+        "Hockey",
+        "College",
+        "Contemporary",
+        "Hockey Romance",
+        "Contemporary Romance",
+        "College Romance"
+      ],
+      "genres": [
+        "contemporary-romance",
+        "sports",
+        "romance"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20808612W",
+      "verifiedAt": "2026-11-12T02:48:57.321Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10108336-M.jpg",
+      "year": "2018",
+      "ratingCount": 2,
+      "priority": 124,
+      "score": 0.012233738900543687,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL15145578W",
+      "externalId": "OL15145578W",
+      "type": "Book",
+      "title": "Mack McGinn's big win",
+      "creator": "Coleen Paratore",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "middle-grade",
+        "fiction",
+        "connection"
+      ],
+      "sourceGenreLabels": [
+        "Families",
+        "Brothers",
+        "Juvenile fiction",
+        "Family life",
+        "Social classes",
+        "Fiction",
+        "Competition (Psychology)",
+        "Sports",
+        "Children's fiction",
+        "Sports, fiction",
+        "Competition (psychology), fiction",
+        "Family life, fiction",
+        "New york (state), fiction"
+      ],
+      "genres": [
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL15145578W",
+      "verifiedAt": "2026-11-12T02:49:02.839Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/6533859-M.jpg",
+      "year": "2007",
+      "priority": 124,
+      "score": 0.012083902517177305,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL36042699W",
+      "externalId": "OL36042699W",
+      "type": "Book",
+      "title": "Mile High",
+      "creator": "Liz Tomforde",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "contemporary-romance",
+        "fiction",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "Fiction, romance, contemporary",
+        "Fiction, romance, romantic comedy",
+        "Fiction, romance, general",
+        "Fiction",
+        "Romance",
+        "Comtemporary",
+        "Sports",
+        "Hockey players",
+        "Hockey",
+        "Serie:Windy_City",
+        "Contemporary",
+        "Contemporary Romance",
+        "Sports Romance",
+        "Adult",
+        "New Adult"
+      ],
+      "genres": [
+        "contemporary-romance",
+        "sports",
+        "romance",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL36042699W",
+      "verifiedAt": "2026-11-12T02:49:00.635Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/14646460-M.jpg",
+      "year": "2023",
+      "ratingCount": 8,
+      "priority": 124,
+      "score": 0.012034279846406625,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20890969W",
+      "externalId": "OL20890969W",
+      "type": "Book",
+      "title": "Common Goal",
+      "creator": "Rachel Reid",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "contemporary-romance",
+        "fiction",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "Series:Game-Changers",
+        "LGTBI",
+        "Fiction, romance, contemporary",
+        "Romance",
+        "Sports Romance",
+        "Hockey",
+        "M M Romance",
+        "Fiction",
+        "Sports",
+        "Contemporary",
+        "Queer",
+        "Contemporary Romance",
+        "LGBTQ romance"
+      ],
+      "genres": [
+        "contemporary-romance",
+        "sports",
+        "romance",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20890969W",
+      "verifiedAt": "2026-11-12T02:49:03.926Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10221572-M.jpg",
+      "year": "2020",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.011796184608311387,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL24625151W",
+      "externalId": "OL24625151W",
+      "type": "Book",
+      "title": "Role Model",
+      "creator": "Rachel Reid",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "contemporary-romance",
+        "fiction",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "Series:Game-Changers",
+        "LGTBI",
+        "Fiction, romance, contemporary",
+        "Romance",
+        "Sports Romance",
+        "Hockey",
+        "M M Romance",
+        "Fiction",
+        "Sports",
+        "Contemporary",
+        "Queer",
+        "Contemporary Romance",
+        "LGBTQ romance"
+      ],
+      "genres": [
+        "contemporary-romance",
+        "sports",
+        "romance",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL24625151W",
+      "verifiedAt": "2026-11-12T02:49:03.939Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/11300616-M.jpg",
+      "year": "2021",
+      "ratingCount": 2,
+      "priority": 124,
+      "score": 0.01173846455059133,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20605820W",
+      "externalId": "OL20605820W",
+      "type": "Book",
+      "title": "The Bromance Club",
+      "creator": "Lyssa Kay Adams",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "contemporary-romance",
+        "fiction",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "American literature",
+        "Romance",
+        "Contemporary",
+        "Fiction",
+        "Contemporary Romance",
+        "Adult",
+        "Sports Romance",
+        "Sports"
+      ],
+      "genres": [
+        "contemporary-romance",
+        "sports",
+        "romance",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20605820W",
+      "verifiedAt": "2026-11-12T02:49:03.950Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/9243359-M.jpg",
+      "year": "2019",
+      "ratingCount": 2,
+      "priority": 124,
+      "score": 0.011700946513073292,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL16113672W",
+      "externalId": "OL16113672W",
+      "type": "Book",
+      "title": "Stink and the ultimate thumb-wrestling smackdown",
+      "creator": "Megan McDonald",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "middle-grade",
+        "fiction",
+        "connection",
+        "family"
+      ],
+      "sourceGenreLabels": [
+        "Schools",
+        "Sports",
+        "Family life",
+        "Fiction",
+        "Families",
+        "Sports stories",
+        "Juvenile fiction",
+        "Stink (Fictitious character : McDonald)",
+        "Children's fiction",
+        "Schools, fiction",
+        "Sports, fiction",
+        "Family life, fiction",
+        "Humorous stories",
+        "Escuelas",
+        "Novela juvenil",
+        "Familias",
+        "JUVENILE FICTION / Humorous Stories",
+        "Spanish language materials",
+        "Vida familiar",
+        "Martial arts, fiction",
+        "Récits de sports",
+        "Romans, nouvelles, etc. pour la jeunesse",
+        "Écoles",
+        "Familles",
+        "Family"
+      ],
+      "genres": [
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL16113672W",
+      "verifiedAt": "2026-11-12T02:48:46.498Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/7902899-M.jpg",
+      "year": "2011",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.009454606453117595,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL19745610W",
+      "externalId": "OL19745610W",
+      "type": "Book",
+      "title": "Indian horse",
+      "creator": "Richard Wagamese",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "coming-of-age",
+        "fiction",
+        "identity"
+      ],
+      "sourceGenreLabels": [
+        "Ojibwa Indians",
+        "Indians of North America",
+        "Fiction",
+        "Off-reservation boarding schools",
+        "Canadian Hockey stories",
+        "Indigenous peoples in Canada",
+        "Roman",
+        "Englisch",
+        "Fiction, coming of age",
+        "Indians of north america, fiction",
+        "Canada, fiction",
+        "Coming of Age",
+        "Literary",
+        "Native American & Aboriginal",
+        "Sports",
+        "Racism",
+        "Hockey stories",
+        "First Nations",
+        "Ojibwa",
+        "Residential schools",
+        "Athletes",
+        "Hockey players"
+      ],
+      "genres": [
+        "coming-of-age",
+        "sports",
+        "fiction",
+        "drama"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL19745610W",
+      "verifiedAt": "2026-11-12T02:48:58.363Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10474137-M.jpg",
+      "year": "2012",
+      "ratingCount": 3,
+      "priority": 124,
+      "score": 0.009247649056459702,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL883475W",
+      "externalId": "OL883475W",
+      "type": "Book",
+      "title": "The power of one",
+      "creator": "Bryce Courtenay",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "historical-fiction",
+        "middle-grade",
+        "fiction",
+        "adventure",
+        "history",
+        "children"
+      ],
+      "sourceGenreLabels": [
+        "Fiction",
+        "World War, 1939-1945",
+        "Children",
+        "Conduct of life",
+        "Prisons",
+        "Apartheid",
+        "Boxing",
+        "Prejudices",
+        "Self-confidence",
+        "History",
+        "Boxing stories",
+        "Juvenile fiction",
+        "Historical Fiction",
+        "Sports",
+        "South africa, fiction",
+        "Fiction, war & military",
+        "World war, 1939-1945, fiction",
+        "Adventure and adventurers",
+        "Afrikaners",
+        "Success in children",
+        "Boarding schools",
+        "Courage",
+        "Loneliness",
+        "War stories",
+        "History, 1909-1961",
+        "SOUTH AFRICA"
+      ],
+      "genres": [
+        "historical-fiction",
+        "sports",
+        "adventure",
+        "history",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL883475W",
+      "verifiedAt": "2026-11-12T02:48:58.386Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/6459205-M.jpg",
+      "year": "1989",
+      "ratingCount": 11,
+      "priority": 124,
+      "score": 0.008599627775628735,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL13729530W",
+      "externalId": "OL13729530W",
+      "type": "Book",
+      "title": "Initial D",
+      "creator": "しげの秀一",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "fiction",
+        "humor",
+        "connection"
+      ],
+      "sourceGenreLabels": [
+        "Man-woman relationships",
+        "High school students",
+        "Extreme sports",
+        "Comic books, strips, etc",
+        "Automobile racing",
+        "Fiction",
+        "Comic books, strips",
+        "Graphic novels",
+        "Translations into English",
+        "Comics & graphic novels, east asian style, manga, general",
+        "Comics & graphic novels, sports",
+        "Comics & graphic novels, east asian style, manga,"
+      ],
+      "genres": [
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL13729530W",
+      "verifiedAt": "2026-11-12T02:49:01.766Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/7072520-M.jpg",
+      "year": "2002",
+      "priority": 124,
+      "score": 0.007499048404551789,
+      "sharedTags": [
+        "humor"
+      ],
+      "reasons": [
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL15520733W",
+      "externalId": "OL15520733W",
+      "type": "Book",
+      "title": "Always War",
+      "creator": "Margaret Peterson Haddix",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "detective-fiction",
+        "middle-grade",
+        "fiction",
+        "connection",
+        "mystery",
+        "science-fiction",
+        "war",
+        "family"
+      ],
+      "sourceGenreLabels": [
+        "Science fiction",
+        "Post-traumatic stress disorder",
+        "Heroes",
+        "Computers",
+        "War",
+        "Fiction",
+        "Individuality",
+        "Middle schools",
+        "Schools",
+        "Space and time",
+        "Sports",
+        "Juvenile fiction",
+        "Sports stories",
+        "School stories",
+        "Family",
+        "Multigenerational",
+        "New Experience",
+        "Social Themes",
+        "Mysteries & Detective Stories",
+        "War stories",
+        "Children's fiction",
+        "War, fiction",
+        "Heroes, fiction",
+        "Computers, fiction"
+      ],
+      "genres": [
+        "sports",
+        "science-fiction",
+        "fiction",
+        "detective-fiction",
+        "mystery"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL15520733W",
+      "verifiedAt": "2026-11-12T02:48:58.340Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/7236745-M.jpg",
+      "year": "2011",
+      "ratingCount": 0,
+      "priority": 124,
+      "score": 0.00672350903733797,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL19731176W",
+      "externalId": "OL19731176W",
+      "type": "Book",
+      "title": "ハイキュー!! 20",
+      "creator": "古舘春一",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "coming-of-age",
+        "identity",
+        "humor"
+      ],
+      "sourceGenreLabels": [
+        "franchise:ハイキュー!!",
+        "series:ハイキュー!!",
+        "form:manga",
+        "form:manga volume",
+        "genre:comedy",
+        "genre:coming-of-age",
+        "genre:sports",
+        "intended public:shōnen",
+        "Volleyball players",
+        "School sports",
+        "High school students",
+        "Volleyball"
+      ],
+      "genres": [
+        "coming-of-age",
+        "sports",
+        "drama",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL19731176W",
+      "verifiedAt": "2026-11-12T02:48:58.381Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/13649344-M.jpg",
+      "year": "2016",
+      "ratingCount": 1,
+      "priority": 124,
+      "score": 0.005650811332802851,
+      "sharedTags": [
+        "humor"
+      ],
+      "reasons": [
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL34955908W",
+      "externalId": "OL34955908W",
+      "type": "Book",
+      "title": "Wildfire",
+      "creator": "Hannah Grace",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "fiction",
+        "romance",
+        "humor",
+        "forbidden-love"
+      ],
+      "sourceGenreLabels": [
+        "Fiction",
+        "romance",
+        "sports",
+        "comedy",
+        "contemporary",
+        "New York Times bestseller",
+        "forced proximity",
+        "dual pov",
+        "college",
+        "praise kink",
+        "shy hero",
+        "sassy heroine",
+        "forbidden love",
+        "hockey",
+        "m-f romance"
+      ],
+      "genres": [
+        "sports",
+        "romance",
+        "fiction",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL34955908W",
+      "verifiedAt": "2026-11-12T02:49:03.941Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/13820942-M.jpg",
+      "year": "2023",
+      "ratingCount": 21,
+      "priority": 128,
+      "score": 0.022193133250234007,
+      "sharedTags": [
+        "sports",
+        "humor"
+      ],
+      "reasons": [
+        "sports",
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL42430111W",
+      "externalId": "OL42430111W",
+      "type": "Book",
+      "title": "The Deal",
+      "creator": "Elle Kennedy",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "contemporary-romance",
+        "friendship",
+        "romance",
+        "friends-to-lovers"
+      ],
+      "sourceGenreLabels": [
+        "Romance",
+        "Sports Romance",
+        "New Adult",
+        "Sports",
+        "Contemporary",
+        "College",
+        "Contemporary Romance",
+        "Fake Dating",
+        "Friends to Lovers"
+      ],
+      "genres": [
+        "contemporary-romance",
+        "sports",
+        "romance"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL42430111W",
+      "verifiedAt": "2026-11-12T02:48:57.289Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/10201611-M.jpg",
+      "year": "2000",
+      "ratingCount": 40,
+      "priority": 128,
+      "score": 0.01711987657306054,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL20260984W",
+      "externalId": "OL20260984W",
+      "type": "Book",
+      "title": "Bully",
+      "creator": "Penelope Douglas",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "friendship",
+        "revenge",
+        "middle-grade",
+        "fiction",
+        "romance",
+        "humor",
+        "mystery",
+        "enemies-to-lovers",
+        "friends-to-lovers",
+        "slow-burn"
+      ],
+      "sourceGenreLabels": [
+        "contemporary",
+        "virgin heroine",
+        "second chances",
+        "enemies to lovers",
+        "bully",
+        "tortured hero",
+        "possessive hero",
+        "friends to lovers",
+        "angst",
+        "sports",
+        "alpha male",
+        "fighter hero",
+        "insta-love",
+        "vengeance",
+        "cheating",
+        "love triangle",
+        "high school",
+        "dark romance",
+        "sassy heroine",
+        "mystery",
+        "grumpy",
+        "slow burn",
+        "funny",
+        "abuse",
+        "Bullying",
+        "Juvenile fiction",
+        "Intimidation",
+        "Romans, nouvelles, etc. pour la jeunesse",
+        "Fiction, romance, contemporary"
+      ],
+      "genres": [
+        "sports",
+        "mystery",
+        "romance",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20260984W",
+      "verifiedAt": "2026-11-12T02:48:58.354Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/8917954-M.jpg",
+      "year": "2013",
+      "ratingCount": 12,
+      "priority": 128,
+      "score": 0.011420476561971052,
+      "sharedTags": [
+        "sports",
+        "humor"
+      ],
+      "reasons": [
+        "sports",
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL45345941W",
+      "externalId": "OL45345941W",
+      "type": "Book",
+      "title": "Tempting Venom",
+      "creator": "Rina Kent",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "romance",
+        "enemies-to-lovers",
+        "dark"
+      ],
+      "sourceGenreLabels": [
+        "Dark Romance",
+        "M M Romance",
+        "Romance",
+        "Enemies To Lovers",
+        "Sports Romance",
+        "Sports",
+        "Dark",
+        "Hockey",
+        "College"
+      ],
+      "genres": [
+        "sports",
+        "romance"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL45345941W",
+      "verifiedAt": "2026-11-12T02:49:03.945Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/15248444-M.jpg",
+      "year": "2026",
+      "ratingCount": 3,
+      "priority": 128,
+      "score": 0.011063790468913594,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL30861265W",
+      "externalId": "OL30861265W",
+      "type": "Book",
+      "title": "Tryst Six Venom",
+      "creator": "Penelope Douglas",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "romance",
+        "forbidden-love",
+        "enemies-to-lovers"
+      ],
+      "sourceGenreLabels": [
+        "lesbian romance",
+        "high school",
+        "contemporary",
+        "enemies to lovers",
+        "angst",
+        "new adult",
+        "virgin heroine",
+        "forbidden love",
+        "bully",
+        "sports",
+        "dark romance",
+        "rich heroine",
+        "poor heroine",
+        "dual pov",
+        "forced proximity",
+        "second chances",
+        "tortured heroine",
+        "sassy heroine"
+      ],
+      "genres": [
+        "sports",
+        "romance"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL30861265W",
+      "verifiedAt": "2026-11-12T02:48:58.377Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/12384855-M.jpg",
+      "year": "2021",
+      "priority": 128,
+      "score": 0.008957228029388933,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL24640741W",
+      "externalId": "OL24640741W",
+      "type": "Book",
+      "title": "I Dare You",
+      "creator": "Shantel Tessier",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "revenge",
+        "suspenseful",
+        "romance",
+        "mystery",
+        "thriller",
+        "enemies-to-lovers"
+      ],
+      "sourceGenreLabels": [
+        "suspense",
+        "sports",
+        "enemies to lovers",
+        "alpha male",
+        "angst",
+        "dark romance",
+        "new adult",
+        "bully",
+        "dual pov",
+        "high school",
+        "vengeance",
+        "mystery",
+        "Betrayal",
+        "abuse",
+        "dubious consent"
+      ],
+      "genres": [
+        "sports",
+        "mystery",
+        "romance"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL24640741W",
+      "verifiedAt": "2026-11-12T02:49:01.775Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/11322526-M.jpg",
+      "year": "2018",
+      "ratingCount": 0,
+      "priority": 128,
+      "score": 0.008121832565854756,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL28952677W",
+      "externalId": "OL28952677W",
+      "type": "Book",
+      "title": "Icebreaker",
+      "creator": "Hannah Grace",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "coming-of-age",
+        "friendship",
+        "young-adult",
+        "identity",
+        "romance",
+        "connection",
+        "second-chance-romance",
+        "enemies-to-lovers",
+        "family"
+      ],
+      "sourceGenreLabels": [
+        "Figure skating",
+        "Hockey",
+        "Young adult",
+        "Romance",
+        "sports",
+        "enemies to lovers",
+        "rivals to lovers",
+        "second chance romance",
+        "coming-of-age",
+        "friendship",
+        "family",
+        "perseverance",
+        "dreams",
+        "love"
+      ],
+      "genres": [
+        "coming-of-age",
+        "sports",
+        "romance",
+        "drama"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL28952677W",
+      "verifiedAt": "2026-11-12T02:48:57.294Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/13180728-M.jpg",
+      "year": "2020",
+      "ratingCount": 182,
+      "priority": 128,
+      "score": 0.0076029317266862965,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL16085966W",
+      "externalId": "OL16085966W",
+      "type": "Book",
+      "title": "The Art of Team Coaching - How Sun Tsu would Coach Coaches",
+      "creator": "Allan P. Sand",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "basketball",
+        "football",
+        "baseball",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "sports",
+        "coach",
+        "team",
+        "teach",
+        "baseball",
+        "basketball",
+        "football",
+        "soccer",
+        "competition"
+      ],
+      "genres": [
+        "basketball",
+        "football",
+        "baseball",
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL16085966W",
+      "verifiedAt": "2026-11-12T02:49:02.849Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/6903775-M.jpg",
+      "year": "2011",
+      "priority": 140,
+      "score": 0.33421575742997683,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL2727955W",
+      "externalId": "OL2727955W",
+      "type": "Book",
+      "title": "Summer Ball",
+      "creator": "Mike Lupica",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "basketball",
+        "coming-of-age",
+        "friendship",
+        "middle-grade",
+        "fiction",
+        "identity",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Basketball",
+        "Basketball stories",
+        "Juvenile fiction",
+        "Fiction",
+        "Camps",
+        "Children's fiction",
+        "Camps, fiction",
+        "Basketball, fiction",
+        "Thirteen-year-old boys",
+        "Teenage boys",
+        "Teenagers",
+        "Misfits (Persons)",
+        "Short boys",
+        "Children of athletes",
+        "Bullying and bullies",
+        "Athletic coaches",
+        "Friendship",
+        "Sports",
+        "Basketball coaching",
+        "Leadership in athletes",
+        "Competition",
+        "Competition in teenagers",
+        "Self-confidence",
+        "Self-confidence in teenage boys",
+        "Social acceptance",
+        "Summer camps",
+        "Basketball camps",
+        "Coming of age",
+        "Realistic fiction",
+        "Sports fiction",
+        "Basket-ball",
+        "Romans, nouvelles, etc. pour la jeunesse",
+        "Littérature de jeunesse anglaise"
+      ],
+      "genres": [
+        "basketball",
+        "coming-of-age",
+        "sports",
+        "fiction",
+        "drama"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL2727955W",
+      "verifiedAt": "2026-11-12T02:48:56.058Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/260270-M.jpg",
+      "year": "2007",
+      "ratingCount": 3,
+      "priority": 140,
+      "score": 0.3172312555366113,
+      "sharedTags": [
+        "sports",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL8817092W",
+      "externalId": "OL8817092W",
+      "type": "Book",
+      "title": "Trapped!",
+      "creator": "Michele Martin Bossley",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "football",
+        "middle-grade",
+        "fiction",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Rumors",
+        "Soccer",
+        "competition",
+        "Children's fiction",
+        "Sports, fiction"
+      ],
+      "genres": [
+        "fiction",
+        "football",
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL8817092W",
+      "verifiedAt": "2026-11-12T02:48:59.384Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/1864075-M.jpg",
+      "year": "2002",
+      "priority": 140,
+      "score": 0.29340717226039953,
+      "sharedTags": [
+        "competition"
+      ],
+      "reasons": [
+        "competition"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL16557709W",
+      "externalId": "OL16557709W",
+      "type": "Book",
+      "title": "H.O.R.S.E.",
+      "creator": "Christopher Myers",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "basketball",
+        "friendship",
+        "middle-grade",
+        "fiction",
+        "humor",
+        "competition"
+      ],
+      "sourceGenreLabels": [
+        "Fiction",
+        "JUVENILE FICTION / Sports & Recreation / Basketball",
+        "Basketball",
+        "Play",
+        "Juvenile Wit and humor",
+        "Juvenile fiction",
+        "Competition",
+        "Imagination",
+        "Sports & Recreation",
+        "Athletics",
+        "Friendship",
+        "Children's fiction",
+        "Basketball, fiction",
+        "Basketball stories"
+      ],
+      "genres": [
+        "basketball",
+        "sports",
+        "fiction",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL16557709W",
+      "verifiedAt": "2026-11-12T02:48:59.382Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/12164952-M.jpg",
+      "year": "2012",
+      "priority": 140,
+      "score": 0.28048595730069714,
+      "sharedTags": [
+        "humor",
+        "competition"
+      ],
+      "reasons": [
+        "competition",
+        "humor"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL8783182W",
+      "externalId": "OL8783182W",
+      "type": "Book",
+      "title": "Eyeshield 21",
+      "creator": "Riichiro Inagaki, Yusuke Murata",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "football",
+        "middle-grade",
+        "fiction",
+        "adventure",
+        "humor"
+      ],
+      "sourceGenreLabels": [
+        "Graphic novels",
+        "High school athletes",
+        "Football",
+        "High school students",
+        "Fiction",
+        "Bullying",
+        "Football players",
+        "Comic books, strips",
+        "Juvenile Fiction",
+        "Comics & Graphic Novels",
+        "Graphic Novels-Manga",
+        "Graphic Novels - Manga",
+        "Comics & Graphic Novels / Graphic Novels / Manga",
+        "Comics & Graphic Novels - Manga",
+        "Sports",
+        "Cartoons and comics",
+        "Comics & graphic novels, manga, sports",
+        "Children's fiction",
+        "Gangs, fiction",
+        "Texas, fiction",
+        "Nevada, fiction",
+        "Adventure and adventurers, fiction",
+        "Schools, fiction",
+        "Football, fiction",
+        "Comic books, strips, etc.",
+        "Comics & graphic novels, general",
+        "Bullying, fiction",
+        "Comics & graphic novels, sports"
+      ],
+      "genres": [
+        "football",
+        "sports",
+        "adventure",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL8783182W",
+      "verifiedAt": "2026-11-12T02:48:58.374Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/765250-M.jpg",
+      "year": "2005",
+      "ratingCount": 3,
+      "priority": 144,
+      "score": 0.021972931210106416,
+      "sharedTags": [
+        "sports",
+        "humor"
+      ],
+      "reasons": [
+        "sports",
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL4124702W",
+      "externalId": "OL4124702W",
+      "type": "Book",
+      "title": "Among the thugs",
+      "creator": "Bill Buford",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "football"
+      ],
+      "sourceGenreLabels": [
+        "Deviant behavior",
+        "Hoodlums",
+        "Soccer",
+        "Soccer fans",
+        "Social aspects of Soccer",
+        "Spectator control",
+        "Violence in sports",
+        "Fodbold",
+        "Sociale forhold",
+        "Storbritannien",
+        "Gruppesociologi",
+        "Sport",
+        "Sociale afvigere",
+        "Aggressiveness",
+        "Sports, great britain",
+        "Sports spectators",
+        "Sports, social aspects",
+        "Violence, psychological aspects",
+        "Social aspects"
+      ],
+      "genres": [
+        "sports",
+        "football"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL4124702W",
+      "verifiedAt": "2026-11-12T02:48:57.306Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/420650-M.jpg",
+      "year": "1991",
+      "ratingCount": 7,
+      "priority": 144,
+      "score": 0.013289310394793748,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL5708904W",
+      "externalId": "OL5708904W",
+      "type": "Book",
+      "title": "The Playground Problem",
+      "creator": "Margaret McNamara",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "football",
+        "middle-grade",
+        "fiction"
+      ],
+      "sourceGenreLabels": [
+        "Fiction",
+        "Soccer",
+        "Sex role",
+        "Schools",
+        "Children's fiction",
+        "Juvenile fiction",
+        "Rôle selon le sexe",
+        "Romans",
+        "nouvelles",
+        "etc. pour la jeunesse",
+        "Écoles",
+        "Picture books",
+        "Sports",
+        "Robin Hill School series"
+      ],
+      "genres": [
+        "sports",
+        "fiction",
+        "football"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL5708904W",
+      "verifiedAt": "2026-11-12T02:48:46.484Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/437735-M.jpg",
+      "year": "2004",
+      "priority": 144,
+      "score": 0.012817235850510637,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL2951563W",
+      "externalId": "OL2951563W",
+      "type": "Book",
+      "title": "Twelve Mighty Orphans",
+      "creator": "Jim Dent",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "football"
+      ],
+      "sourceGenreLabels": [
+        "Football",
+        "High schools",
+        "Sports, united states",
+        "Masonic Home and School of Texas (Fort Worth, Tex.)",
+        "Sports"
+      ],
+      "genres": [
+        "football",
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL2951563W",
+      "verifiedAt": "2026-11-12T02:48:58.380Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/1169399-M.jpg",
+      "year": "2007",
+      "priority": 144,
+      "score": 0.012490198297124491,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL19752375W",
+      "externalId": "OL19752375W",
+      "type": "Book",
+      "title": "Here to Stay",
+      "creator": "Sara Farizan",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "basketball",
+        "middle-grade",
+        "young-adult",
+        "fiction",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "Basketball",
+        "Arab Americans",
+        "Juvenile fiction",
+        "Cyberbullying",
+        "Fiction",
+        "Bullying",
+        "High schools",
+        "Schools",
+        "Juvenile works",
+        "YA Fiction",
+        "Sports",
+        "Romance",
+        "Children's fiction",
+        "Bullying, fiction",
+        "Basketball, fiction",
+        "Schools, fiction",
+        "Interpersonal relations, fiction",
+        "Basketball stories",
+        "Basketball players",
+        "YOUNG ADULT FICTION",
+        "Social Themes",
+        "Prejudice & Racism",
+        "Sports & Recreation",
+        "Bullies",
+        "School stories"
+      ],
+      "genres": [
+        "basketball",
+        "sports",
+        "romance",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL19752375W",
+      "verifiedAt": "2026-11-12T02:48:58.345Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/9293452-M.jpg",
+      "year": "2018",
+      "ratingCount": 1,
+      "priority": 144,
+      "score": 0.011649720641740188,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL76979W",
+      "externalId": "OL76979W",
+      "type": "Book",
+      "title": "Bleachers",
+      "creator": "John Grisham",
+      "description": "Bij het sterfbed van zijn coach maakt de voormalige sterspeler van een American football team de balans op van zijn jeugd.",
+      "synopsisStatus": "available",
+      "tags": [
+        "fiction",
+        "connection",
+        "sports",
+        "football"
+      ],
+      "sourceGenreLabels": [
+        "Death",
+        "Teacher-student relationships",
+        "Funeral rites and ceremonies",
+        "School sports",
+        "Football players",
+        "Football coaches",
+        "Fiction",
+        "Fiction, sports",
+        "Ritos y ceremonias fúnebres",
+        "Novela",
+        "Relaciones maestro-estudiante",
+        "Fútbol americano",
+        "Muerte",
+        "Football stories",
+        "American Psychological fiction",
+        "Translations into Spanish",
+        "Novela psicología",
+        "Texas, fiction",
+        "Fiction, psychological"
+      ],
+      "genres": [
+        "football",
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL76979W",
+      "verifiedAt": "2026-11-12T02:48:46.455Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/6616600-M.jpg",
+      "year": "2003",
+      "ratingCount": 3,
+      "priority": 144,
+      "score": 0.010600714595571752,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL36043513W",
+      "externalId": "OL36043513W",
+      "type": "Book",
+      "title": "Right Move",
+      "creator": "Liz Tomforde",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "basketball",
+        "contemporary-romance",
+        "fiction",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "Fiction, romance, contemporary",
+        "Fiction, romance, romantic comedy",
+        "Fiction, romance, general",
+        "Romance",
+        "Sports Romance",
+        "Sports",
+        "Fake Dating",
+        "Contemporary",
+        "Contemporary Romance",
+        "Basketball players",
+        "Basketball",
+        "Serie:Windy_City",
+        "Fiction",
+        "Adult",
+        "New Adult"
+      ],
+      "genres": [
+        "basketball",
+        "contemporary-romance",
+        "sports",
+        "romance",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL36043513W",
+      "verifiedAt": "2026-11-12T02:49:00.646Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/14646468-M.jpg",
+      "year": "2023",
+      "ratingCount": 2,
+      "priority": 144,
+      "score": 0.009013405968723956,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL37583785W",
+      "externalId": "OL37583785W",
+      "type": "Book",
+      "title": "Play Along",
+      "creator": "Liz Tomforde",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "baseball",
+        "contemporary-romance",
+        "fiction",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "Romance",
+        "Sports Romance",
+        "Sports",
+        "Fake Dating",
+        "Contemporary",
+        "Contemporary Romance",
+        "Baseball players",
+        "Baseball",
+        "Serie:Windy_City",
+        "Fiction"
+      ],
+      "genres": [
+        "baseball",
+        "contemporary-romance",
+        "sports",
+        "romance",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL37583785W",
+      "verifiedAt": "2026-11-12T02:49:00.649Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/15148767-M.jpg",
+      "year": "2024",
+      "ratingCount": 1,
+      "priority": 144,
+      "score": 0.008983072298349841,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL45346035W",
+      "externalId": "OL45346035W",
+      "type": "Book",
+      "title": "The Keeper",
+      "creator": "Ana Huang",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "football",
+        "contemporary-romance",
+        "fiction",
+        "romance"
+      ],
+      "sourceGenreLabels": [
+        "Romance",
+        "Sports Romance",
+        "Sports",
+        "Contemporary Romance",
+        "Spicy",
+        "Contemporary",
+        "Soccer",
+        "Fiction",
+        "Adult"
+      ],
+      "genres": [
+        "contemporary-romance",
+        "sports",
+        "romance",
+        "fiction",
+        "football"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL45346035W",
+      "verifiedAt": "2026-11-12T02:49:00.660Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/15248365-M.jpg",
+      "year": "2026",
+      "ratingCount": 3,
+      "priority": 144,
+      "score": 0.008911926053290551,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL8783725W",
+      "externalId": "OL8783725W",
+      "type": "Book",
+      "title": "Slam Dunk, Vol. 1",
+      "creator": "井上雄彦 (Takehiko Inoue)",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "basketball",
+        "middle-grade",
+        "fiction",
+        "humor"
+      ],
+      "sourceGenreLabels": [
+        "Basketball",
+        "Basketball stories",
+        "Juvenile fiction",
+        "High school students",
+        "Basketball players",
+        "Comic books, strips",
+        "Basketball teams",
+        "High schools",
+        "Cartoons and comics",
+        "Graphic novels",
+        "Translations into English",
+        "Sports stories",
+        "Comics & graphic novels, manga, sports",
+        "Japan, fiction"
+      ],
+      "genres": [
+        "basketball",
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL8783725W",
+      "verifiedAt": "2026-11-12T02:48:46.462Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/991930-M.jpg",
+      "year": "1999",
+      "ratingCount": 1,
+      "priority": 144,
+      "score": 0.00851891293887781,
+      "sharedTags": [
+        "humor"
+      ],
+      "reasons": [
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL8783076W",
+      "externalId": "OL8783076W",
+      "type": "Book",
+      "title": "Whistle!",
+      "creator": "Daisuke Higuchi",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "football",
+        "young-adult",
+        "fiction",
+        "humor"
+      ],
+      "sourceGenreLabels": [
+        "Teenage boys",
+        "Soccer",
+        "School sports",
+        "Graphic novels",
+        "Soccer players",
+        "Fiction",
+        "Translations into English",
+        "Ambition",
+        "Junior high school students",
+        "Comic books, strips",
+        "Comics & graphic novels, manga, sports",
+        "Young adult fiction",
+        "Teamwork (Sports)",
+        "Cartoons and comics",
+        "Romans graphiques"
+      ],
+      "genres": [
+        "sports",
+        "fiction",
+        "football"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL8783076W",
+      "verifiedAt": "2026-11-12T02:48:58.367Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/8017067-M.jpg",
+      "year": "1998",
+      "priority": 144,
+      "score": 0.007534785954750827,
+      "sharedTags": [
+        "humor"
+      ],
+      "reasons": [
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL8941234W",
+      "externalId": "OL8941234W",
+      "type": "Book",
+      "title": "Sports Illustrated",
+      "creator": "Editors of Sports Illustrated",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "basketball",
+        "football",
+        "baseball"
+      ],
+      "sourceGenreLabels": [
+        "Basketball",
+        "Pictorial works",
+        "Photography of women",
+        "Erotic Photography",
+        "Photography of the nude",
+        "Body art",
+        "Body painting",
+        "Trompe l'oeil painting",
+        "Sports journalism",
+        "Football",
+        "Sports, history",
+        "Baseball",
+        "Photography of sports",
+        "Golf",
+        "Woods, tiger, 1975-",
+        "Miscellanea",
+        "Statistics",
+        "Athletes",
+        "Sports",
+        "Sports rivalries",
+        "Bathing suits",
+        "Models (Persons)",
+        "Maillots de bain",
+        "Ouvrages illustrés",
+        "Mannequins (Personnes)",
+        "Models (people)",
+        "Body marking",
+        "Sports, dictionaries"
+      ],
+      "genres": [
+        "basketball",
+        "football",
+        "baseball",
+        "sports"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL8941234W",
+      "verifiedAt": "2026-11-12T02:49:03.943Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/2130761-M.jpg",
+      "year": "2001",
+      "ratingCount": 2,
+      "priority": 144,
+      "score": 0.007503527430383348,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL8911377W",
+      "externalId": "OL8911377W",
+      "type": "Book",
+      "title": "Rebound",
+      "creator": "Yuriko Nishiyama, NishiyamaYuriko",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "basketball",
+        "middle-grade",
+        "young-adult",
+        "fiction",
+        "humor"
+      ],
+      "sourceGenreLabels": [
+        "Basketball",
+        "Basketball stories",
+        "Graphic novels",
+        "High school students",
+        "Fiction",
+        "High schools",
+        "Comic books, strips",
+        "Sports tournaments",
+        "Sports & Recreation - Basketball",
+        "Children: Grades 4-6",
+        "Juvenile Fiction",
+        "Children's Books/Ages 9-12 Graphic Novels",
+        "Children: Young Adult (Gr. 7-9)",
+        "Sportsmanship",
+        "Comics & Graphic Novels - Manga",
+        "Comics & Graphic Novels / Graphic Novels / Manga",
+        "Comic books, strips, etc",
+        "Cartoons and comics",
+        "Translations into English",
+        "Japanese Graphic novels",
+        "Comics & graphic novels, sports",
+        "Comics & graphic novels, east asian style, manga, romance"
+      ],
+      "genres": [
+        "basketball",
+        "sports",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL8911377W",
+      "verifiedAt": "2026-11-12T02:49:01.783Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/865266-M.jpg",
+      "year": "2002",
+      "priority": 144,
+      "score": 0.007172430237791684,
+      "sharedTags": [
+        "humor"
+      ],
+      "reasons": [
+        "humor"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    },
+    {
+      "id": "openlibrary:OL36807745W",
+      "externalId": "OL36807745W",
+      "type": "Book",
+      "title": "Caught Up",
+      "creator": "Liz Tomforde",
+      "description": "",
+      "synopsisStatus": "pending",
+      "tags": [
+        "sports",
+        "baseball",
+        "contemporary-romance",
+        "found-family",
+        "fiction",
+        "romance",
+        "connection"
+      ],
+      "sourceGenreLabels": [
+        "American literature",
+        "Romance",
+        "Sports Romance",
+        "Sports",
+        "Contemporary Romance",
+        "Contemporary",
+        "Baseball",
+        "Found Family",
+        "Serie:Windy_City",
+        "Fiction"
+      ],
+      "genres": [
+        "baseball",
+        "contemporary-romance",
+        "sports",
+        "romance",
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL36807745W",
+      "verifiedAt": "2026-11-12T02:48:57.324Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/15098697-M.jpg",
+      "year": "2023",
+      "ratingCount": 3,
+      "priority": 144,
+      "score": 0.0068617752156748275,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [],
+      "rankingDetails": {
+        "storyCoverage": 0,
+        "aiAvailable": false,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Broader match: some story features differ"
+    }
+  ]
+}

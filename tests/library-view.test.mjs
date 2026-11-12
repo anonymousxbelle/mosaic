@@ -8,3 +8,5 @@ test('title matching ignores connecting words and punctuation but preserves repe
 
 test('rated titles precede bookmarks and dismissed rated titles remain last',()=>{const items=[{id:'later',libraryState:'later'},{id:'dismissed',libraryState:'dismissed'},{id:'rated'},{id:'other'}];assert.deepEqual(libraryOrder(items,{rated:5,dismissed:5}).map(i=>i.id),['rated','later','other','dismissed']);});
 
+test('exact short title survives a bounded enrichment shortlist',()=>{const rows=Array.from({length:20},(_,i)=>({title:i===19?'K':`K prefix ${i}`,creator:'',ratingCount:100-i}));assert.equal(rankSearch(rows,'K').slice(0,8)[0].title,'K');});
+

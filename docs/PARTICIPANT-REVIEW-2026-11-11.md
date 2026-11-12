@@ -29,7 +29,12 @@ For inbox: open the private inbox with the reviewer key, find the SYSTEM TEST re
 - Evaluate AI versus no-AI on a fixed candidate set and several unrelated seeds. Report helpful and harmful changes; no hardcoded title pairs.
 
 ## Checks
-152 automated tests passed; new coverage checks single-character search and rated-before-unrated ordering. Type checking passed. See evidence/participant-fixes-tests.txt and participant-fixes-build.txt for logs. The connected browser could not reach the local development server, so the final interactive regression checks remain open until the deployed app is exercised.
+153 automated tests passed; new coverage checks single-character search and rated-before-unrated ordering. Type checking passed. See evidence/participant-fixes-tests.txt and participant-fixes-build.txt for logs. The connected browser could not reach the local development server, so the final interactive regression checks remain open until the deployed app is exercised.
 
 Offline check: in desktop Edge/Chrome press F12, select Network, change the throttling dropdown from No throttling to Offline, then perform a new search. Expect visible failure/retry. Restore No throttling and retry. Do not clear site storage. Mobile participants can skip this developer-only check.
+
+## Live follow-up
+The deployed browser preserved Collections after reload and accepted the one-character query. The first K search still missed the exact anime: the backend truncated provider rows before exact-title ranking. A follow-up fix ranks before enrichment and checks up to three pages for one- or two-character titles when no exact title is found. This is bounded search, not exhaustive coverage.
+
+The real Haikyu!! diagnostic examined 261 unique titles across nine catalog pages, with 149 accepted retrieval candidates. Only five final candidates had synopses eligible for AI comparison. Weak top-ranked candidates included sports law, sports psychology and fantasy with sports metadata. This confirms a retrieval/classification problem, not merely an inactive AI endpoint. The saved diagnostic is a new session, not the owner’s exact result list. Haikyu book quality remains unresolved; no ranking change is claimed here. See evidence/haikyu-book-diagnostic.json.
 
