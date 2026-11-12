@@ -1,0 +1,97 @@
+{
+  "studyVersion": "mosaic-study-v1",
+  "freezeDate": "2026-11-12",
+  "timezone": "America/Chicago",
+  "verifiedAt": "2026-11-12T15:13:54.408Z",
+  "applicationCommit": "d4c463c56081d97307b0543260cc5d20f0f5461f",
+  "archiveBranch": "study-v1-2026-11-12",
+  "site": "https://anonymousxbelle.github.io/mosaic/",
+  "catalogApi": "https://mosaic-catalog-api.toyosi-abike.workers.dev",
+  "taxonomy": {
+    "schemaVersion": 1,
+    "approvedRevision": "1cae15ac25ccb00680f4c35838d8e33a03cad31cc00025b9e9a79f2aacbdf5c1",
+    "effectiveRevision": "5951f6f3d775c862af169848cee6209746e87aecc2873eb64b8be569a24be679",
+    "activeNodes": 158,
+    "sourceHashes": {
+      "lib/taxonomy.ts": "85c2bed09bfb5b8cbb3dfd4fb26dc70802ad891d5265bf959fdfa60956628b6d",
+      "data/taxonomy-edits.json": "d938c6859d3e3a8d06fe70150ab7d65de22621c9f0697653947f10edaac88945"
+    }
+  },
+  "primaryStudy": {
+    "mode": "For You",
+    "ranking": "recommended",
+    "targetMedia": "All",
+    "media": [
+      "Book",
+      "Movie",
+      "TV"
+    ],
+    "minimumRatedTitles": 5,
+    "minimumSourceMediaTypes": 2,
+    "evaluateFirstResults": 5
+  },
+  "secondaryExploration": [
+    "Based On",
+    "My Library",
+    "Collections",
+    "preferences"
+  ],
+  "ai": {
+    "forYouDescriptionComparison": false,
+    "basedOnModel": "@cf/baai/bge-small-en-v1.5",
+    "basedOnMaximumComparisons": 24,
+    "taggingModel": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "taggingPrompt": "grounded-tags-v3-centrality",
+    "taggingReview": "Reviewer only; pending/rejected tags inactive",
+    "webSearchRetrieval": false
+  },
+  "providerStatus": {
+    "taggingModel": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "feedback": true,
+    "tmdb": true,
+    "semantic": true,
+    "hardcover": true,
+    "igdb": false
+  },
+  "bookDiscovery": "Open Library structured subject search",
+  "bookSearch": "Hardcover with Open Library fallback/enrichment",
+  "movieTV": "TMDB",
+  "supportedLiveMedia": [
+    "Book",
+    "Movie",
+    "TV"
+  ],
+  "preStudyAcceptance": {
+    "status": "Owner confirmed done on 2026-11-12",
+    "independentlyVerifiedFormSubmission": false
+  },
+  "checks": [
+    {
+      "name": "deploy",
+      "conclusion": "success",
+      "url": "https://github.com/anonymousxbelle/mosaic/actions/runs/43229547514/job/131221312102"
+    },
+    {
+      "name": "check",
+      "conclusion": "success",
+      "url": "https://github.com/anonymousxbelle/mosaic/actions/runs/43229547516/job/131221252898"
+    },
+    {
+      "name": "Workers Builds: mosaic-catalog-api",
+      "conclusion": "success",
+      "url": "https://github.com/anonymousxbelle/mosaic/runs/131221210690"
+    },
+    {
+      "name": "build",
+      "conclusion": "success",
+      "url": "https://github.com/anonymousxbelle/mosaic/actions/runs/43229547514/job/131220856130"
+    }
+  ],
+  "limits": [
+    "Live provider records and model service behavior may change; this freezes application/configuration, not external catalogs or participant data.",
+    "Browser-local libraries and edits vary by participant.",
+    "Separate AI quality evaluation remains outstanding.",
+    "No branch protection or deployment lock was added."
+  ]
+}
+

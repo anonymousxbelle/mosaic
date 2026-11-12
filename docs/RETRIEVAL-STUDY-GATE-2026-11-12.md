@@ -17,11 +17,12 @@ After: examined 44, rejected 40, accepted four, all four compared by AI. The fir
 Evidence: evidence/haikyu-book-before-retrieval.json and evidence/haikyu-book-after-retrieval.json. Synthetic regression tests also cover mystery, romance, fantasy/magic, incidental sport mentions, wrong sports, unknown class, and fictional characters using manuals.
 
 ## Before distributing the study
-- [ ] Brief deployed acceptance pass: add/rate, bookmark without losing results, reopen a collection card, refresh location, Not interested exclusion, and one For You plus one cross-media Based On search.
+Owner confirmed the acceptance/form/link checks below on November 12. Freeze evidence: docs/STUDY-FREEZE-v1.md.
+- [x] Brief deployed acceptance pass: add/rate, bookmark without losing results, reopen a collection card, refresh location, Not interested exclusion, and one For You plus one cross-media Based On search.
 - [x] Owner reported offline errors and retry work.
-- [ ] Preview the current Google Form on desktop/phone. Preserve the owner's edits. Confirm the activity asks for at least five ratings across at least two supported media types, then For You with All media.
-- [ ] Submit one clearly labeled TEST response; confirm it arrives, and exclude it from analysis. Verify the responder link works for someone other than the owner. Do not send the editor link.
-- [ ] Record deployed commit, taxonomy revision, normal ranking mode, enabled providers and date before real responses. Keep ranking/taxonomy stable during collection; record any emergency change and separate affected responses.
+- [x] Preview the current Google Form on desktop/phone. Preserve the owner's edits. Confirm the activity asks for at least five ratings across at least two supported media types, then For You with All media.
+- [x] Submit one clearly labeled TEST response; confirm it arrives, and exclude it from analysis. Verify the responder link works for someone other than the owner. Do not send the editor link.
+- [x] Record deployed commit, taxonomy revision, normal ranking mode, enabled providers and date before real responses. Keep ranking/taxonomy stable during collection; record any emergency change and separate affected responses.
 - [ ] Keep question scales consistent for relevance, discovery value, clarity and intent to try. General exploration feedback is optional. Distinguish intention from actual enjoyment; record not-yet-tried honestly.
 - [ ] Explain that this study provides descriptive usefulness feedback. A claim that mixed-media profiles are *more relevant* than single-media profiles requires a defined comparison condition; this questionnaire alone does not establish that causal claim.
 
