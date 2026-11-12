@@ -686,7 +686,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
           <p className="muted">
             {adultSection
               ? '18+ movies, TV and books. Includes explicit flags and mature ratings such as R, NC-17 and TV-MA. This is a browsing preference, not age verification.'
-              : 'Flagged mature movies, TV and books are kept in 18+. Missing ratings are labeled unknown; this collection is not a child-safe filter.'}
+              : 'Main hides titles the catalog identifies as mature. Missing or incorrect ratings can let mature content through. Search in 18+ for known mature titles; Main is not a guaranteed child-safe filter.'}
           </p>
         </div></details>
         <div className="workspace focused-workspace">

@@ -1,3 +1,4 @@
+import {retrievalClass} from './retrieval-context.ts';
 import {enrichBookAcrossSources} from './book-enrichment.ts';
 import {seriesPosition,storySearchTerms,hasStoryContext,matchesStoryContext} from './story-profile.ts';
 import type { CatalogMedia } from './media-api';
@@ -136,9 +137,9 @@ export async function enrichBook(item:CatalogMedia,signal?:AbortSignal):Promise<
   };
 }
 export async function retrieveBooks(tags:string[], signal?:AbortSignal, accept:(item:CatalogMedia)=>boolean=()=>true, anchor?:string, topic?:string, seed?:import('./recommendations').Media, cursor:import('./retrieval').RetrievalCursor={}) {
-  const fiction=tags.includes('fiction') || tags.includes('fantasy') || tags.includes('magic');
+  const fiction=retrievalClass(seed || {tags})==='fiction';
   const subjects=[...new Set(tags.filter(t=>bookSubjects[t]).sort((a,b)=>specificity(b)-specificity(a)).map(t=>bookSubjects[t]))].slice(0,3);
-  const core=[anchor && bookSubjects[anchor],topic && bookSubjects[topic]].filter((x):x is string=>!!x);
+  const core=[topic && bookSubjects[topic],(anchor!=='sports' || !topic || !bookSubjects[topic]) && anchor && bookSubjects[anchor]].filter((x):x is string=>!!x);
   const clauses=(values:string[])=>[...new Set(values)].map(s=>'subject:"'+s+'"').join(' AND ')+(fiction?' AND subject:fiction':'');
   const plans=[...new Set(subjects.map(s=>clauses([...core,s])))];
   if(core.length) { if(plans.length>=3)plans[2]=clauses(core);else plans.push(clauses(core)); }

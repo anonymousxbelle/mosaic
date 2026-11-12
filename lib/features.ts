@@ -1,3 +1,4 @@
+import {sportSubject} from './retrieval-context.ts';
 import {sportsCentrality} from './tag-centrality.ts';
 import {taxonomy, type TaxonomyKind} from './taxonomy.ts';
 export type FeatureKind = TaxonomyKind;
@@ -121,7 +122,7 @@ export const detailedPatterns = Object.fromEntries(
 export const detailedTags = [...new Set([...Object.keys(terms),...Object.keys(taxonomy)])];
 export const subgenres = [...new Set(Object.values(featureGroups).flat())];
 const anchorGenres = ['fantasy','science-fiction','mystery','thriller','horror','romance','sports','non-fiction','strategy'];
-export function seedTopic(item?: {tags:string[]}):string|undefined {
+export function seedTopic(item?: {tags:string[];description?:string;genres?:string[];sourceGenreLabels?:string[]}):string|undefined {
   if(!item)return undefined;
   const subjects:Record<string,string[]>={
     fantasy:['magic','mythic-fantasy'],
@@ -129,6 +130,7 @@ export function seedTopic(item?: {tags:string[]}):string|undefined {
     'science-fiction':['space-opera','cyberpunk','first-contact'],
   };
   const genre=primaryGenre(item);
+  if(genre==='sports' && sportSubject(item))return sportSubject(item);
   return (subjects[genre || ''] || []).find(t=>item.tags.includes(t)) ||
     item.tags.find(t=>['basketball','football','baseball'].includes(t));
 }
@@ -180,6 +182,7 @@ export function detailedFeatures(description: string, subjects: string[]) {
 }
 // Controlled subject queries only. Personal collection names never become catalog queries.
 export const bookSubjects: Record<string, string> = {
+  volleyball:'volleyball',tennis:'tennis',swimming:'swimming',soccer:'soccer',
   sports: 'sports',
   basketball: 'basketball',
   anime: 'manga',

@@ -1,3 +1,4 @@
+import {retrievalClassCompatible,matchesRetrievalTopic} from './retrieval-context.ts';
 import {compatibleClass} from './taxonomy.ts';
 import { specificity, featureKind, matchesGenre, seedTopic } from './features.ts';
 import {storyMatch,sameSeries} from './story-profile.ts';
@@ -61,9 +62,9 @@ export function recommend(
   return catalog
     .filter(
       (i) =>
-        (!seed || compatibleClass(seed,i)) && !exclude.includes(i.id) && (category === 'All' || i.type === category) &&
+        (!seed || retrievalClassCompatible(seed,i)) && !exclude.includes(i.id) && (category === 'All' || i.type === category) &&
         (!requiredGenre || matchesGenre(i,requiredGenre)) &&
-        (!seedTopic(seed) || i.tags.includes(seedTopic(seed)!)),
+        (!seedTopic(seed) || matchesRetrievalTopic(i,seedTopic(seed)!)),
     )
     .map((i) => ({
       ...i,
@@ -159,3 +160,4 @@ export function preferMatches<T extends Media & {score:number;priority?:number}>
  return items.map(item=>({...item,score:item.score*(1+(preferred.length?0.5*preferred.filter(t=>item.tags.includes(t)).length/preferred.length:0))}))
  .sort((a,b)=>(a.priority||0)-(b.priority||0)||b.score-a.score);
 }
+

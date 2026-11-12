@@ -28,7 +28,8 @@ test('book queries retain core requirements and enrich uncertain subjects before
  };
  try{
   const result=await retrieveBooks(seed.tags,undefined,i=>i.tags.includes('magic'),'fantasy','magic');
-  assert.ok(queries.length);assert.ok(queries.every(q=>q.includes('subject:"fantasy"') && q.includes('subject:"magic"')));
+  assert.ok(queries.length);assert.ok(queries.every(q=>q.includes('subject:"fantasy"') && q.includes('subject:"magic"') && q.includes('subject:fiction')));
   assert.equal(result.items.length,1);assert.ok(result.items[0].tags.includes('magic'));
  }finally{globalThis.fetch=old;}
 });
+

@@ -1,3 +1,4 @@
+import {retrievalClassCompatible,matchesRetrievalTopic} from './retrieval-context.ts';
 import {toUnifiedRecord} from './unified-media.ts';
 import {taxonomy,tagApplicable,compatibleClass} from './taxonomy.ts';
 import { detailedPatterns, detailedFeatures, featureGroups, primaryGenre, seedTopic, matchesGenre } from './features.ts';
@@ -709,7 +710,7 @@ export async function discoverMedia(
  const anchor=primaryGenre(options.seed),topic=seedTopic(options.seed);
  const subgenre=(featureGroups[anchor || '']||[]).find(t=>[...(options.seed?.genres||[]),...(options.seed?.tags||[])].includes(t));
  const accept=(item:CatalogMedia)=>
-  (!options.seed || compatibleClass(options.seed,item)) && (!anchor || matchesGenre(item,anchor)) && (!topic || item.tags.includes(topic)) &&
+  (!options.seed || retrievalClassCompatible(options.seed,item)) && (!anchor || matchesGenre(item,anchor)) && (!topic || matchesRetrievalTopic(item,topic)) &&
   item.tags.some(t=>tags.includes(t)) && (!options.seed || !sameWork(item,options.seed)) &&
   (options.accept?.(item) ?? true);
  for(const item of cachedCatalog())if(types.includes(item.type) && accept(item) && !findDuplicate(items,item)){items.push(item);stats.cached++;}

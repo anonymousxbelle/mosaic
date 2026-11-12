@@ -1,3 +1,4 @@
+import {retrievalClass,retrievalClassCompatible,matchesRetrievalTopic} from './retrieval-context.ts';
 import {compatibleClass} from './taxonomy.ts';
 import type {Media} from './recommendations';
 import type {RankingEvidence,SemanticScores} from './hybrid-ranking';
@@ -8,7 +9,7 @@ export function unifiedRank<T extends Media & {score:number;priority?:number}>(i
  const genre=primaryGenre(seed),topic=seedTopic(seed),labels=(i:Media)=>[...new Set([...(i.genres||[]),...i.tags])];
  const subs=(i:Media)=>(featureGroups[genre || '']||[]).filter(t=>labels(i).includes(t));
  const seedSubs=subs(seed),a=storyProfile(seed);
- return items.filter(i=>compatibleClass(seed,i) && (!genre||matchesGenre(i,genre)) && (!topic||i.tags.includes(topic)))
+ return items.filter(i=>retrievalClassCompatible(seed,i) && (!genre||matchesGenre(i,genre)) && (!topic||matchesRetrievalTopic(i,topic)))
  .filter(i=>!(seedSubs.includes('historical-romance') && subs(i).includes('contemporary-romance') && !subs(i).includes('historical-romance')))
  .filter(i=>!(seedSubs.includes('contemporary-romance') && subs(i).includes('historical-romance') && !subs(i).includes('contemporary-romance')))
  .map(i=>{
@@ -24,10 +25,11 @@ export function unifiedRank<T extends Media & {score:number;priority?:number}>(i
   const score=(0.9*core+0.08*(aiAvailable?ai:core)+0.02*(providerAvailable?provider:core))*later;
   // Lexicographic compatibility precedes all scores and media preferences.
   // Missing fields remain distinguishable from observed non-overlap.
-  return {...i,priority:era*1000+setting*100+sub*20+premise*4+(i.priority||0),
+  return {...i,priority:(retrievalClass(seed)!=='unknown'&&retrievalClass(i)==='unknown'?10000:0)+era*1000+setting*100+sub*20+premise*4+(i.priority||0),
    score,
    rankingDetails:{storyCoverage:story.coverage,aiAvailable,providerAvailable},
    storyReasons:story.reasons,
    compatibilityNote:era===2 || sub===2 || setting===2 || premise===2?'Broader match: some story features differ':era===1 || sub===1 || setting===1 || premise===1?'Some comparison metadata is missing':!a.era.length&&!seedSubs.length&&!definingSettings(seed).length&&!a.premise.length?'Limited story context: ranked mainly by tags':'Core story features align'};
  }).sort((a,b)=>a.priority-b.priority||b.score-a.score||a.title.localeCompare(b.title));
 }
+

@@ -1,0 +1,341 @@
+{
+  "checkedAt": "2026-11-12T13:37:29.984Z",
+  "note": "Fresh live diagnostic pool, not the participant original session or final diversified UI order",
+  "seed": {
+    "id": "tmdb:TV:60863",
+    "externalId": "60863",
+    "type": "TV",
+    "title": "Haikyu!!",
+    "creator": "Creator unavailable",
+    "description": "Inspired by a small-statured pro volleyball player, Hinata creates a volleyball team in his last year of middle school. Unfortunately the team is matched up against the \"King of the Court\" Tobio Kageyama’s team in their first tournament and inevitably lose. After the crushing defeat, Hinata vows to surpass Kageyama After entering high school, Hinata joins the volleyball team only to find that Tobio has also joined.",
+    "tags": [
+      "sports",
+      "anime",
+      "animation",
+      "humor",
+      "drama",
+      "competition",
+      "teamwork",
+      "sports-anime",
+      "sports-drama"
+    ],
+    "sourceGenreLabels": [
+      "Animation",
+      "Comedy",
+      "Drama"
+    ],
+    "genres": [
+      "animation",
+      "drama",
+      "humor",
+      "sports-drama",
+      "sports-anime",
+      "anime",
+      "sports"
+    ],
+    "adult": false,
+    "contentRating": "TV-14",
+    "artworkUrl": "https://image.tmdb.org/t/p/w342/8WEr48swcqe89Zsy5sdrGCASlIg.jpg",
+    "provider": "TMDB",
+    "sourceUrl": "https://www.themoviedb.org/tv/60863",
+    "imdbUrl": "https://www.imdb.com/title/tt3398540/",
+    "year": "2014",
+    "verifiedAt": "2026-11-12T13:37:13.661Z",
+    "schemaVersion": 1,
+    "themes": [
+      "competition",
+      "teamwork"
+    ],
+    "moods": [],
+    "creators": [],
+    "keywords": [
+      "sports",
+      "anime",
+      "animation",
+      "humor",
+      "drama",
+      "competition",
+      "teamwork",
+      "sports-anime",
+      "sports-drama"
+    ]
+  },
+  "tags": [
+    "volleyball",
+    "sports",
+    "competition",
+    "teamwork",
+    "sports-anime",
+    "sports-drama",
+    "humor",
+    "drama",
+    "anime",
+    "animation"
+  ],
+  "stats": {
+    "examined": 44,
+    "rejected": 40,
+    "accepted": 4,
+    "pages": 4,
+    "failedQueries": 0,
+    "cached": 0
+  },
+  "failures": [],
+  "aiError": "",
+  "semantic": {
+    "openlibrary:OL15706176W": 0.6405279058700803,
+    "openlibrary:OL9002694W": 0.7227283912471579,
+    "openlibrary:OL19736705W": 0.7221044259114036,
+    "openlibrary:OL20042169W": 0.765676352986055
+  },
+  "baseline": [
+    {
+      "id": "openlibrary:OL15706176W",
+      "title": "All you've got",
+      "score": 0.3424839025171773
+    },
+    {
+      "id": "openlibrary:OL9002694W",
+      "title": "Jump serve",
+      "score": 0.20201896822390328
+    },
+    {
+      "id": "openlibrary:OL19736705W",
+      "title": "ハイキュー!! 22",
+      "score": 0.18176324604597502
+    },
+    {
+      "id": "openlibrary:OL20042169W",
+      "title": "ハイキュー!! 6",
+      "score": 0.18075057940329822
+    }
+  ],
+  "ranked": [
+    {
+      "id": "openlibrary:OL15706176W",
+      "externalId": "OL15706176W",
+      "type": "Book",
+      "title": "All you've got",
+      "creator": "Karol Ann Hoeffner",
+      "description": "Golden girl Lauren is Villa Madonna Academy's star volleyball player and leader of the Madonnas. Spitfire Gabby leads the Reinas at archrival school Scared Heart. Both girls and teams sport mad skills on the court. The competition is killer. But a twist of fate merges the Madonnas and the Reinas into one school. And one volleyball team. Now there's more at stake than winning or losing -- the girls will have to battle just to make the cut.",
+      "synopsisStatus": "available",
+      "tags": [
+        "friendship",
+        "middle-grade",
+        "fiction",
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "High school students",
+        "Girls' schools",
+        "Fiction",
+        "Catholic high schools",
+        "Volleyball for girls",
+        "Friendship",
+        "Children's fiction",
+        "Friendship, fiction"
+      ],
+      "genres": [
+        "fiction"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL15706176W",
+      "verifiedAt": "2026-11-12T13:37:14.511Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/6938590-M.jpg",
+      "year": "2006",
+      "metadataSourceUrl": "https://hardcover.app/books/all-youve-got",
+      "priority": 20,
+      "score": 0.36609479600578965,
+      "sharedTags": [
+        "sports"
+      ],
+      "reasons": [
+        "sports"
+      ],
+      "storyReasons": [
+        "setting: school",
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 1,
+        "aiAvailable": true,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL9002694W",
+      "externalId": "OL9002694W",
+      "type": "Book",
+      "title": "Jump serve",
+      "creator": "Jane bingham",
+      "description": "Ella and Laura can’t believe it when two of the meanest girls from a rival volleyball team switch to their team. Before long it’s clear that the new girls don’t plan to be good teammates. Is there any hope for a championship, or was the season ruined before it began?",
+      "synopsisStatus": "available",
+      "tags": [
+        "middle-grade",
+        "fiction",
+        "drama",
+        "sports",
+        "hope"
+      ],
+      "sourceGenreLabels": [
+        "Juvenile Fiction",
+        "Volleyball",
+        "Fiction",
+        "Drama",
+        "Teamwork (Sports)",
+        "Children's fiction",
+        "Sports, fiction"
+      ],
+      "genres": [
+        "sports",
+        "fiction",
+        "drama"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL9002694W",
+      "verifiedAt": "2026-11-12T13:37:25.362Z",
+      "artworkUrl": "https://covers.openlibrary.org/b/id/12184737-M.jpg",
+      "year": "2008",
+      "ratingCount": 1,
+      "priority": 120,
+      "score": 0.24341392238975182,
+      "sharedTags": [
+        "drama",
+        "sports"
+      ],
+      "reasons": [
+        "drama",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": true,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL20042169W",
+      "externalId": "OL20042169W",
+      "type": "Book",
+      "title": "ハイキュー!! 6",
+      "creator": "古舘春一",
+      "description": "Ever since he saw the legendary player known as 'the Little Giant' compete at the national volleyball finals, Shoyo Hinata has been aiming to be the best volleyball player ever! Who says you need to be tall to play volleyball when you can jump higher than anyone else? After having overcome the Iron Wall of Date Tech, it's finally time for Karasuno to have their rematch with Aoba Johsai! Kageyama and Karasuno claimed victory in the practice match, but how will they fare in a real game? Tensions run high when Tohru Oikawa gears up to crush Kageyama once and for all.",
+      "synopsisStatus": "available",
+      "tags": [
+        "coming-of-age",
+        "young-adult",
+        "fiction",
+        "identity",
+        "humor",
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "franchise:ハイキュー!!",
+        "series:ハイキュー!!",
+        "form:manga",
+        "form:manga volume",
+        "genre:comedy",
+        "genre:coming-of-age",
+        "genre:sports",
+        "intended public:shōnen",
+        "Teenage boys",
+        "Young adult fiction",
+        "Volleyball"
+      ],
+      "genres": [
+        "coming-of-age",
+        "sports",
+        "fiction",
+        "drama",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL20042169W",
+      "verifiedAt": "2026-11-12T13:37:26.622Z",
+      "priority": 120,
+      "score": 0.22729035462966846,
+      "sharedTags": [
+        "humor",
+        "sports"
+      ],
+      "reasons": [
+        "humor",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": true,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    },
+    {
+      "id": "openlibrary:OL19736705W",
+      "externalId": "OL19736705W",
+      "type": "Book",
+      "title": "ハイキュー!! 22",
+      "creator": "古舘春一",
+      "description": "\"Ever since he saw the legendary player known as \"the Little Giant\" compete at the national volleyball finals, Shoyo Hinata has been aiming to be the best volleyball player ever! Who says you need to be tall to play volleyball when you can jump higher than anyone else? The semifinals of the Tokyo Area Qualifiers for the Spring Tournament have begun! It's NEKOMA vs. FUKURODANI in a win-and-you're-in match! Fukurodani's ace, Bokuto, is in top form as he goes head-to-head with Nekoma's defensive master, Yaku. Will the Cats be able to take down the Owls?!\"--Page [4] of cover.",
+      "synopsisStatus": "available",
+      "tags": [
+        "coming-of-age",
+        "fiction",
+        "identity",
+        "humor",
+        "sports"
+      ],
+      "sourceGenreLabels": [
+        "franchise:ハイキュー!!",
+        "series:ハイキュー!!",
+        "form:manga",
+        "form:manga volume",
+        "genre:comedy",
+        "genre:coming-of-age",
+        "genre:sports",
+        "intended public:shōnen",
+        "School sports",
+        "Teenage boys",
+        "Volleyball players",
+        "Volleyball",
+        "Fiction"
+      ],
+      "genres": [
+        "coming-of-age",
+        "sports",
+        "fiction",
+        "drama",
+        "humor"
+      ],
+      "provider": "Open Library",
+      "sourceUrl": "https://openlibrary.org/works/OL19736705W",
+      "verifiedAt": "2026-11-12T13:37:14.535Z",
+      "priority": 120,
+      "score": 0.22480262765254921,
+      "sharedTags": [
+        "humor",
+        "sports"
+      ],
+      "reasons": [
+        "humor",
+        "sports"
+      ],
+      "storyReasons": [
+        "premise: competition"
+      ],
+      "rankingDetails": {
+        "storyCoverage": 0.5,
+        "aiAvailable": true,
+        "providerAvailable": true
+      },
+      "compatibilityNote": "Some comparison metadata is missing"
+    }
+  ]
+}
