@@ -291,8 +291,8 @@ export default {
               ),
           )
           .map((r) => r.id);
-      if (u.pathname === '/search' && (q.length < 2 || q.length > 100))
-        throw new ApiError(400, 'Search must be 2–100 characters.');
+      if (u.pathname === '/search' && (q.length < 1 || q.length > 100))
+        throw new ApiError(400, 'Search must be 1–100 characters.');
       if (u.pathname === '/verify' && !/^[1-9]\d{0,9}$/.test(id))
         throw new ApiError(400, 'Invalid catalog ID.');
       const context=(u.searchParams.get('context') || '').trim().toLowerCase();

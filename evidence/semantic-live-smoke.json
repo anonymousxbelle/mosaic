@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-11-12T02:43:54.852Z",
+  "purpose": "Synthetic operational smoke test, not a Haikyuu recommendation-quality evaluation",
+  "status": 200,
+  "input": {
+    "seed": {
+      "id": "test-volleyball",
+      "text": "A high school volleyball team trains for a championship, learning teamwork and overcoming rivalry through competitive matches."
+    },
+    "items": [
+      {
+        "id": "test-team-sport",
+        "text": "Teenage basketball players learn to trust their teammates as they train hard and compete in a school tournament."
+      },
+      {
+        "id": "test-unrelated",
+        "text": "A historian investigates royal succession and court intrigue in a medieval kingdom, uncovering a conspiracy against the queen."
+      }
+    ]
+  },
+  "result": {
+    "model": "@cf/baai/bge-small-en-v1.5",
+    "scores": {
+      "test-team-sport": 0.7446244701569401,
+      "test-unrelated": 0.38895464787032447
+    }
+  }
+}

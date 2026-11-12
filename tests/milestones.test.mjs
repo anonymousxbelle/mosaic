@@ -19,7 +19,7 @@ test('unified fields represent missing metadata as empty arrays without invented
 });
 test('empty or invalid search is rejected before fetching; unknown title can return no results',async(t)=>{
  let calls=0;t.mock.method(globalThis,'fetch',async()=>{calls++;return new Response('[]',{status:200});});
- await assert.rejects(liveEvidenceSearch(''),/at least/);await assert.rejects(liveEvidenceSearch('!!!'),/letters or numbers/);assert.equal(calls,0);
+ await assert.rejects(liveEvidenceSearch(''),/Enter a title/);await assert.rejects(liveEvidenceSearch('!!!'),/letters or numbers/);assert.equal(calls,0);
  const result=await liveEvidenceSearch('No matching title');assert.deepEqual(result.normalized,[]);assert.equal(calls,1);
  assert.ok(queryError('x'.repeat(101)));
 });
@@ -28,3 +28,4 @@ test('failed API and malformed responses are surfaced, never replaced with fixtu
  await assert.rejects(liveEvidenceSearch('Example'),/HTTP 503/);
  globalThis.fetch=async()=>new Response('{}',{status:200});await assert.rejects(liveEvidenceSearch('Example'),/Unexpected TV/);
 });
+

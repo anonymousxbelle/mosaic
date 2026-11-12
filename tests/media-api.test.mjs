@@ -71,6 +71,8 @@ test('input length is bounded and invalid selections never call provider', async
   assert.ok(queryError(' '));
   assert.ok(queryError('a'.repeat(101)));
   assert.equal(queryError('Arrival'), null);
+  assert.equal(queryError('K'), null);
+  assert.ok(queryError('!'));
   await assert.rejects(
     () =>
       verifyMedia({
@@ -136,3 +138,4 @@ test('verification re-fetches the provider record and rejects wrong categories',
     globalThis.fetch = original;
   }
 });
+

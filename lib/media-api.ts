@@ -302,8 +302,8 @@ export function normalizeResults(
 }
 export function queryError(query: string): string | null {
   const n = query.trim().length;
-  return n < 2
-    ? 'Type at least 2 characters.'
+  return n < 1
+    ? 'Enter a title or creator.'
     : n > 100
       ? 'Keep the search under 101 characters.'
       : !/[\p{L}\p{N}]/u.test(query)

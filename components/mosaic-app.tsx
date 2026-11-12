@@ -102,6 +102,7 @@ function MediaMark({ item }: { item: Media }) {
 export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const [view, setView] = useState(reviewer?'library':'discover');
   const [preferencesOpen,setPreferencesOpen]=useState(false);
+  const [openCollection,setOpenCollection]=useState<string|null>(null);
   const [preservedResults,setPreservedResults]=useState<{key:string;items:any[]}|null>(null);
   const [removeTarget,setRemoveTarget]=useState<Media|null>(null);
   const [rateTarget,setRateTarget]=useState<Media|null>(null);
@@ -205,6 +206,13 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             )
           : [],
       );
+      try {const nav = JSON.parse(sessionStorage.getItem(reviewer?'mosaic-review-navigation':'mosaic-navigation') || '{}');
+      if(['discover','library','collections'].includes(nav.view))setView(nav.view);
+      if(['for-you','based-on'].includes(nav.mode))setMode(nav.mode);
+      if(['all','later','experienced','dismissed'].includes(nav.shelf))setShelf(nav.shelf);
+      if(['All','Book','Movie','TV'].includes(nav.category))setCategory(nav.category);
+      if(typeof nav.seed==='string')setSeed(nav.seed);
+      }catch{/* Navigation storage must not prevent library recovery. */}
       setAdded(saved.added);
       setRatings(saved.ratings);
       setTagEdits(saved.tagEdits);
@@ -228,7 +236,9 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       );
     }
   }, [added, ratings, tagEdits, avoided, ready]);
+  useEffect(()=>{if(ready)try{sessionStorage.setItem(reviewer?'mosaic-review-navigation':'mosaic-navigation',JSON.stringify({view,mode,shelf,category,seed}));}catch{/* Navigation can still work without storage. */}},[ready,reviewer,view,mode,shelf,category,seed]);
   function addItem(item: CatalogMedia, rating?:number) {
+    if(selected)setSeed(selected.id);
     if(view==='discover'&&filteredResults.length)setPreservedResults({key:controlsKey,items:filteredResults});
     setUndo(null);
     if (added.length >= 200)
@@ -266,6 +276,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
         throw new Error(
           'Its content rating has changed. Search in the appropriate collection.',
         );
+      if(selected)setSeed(selected.id);
       setPreservedResults({key:controlsKey,items:filteredResults});
       setAdded((old) => [
         { ...verified, libraryState: state==='later' && ratings[item.id]?'experienced':state },
@@ -836,7 +847,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                           aria-label={n + ' stars for ' + item.title}
                           aria-pressed={ratings[item.id] === n}
                           onClick={() =>
-                            {setRatings((old) => ({ ...old, [item.id]: n }));setAdded(old=>old.map(x=>x.id===item.id?{...x,libraryState:'experienced'}:x));}
+                            {setRatings((old) => ({ ...old, [item.id]: n }));setAdded(old=>old.map(x=>x.id===item.id?{...x,libraryState:'experienced'}:x));setNotice(`${item.title} rated ${n} stars. It is now in Already experienced, not Saved for later.`);}
                           }
                         >
                           <Star
@@ -1154,6 +1165,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                           : 'More like this'}
                       </button>
                     </div>
+                    {undo?.id===item.id && <p className="form-message" role="status">{notice}</p>}
                     <details className="connection"><summary>Why this matches</summary>
                       <p>{mode==='based-on'&&selected?`Similar to “${selected.title}” in: `:'Shares these details with your rated favorites: '}{item.sharedTags.map((t:string)=>t.replaceAll('-',' ')).join(', ') || 'No shared tags are confirmed yet.'}</p>
                       {reviewer && <details><summary>Scoring evidence · {item.sharedTags.length} shared tags</summary>
@@ -1229,11 +1241,11 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               edits={tagEdits}
               onChange={setTagEdits}
               onExplore={(tag) => {
-                setSearch(tag);
-                setView('library');
+                setOpenCollection(tag);
               }}
             />
         </section>
+        <Dialog open={!!openCollection} onOpenChange={open=>{if(!open)setOpenCollection(null);}}><DialogContent className="add-media-dialog"><DialogTitle>{openCollection?.replaceAll('-',' ')}</DialogTitle><DialogDescription>Titles you grouped with this personal tag. Opening this collection keeps you in Collections.</DialogDescription><div className="collection-list">{sectionCatalog.filter(item=>openCollection && tagEdits[item.id]?.added.includes(openCollection)).map(item=><article key={item.id}><h3>{item.title}</h3><p>{item.type} · {ratings[item.id]?`${ratings[item.id]} stars`:'Saved for later'}</p><button onClick={()=>setRateTarget(item)}>Rate title</button><button onClick={()=>{setSeed(item.id);setMode('based-on');setView('discover');setOpenCollection(null);}}>Find similar titles</button></article>)}</div></DialogContent></Dialog>
         <Dialog open={!!removeTarget} onOpenChange={open=>{if(!open)setRemoveTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Remove {removeTarget?.title}?</DialogTitle><DialogDescription>This removes the title, its star rating, personal tags and AI review history from this browser’s library. It may appear in recommendations again. This does not change the catalog.</DialogDescription><div className="result-actions"><button onClick={()=>setRemoveTarget(null)}>Keep title</button><button className="destructive" onClick={()=>{if(removeTarget)removeItem(removeTarget.id);setRemoveTarget(null);}}>Remove from library</button></div></DialogContent></Dialog>
         <Dialog open={!!rateTarget} onOpenChange={open=>{if(!open)setRateTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Rate {rateTarget?.title}</DialogTitle><DialogDescription>Your rating shapes your taste profile. If you haven’t read or watched it, save it for later instead.</DialogDescription><div className="rating-choices">{[1,2,3,4,5].map(n=><button disabled={actionBusy} key={n} onClick={()=>{if(rateTarget)void feedback(rateTarget,'experienced',n);setRateTarget(null);}}>{n} ★</button>)}<button disabled={actionBusy} onClick={()=>{if(rateTarget)void feedback(rateTarget,'later');setRateTarget(null);}}>Save to library · for later</button></div></DialogContent></Dialog>
 <Dialog open={preferencesOpen} onOpenChange={setPreferencesOpen}><DialogContent className="add-media-dialog preferences-screen"><DialogTitle>Your taste & preferences</DialogTitle><DialogDescription>Manage exclusions and your browser-saved library.</DialogDescription>
