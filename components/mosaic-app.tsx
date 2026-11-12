@@ -374,6 +374,10 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   }, []);
   async function findConnections(more=false) {
     if(discovering)return;
+    if(more && hasBufferedResults){
+      setMorePrefix({key:controlsKey,items:filteredResults});setPreservedResults(null);setResultLimit(n=>n+30);setCompletedDiscoveryKey(discoveryKey);
+      setMoreNotice('Showing more matches from the titles already retrieved.');return;
+    }
     setMoreNotice('');
     if(more){setMorePrefix({key:controlsKey,items:filteredResults});setResultLimit(n=>n+30);}
     else {setMorePrefix(null);setContinuation({});setHasMore(false);setResultLimit(30);}
@@ -509,7 +513,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             )),
       }))
       .sort((a, b) => b.score - a.score)),
-    resultLimit,
+    resultLimit+1,
   ) : [];
   const cosineRun=cosineDiscovery([...catalog,...candidates],{mode:mode==='based-on'?'based-on':'for-you',ratings,library:catalog,seed:mode==='based-on'?selected:undefined,category});
   const calculatedResults=rankingMode==='cosine'
@@ -517,7 +521,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       .filter(i=>i.type!=='Music'&&i.type!=='Game'&&inContentSection(i,adultSection)&&genreAllowed(i,[],avoided))
       .filter(i=>mode!=='based-on'||mustTags.every(t=>i.tags.includes(t)))
       .map(i=>({...i,storyReasons:[] as string[],seriesEntries:[i]})):[]
-    :legacyResults;
+    :legacyResults.slice(0,resultLimit);
+  const hasBufferedResults=rankingMode!=='cosine' && legacyResults.length>resultLimit;
   const batchResults=rankingMode==='cosine'&&!discovering?calculatedResults:morePrefix?.key===controlsKey?[...morePrefix.items,...calculatedResults.filter(item=>!findDuplicate(morePrefix.items,item))]:calculatedResults;
   const filteredResults=preservedResults?.key===controlsKey?preservedResults.items:batchResults;
   const visible = libraryOrder(sectionCatalog,ratings)
@@ -1210,7 +1215,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 ))}
               </div>
             )}
-            <div className="more-discoveries" aria-live="polite">{moreNotice && <p>{moreNotice}</p>}{completedDiscoveryKey===discoveryKey && (hasMore ? <button type="button" className="add-media-button" disabled={discovering} onClick={()=>findConnections(true)}>{discovering ? 'Finding more…' : 'Find more recommendations'}</button> : !discovering && <p>You have reached the end of this search batch. Try different filters or a starting title to explore more. This is not the entire catalog.</p>)}</div>
+            <div className="more-discoveries" aria-live="polite">{moreNotice && <p>{moreNotice}</p>}{(completedDiscoveryKey===discoveryKey || preservedResults?.key===controlsKey) && (hasMore || hasBufferedResults ? <button type="button" className="add-media-button" disabled={discovering} onClick={()=>findConnections(true)}>{discovering ? 'Finding more…' : 'Find more recommendations'}</button> : !discovering && <p>You have reached the end of this search batch. Try different filters or a starting title to explore more. This is not the entire catalog.</p>)}</div>
             <details className="advanced-panel"><summary>About your recommendations</summary><p className="data-note">
               You have {sectionCatalog.length} titles in this content section{added.length!==sectionCatalog.length ? ` (${added.length} stored in total, including other content sections or unsupported media)` : ''}. Mosaic searches live catalogs for candidates and compares their story details with your favorites. It does not compare every title in every catalog. Match explanations describe similarities—not a guarantee that you will enjoy a title. You can correct tags from My Library.
             </p></details>
