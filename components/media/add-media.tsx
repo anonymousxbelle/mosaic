@@ -204,6 +204,12 @@ export function AddMedia({
           <input id="live-media-search" role="combobox" aria-autocomplete="list" aria-expanded={!selection && matches.length>0} aria-controls="catalog-options" aria-activedescendant={!selection && matches.length?`catalog-option-${Math.min(highlight,matches.length-1)}`:undefined} aria-describedby="search-help" placeholder="Start typing a title…" value={query} disabled={verifying}
             onChange={e=>{reset();setQuery(e.target.value);setHighlight(0);}}
             onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();e.stopPropagation();}else if(e.key==='ArrowDown'){e.preventDefault();setHighlight(n=>Math.min(n+1,matches.length-1));}else if(e.key==='ArrowUp'){e.preventDefault();setHighlight(n=>Math.max(n-1,0));}}}/>
+        {!adult && !loading && !error && !selection && !queryError(query) && (
+          <div className="form-message">
+            <p>Can’t find your title? It may be in the 18+ collection, where titles with mature content ratings appear.</p>
+            {onCheckMature && <button type="button" className="demo-button" onClick={onCheckMature}>Check the 18+ collection</button>}
+          </div>
+        )}
           {!selection && matches.length>0 && <div id="catalog-options" role="listbox" className="catalog-options">{matches.map((item,index)=><button type="button" role="option" id={`catalog-option-${index}`} aria-selected={index===highlight} key={item.id} onClick={()=>{setSelection(item);setQuery(item.title);setLoading(false);generation.current++;}}><strong>{item.title}</strong><span>{item.creator}{item.year?' · '+item.year:''}</span><small>{item.provider}</small></button>)}</div>}
         </div>
         <p id="search-help" className="search-help" role="status">
@@ -216,12 +222,6 @@ export function AddMedia({
                   ? 'Choose one of the suggestions to continue.'
                   : 'Selected catalog record. Ready to verify.')}
         </p>
-        {!adult && !loading && !error && !selection && !queryError(query) && !matches.length && (
-          <div className="form-message">
-            <p>Can’t find your title? It may be in the 18+ collection, where titles with mature content ratings appear.</p>
-            {onCheckMature && <button type="button" className="demo-button" onClick={onCheckMature}>Check the 18+ collection</button>}
-          </div>
-        )}
         {selection && (
           <div className="selected-media">
             <div className="selected-label">
