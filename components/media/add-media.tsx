@@ -161,8 +161,8 @@ export function AddMedia({
         setOpen(true);
       }}>
         <div className="inline-search-notice">
-          <p>{adult ? '18+ collection: search all titles, including general and mature content.' : 'Main collection: titles marked as mature are hidden. Titles without a rating may still contain mature content.'}</p>
-          {onCheckMature && <button type="button" className="demo-button" onClick={onCheckMature}>{adult ? 'Go back to Main collection' : 'Check the 18+ collection'}</button>}
+          <p>{adult ? '18+ titles included: search both general and mature titles.' : '18+ titles hidden: search general titles. Unrated titles may still contain mature content.'}</p>
+          {onCheckMature && <button type="button" className="demo-button collection-toggle" onClick={onCheckMature}>{adult ? 'Hide 18+ titles' : 'Include 18+ titles'}</button>}
         </div>
         <label className="favorite-search-field">Media type
           <select value={type} onChange={event=>{reset();setType(event.target.value as Category);}}>
@@ -189,7 +189,7 @@ export function AddMedia({
             ? 'All catalog matches, including 18+ content.'
             : 'Flagged 18+ titles are hidden. Unrated titles may still contain mature content.'}
         </p>
-        {adult && onCheckMature && <button type="button" className="demo-button" onClick={()=>{reset();onCheckMature();}}>Go back to Main collection</button>}
+        {adult && onCheckMature && <button type="button" className="demo-button collection-toggle" onClick={()=>{reset();onCheckMature();}}>Hide 18+ titles</button>}
         <DialogDescription>
           Search a live catalog and select the correct title. Exact title
           matches rank first; available rating counts break ties. We check the
@@ -232,8 +232,8 @@ export function AddMedia({
             onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();e.stopPropagation();}else if(e.key==='ArrowDown'){e.preventDefault();setHighlight(n=>Math.min(n+1,matches.length-1));}else if(e.key==='ArrowUp'){e.preventDefault();setHighlight(n=>Math.max(n-1,0));}}}/>
         {!adult && !loading && !error && !selection && !queryError(query) && (
           <div className="form-message">
-            <p>Can’t find your title? It may be in the 18+ collection, where titles with mature content ratings appear.</p>
-            {onCheckMature && <button type="button" className="demo-button" onClick={onCheckMature}>Check the 18+ collection</button>}
+            <p>Can’t find your title? It may have a mature content rating. Include 18+ titles to broaden your search.</p>
+            {onCheckMature && <button type="button" className="demo-button collection-toggle" onClick={onCheckMature}>Include 18+ titles</button>}
           </div>
         )}
           {!selection && matches.length>0 && <div id="catalog-options" role="listbox" className="catalog-options">{matches.map((item,index)=><button type="button" role="option" id={`catalog-option-${index}`} aria-selected={index===highlight} key={item.id} onClick={()=>{setSelection(item);setQuery(item.title);setLoading(false);generation.current++;}}><strong>{item.title}</strong><span>{item.creator}{item.year?' · '+item.year:''}</span><small>{item.provider}</small></button>)}</div>}

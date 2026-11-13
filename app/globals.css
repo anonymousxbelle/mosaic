@@ -1339,3 +1339,8 @@ body { background:var(--background); }
 .grouped-title-tags dt { font-weight:700; }
 .grouped-title-tags dd { margin:0; line-height:1.6; overflow-wrap:anywhere; }
 @media(max-width:500px) { .grouped-title-tags > div { grid-template-columns:1fr; gap:4px; } }
+.inline-search-notice { display:flex; flex-wrap:nowrap; gap:24px; }
+.inline-search-notice p { flex:1 1 auto; }
+.app-shell .collection-toggle,.collection-toggle { background:#235f50; color:white; border:1px solid #235f50; border-radius:10px; padding:12px 18px; min-height:44px; font-weight:700; white-space:nowrap; }
+.collection-toggle:hover { background:#194b3e; }
+@media(max-width:600px) { .inline-search-notice { flex-wrap:wrap; gap:12px; } .inline-search-notice .collection-toggle { margin-left:auto; } }
