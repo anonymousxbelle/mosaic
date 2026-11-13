@@ -36,6 +36,7 @@ export function AddMedia({
   items,
   adult = false,
   favorite = false,
+  inlineSearch = false,
   label,
   onAdd,
   onCheckMature,
@@ -43,6 +44,7 @@ export function AddMedia({
   items: Media[];
   adult?: boolean;
   favorite?: boolean;
+  inlineSearch?: boolean;
   label?: string;
   onAdd: (item: CatalogMedia, rating?: number) => void;
   onCheckMature?: () => void;
@@ -154,7 +156,7 @@ export function AddMedia({
         if (!value) reset();
       }}
     >
-      {favorite ? <form className="favorite-search" onSubmit={(event) => {
+      {inlineSearch ? <form className="favorite-search" onSubmit={(event) => {
         event.preventDefault();
         reset();
         setOpen(true);
@@ -165,7 +167,7 @@ export function AddMedia({
           </select>
         </label>
         <label className="favorite-search-field favorite-search-query">Find a title
-          <input type="search" value={query} placeholder="Search for a favorite…" onChange={event=>{reset();setQuery(event.target.value);}} />
+          <input type="search" value={query} placeholder="Search for a book, movie or TV show…" onChange={event=>{reset();setQuery(event.target.value);}} />
         </label>
         <button type="submit" className="add-media-button"><Plus size={17}/>{label || 'Add a favorite'}</button>
       </form> : <DialogTrigger className="add-media-button">

@@ -18,3 +18,9 @@ Owner-reported observations, November 12, 2026. These are qualitative reports, n
 ## Study handling
 Record deployment commit/time when publishing new changes; disclose post-freeze changes with v1.1 observations. Language filtering remains a proposed refinement, not a deployed retrieval change.
 
+
+## Follow-up: discovery navigation and result browsing
+- Search placement correction: the first implementation appeared only during onboarding. Move the visible field to Discover's persistent Add & rate a title row so returning users see it too; retain the simple onboarding button to avoid duplicate fields.
+- Mode clarity: show both definitions together directly beneath the mode controls. For You combines ratings across titles; Based On uses one chosen title.
+- Existing continuation: Find more recommendations already reveals another 30 buffered results or fetches more provider candidates when available. It is not numbered pagination; a long initial batch can still feel like endless scrolling.
+- Participant requested full title tags as well as shared tags and quicker category access. Open: clarify genre versus media type; consider compact pagination and separate descriptive tags from match explanations.

@@ -1305,3 +1305,10 @@ body { background:var(--background); }
 .favorite-search-field input, .favorite-search-field select { min-height:48px; padding:10px 12px; border:1px solid #aebdb5; border-radius:8px; background:white; color:#203d38; font:inherit; }
 .onboarding .favorite-search .add-media-button { margin:0; min-height:48px; width:auto; }
 @media(max-width:600px) { .favorite-search-query { flex-basis:100%; } .onboarding .favorite-search .add-media-button { width:100%; } }
+.discover-actions .favorite-search { flex:1; min-width:0; }
+.app-shell .discover-actions { align-items:flex-end; }
+.discover-actions .favorite-search .add-media-button { min-height:48px; }
+.discover-actions > .preferences-button { margin-bottom:2px; }
+.discovery-mode-guide { margin:12px 0; padding:12px 16px; border-radius:10px; background:#f4f1e8; }
+.discovery-mode-guide p { margin:4px 0; font-size:14px; line-height:1.5; }
+@media(max-width:600px) { .discover-actions .favorite-search .add-media-button { width:100%; } }

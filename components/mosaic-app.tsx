@@ -653,7 +653,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
 
             </section>
           )}
-        {view==='discover'&&<div className="discover-actions"><AddMedia items={catalog} adult={adultSection} onCheckMature={checkMatureCollection} onAdd={addItem} label="Add & rate a title"/><button className="preferences-button" aria-label="Open taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button></div>}
+        {view==='discover'&&<div className="discover-actions"><AddMedia inlineSearch items={catalog} adult={adultSection} onCheckMature={checkMatureCollection} onAdd={addItem} label="Add & rate a title"/><button className="preferences-button" aria-label="Open taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button></div>}
         <details className="content-settings" open><summary>Content preferences {adultSection ? '· 18+' : '· General'}</summary><div
           className="content-section"
           role="group"
@@ -918,7 +918,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                   }}
                 >
                   <SelectTrigger
-                    aria-label="Recommendation category"
+                    aria-label="Recommendation media type"
                     className="category-select"
                   >
                     <SelectValue />
@@ -933,6 +933,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 </Select>
               </div>
 
+              <div className="discovery-mode-guide"><p><strong>For You:</strong> combines your ratings across titles to find matches for your overall taste.</p><p><strong>Based On:</strong> finds similar stories using one title you choose.</p></div>
               <TabsContent value="for-you">
                 <div className="context">
                   <p className="eyebrow">PICKED FROM YOUR FAVORITES</p>
