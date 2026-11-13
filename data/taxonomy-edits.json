@@ -1196,7 +1196,7 @@
       ]
     },
     "war": {
-      "kind": "genre",
+      "kind": "theme",
       "description": "Armed conflict and its effects on people, communities or societies are central to the work.",
       "label": "war",
       "classes": [
