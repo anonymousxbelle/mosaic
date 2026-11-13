@@ -1545,3 +1545,22 @@ body { background:var(--background); }
   outline: 2px solid #245f50;
   outline-offset: 2px;
 }
+
+/* Align the 18+ toggle with the Settings button */
+@media (min-width: 701px) {
+  .app-shell .discover-actions {
+    position: relative;
+  }
+
+  .app-shell .discover-actions .inline-search-notice {
+    min-height: 42px;
+    padding-right: 190px;
+  }
+
+  .app-shell .discover-actions .inline-search-notice .collection-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+  }
+}
