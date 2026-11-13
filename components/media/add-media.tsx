@@ -38,12 +38,14 @@ export function AddMedia({
   favorite = false,
   label,
   onAdd,
+  onCheckMature,
 }: {
   items: Media[];
   adult?: boolean;
   favorite?: boolean;
   label?: string;
   onAdd: (item: CatalogMedia, rating?: number) => void;
+  onCheckMature?: () => void;
 }) {
   const [rating,setRating]=useState<number | null>(null);
   const [highlight,setHighlight]=useState(0);
@@ -214,6 +216,12 @@ export function AddMedia({
                   ? 'Choose one of the suggestions to continue.'
                   : 'Selected catalog record. Ready to verify.')}
         </p>
+        {!adult && !loading && !error && !selection && !queryError(query) && !matches.length && (
+          <div className="form-message">
+            <p>Can’t find your title? It may be in the 18+ collection, where titles with mature content ratings appear.</p>
+            {onCheckMature && <button type="button" className="demo-button" onClick={onCheckMature}>Check the 18+ collection</button>}
+          </div>
+        )}
         {selection && (
           <div className="selected-media">
             <div className="selected-label">
@@ -295,4 +303,3 @@ export function AddMedia({
     </Dialog>
   );
 }
-

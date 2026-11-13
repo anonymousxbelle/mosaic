@@ -383,6 +383,16 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     }
     return () => lifecycle.abort();
   }, []);
+  function checkMatureCollection() {
+    discoveryRequest.current?.abort();
+    setDiscovering(false);
+    setCandidates([]);
+    setDiscoveryNotice('');
+    setDiscoveryFailure(false);
+    setPartialDiscovery(false);
+    setNotice('');
+    setAdultSection(true);
+  }
   async function findConnections(more=false) {
     if(discovering)return;
     if(more && hasBufferedResults){
@@ -634,16 +644,16 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 </li>
               </ol>
               <AddMedia
-                key={'favorite-' + adultSection}
+                
                 favorite
                 items={catalog}
-                adult={adultSection}
+                adult={adultSection} onCheckMature={checkMatureCollection}
                 onAdd={addFavorite}
               />
 
             </section>
           )}
-        {view==='discover'&&<div className="discover-actions"><AddMedia items={catalog} adult={adultSection} onAdd={addItem} label="Add & rate a title"/><button className="preferences-button" aria-label="Open taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button></div>}
+        {view==='discover'&&<div className="discover-actions"><AddMedia items={catalog} adult={adultSection} onCheckMature={checkMatureCollection} onAdd={addItem} label="Add & rate a title"/><button className="preferences-button" aria-label="Open taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button></div>}
         <details className="content-settings" open><summary>Content preferences {adultSection ? '· 18+' : '· General'}</summary><div
           className="content-section"
           role="group"
@@ -700,9 +710,9 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               library and ratings are saved in this browser.
             </p>
             <AddMedia
-              key={String(adultSection)}
+              
               items={catalog}
-              adult={adultSection}
+              adult={adultSection} onCheckMature={checkMatureCollection}
               onAdd={addItem}
             />
             <div className="shelf-tabs" role="group" aria-label="Library shelf">
@@ -1367,4 +1377,5 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     </div>
   );
 }
+
 
