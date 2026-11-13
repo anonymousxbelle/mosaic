@@ -64,7 +64,7 @@ export function AddMedia({
   const verification = useRef<AbortController | null>(null);
   const lastSearch = useRef(0);
   useEffect(() => {
-    if (!open) {
+    if (!open && !inlineSearch) {
       generation.current++;
       verification.current?.abort();
       setVerifying(false);
@@ -104,7 +104,7 @@ export function AddMedia({
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query, type, open, retry, selection, adult]);
+  }, [query, type, open, retry, selection, adult, inlineSearch]);
   function reset() {
     setRating(null);
     generation.current++;
@@ -158,9 +158,13 @@ export function AddMedia({
     >
       {inlineSearch ? <form className="favorite-search" onSubmit={(event) => {
         event.preventDefault();
-        reset();
-        setOpen(true);
+        if (queryError(query)) setOpen(true);
+        else setRetry(n=>n+1);
       }}>
+        <div className="inline-search-notice">
+          <p>{adult ? 'Searching the 18+ collection.' : 'Main hides titles with known mature ratings. Missing ratings do not guarantee child-safe content.'}</p>
+          {!adult && onCheckMature && <button type="button" className="demo-button" onClick={onCheckMature}>Check the 18+ collection</button>}
+        </div>
         <label className="favorite-search-field">Media type
           <select value={type} onChange={event=>{reset();setType(event.target.value as Category);}}>
             {discoveryCategories.map(category=><option key={category} value={category}>{category}</option>)}
@@ -170,6 +174,11 @@ export function AddMedia({
           <input type="search" value={query} placeholder="Search for a book, movie or TV show…" onChange={event=>{reset();setQuery(event.target.value);}} />
         </label>
         <button type="submit" className="add-media-button"><Plus size={17}/>{label || 'Add a favorite'}</button>
+        {!open && query.trim() && <div className="inline-search-results">
+          <p role="status">{loading ? 'Searching '+providerFor(type)+'…' : error || queryError(query) || (matches.length ? 'Choose a title to rate it or save it for later.' : 'No matching titles found. Try another spelling or check the other collection.')}</p>
+          {error && <button type="button" className="demo-button" onClick={()=>setRetry(n=>n+1)}>Retry search</button>}
+          {!loading && !error && matches.length>0 && <div className="catalog-options">{matches.map(item=><button type="button" key={item.id} onClick={()=>{setSelection(item);setQuery(item.title);setRating(null);setLoading(false);generation.current++;setOpen(true);}}><strong>{item.artworkUrl && <img src={item.artworkUrl} alt="" loading="lazy" className="inline-search-cover"/>}{item.title}</strong><span>{item.type}{item.year?' · '+item.year:''}{item.creator?' · '+item.creator:''}</span><small>{item.provider}</small></button>)}</div>}
+        </div>}
       </form> : <DialogTrigger className="add-media-button">
         <Plus size={17} />
         {label || (favorite ? 'Add a favorite' : 'Add media')}
@@ -186,6 +195,7 @@ export function AddMedia({
           matches rank first; available rating counts break ties. We check the
           record again before adding it.
         </DialogDescription>
+        {(!inlineSearch || !selection) && <>
         <label className="field-label" id="media-type-label">
           Media type
         </label>
@@ -238,6 +248,7 @@ export function AddMedia({
                   ? 'Choose one of the suggestions to continue.'
                   : 'Selected catalog record. Ready to verify.')}
         </p>
+        </>}
         {selection && (
           <div className="selected-media">
             <div className="selected-label">

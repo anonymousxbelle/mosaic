@@ -24,3 +24,11 @@ Record deployment commit/time when publishing new changes; disclose post-freeze 
 - Mode clarity: show both definitions together directly beneath the mode controls. For You combines ratings across titles; Based On uses one chosen title.
 - Existing continuation: Find more recommendations already reveals another 30 buffered results or fetches more provider candidates when available. It is not numbered pagination; a long initial batch can still feel like endless scrolling.
 - Participant requested full title tags as well as shared tags and quicker category access. Open: clarify genre versus media type; consider compact pagination and separate descriptive tags from match explanations.
+
+## November 13: inline search and pagination
+- Discover search now fetches options while typing. Selecting a result opens its rating/save dialog. Enter requests suggestions without picking a title.
+- Main/18+ notice and mature-collection switch are above the search field.
+- Recommendations are displayed 12 per page. Previous/Next browse the current ordered result set without additional API/AI calls. The final page offers Find more recommendations when more candidates are available.
+- New searches/filter changes reset to page one; saved-result preservation retains the page. Dismissal clamps a page to the remaining page count.
+- Validation: typecheck, Pages build and all 157 automated tests passed. These existing tests do not substitute for browser interaction checks.
+- Post-freeze UI update: disclose with v1.1 observations; ranking algorithm unchanged.

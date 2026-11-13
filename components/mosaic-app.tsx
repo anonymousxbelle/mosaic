@@ -123,6 +123,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const [moreNotice,setMoreNotice]=useState('');
   const [morePrefix,setMorePrefix]=useState<{key:string;items:any[]}|null>(null);
   const [resultLimit,setResultLimit]=useState(30);
+  const [resultPage,setResultPage]=useState(1);
   const [discoveryNotice, setDiscoveryNotice] = useState('');
   const [discoveryFailure, setDiscoveryFailure] = useState(false);
   const [partialDiscovery, setPartialDiscovery] = useState(false);
@@ -190,7 +191,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     setDiscoveryFailure(false);
     setPartialDiscovery(false);
     setCompletedDiscoveryKey('');
-    setMorePrefix(null);setContinuation({});setHasMore(false);setResultLimit(30);setMoreNotice('');
+    setMorePrefix(null);setContinuation({});setHasMore(false);setResultLimit(30);setResultPage(1);setMoreNotice('');
   },[discoveryKey,rankingMode,controlsKey]);
   useEffect(() => {
     try {
@@ -401,7 +402,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     }
     setMoreNotice('');
     if(more){setMorePrefix({key:controlsKey,items:filteredResults});setResultLimit(n=>n+30);}
-    else {setMorePrefix(null);setContinuation({});setHasMore(false);setResultLimit(30);}
+    else {setMorePrefix(null);setContinuation({});setHasMore(false);setResultLimit(30);setResultPage(1);}
     setPreservedResults(null);
     discoveryRequest.current?.abort();
     const controller = new AbortController();
@@ -546,6 +547,10 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const hasBufferedResults=rankingMode!=='cosine' && legacyResults.length>resultLimit;
   const batchResults=rankingMode==='cosine'&&!discovering?calculatedResults:morePrefix?.key===controlsKey?[...morePrefix.items,...calculatedResults.filter(item=>!findDuplicate(morePrefix.items,item))]:calculatedResults;
   const filteredResults=(preservedResults?.key===controlsKey?preservedResults.items:batchResults).filter(item=>notDismissed(item,catalog));
+  const pageCount=Math.max(1,Math.ceil(filteredResults.length/12));
+  const currentPage=Math.min(resultPage,pageCount);
+  const pageResults=filteredResults.slice((currentPage-1)*12,currentPage*12);
+  function changeResultPage(page:number) { setResultPage(page); requestAnimationFrame(()=>document.getElementById("recommendation-pages")?.scrollIntoView({block:"start"})); }
   const visible = libraryOrder(sectionCatalog,ratings)
     .filter(i=>matchesShelf(i,ratings,shelf))
     .filter((i) =>
@@ -1066,6 +1071,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 {filteredResults.length} connections
               </span>
             </div>
+            {filteredResults.length>0 && <nav id="recommendation-pages" className="result-pagination" aria-label="Recommendation pages"><button type="button" className="demo-button" disabled={currentPage===1} onClick={()=>changeResultPage(currentPage-1)}>Previous</button><span role="status">Page {currentPage} of {pageCount} · {filteredResults.length} retrieved matches</span><button type="button" className="demo-button" disabled={currentPage===pageCount} onClick={()=>changeResultPage(currentPage+1)}>Next</button></nav>}
             {!filteredResults.length ? (
               <div className={"empty-state"+(discovering?" is-discovering":"")}>
                 <Sparkles className="connection-spark" size={32} />
@@ -1090,11 +1096,11 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               </div>
             ) : (
               <div className="results">
-                {filteredResults.map((item, index) => (
+                {pageResults.map((item, index) => (
                   <article className="result-card" data-media-type={item.type} key={item.id}>
                     <div className="card-top">
                       <span className="rank">
-                        {String(index + 1).padStart(2, '0')}
+                        {String((currentPage-1)*12 + index + 1).padStart(2, '0')}
                       </span>
                       <span
                         className={'category-badge ' + item.type.toLowerCase()}
@@ -1239,7 +1245,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 ))}
               </div>
             )}
-            <div className="more-discoveries" aria-live="polite">{moreNotice && <p>{moreNotice}</p>}{(completedDiscoveryKey===discoveryKey || preservedResults?.key===controlsKey) && (hasMore || hasBufferedResults ? <button type="button" className="add-media-button" disabled={discovering} onClick={()=>findConnections(true)}>{discovering ? 'Finding more…' : 'Find more recommendations'}</button> : !discovering && <p>You have reached the end of this search batch. Try different filters or a starting title to explore more. This is not the entire catalog.</p>)}</div>
+            <div className="more-discoveries" aria-live="polite">{currentPage<pageCount && <button type="button" className="demo-button" onClick={()=>changeResultPage(currentPage+1)}>Next page</button>}{moreNotice && <p>{moreNotice}</p>}{currentPage===pageCount && (completedDiscoveryKey===discoveryKey || preservedResults?.key===controlsKey) && (hasMore || hasBufferedResults ? <button type="button" className="add-media-button" disabled={discovering} onClick={()=>findConnections(true)}>{discovering ? 'Finding more…' : 'Find more recommendations'}</button> : !discovering && <p>You have reached the end of this search batch. Try different filters or a starting title to explore more. This is not the entire catalog.</p>)}</div>
             <details className="advanced-panel"><summary>About your recommendations</summary><p className="data-note">
               You have {sectionCatalog.length} titles in this content section{added.length!==sectionCatalog.length ? ` (${added.length} stored in total, including other content sections or unsupported media)` : ''}. Mosaic searches live catalogs for candidates and compares their story details with your favorites. It does not compare every title in every catalog. Match explanations describe similarities—not a guarantee that you will enjoy a title. You can correct tags from My Library.
             </p></details>
