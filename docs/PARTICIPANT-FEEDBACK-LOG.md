@@ -53,3 +53,9 @@ Record deployment commit/time when publishing new changes; disclose post-freeze 
 - Metadata review: TV creator uses TMDB created_by; movies use Director credits. Empty fields yield Creator unavailable. Hardcover author data comes from search author_names; verification queries contributions but the rich-search branch currently retains the search creator. Open Library record normalization expects author_name. These explain missing fields; do not invent credits.
 - Book provider assessment: Hardcover is primary title search; Open Library handles discovery/subject retrieval with Hardcover enrichment. Missing descriptions are not evidence that one whole catalog is worse. Open: compare matched work/edition completeness and bidirectional enrichment before changing provider preference.
 - Follow-up wording: replace collection metaphor with Include 18+ titles / Hide 18+ titles, using a green switch button aligned at the description row's right edge. This changes search/discovery scope, not saved-library visibility.
+
+## November 13: README review and revised batch/default behavior
+- Owner requested mature titles included by default; changed initial content scope to inclusive. Hide 18+ titles remains available and library visibility is unchanged.
+- Supersedes the earlier global reranking decision: Find more now preserves earlier batches and appends only newly ranked results. A higher-scoring new title can follow a lower-scoring title in an earlier batch by design. Repeat-search replacement remains separate.
+- README preserves owner edits, links a current implementation plan and questionnaire outline, explains scope reduction and distinguishes the archived study version from later participant experiences.
+- Typecheck and 160 automated tests passed, including stable batch append/deduplication regression. Build verification recorded separately during publication.

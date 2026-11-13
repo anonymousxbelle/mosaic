@@ -1,5 +1,5 @@
 'use client';
-import {rankForPages} from '@/lib/result-order';
+import {rankForPages,appendRankedBatch} from '@/lib/result-order';
 import {discoveryStatus} from '@/lib/discovery-status';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -458,7 +458,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       setCandidates(previous=>more?[...previous,...found.items.filter(i=>!findDuplicate(previous,i)&&!findDuplicate(catalog,i))]:found.items.filter(i=>!findDuplicate(catalog,i)));
       setContinuation(found.cursor);setHasMore(found.hasMore);
       if(repeat)setMoreNotice(found.items.length ? 'Explored further catalog candidates; earlier result batches are omitted from this search.' : 'No fresh candidates found within this search budget. Change your filters or starting title to explore further.');
-      if(more)setMoreNotice(found.items.length ? 'Additional candidates checked; all retrieved matches are ranked together, so page positions may change.' : found.hasMore ? 'No new matches on those pages. You can try the next pages without changing your filters.' : 'No new matches found within this search budget. Try different filters to explore further.');
+      if(more)setMoreNotice(found.items.length ? 'New matches are ranked within this batch and added after your earlier results. Earlier results stay in place.' : found.hasMore ? 'No new matches on those pages. You can try the next pages without changing your filters.' : 'No new matches found within this search budget. Try different filters to explore further.');
       setRankingEvidence(previous=>({key:discoveryKey,provider:more?{...previous.provider,...found.evidence}:found.evidence,semantic:more?previous.semantic:{}}));
       let aiNotice='';
       if(['recommended','semantic'].includes(rankingMode) && mode==='based-on' && selected){
@@ -554,9 +554,9 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       .filter(i=>mode!=='based-on'||mustTags.every(t=>i.tags.includes(t)))
       .filter(i=>earlierMatches.key!==discoveryKey || !findDuplicate(earlierMatches.items,i))
       .map(i=>({...i,storyReasons:[] as string[],seriesEntries:[i]})):[]
-    :legacyResults.slice(0,resultLimit);
+    :morePrefix?.key===controlsKey?legacyResults:legacyResults.slice(0,resultLimit);
   const hasBufferedResults=rankingMode!=='cosine' && legacyResults.length>resultLimit;
-  const batchResults=calculatedResults;
+  const batchResults=morePrefix?.key===controlsKey ? appendRankedBatch(morePrefix.items,calculatedResults,resultLimit) : calculatedResults;
   const filteredResults=(preservedResults?.key===controlsKey?preservedResults.items:batchResults).filter(item=>notDismissed(item,catalog));
   const pageCount=Math.max(1,Math.ceil(filteredResults.length/12));
   const currentPage=Math.min(resultPage,pageCount);

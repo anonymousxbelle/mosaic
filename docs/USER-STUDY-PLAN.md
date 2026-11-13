@@ -13,7 +13,7 @@ Build a unified profile from preferences across media and generate cross-media r
 5. Actual enjoyment is recorded only after actual consumption; not tried is not a zero enjoyment rating. Follow up separately with participants who agreed. Record title, date, tried yes/no and enjoyment 1–5. Do not mix a follow-up into the count of new participants.
 
 Editor: https://docs.google.com/forms/d/1OpdAc-28Jzrhg_WEau10KmTUZekG9Z9GQ-C5WvgflR4/edit
-The form is updated but unpublished. No participant invitations sent. Automatic verified-email collection and the one-response sign-in requirement are off; explicit name/email questions are present. Public response summary is off. Names/emails are not anonymous codes.
+November 13 update: the owner has reported participant use and subsequent edits to the form. The earlier unpublished status is historical. See the [questionnaire overview](PARTICIPANT-QUESTIONNAIRE.md); its outline is not a fresh export of the owner-edited form. Names/emails are not anonymous codes.
 
 ## Evidence this design can support
 Descriptive relevance, intention, novelty, usability and self-reported interest in less-usual media. It evaluates the combined profile experience. It does NOT establish that mixed-media inputs outperform single-medium inputs. Same-medium versus cross-media OUTPUT alone also does not isolate the benefit of combining INPUT preferences.
@@ -32,4 +32,3 @@ Separate tagging evaluation: independently review a varied set of source descrip
 
 ## Before distribution
 Preview form on desktop/mobile, run one clearly labeled test response, verify response storage, remove/exclude that test from analysis, then freeze the deployed commit, taxonomy, ranking mode and study instructions. The reviewer-key inbox flow, controlled outage recovery and full continuation browser test remain outstanding; see FINAL-USER-WALKTHROUGH.md.
-
