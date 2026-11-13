@@ -1327,3 +1327,9 @@ body { background:var(--background); }
 .library-item .synopsis { margin:10px 0; }
 .result-pagination button[aria-current='page'] { background:#235f50; color:white; border-color:#235f50; font-weight:700; }
 .result-pagination button { min-width:40px; min-height:40px; }
+/* Collection scope stays prominent; the switch anchors the right edge. */
+.inline-search-notice { width:100%; justify-content:space-between; align-items:center; }
+.inline-search-notice p { flex:1; min-width:0; font-size:15px; font-weight:700; line-height:1.5; color:#203d38; }
+.inline-search-notice > button { flex-shrink:0; margin-left:auto; font-weight:700; }
+@media(min-width:701px) { .discover-actions { position:relative; } .discover-actions .favorite-search .inline-search-notice { padding-right:0; } .discover-actions > .preferences-button { align-self:flex-end; } }
+@media(max-width:600px) { .inline-search-notice p { flex-basis:100%; } }

@@ -161,7 +161,7 @@ export function AddMedia({
         setOpen(true);
       }}>
         <div className="inline-search-notice">
-          <p>{adult ? 'Searching all titles, including 18+ content.' : 'Main hides titles with known mature ratings. Missing ratings do not guarantee child-safe content.'}</p>
+          <p>{adult ? '18+ collection: search all titles, including general and mature content.' : 'Main collection: titles marked as mature are hidden. Titles without a rating may still contain mature content.'}</p>
           {onCheckMature && <button type="button" className="demo-button" onClick={onCheckMature}>{adult ? 'Go back to Main collection' : 'Check the 18+ collection'}</button>}
         </div>
         <label className="favorite-search-field">Media type
