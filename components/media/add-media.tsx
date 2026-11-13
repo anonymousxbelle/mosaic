@@ -154,10 +154,24 @@ export function AddMedia({
         if (!value) reset();
       }}
     >
-      <DialogTrigger className="add-media-button">
+      {favorite ? <form className="favorite-search" onSubmit={(event) => {
+        event.preventDefault();
+        reset();
+        setOpen(true);
+      }}>
+        <label className="favorite-search-field">Media type
+          <select value={type} onChange={event=>{reset();setType(event.target.value as Category);}}>
+            {discoveryCategories.map(category=><option key={category} value={category}>{category}</option>)}
+          </select>
+        </label>
+        <label className="favorite-search-field favorite-search-query">Find a title
+          <input type="search" value={query} placeholder="Search for a favorite…" onChange={event=>{reset();setQuery(event.target.value);}} />
+        </label>
+        <button type="submit" className="add-media-button"><Plus size={17}/>{label || 'Add a favorite'}</button>
+      </form> : <DialogTrigger className="add-media-button">
         <Plus size={17} />
         {label || (favorite ? 'Add a favorite' : 'Add media')}
-      </DialogTrigger>
+      </DialogTrigger>}
       <DialogContent className="add-media-dialog">
         <DialogTitle className="add-title">Add something you love</DialogTitle>
         <p>
