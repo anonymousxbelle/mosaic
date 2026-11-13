@@ -8,6 +8,10 @@ test('explicit books are separated; romance and unknown ratings are not guessed'
  const books=normalizeResults('Book',{results:[{kind:'ebook',trackId:1,trackName:'One',trackExplicitness:'explicit'},{kind:'ebook',trackId:2,trackName:'Two',genres:['Romance']},{kind:'ebook',trackId:3,trackName:'Three',genres:['Erotica']}]});
  assert.deepEqual(books.map(isAdult),[true,false,true]);
  assert.equal(inContentSection(books[0],false),false);
+ assert.equal(inContentSection(books[1],false),true);
+ assert.equal(inContentSection(books[0],true),true);
+ assert.equal(inContentSection(books[1],true),true);
+ assert.equal(inContentSection(books[2],true),true);
  assert.equal(contentLabel(books[1]),'Content rating unknown');
  const marked={...books[1],adultMarked:true};
  const restored=restoreLibrary(JSON.stringify({version:1,added:[marked]}),[]);

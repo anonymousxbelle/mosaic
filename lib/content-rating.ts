@@ -3,7 +3,7 @@ export function isAdult(item: Media): boolean {
   return ['Book', 'Movie', 'TV'].includes(item.type) && (item.adult === true || item.adultMarked === true);
 }
 export function inContentSection(item: Media, adult: boolean): boolean {
-  return isAdult(item) === adult;
+  return adult || !isAdult(item);
 }
 export function contentLabel(item: Media): string {
   if (!['Book', 'Movie', 'TV'].includes(item.type)) return '';

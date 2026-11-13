@@ -1,4 +1,5 @@
 'use client';
+import {rankForPages} from '@/lib/result-order';
 import {discoveryStatus} from '@/lib/discovery-status';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -394,7 +395,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     setDiscoveryFailure(false);
     setPartialDiscovery(false);
     setNotice('');
-    setAdultSection(true);
+    setAdultSection(current=>!current);
   }
   async function findConnections(more=false) {
     if(discovering)return;
@@ -456,7 +457,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       setCandidates(previous=>more?[...previous,...found.items.filter(i=>!findDuplicate(previous,i)&&!findDuplicate(catalog,i))]:found.items.filter(i=>!findDuplicate(catalog,i)));
       setContinuation(found.cursor);setHasMore(found.hasMore);
       if(repeat)setMoreNotice(found.items.length ? 'Explored further catalog candidates; earlier result batches are omitted from this search.' : 'No fresh candidates found within this search budget. Change your filters or starting title to explore further.');
-      if(more)setMoreNotice(found.items.length ? 'Additional candidates checked; new eligible matches appear after your previous results.' : found.hasMore ? 'No new matches on those pages. You can try the next pages without changing your filters.' : 'No new matches found within this search budget. Try different filters to explore further.');
+      if(more)setMoreNotice(found.items.length ? 'Additional candidates checked; all retrieved matches are ranked together, so page positions may change.' : found.hasMore ? 'No new matches on those pages. You can try the next pages without changing your filters.' : 'No new matches found within this search budget. Try different filters to explore further.');
       setRankingEvidence(previous=>({key:discoveryKey,provider:more?{...previous.provider,...found.evidence}:found.evidence,semantic:more?previous.semantic:{}}));
       let aiNotice='';
       if(['recommended','semantic'].includes(rankingMode) && mode==='based-on' && selected){
@@ -521,8 +522,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     ?unifiedRank(results,selected,rankingEvidence.key===discoveryKey?rankingEvidence.provider:{},rankingEvidence.key===discoveryKey?rankingEvidence.semantic:{})
     :['provider','semantic'].includes(rankingMode) && mode==='based-on' && rankingEvidence.key===discoveryKey
     ?hybridRank(results,rankingEvidence.provider,rankingMode==='semantic'?rankingEvidence.semantic:{}) : results;
-  const legacyResults = completedDiscoveryKey===discoveryKey && !discovering ? diversify(
-    groupSeries(preferMatches(rankedResults, mode==='based-on' ? focusTags : [])
+  const legacyResults = completedDiscoveryKey===discoveryKey && !discovering ? (
+    rankForPages(groupSeries(preferMatches(rankedResults, mode==='based-on' ? focusTags : [])
       .filter((i) => i.type !== 'Music' && i.type !== 'Game')
       .filter((i) => earlierMatches.key!==discoveryKey || !findDuplicate(earlierMatches.items,i))
       .filter((i) =>
@@ -542,8 +543,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               ),
             )),
       }))
-      .sort((a, b) => b.score - a.score)),
-    resultLimit+1,
+      .sort((a, b) => (a.priority || 0)-(b.priority || 0) || b.score - a.score)))
+
   ) : [];
   const cosineRun=cosineDiscovery([...catalog,...candidates],{mode:mode==='based-on'?'based-on':'for-you',ratings,library:catalog,seed:mode==='based-on'?selected:undefined,category});
   const calculatedResults=rankingMode==='cosine'
@@ -554,12 +555,12 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       .map(i=>({...i,storyReasons:[] as string[],seriesEntries:[i]})):[]
     :legacyResults.slice(0,resultLimit);
   const hasBufferedResults=rankingMode!=='cosine' && legacyResults.length>resultLimit;
-  const batchResults=rankingMode==='cosine'&&!discovering?calculatedResults:morePrefix?.key===controlsKey?[...morePrefix.items,...calculatedResults.filter(item=>!findDuplicate(morePrefix.items,item))]:calculatedResults;
+  const batchResults=calculatedResults;
   const filteredResults=(preservedResults?.key===controlsKey?preservedResults.items:batchResults).filter(item=>notDismissed(item,catalog));
   const pageCount=Math.max(1,Math.ceil(filteredResults.length/12));
   const currentPage=Math.min(resultPage,pageCount);
   const pageResults=filteredResults.slice((currentPage-1)*12,currentPage*12);
-  function changeResultPage(page:number) { setResultPage(page); requestAnimationFrame(()=>document.getElementById("recommendation-pages")?.scrollIntoView({block:"start"})); }
+  function changeResultPage(page:number) { setResultPage(page); requestAnimationFrame(()=>document.getElementById("recommendation-results")?.scrollIntoView({block:"start"})); }
   const visible = libraryOrder(sectionCatalog,ratings)
     .filter(i=>matchesShelf(i,ratings,shelf))
     .filter((i) =>
@@ -668,51 +669,6 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             </section>
           )}
         {view==='discover'&&<div className="discover-actions"><AddMedia inlineSearch items={catalog} adult={adultSection} onCheckMature={checkMatureCollection} onAdd={addItem} label="Add & rate a title"/><button className="preferences-button" aria-label="Open taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button></div>}
-        <details className="content-settings" open><summary>Content preferences {adultSection ? '· 18+' : '· General'}</summary><div
-          className="content-section"
-          role="group"
-          aria-label="Content section"
-        >
-          <button
-            className="demo-button"
-            aria-pressed={!adultSection}
-            disabled={actionBusy}
-            onClick={() => {
-              discoveryRequest.current?.abort();
-              setDiscovering(false);
-              setCandidates([]);
-              setDiscoveryNotice('');
-    setDiscoveryFailure(false);
-    setPartialDiscovery(false);
-              setNotice('');
-              setAdultSection(false);
-            }}
-          >
-            Main collection
-          </button>
-          <button
-            className="demo-button"
-            aria-pressed={adultSection}
-            disabled={actionBusy}
-            onClick={() => {
-              discoveryRequest.current?.abort();
-              setDiscovering(false);
-              setCandidates([]);
-              setDiscoveryNotice('');
-    setDiscoveryFailure(false);
-    setPartialDiscovery(false);
-              setNotice('');
-              setAdultSection(true);
-            }}
-          >
-            18+ · Enter mature collection
-          </button>
-          <p className="muted">
-            {adultSection
-              ? '18+ movies, TV and books. Includes explicit flags and mature ratings such as R, NC-17 and TV-MA. This is a browsing preference, not age verification.'
-              : 'Main hides titles the catalog identifies as mature. Missing or incorrect ratings can let mature content through. Search in 18+ for known mature titles; Main is not a guaranteed child-safe filter.'}
-          </p>
-        </div></details>
         <div className="workspace focused-workspace">
           <aside className="library" hidden={view !== 'library'}>
             <div className="section-heading">
@@ -1079,7 +1035,6 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 {filteredResults.length} connections
               </span>
             </div>
-            {filteredResults.length>0 && <nav id="recommendation-pages" className="result-pagination" aria-label="Recommendation pages"><button type="button" className="demo-button" disabled={currentPage===1} onClick={()=>changeResultPage(currentPage-1)}>Previous</button><span role="status">Page {currentPage} of {pageCount} · {filteredResults.length} retrieved matches</span><button type="button" className="demo-button" disabled={currentPage===pageCount} onClick={()=>changeResultPage(currentPage+1)}>Next</button></nav>}
             {!filteredResults.length ? (
               <div className={"empty-state"+(discovering?" is-discovering":"")}>
                 <Sparkles className="connection-spark" size={32} />
@@ -1103,7 +1058,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 </button>
               </div>
             ) : (
-              <div className="results">
+              <div className="results" id="recommendation-results">
                 {pageResults.map((item, index) => (
                   <article className="result-card" data-media-type={item.type} key={item.id}>
                     <div className="card-top">
@@ -1253,7 +1208,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 ))}
               </div>
             )}
-            <div className="more-discoveries" aria-live="polite">{currentPage<pageCount && <button type="button" className="demo-button" onClick={()=>changeResultPage(currentPage+1)}>Next page</button>}{moreNotice && <p>{moreNotice}</p>}{currentPage===pageCount && (completedDiscoveryKey===discoveryKey || preservedResults?.key===controlsKey) && (hasMore || hasBufferedResults ? <button type="button" className="add-media-button" disabled={discovering} onClick={()=>findConnections(true)}>{discovering ? 'Finding more…' : 'Find more recommendations'}</button> : !discovering && <p>You have reached the end of this search batch. Try different filters or a starting title to explore more. This is not the entire catalog.</p>)}</div>
+            {filteredResults.length>0 && <nav className="result-pagination" aria-label="Recommendation pages"><button type="button" className="demo-button" aria-label="Previous page" disabled={currentPage===1} onClick={()=>changeResultPage(currentPage-1)}>‹</button>{Array.from({length:pageCount},(_,i)=>i+1).map(page=><button type="button" className="demo-button" key={page} aria-label={`Page ${page}`} aria-current={page===currentPage?"page":undefined} onClick={()=>changeResultPage(page)}>{page}</button>)}<button type="button" className="demo-button" aria-label="Next page" disabled={currentPage===pageCount} onClick={()=>changeResultPage(currentPage+1)}>›</button></nav>}
+            <div className="more-discoveries" aria-live="polite">{moreNotice && <p>{moreNotice}</p>}{currentPage===pageCount && (completedDiscoveryKey===discoveryKey || preservedResults?.key===controlsKey) && (hasMore || hasBufferedResults ? <button type="button" className="add-media-button" disabled={discovering} onClick={()=>findConnections(true)}>{discovering ? 'Finding more…' : 'Find more recommendations'}</button> : !discovering && <p>You have reached the end of this search batch. Try different filters or a starting title to explore more. This is not the entire catalog.</p>)}</div>
             <details className="advanced-panel"><summary>About your recommendations</summary><p className="data-note">
               You have {sectionCatalog.length} titles in this content section{added.length!==sectionCatalog.length ? ` (${added.length} stored in total, including other content sections or unsupported media)` : ''}. Mosaic searches live catalogs for candidates and compares their story details with your favorites. It does not compare every title in every catalog. Match explanations describe similarities—not a guarantee that you will enjoy a title. You can correct tags from My Library.
             </p></details>

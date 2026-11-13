@@ -1325,3 +1325,5 @@ body { background:var(--background); }
 .title-tags summary { cursor:pointer; font-weight:600; }
 .title-tags details p { margin:8px 0; }
 .library-item .synopsis { margin:10px 0; }
+.result-pagination button[aria-current='page'] { background:#235f50; color:white; border-color:#235f50; font-weight:700; }
+.result-pagination button { min-width:40px; min-height:40px; }

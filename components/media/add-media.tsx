@@ -161,8 +161,8 @@ export function AddMedia({
         setOpen(true);
       }}>
         <div className="inline-search-notice">
-          <p>{adult ? 'Searching the 18+ collection.' : 'Main hides titles with known mature ratings. Missing ratings do not guarantee child-safe content.'}</p>
-          {!adult && onCheckMature && <button type="button" className="demo-button" onClick={onCheckMature}>Check the 18+ collection</button>}
+          <p>{adult ? 'Searching all titles, including 18+ content.' : 'Main hides titles with known mature ratings. Missing ratings do not guarantee child-safe content.'}</p>
+          {onCheckMature && <button type="button" className="demo-button" onClick={onCheckMature}>{adult ? 'Go back to Main collection' : 'Check the 18+ collection'}</button>}
         </div>
         <label className="favorite-search-field">Media type
           <select value={type} onChange={event=>{reset();setType(event.target.value as Category);}}>
@@ -186,9 +186,10 @@ export function AddMedia({
         <DialogTitle className="add-title">Add something you love</DialogTitle>
         <p>
           {adult
-            ? '18+ catalog matches only.'
+            ? 'All catalog matches, including 18+ content.'
             : 'Flagged 18+ titles are hidden. Unrated titles may still contain mature content.'}
         </p>
+        {adult && onCheckMature && <button type="button" className="demo-button" onClick={()=>{reset();onCheckMature();}}>Go back to Main collection</button>}
         <DialogDescription>
           Search a live catalog and select the correct title. Exact title
           matches rank first; available rating counts break ties. We check the

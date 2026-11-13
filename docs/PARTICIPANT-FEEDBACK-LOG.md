@@ -39,3 +39,10 @@ Record deployment commit/time when publishing new changes; disclose post-freeze 
 - Library synopses preview 180 characters and expand inline. Library, recommendation and collection cards show three descriptive tags (genres, then subgenres, then specific facets) and an expandable full effective tag list. Shared-tag explanations remain separate.
 - Repeat discovery with unchanged inputs continues provider cursors and excludes earlier result batches in that session. Relevance requirements remain intact; exhausted providers can yield no fresh matches. No promise of unlimited distinct recommendations. Changing inputs starts a new session. This changes candidate retrieval, so disclose it as v1.2 separately from the original frozen study.
 - Validation: typecheck, Pages build and 157 existing automated tests passed. No participant relevance measurements are claimed by these checks.
+
+## November 13: inclusive 18+ browsing and ranked numbered pages
+- Removed the Content preferences dropdown. Search provides the collection switch; in 18+ it reads Go back to Main collection.
+- 18+ includes general and mature records. Main still filters known mature records. Unknown ratings remain unknown.
+- Bottom pagination uses previous arrow, numbered pages with current-page indication, and next arrow; changing pages scrolls to the results.
+- Global ordering now runs after series grouping, before pagination. Story compatibility priority remains first, then descending score. Removed per-list diversity reshuffling and append-only batch ordering so later pages cannot precede stronger items by this ordering. New candidates can move earlier pages.
+- Validation: 159 automated tests passed, including inclusive content scope and ranking/page-boundary regressions; typecheck and Pages build passed. Continued v1.2 retrieval/display behavior; distinguish from frozen v1 observations.
