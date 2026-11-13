@@ -52,7 +52,13 @@ The live command requires internet and overwrites the four generated evidence JS
 6. With the local catalog API environment variable unset, Add a favorite → TV → search Avatar → choose Netflix 2024 → Add as a favorite. Confirm 5 stars in My Library and fantasy/adventure/action in the profile. Change to 4 stars, reload and reopen My Library; confirm 4 remains selected. Use a fresh browser profile if already saved, since duplicates are rejected.
 7. The milestone unit test named `failed API and malformed responses` covers injected HTTP 503 and invalid response shape. Offline browser testing is not recorded as performed.
 
-Recorded checks: typecheck passed; all 103 tests passed; Pages build exported `/` and `/milestones`. Build reported an advisory for chunks over 500 kB. See [evidence index](../evidence/milestones/README.md).
+Recorded checks: typecheck passed; all 103 tests passed; Pages build exported `/` and `/milestones`. Build reported an advisory for chunks over 500 kB.
+
+## Evidence provenance
+
+The linked raw and normalized JSON records capture a real TVmaze response for ID 38753. Stored preferences are a generated test payload restored through production code, not a personal library. The live report records the capture timestamp, query, status and assertions; browser observations document interaction and reload persistence. Regenerate the JSON using the command above.
+
+TVmaze metadata is attributed to [TVmaze](https://www.tvmaze.com/api) (CC BY-SA), including the [source record](https://www.tvmaze.com/shows/38753). The normalized record adapts that metadata. The separate 25-title course catalog is hand-authored fixture data.
 
 ## Changed files
 
@@ -65,4 +71,5 @@ Recorded checks: typecheck passed; all 103 tests passed; Pages build exported `/
 - `scripts/verify-milestones.mjs`: reproducible real-network evidence.
 - `tests/milestones.test.mjs`: schema, profile, metadata and failure tests.
 - `docs/ARCHITECTURE.md`, `docs/MILESTONES.md`, `README.md`: current architecture, verification and entry-point documentation.
-- `evidence/milestones/README.md`, `browser-observations.md`, `automated-live-evidence.json`, `raw-tvmaze-search.json`, `normalized-tvmaze-record.json`, `stored-preferences.json`: evidence and provenance.
+- `evidence/milestones/browser-observations.md`, `automated-live-evidence.json`, `raw-tvmaze-search.json`, `normalized-tvmaze-record.json`, `stored-preferences.json`: evidence and provenance.
+
