@@ -41,7 +41,7 @@ import {
 } from '@/components/ui/select';
 import { detailedFeatures, specificity, detailedTags, primaryGenre, seedTopic } from '@/lib/features';
 import { GenreGuide } from '@/components/media/genre-guide';
-import { DiscoveryFeedback } from '@/components/media/discovery-feedback';
+
 import { inContentSection, contentLabel } from '@/lib/content-rating';
 import { genrePreferences, genreAllowed } from '@/lib/genres';
 import { TagEditor } from '@/components/media/tag-editor';
@@ -146,6 +146,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
       })),
     [originals, tagEdits],
   );
+  const libraryCatalog = useMemo(()=>catalog.filter(i=>i.type!=="Music" && i.type!=="Game"),[catalog]);
   const sectionCatalog = useMemo(
     () => catalog.filter((i) => i.type !== 'Music' && i.type !== 'Game' && inContentSection(i, adultSection)),
     [catalog, adultSection],
@@ -561,7 +562,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const currentPage=Math.min(resultPage,pageCount);
   const pageResults=filteredResults.slice((currentPage-1)*12,currentPage*12);
   function changeResultPage(page:number) { setResultPage(page); requestAnimationFrame(()=>document.getElementById("recommendation-results")?.scrollIntoView({block:"start"})); }
-  const visible = libraryOrder(sectionCatalog,ratings)
+  const visible = libraryOrder(libraryCatalog,ratings)
     .filter(i=>matchesShelf(i,ratings,shelf))
     .filter((i) =>
       (i.title + ' ' + i.creator + ' ' + i.type + ' ' + i.tags.join(' '))
@@ -673,11 +674,11 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
           <aside className="library" hidden={view !== 'library'}>
             <div className="section-heading">
               <h2>My Library</h2><div className="library-header-meta"><button className="preferences-button" aria-label="Open taste and preferences" title="Taste and preferences" onClick={()=>setPreferencesOpen(true)}><Settings size={20}/></button>
-              <span>{sectionCatalog.length} titles · {sectionCatalog.filter((i) => ratings[i.id]).length} rated</span></div>
+              <span>{libraryCatalog.length} titles · {libraryCatalog.filter((i) => ratings[i.id]).length} rated</span></div>
             </div>
             <p className="muted">
               Add media from live catalogs, then rate your favorites. Your
-              library and ratings are saved in this browser.
+              library and ratings are saved in this browser. All saved titles appear here, including 18+ titles.
             </p>
             <AddMedia
               
@@ -766,11 +767,6 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                             : 'Mark as 18+'}
                         </button>
                       )}
-                    <DiscoveryFeedback reviewer={reviewer}
-                      item={item}
-                      library={catalog}
-                      onDismiss={() => feedback(item, 'dismissed')}
-                    />
                     {added.some((x) => x.id === item.id) && (
                       <button
                         disabled={actionBusy}
@@ -1197,12 +1193,6 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                         }
                       </a>
                     )}
-                    <DiscoveryFeedback reviewer={reviewer}
-                      item={item}
-                      seed={selected}
-                      library={catalog}
-                      onDismiss={() => feedback(item, 'dismissed')}
-                    />
                     </details>
                   </article>
                 ))}
@@ -1217,7 +1207,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
         </div>
         <section className="collections-screen" hidden={view!=='collections'}><h2>My taste collections</h2><p>Group titles around a connection you care about, across books, movies and TV.</p>
             <TasteCollections
-              items={sectionCatalog.filter((i) =>
+              items={libraryCatalog.filter((i) =>
                 added.some((x) => x.id === i.id),
               )}
               edits={tagEdits}
@@ -1227,7 +1217,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
               }}
             />
         </section>
-        <Dialog open={!!openCollection} onOpenChange={open=>{if(!open)setOpenCollection(null);}}><DialogContent className="add-media-dialog collection-dialog"><DialogTitle>{openCollection?.replaceAll('-',' ')}</DialogTitle><DialogDescription>Your saved titles in this collection. Ratings and changes are shared with My Library.</DialogDescription><div className="collection-cards">{libraryOrder(sectionCatalog,ratings).filter(item=>openCollection && tagEdits[item.id]?.added.includes(openCollection)).map(item=><article className="result-card" data-media-type={item.type} key={item.id}>
+        <Dialog open={!!openCollection} onOpenChange={open=>{if(!open)setOpenCollection(null);}}><DialogContent className="add-media-dialog collection-dialog"><DialogTitle>{openCollection?.replaceAll('-',' ')}</DialogTitle><DialogDescription>Your saved titles in this collection. Ratings and changes are shared with My Library.</DialogDescription><div className="collection-cards">{libraryOrder(libraryCatalog,ratings).filter(item=>openCollection && tagEdits[item.id]?.added.includes(openCollection)).map(item=><article className="result-card" data-media-type={item.type} key={item.id}>
           <span className={'category-badge '+item.type.toLowerCase()}>{item.type}</span><MediaMark item={item}/><h3>{item.title}</h3><p className="library-creator">{item.creator}</p><AutoSynopsis item={item} previewLength={180}/><TitleTags item={item}/><p className="muted">{contentLabel(item)}</p><p>{ratings[item.id]?`${ratings[item.id]} stars · `:''}{libraryShelf(item,ratings)==='dismissed'?'Not interested':libraryShelf(item,ratings)==='later'?'Saved for later':'Already experienced'}</p><div className="result-actions"><button onClick={()=>setRateTarget(item)}>Rate title</button><button disabled={!notDismissed(item,catalog)} onClick={()=>{setSeed(item.id);setMode('based-on');setView('discover');setOpenCollection(null);}}>Find similar titles</button></div>
         </article>)}</div></DialogContent></Dialog>
         <Dialog open={!!removeTarget} onOpenChange={open=>{if(!open)setRemoveTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Remove {removeTarget?.title}?</DialogTitle><DialogDescription>This removes the title, its star rating, personal tags and AI review history from this browser’s library. It may appear in recommendations again. This does not change the catalog.</DialogDescription><div className="result-actions"><button onClick={()=>setRemoveTarget(null)}>Keep title</button><button className="destructive" onClick={()=>{if(removeTarget)removeItem(removeTarget.id);setRemoveTarget(null);}}>Remove from library</button></div></DialogContent></Dialog>

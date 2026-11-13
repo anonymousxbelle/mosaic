@@ -46,3 +46,9 @@ Record deployment commit/time when publishing new changes; disclose post-freeze 
 - Bottom pagination uses previous arrow, numbered pages with current-page indication, and next arrow; changing pages scrolls to the results.
 - Global ordering now runs after series grouping, before pagination. Story compatibility priority remains first, then descending score. Removed per-list diversity reshuffling and append-only batch ordering so later pages cannot precede stronger items by this ordering. New candidates can move earlier pages.
 - Validation: 159 automated tests passed, including inclusive content scope and ranking/page-boundary regressions; typecheck and Pages build passed. Continued v1.2 retrieval/display behavior; distinguish from frozen v1 observations.
+
+## November 13: saved mature titles and card feedback
+- Library shelves/counts and saved collections include all supported saved titles, regardless of discovery content scope. Mature labels remain visible; Main discovery/search still hides mature results.
+- Removed Share feedback controls from library and recommendation cards. Existing feedback storage/reviewer inbox remain intact.
+- Metadata review: TV creator uses TMDB created_by; movies use Director credits. Empty fields yield Creator unavailable. Hardcover author data comes from search author_names; verification queries contributions but the rich-search branch currently retains the search creator. Open Library record normalization expects author_name. These explain missing fields; do not invent credits.
+- Book provider assessment: Hardcover is primary title search; Open Library handles discovery/subject retrieval with Hardcover enrichment. Missing descriptions are not evidence that one whole catalog is worse. Open: compare matched work/edition completeness and bidirectional enrichment before changing provider preference.
