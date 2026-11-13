@@ -1333,3 +1333,9 @@ body { background:var(--background); }
 .inline-search-notice > button { flex-shrink:0; margin-left:auto; font-weight:700; }
 @media(min-width:701px) { .discover-actions { position:relative; } .discover-actions .favorite-search .inline-search-notice { padding-right:0; } .discover-actions > .preferences-button { align-self:flex-end; } }
 @media(max-width:600px) { .inline-search-notice p { flex-basis:100%; } }
+.all-tags-button { margin-top:8px; padding:4px 0; text-decoration:underline; text-underline-offset:3px; font-weight:600; font-size:14px; }
+.grouped-title-tags { margin:4px 0; display:grid; gap:14px; }
+.grouped-title-tags > div { display:grid; grid-template-columns:150px minmax(0,1fr); gap:12px; padding-bottom:12px; border-bottom:1px solid #e2ded3; }
+.grouped-title-tags dt { font-weight:700; }
+.grouped-title-tags dd { margin:0; line-height:1.6; overflow-wrap:anywhere; }
+@media(max-width:500px) { .grouped-title-tags > div { grid-template-columns:1fr; gap:4px; } }
