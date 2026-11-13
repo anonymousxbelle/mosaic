@@ -46,9 +46,42 @@ export function AutoSynopsis({item,previewLength=420}:{item:Media;previewLength?
     return()=>{active=false;observer.disconnect();};
   },[item.id,item.description,retry]);
   const preview=description.length>previewLength?description.slice(0,previewLength).replace(/\s+\S*$/,''):description;
-  return <div ref={root} className="synopsis">
-    <p className="description">{hasSynopsis(description)?description.length>previewLength&&!expanded?preview+'…':description:status==='error'?'The synopsis could not load.':status==='done'?'No synopsis is available from the catalog. Use the source link for more details.':'Loading synopsis…'}</p>
-    {status==='error'&&<button onClick={()=>setRetry(n=>n+1)}>Retry synopsis</button>}
-    {hasSynopsis(description)&&description.length>previewLength&&<button type="button" className="synopsis-toggle" aria-expanded={expanded} onClick={()=>setExpanded(value=>!value)}>{expanded ? 'Show less' : 'Continue reading'}</button>}
-  </div>;
+  
+  return (
+    <div ref={root} className="synopsis">
+      <p className="description">
+        {hasSynopsis(description)
+          ? description.length > previewLength && !expanded
+            ? preview + '…'
+            : description
+          : status === 'error'
+            ? 'The synopsis could not load.'
+            : status === 'done'
+              ? 'No synopsis is available from the catalog. Use the source link for more details.'
+              : 'Loading synopsis…'}
+  
+        {hasSynopsis(description) &&
+          description.length > previewLength && (
+            <>
+              {' '}
+              <button
+                type="button"
+                className="synopsis-toggle"
+                aria-expanded={expanded}
+                onClick={() => setExpanded((value) => !value)}
+              >
+                {expanded ? 'Show less' : 'Continue reading'}
+              </button>
+            </>
+          )}
+      </p>
+  
+      {status === 'error' && (
+        <button onClick={() => setRetry((n) => n + 1)}>
+          Retry synopsis
+        </button>
+      )}
+    </div>
+  );
+
 }
