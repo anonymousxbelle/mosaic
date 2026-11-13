@@ -115,7 +115,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     previous?: CatalogMedia;
     previousRating?: number;
   } | null>(null);
-  const [adultSection, setAdultSection] = useState(false);
+  const [adultSection, setAdultSection] = useState(true);
   const [added, setAdded] = useState<CatalogMedia[]>([]);
   const [avoided, setAvoided] = useState<string[]>([]);
   const [candidates, setCandidates] = useState<CatalogMedia[]>([]);
@@ -767,43 +767,6 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                             : 'Mark as 18+'}
                         </button>
                       )}
-                    {added.some((x) => x.id === item.id) && (
-                      <button
-                        disabled={actionBusy}
-                        onClick={async () => {
-                          const original = added.find((x) => x.id === item.id);
-                          if (!original) return;
-                          setActionBusy(true);
-                          try {
-                            const fresh = await verifyMedia(original);
-                            setAdded((old) =>
-                              old.map((x) =>
-                                x.id === fresh.id
-                                  ? {
-                                      ...fresh,
-                                      libraryState: x.libraryState,
-                                      adultMarked: x.adultMarked,
-                                    }
-                                  : x,
-                              ),
-                            );
-                            setNotice(
-                              'Catalog details refreshed. Your rating and personal tags are preserved.',
-                            );
-                          } catch (e) {
-                            setNotice(
-                              e instanceof Error
-                                ? e.message
-                                : 'Could not refresh details.',
-                            );
-                          } finally {
-                            setActionBusy(false);
-                          }
-                        }}
-                      >
-                        Refresh catalog details
-                      </button>
-                    )}
                     <TagEditor
                       reviewer={reviewer}
                       item={originals.find((x) => x.id === item.id)!}
@@ -852,7 +815,51 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                           ×
                         </button>
                       )}
-                    </div>
+                    </div>  
+                    {added.some((x) => x.id === item.id) && (
+                      <button
+                        type="button"
+                        className="edit-tags refresh-catalog-button"
+                        disabled={actionBusy}
+                        onClick={async () => {
+                          const original = added.find((x) => x.id === item.id);
+                          if (!original) return;
+                    
+                          setActionBusy(true);
+                    
+                          try {
+                            const fresh = await verifyMedia(original);
+                    
+                            setAdded((old) =>
+                              old.map((x) =>
+                                x.id === fresh.id
+                                  ? {
+                                      ...fresh,
+                                      libraryState: x.libraryState,
+                                      adultMarked: x.adultMarked,
+                                    }
+                                  : x
+                              )
+                            );
+                    
+                            setNotice(
+                              'Catalog details refreshed. Your rating and personal tags are preserved.'
+                            );
+                          } catch (error) {
+                            setNotice(
+                              error instanceof Error
+                                ? error.message
+                                : 'Could not refresh details.'
+                            );
+                          } finally {
+                            setActionBusy(false);
+                          }
+                        }}
+                      >
+                        Refresh catalog details
+                      </button>
+                    )}
+
                   </div>
                 </article>
               ))}
@@ -1020,12 +1027,8 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             <div className="results-heading">
               <h2>
                 {mode === 'based-on'
-                  ? adultSection
-                    ? '18+ connections'
-                    : 'Connected discoveries'
-                  : adultSection
-                    ? '18+ discoveries'
-                    : 'Your discoveries'}
+                  ? 'Connected discoveries'
+                  : 'Your discoveries'}
               </h2>
               <span aria-live="polite">
                 {filteredResults.length} connections
