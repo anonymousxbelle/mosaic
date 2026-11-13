@@ -12,6 +12,7 @@ import {unifiedRank} from '@/lib/unified-ranking';
 import {cosineDiscovery,vocabularyFor,tasteVector} from '@/lib/cosine-discovery';
 import {sameSeries, groupSeries, seriesGroupKey} from '@/lib/story-profile';
 import {genreDescription} from '@/lib/genre-descriptions';
+import { TitleTags } from '@/components/media/title-tags';
 import { AutoSynopsis } from '@/components/media/auto-synopsis';
 import { TagChoice } from '@/components/media/tag-choice';
 import { taxonomy } from '@/lib/taxonomy';
@@ -124,6 +125,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const [morePrefix,setMorePrefix]=useState<{key:string;items:any[]}|null>(null);
   const [resultLimit,setResultLimit]=useState(30);
   const [resultPage,setResultPage]=useState(1);
+  const [earlierMatches,setEarlierMatches]=useState<{key:string;items:Media[]}>({key:'',items:[]});
   const [discoveryNotice, setDiscoveryNotice] = useState('');
   const [discoveryFailure, setDiscoveryFailure] = useState(false);
   const [partialDiscovery, setPartialDiscovery] = useState(false);
@@ -396,13 +398,17 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   }
   async function findConnections(more=false) {
     if(discovering)return;
+    const repeat=!more && completedDiscoveryKey===discoveryKey;
+    const prior=earlierMatches.key===discoveryKey?earlierMatches.items:[];
+    const omit=repeat?[...prior,...filteredResults.filter(item=>!findDuplicate(prior,item))]:more?prior:[];
     if(more && hasBufferedResults){
       setMorePrefix({key:controlsKey,items:filteredResults});setPreservedResults(null);setResultLimit(n=>n+30);setCompletedDiscoveryKey(discoveryKey);
       setMoreNotice('Showing more matches from the titles already retrieved.');return;
     }
     setMoreNotice('');
     if(more){setMorePrefix({key:controlsKey,items:filteredResults});setResultLimit(n=>n+30);}
-    else {setMorePrefix(null);setContinuation({});setHasMore(false);setResultLimit(30);setResultPage(1);}
+    else {setMorePrefix(null);if(!repeat)setContinuation({});setHasMore(false);setResultLimit(30);setResultPage(1);}
+    setEarlierMatches({key:discoveryKey,items:omit});
     setPreservedResults(null);
     discoveryRequest.current?.abort();
     const controller = new AbortController();
@@ -442,13 +448,14 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
           : tags,
         controller.signal,
         adultSection,
-        {seed:mode === 'based-on'?selected:undefined,cursor:more?continuation:undefined,
+        {seed:mode === 'based-on'?selected:undefined,cursor:more||repeat?continuation:undefined,
           accept:(item)=>(mode!=='based-on' || mustTags.every(t=>item.tags.includes(t))) && inContentSection(item,adultSection) && genreAllowed(item,[],avoided) &&
-            recommendationEligible(item,ratings) && !findDuplicate(catalog,item) && (!more || !findDuplicate(candidates,item))},
+            recommendationEligible(item,ratings) && !findDuplicate(catalog,item) && !findDuplicate(omit,item) && (!more || !findDuplicate(candidates,item))},
       );
       if (controller.signal.aborted) return;
       setCandidates(previous=>more?[...previous,...found.items.filter(i=>!findDuplicate(previous,i)&&!findDuplicate(catalog,i))]:found.items.filter(i=>!findDuplicate(catalog,i)));
       setContinuation(found.cursor);setHasMore(found.hasMore);
+      if(repeat)setMoreNotice(found.items.length ? 'Explored further catalog candidates; earlier result batches are omitted from this search.' : 'No fresh candidates found within this search budget. Change your filters or starting title to explore further.');
       if(more)setMoreNotice(found.items.length ? 'Additional candidates checked; new eligible matches appear after your previous results.' : found.hasMore ? 'No new matches on those pages. You can try the next pages without changing your filters.' : 'No new matches found within this search budget. Try different filters to explore further.');
       setRankingEvidence(previous=>({key:discoveryKey,provider:more?{...previous.provider,...found.evidence}:found.evidence,semantic:more?previous.semantic:{}}));
       let aiNotice='';
@@ -517,6 +524,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
   const legacyResults = completedDiscoveryKey===discoveryKey && !discovering ? diversify(
     groupSeries(preferMatches(rankedResults, mode==='based-on' ? focusTags : [])
       .filter((i) => i.type !== 'Music' && i.type !== 'Game')
+      .filter((i) => earlierMatches.key!==discoveryKey || !findDuplicate(earlierMatches.items,i))
       .filter((i) =>
         recommendationEligible(i, ratings),
       )
@@ -542,6 +550,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
     ?completedDiscoveryKey===discoveryKey&&!discovering?cosineRun.results
       .filter(i=>i.type!=='Music'&&i.type!=='Game'&&inContentSection(i,adultSection)&&genreAllowed(i,[],avoided))
       .filter(i=>mode!=='based-on'||mustTags.every(t=>i.tags.includes(t)))
+      .filter(i=>earlierMatches.key!==discoveryKey || !findDuplicate(earlierMatches.items,i))
       .map(i=>({...i,storyReasons:[] as string[],seriesEntries:[i]})):[]
     :legacyResults.slice(0,resultLimit);
   const hasBufferedResults=rankingMode!=='cosine' && legacyResults.length>resultLimit;
@@ -755,7 +764,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                     <span className="type-label">{item.type}</span>
                     <p className="muted">{contentLabel(item)}</p>
                     <h3>{item.title}</h3>
-                    <p className="library-creator">{item.creator}</p>
+                    <p className="library-creator">{item.creator}</p><AutoSynopsis item={item} previewLength={180}/><TitleTags item={item}/>
                     <p className="muted">{libraryShelf(item,ratings)==='later'?'Saved for later':libraryShelf(item,ratings)==='experienced'?'Already experienced':'Not interested'}</p>
                     {libraryShelf(item,ratings)==='dismissed'&&<button className="edit-tags" onClick={()=>setAdded(old=>old.map(x=>x.id===item.id?{...x,libraryState:ratings[item.id]?'experienced':'later'}:x))}>Restore to library</button>}
                     <button
@@ -938,20 +947,19 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                 </Select>
               </div>
 
-              <div className="discovery-mode-guide"><p><strong>For You:</strong> combines your ratings across titles to find matches for your overall taste.</p><p><strong>Based On:</strong> finds similar stories using one title you choose.</p></div>
               <TabsContent value="for-you">
                 <div className="context">
-                  <p className="eyebrow">PICKED FROM YOUR FAVORITES</p>
+                  <p className="eyebrow">FOR YOU · YOUR COMBINED TASTE</p>
                   <h2>Your taste. New possibilities.</h2>
                   <p>
-                    {rankingMode==='cosine'?'Your complete signed profile: high ratings add features, low ratings subtract them, and 3 stars are neutral.':'Connections drawn from the titles you rate 3 stars or higher.'}
+                    {rankingMode==='cosine'?'Your complete signed profile: high ratings add features, low ratings subtract them, and 3 stars are neutral.':'Recommendations combine the books, movies and shows you rate 3 stars or higher.'}
                   </p>
                 </div>
               </TabsContent>
 
               <TabsContent value="based-on">
                 <div className="context">
-                  <p className="eyebrow">START WITH ONE FAVORITE</p>
+                  <p className="eyebrow">BASED ON · ONE TITLE YOU CHOOSE</p>
                   <h2>{selected ? `Find stories like ${selected.title}` : 'Choose a title to find similar stories'}</h2><p>Recommendations will be based on this title’s genre, setting and story details.</p>
                   <Select
                     value={seed}
@@ -1144,7 +1152,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
                     </details>}
                     {'storyReasons' in item && Array.isArray(item.storyReasons) && item.storyReasons.length>0 && <p>Story connections: {item.storyReasons.join('; ')}</p>}
                     {'metadataSourceUrl' in item && typeof item.metadataSourceUrl==='string' && <a href={item.metadataSourceUrl} target="_blank" rel="noreferrer">Additional book metadata: Hardcover</a>}
-                    <AutoSynopsis item={item} />
+                    <AutoSynopsis item={item} /><TitleTags item={item}/>
                     {added.some(x=>x.id===item.id)&&<p className="saved-result-status">{added.find(x=>x.id===item.id)?.libraryState==='dismissed'?'Marked Not interested':ratings[item.id]?`In My Library · ${ratings[item.id]} stars`:'Saved in My Library'}</p>}
                     <div className="result-actions">
                       {[...added, ...candidates].some(
@@ -1264,7 +1272,7 @@ export default function MosaicApp({reviewer=false}:{reviewer?:boolean}) {
             />
         </section>
         <Dialog open={!!openCollection} onOpenChange={open=>{if(!open)setOpenCollection(null);}}><DialogContent className="add-media-dialog collection-dialog"><DialogTitle>{openCollection?.replaceAll('-',' ')}</DialogTitle><DialogDescription>Your saved titles in this collection. Ratings and changes are shared with My Library.</DialogDescription><div className="collection-cards">{libraryOrder(sectionCatalog,ratings).filter(item=>openCollection && tagEdits[item.id]?.added.includes(openCollection)).map(item=><article className="result-card" data-media-type={item.type} key={item.id}>
-          <span className={'category-badge '+item.type.toLowerCase()}>{item.type}</span><MediaMark item={item}/><h3>{item.title}</h3><p className="library-creator">{item.creator}</p><p className="muted">{contentLabel(item)}</p><p>{ratings[item.id]?`${ratings[item.id]} stars · `:''}{libraryShelf(item,ratings)==='dismissed'?'Not interested':libraryShelf(item,ratings)==='later'?'Saved for later':'Already experienced'}</p><AutoSynopsis item={item}/><div className="tag-options">{item.tags.slice(0,8).map(tag=><span key={tag}>{tag.replaceAll('-',' ')}</span>)}</div><div className="result-actions"><button onClick={()=>setRateTarget(item)}>Rate title</button><button disabled={!notDismissed(item,catalog)} onClick={()=>{setSeed(item.id);setMode('based-on');setView('discover');setOpenCollection(null);}}>Find similar titles</button></div>
+          <span className={'category-badge '+item.type.toLowerCase()}>{item.type}</span><MediaMark item={item}/><h3>{item.title}</h3><p className="library-creator">{item.creator}</p><AutoSynopsis item={item} previewLength={180}/><TitleTags item={item}/><p className="muted">{contentLabel(item)}</p><p>{ratings[item.id]?`${ratings[item.id]} stars · `:''}{libraryShelf(item,ratings)==='dismissed'?'Not interested':libraryShelf(item,ratings)==='later'?'Saved for later':'Already experienced'}</p><div className="result-actions"><button onClick={()=>setRateTarget(item)}>Rate title</button><button disabled={!notDismissed(item,catalog)} onClick={()=>{setSeed(item.id);setMode('based-on');setView('discover');setOpenCollection(null);}}>Find similar titles</button></div>
         </article>)}</div></DialogContent></Dialog>
         <Dialog open={!!removeTarget} onOpenChange={open=>{if(!open)setRemoveTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Remove {removeTarget?.title}?</DialogTitle><DialogDescription>This removes the title, its star rating, personal tags and AI review history from this browser’s library. It may appear in recommendations again. This does not change the catalog.</DialogDescription><div className="result-actions"><button onClick={()=>setRemoveTarget(null)}>Keep title</button><button className="destructive" onClick={()=>{if(removeTarget)removeItem(removeTarget.id);setRemoveTarget(null);}}>Remove from library</button></div></DialogContent></Dialog>
         <Dialog open={!!rateTarget} onOpenChange={open=>{if(!open)setRateTarget(null);}}><DialogContent className="add-media-dialog"><DialogTitle>Rate {rateTarget?.title}</DialogTitle><DialogDescription>Your rating shapes your taste profile. If you haven’t read or watched it, save it for later instead.</DialogDescription><div className="rating-choices">{[1,2,3,4,5].map(n=><button disabled={actionBusy} key={n} onClick={()=>{if(rateTarget)void feedback(rateTarget,'experienced',n);setRateTarget(null);}}>{n} ★</button>)}<button disabled={actionBusy} onClick={()=>{if(rateTarget)void feedback(rateTarget,'later');setRateTarget(null);}}>Save to library · for later</button></div></DialogContent></Dialog>

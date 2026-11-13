@@ -32,3 +32,10 @@ Record deployment commit/time when publishing new changes; disclose post-freeze 
 - New searches/filter changes reset to page one; saved-result preservation retains the page. Dismissal clamps a page to the remaining page count.
 - Validation: typecheck, Pages build and all 157 automated tests passed. These existing tests do not substitute for browser interaction checks.
 - Post-freeze UI update: disclose with v1.1 observations; ranking algorithm unchanged.
+
+## November 13: clearer cards and fresh repeat searches (v1.2)
+- Removed the combined For You/Based On guide. Each mode retains its own stronger tagline and bold description.
+- Enter opens the search/rating dialog with scrollable suggestions; selecting a match opens that selected title.
+- Library synopses preview 180 characters and expand inline. Library, recommendation and collection cards show three descriptive tags (genres, then subgenres, then specific facets) and an expandable full effective tag list. Shared-tag explanations remain separate.
+- Repeat discovery with unchanged inputs continues provider cursors and excludes earlier result batches in that session. Relevance requirements remain intact; exhausted providers can yield no fresh matches. No promise of unlimited distinct recommendations. Changing inputs starts a new session. This changes candidate retrieval, so disclose it as v1.2 separately from the original frozen study.
+- Validation: typecheck, Pages build and 157 existing automated tests passed. No participant relevance measurements are claimed by these checks.

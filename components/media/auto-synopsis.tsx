@@ -23,7 +23,7 @@ function fetchDescription(item:CatalogMedia){
   }
   return request;
 }
-export function AutoSynopsis({item}:{item:Media}){
+export function AutoSynopsis({item,previewLength=420}:{item:Media;previewLength?:number}){
   const root=useRef<HTMLDivElement>(null);
   const [description,setDescription]=useState(item.description);
   const [status,setStatus]=useState<'waiting'|'loading'|'done'|'error'>('waiting');
@@ -45,11 +45,10 @@ export function AutoSynopsis({item}:{item:Media}){
     observer.observe(root.current);
     return()=>{active=false;observer.disconnect();};
   },[item.id,item.description,retry]);
-  const preview=description.length>420?description.slice(0,420).replace(/\s+\S*$/,''):description;
+  const preview=description.length>previewLength?description.slice(0,previewLength).replace(/\s+\S*$/,''):description;
   return <div ref={root} className="synopsis">
-    <p className="description">{hasSynopsis(description)?description.length>420&&!expanded?preview+'…':description:status==='error'?'The synopsis could not load.':status==='done'?'No synopsis is available from the catalog. Use the source link for more details.':'Loading synopsis…'}</p>
+    <p className="description">{hasSynopsis(description)?description.length>previewLength&&!expanded?preview+'…':description:status==='error'?'The synopsis could not load.':status==='done'?'No synopsis is available from the catalog. Use the source link for more details.':'Loading synopsis…'}</p>
     {status==='error'&&<button onClick={()=>setRetry(n=>n+1)}>Retry synopsis</button>}
-    {hasSynopsis(description)&&description.length>420&&<button type="button" className="synopsis-toggle" aria-expanded={expanded} onClick={()=>setExpanded(value=>!value)}>{expanded ? 'Show less' : 'Continue reading'}</button>}
+    {hasSynopsis(description)&&description.length>previewLength&&<button type="button" className="synopsis-toggle" aria-expanded={expanded} onClick={()=>setExpanded(value=>!value)}>{expanded ? 'Show less' : 'Continue reading'}</button>}
   </div>;
 }
-

@@ -1317,3 +1317,11 @@ body { background:var(--background); }
 .inline-search-notice p,.inline-search-results > p { margin:0; font-size:14px; }
 .inline-search-cover { width:36px; height:50px; object-fit:cover; border-radius:4px; margin-right:10px; vertical-align:middle; }
 .result-pagination { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:center; margin:16px 0; scroll-margin-top:24px; }
+.context > p:not(.eyebrow) { font-weight:650; color:#203d38; }
+.title-tags { margin:10px 0; }
+.title-tag-preview { display:flex; flex-wrap:wrap; gap:6px; }
+.title-tag-preview span { font-size:13px; padding:4px 9px; border-radius:14px; background:#e9efe7; color:#244d40; }
+.title-tags details { margin-top:8px; font-size:14px; }
+.title-tags summary { cursor:pointer; font-weight:600; }
+.title-tags details p { margin:8px 0; }
+.library-item .synopsis { margin:10px 0; }

@@ -158,8 +158,7 @@ export function AddMedia({
     >
       {inlineSearch ? <form className="favorite-search" onSubmit={(event) => {
         event.preventDefault();
-        if (queryError(query)) setOpen(true);
-        else setRetry(n=>n+1);
+        setOpen(true);
       }}>
         <div className="inline-search-notice">
           <p>{adult ? 'Searching the 18+ collection.' : 'Main hides titles with known mature ratings. Missing ratings do not guarantee child-safe content.'}</p>
