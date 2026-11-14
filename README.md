@@ -55,7 +55,7 @@ Supabase integration code exists, but active account synchronization and shared 
 
 ## Documentation
 
-- [Implementation](docs/IMPLEMENTATION.md) and [architecture](docs/ARCHITECTURE.md): what exists and how it works.
+- [Implementation](docs/IMPLEMENTATION.md): what exists and how it works.
 - [Roadmap](docs/ROADMAP.md): remaining work and future proposals.
 - [Local development](docs/LOCAL-DEVELOPMENT.md) and [backend setup](backend/README.md).
 - [Taxonomy](docs/TAXONOMY.md), [all tags](TAG-CATALOG.md) and [AI tagging](docs/AI-TAGGING.md).

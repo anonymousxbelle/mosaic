@@ -12,7 +12,7 @@ Already implemented: Discover (For You / Based On), My Library with preferences,
 
 | --- | --- |
 
-| W4 architecture | Documented against source in [ARCHITECTURE.md](ARCHITECTURE.md), including optional services and separate audit storage. |
+| W4 architecture | Documented against source in [the architecture document at the recorded revision](https://github.com/anonymousxbelle/mosaic/blob/a38ed41621ae2c18ec87879d3ea670a265329e68/docs/ARCHITECTURE.md), including optional services and separate audit storage. |
 
 | W4 structured 25-title catalog | Implemented `data/catalog.json`; loader validates all 25 records. Browser rendered them. Automated checks establish five per type. No catalog rows embedded in the page component. |
 
@@ -115,6 +115,6 @@ HTTP failure handling was simulated in Node tests; these browser checks did not 
 
 - `tests/milestones.test.mjs`: schema, profile, metadata and failure tests.
 
-- `docs/ARCHITECTURE.md`, `docs/CATALOG-VERIFICATION.md`, `README.md`: current architecture, verification and entry-point documentation.
+- Architecture, verification and entry-point documentation were updated at the time of this historical check.
 
 - `evidence/milestones/automated-live-evidence.json`, `raw-tvmaze-search.json`, `normalized-tvmaze-record.json`, `stored-preferences.json`: evidence and provenance.

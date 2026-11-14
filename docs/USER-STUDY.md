@@ -12,8 +12,7 @@ Build a unified profile from preferences across media and generate cross-media r
 4. Submit the Google Form once for this experience. It collects name/email, rated titles, overall relevance (1–5), discovery value (1–5), clarity, intent to try, ease, a chosen title, prior awareness/consideration, usual media habits and interest outside those habits.
 5. Actual enjoyment is recorded only after actual consumption; not tried is not a zero enjoyment rating. Follow up separately with participants who agreed. Record title, date, tried yes/no and enjoyment 1–5. Do not mix a follow-up into the count of new participants.
 
-Editor: https://docs.google.com/forms/d/1OpdAc-28Jzrhg_WEau10KmTUZekG9Z9GQ-C5WvgflR4/edit
-November 13 update: the owner has reported participant use and subsequent edits to the form. The earlier unpublished status is historical. See the [questionnaire overview](PARTICIPANT-QUESTIONNAIRE.md); its outline is not a fresh export of the owner-edited form. Names/emails are not anonymous codes.
+[Participant questionnaire](https://docs.google.com/forms/d/e/1FAIpQLSdYNjkKFDr58bBdMEukDVlM6zW_gObwy1dTFJdTPkkwj2n0VA/viewform) · [Questions and answer choices](PARTICIPANT-QUESTIONNAIRE.md)
 
 ## Evidence this design can support
 Descriptive relevance, intention, novelty, usability and self-reported interest in less-usual media. It evaluates the combined profile experience. It does NOT establish that mixed-media inputs outperform single-medium inputs. Same-medium versus cross-media OUTPUT alone also does not isolate the benefit of combining INPUT preferences.
@@ -59,5 +58,5 @@ Full configuration, provider status, verification timestamp, taxonomy source has
 5. Save dated result screenshots/exports when possible. Live catalogs, provider metadata and hosted model behavior are not frozen snapshots, so identical results are not guaranteed.
 6. Participant browser-local ratings and tag edits are part of normal use. Reviewer AI acceptance, model comparisons and tagging-accuracy experiments remain separate from the participant study.
 
-No repository protection or deployment lock was added; this is an archived, documented baseline and change-control agreement. Keep the archive branch unchanged. The Google Form's exact current wording/response data has not been independently archived by this operation.
+No repository protection or deployment lock was added; this is an archived, documented baseline and change-control agreement. Keep the archive branch unchanged. 
 
