@@ -1338,7 +1338,34 @@ body { background:var(--background); }
 .inline-search-notice { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; }
 .inline-search-notice p,.inline-search-results > p { margin:0; font-size:14px; }
 .inline-search-cover { width:36px; height:50px; object-fit:cover; border-radius:4px; margin-right:10px; vertical-align:middle; }
-.result-pagination { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:center; margin:16px 0; scroll-margin-top:24px; }
+/* Compact pagination uses its own controls, never full-width action buttons. */
+.app-shell .result-pagination {
+  display:flex; flex-wrap:nowrap; align-items:center; justify-content:flex-start;
+  gap:8px; width:max-content; max-width:100%; margin:24px auto 16px;
+  padding:4px; overflow-x:auto; scroll-margin-top:24px;
+}
+.app-shell .result-pagination .result-page-button {
+  display:inline-flex; flex:0 0 48px; align-items:center; justify-content:center;
+  width:48px; min-width:48px; height:48px; min-height:48px;
+  margin:0; padding:0; border:0; border-bottom:3px solid transparent;
+  border-radius:0; background:transparent; color:#64736d; font:inherit;
+  font-size:16px; cursor:pointer;
+}
+.app-shell .result-pagination .result-page-button[aria-current='page'] {
+  border-bottom-color:#235f50; color:#203d38; font-weight:700;
+}
+.app-shell .result-pagination .result-page-button:hover:not(:disabled) {
+  background:#f1f4ef; color:#203d38;
+}
+.app-shell .result-pagination .result-page-button:focus-visible {
+  outline:2px solid #235f50; outline-offset:-2px;
+}
+.app-shell .result-pagination .result-page-button:disabled {
+  background:transparent; color:#9aa39e; opacity:.55; cursor:default;
+}
+.app-shell .result-pagination .result-page-button[aria-label$='page'] {
+  font-size:28px; line-height:1;
+}
 .context > p:not(.eyebrow) { font-weight:650; color:#203d38; }
 .title-tags { margin:10px 0; }
 .title-tag-preview { display:flex; flex-wrap:wrap; gap:6px; }
@@ -1347,8 +1374,6 @@ body { background:var(--background); }
 .title-tags summary { cursor:pointer; font-weight:600; }
 .title-tags details p { margin:8px 0; }
 .library-item .synopsis { margin:10px 0; }
-.result-pagination button[aria-current='page'] { background:#235f50; color:white; border-color:#235f50; font-weight:700; }
-.result-pagination button { min-width:40px; min-height:40px; }
 /* Collection scope stays prominent; the switch anchors the right edge. */
 .inline-search-notice { width:100%; justify-content:space-between; align-items:center; }
 .inline-search-notice p { flex:1; min-width:0; font-size:15px; font-weight:700; line-height:1.5; color:#203d38; }
