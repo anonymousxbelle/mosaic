@@ -1,34 +1,32 @@
-# Mosaic architecture
+# Architecture
 
-Source inspection and local verification: September 22–23, 2026. Solid arrows describe implemented paths; dashed arrows are optional/configured services, not proof of active accounts.
+Current source structure; this diagram describes implemented paths, not a fresh live-service verification. [Implementation](IMPLEMENTATION.md) explains ranking; [backend setup](../backend/README.md) explains configuration.
 
 ```mermaid
 flowchart TD
- Pages[GitHub Pages: static React / Vinext export] --> UI[Discover and My Library]
- UI --> Search[media-api.ts: search and ID verification]
- Search --> Public[Public fallback APIs: Open Library, Apple, TVmaze, Wikidata]
- Search --> Worker[Configured Cloudflare catalog Worker]
- Worker --> Providers[TMDB / Hardcover with server-side secrets]
- Search --> Normalize[Unified records and deterministic tags]
- Normalize --> UI
- UI <--> Store[Browser localStorage: mosaic-library-v1]
- UI --> Rank[Profile, candidate retrieval and story / tag ranking]
- Rank --> Search
- Rank -. optional semantic comparison .-> Worker
- Worker -. AI binding .-> AI[Workers AI: bounded synopsis comparison]
- UI -. requires configuration .-> Supabase[Optional login / cloud storage]
- Pages --> Audit[Separate /milestones/ verification page]
- JSON[data/catalog.json: 25 curated records] --> Loader[lib/catalog.ts validates schema and count]
- Loader --> Audit
- Audit --> Rank
- Audit <--> AuditStore[Separate milestone localStorage]
- Audit --> Live[TVmaze live search and raw response capture]
- Live --> Normalize
- Audit --> Search
+ Pages[GitHub Pages: static React / Vinext frontend] --> UI[Discover, Library, Collections]
+ UI <--> Local[Browser storage: ratings, shelves, tags, preferences]
+ UI --> Retrieval[Search, verification and bounded retrieval]
+ Retrieval --> Worker[Cloudflare catalog Worker]
+ Worker --> Providers[TMDB and Hardcover: server-side secrets]
+ Retrieval --> Public[Open Library and public fallback adapters]
+ Retrieval --> Normalize[Unified records and effective tags]
+ Normalize --> Rank[Taste profile / source title and content ranking]
+ Rank --> UI
+ Rank -. Based On shortlist .-> Worker
+ Worker -. embeddings .-> AI[Workers AI]
+ Pages --> Review[Separate reviewer tools]
+ Review -. authenticated analysis .-> Worker
+ Worker -. tag suggestions .-> AI
+ Review --> Decisions[Local accept / edit / reject history]
+ Decisions --> Normalize
+ Review -. authenticated inbox .-> Worker
+ Worker --> D1[Private feedback database]
+ Pages --> Course[Isolated catalog and cosine demonstrations]
+ JSON[data/catalog.json: 25 fixtures] --> Course
+ UI -. inactive optional integration .-> Supabase[Supabase accounts / snapshots]
 ```
 
-The main interface exposes Book, Movie and TV. Games/music retain structured model support but their discovery controls remain hidden. The course catalog is imported from JSON at build time and appears only in the isolated audit page, not the normal library. There is no whole-catalog database server.
+Normal media choices are books, movies and TV. Games/music remain in schema and course fixtures. There is no complete provider-catalog database. The D1 inbox stores submitted feedback, not everyone's library; current public cards no longer submit feedback. AI suggestions stay inactive until reviewed and do not train the model.
 
-The static frontend uses browser storage; `lib/library-storage.ts` validates restoration. Ratings and effective tags feed `lib/recommendations.ts`. Configured secret-bearing requests go through `backend/`; local development without the catalog API URL uses public fallbacks. `.github/workflows/pages.yml` supplies deployment variables. Supabase code does not establish an operational shared ratings database. AI is bounded semantic comparison, not automatic taxonomy generation.
-
-Inspected implementation: `app/page.tsx`, `components/media/add-media.tsx`, `lib/media-api.ts`, `lib/library-storage.ts`, `lib/recommendations.ts`, `backend/`, `next.config.ts`, `.github/workflows/pages.yml`, and `app/milestones/page.tsx`.
+The principal modules are `lib/media-api.ts`, `lib/library-storage.ts`, `lib/recommendations.ts`, `lib/ai-tagging.ts`, `backend/` and `components/`. `.github/workflows/pages.yml` builds the frontend; the Worker deploys separately. Legacy `/milestones/` and `/week8/` routes and evidence directories retain their names to keep recorded demonstrations reproducible.

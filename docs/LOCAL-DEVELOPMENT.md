@@ -29,4 +29,4 @@ npm run build:pages
 
 GitHub Actions validates pushes to `main` and publishes the Pages build. The frontend build receives its public backend URL through the repository’s `CATALOG_API_URL` variable. The Worker is deployed separately using `backend/wrangler.jsonc`.
 
-See [backend setup](../backend/README.md) for implementation details. Some older setup instructions include optional game support; IGDB is not required for the current Book/Movie/TV interface.
+See [backend setup](../backend/README.md) for implementation details. IGDB is not required for the current Book/Movie/TV interface.

@@ -6,13 +6,12 @@ Hardcover uses the encrypted runtime secret `HARDCOVER_TOKEN`. Its adapter sends
 
 ## Setup
 
-1. Register a [TMDB account](https://www.themoviedb.org/signup), then request a developer API key in account Settings → API. Keep the API Read Access Token for server use.
-2. Register a [Twitch developer app](https://dev.twitch.tv/console/apps), enable account two-factor authentication, and choose a confidential client. Keep its client ID and secret. See [IGDB setup](https://api-docs.igdb.com/#account-creation).
-3. Use a Cloudflare Workers account to deploy `backend/wrangler.jsonc`. The frontend stays on GitHub Pages. Check that rate-limit namespace 31001 is unused in the account before deploying.
-4. From the project root, securely set Worker secrets with `npx wrangler secret put TMDB_TOKEN --config backend/wrangler.jsonc`, then repeat for IGDB_CLIENT_ID and IGDB_CLIENT_SECRET. Enter values at the terminal prompt, never in committed files or chat. For local development only, use ignored `backend/.dev.vars`.
-5. Deploy using `npx wrangler deploy --config backend/wrangler.jsonc`. Confirm /status reports both providers configured, then live-test search, verification and discovery for Movie, TV and Game.
-6. Complete TMDB's [required logo attribution](https://developer.themoviedb.org/docs/faq) in the site's credits before activating this provider; the required endorsement notice is already conditional in the footer.
-7. Set GitHub repository Actions variable CATALOG_API_URL to the deployed HTTPS origin, and rerun Publish Mosaic. This is a public endpoint URL, not a secret. The build embeds it as NEXT_PUBLIC_CATALOG_API.
+1. Configure a Cloudflare Worker using `backend/wrangler.jsonc`. Frontend hosting remains GitHub Pages.
+2. Set runtime secrets `TMDB_TOKEN` and `HARDCOVER_TOKEN` using `npx wrangler secret put NAME --config backend/wrangler.jsonc`. Enter values at the prompt. Use ignored `backend/.dev.vars` only for local testing.
+3. Deploy with `npx wrangler deploy --config backend/wrangler.jsonc`. Check `/status`, then live-test Book/Movie/TV search, verification and discovery. Configuration booleans alone are not end-to-end proof.
+4. Set the GitHub Actions variable `CATALOG_API_URL` to the public Worker origin and rebuild the frontend. Never expose provider secrets in frontend variables. Retain provider attribution.
+
+IGDB/Twitch credentials are optional legacy support, not required for the current participant interface. Google Books is not configured.
 
 ## Endpoints and behavior
 
@@ -23,4 +22,16 @@ Hardcover uses the encrypted runtime secret `HARDCOVER_TOKEN`. Its adapter sends
 
 Only fixed upstream hosts and endpoints are used. Request IDs and query length are validated. Twitch tokens remain on the server. Search/discovery cache holds at most 100 responses for five minutes per isolate. A Cloudflare limiter allows 20 uncached requests per provider per minute per location; this is an approximate abuse limit, not global quota accounting. Catalog rate limits and errors remain possible. Origins are restricted to the GitHub Pages origin; CORS is not authentication.
 
-`node scripts/build-api.mjs` bundles the Worker without credentials. `npm test` covers normalization, source URLs, wrong-category rejection, missing credentials, route validation, secret handling and rate limiting. No user accounts/database are implemented by this Worker. Those require a separate authentication and persistence milestone.
+`node scripts/build-api.mjs` bundles the Worker without credentials. `npm test` covers normalization, source URLs, wrong-category rejection, missing credentials, route validation, secret handling and rate limiting. The Worker does not host personal libraries or user accounts. Its private feedback database is separate.
+
+## AI and private feedback
+
+The `AI` binding supports bounded embeddings and reviewer tag analysis. `TAGGING_REVIEW_KEY` protects analysis and private inbox access; keep it as a runtime secret. See [AI tagging](../docs/AI-TAGGING.md). Rate-limit bindings are declared in Wrangler configuration.
+
+The D1 database `mosaic-feedback` is bound as `FEEDBACK_DB`; initialize it using `backend/migrations/0001_feedback.sql`. The configured database ID is not a credential. Public cards no longer expose submission controls, but the backend and reviewer inbox remain. Validated submissions use parameterized SQL and deduplicate retries. Inbox access and decisions require the reviewer key; locking clears the interface and invalidates delayed responses.
+
+Historical activation verified a test delivery (HTTP 200), `/status` configuration and unauthenticated rejection (HTTP 401) at commit `01133d429d3d5415448bcb63f7a62cdc146d0f68`. Authenticated browser review/reload still requires recorded verification. Exclude system-test rows from study analysis. Reviewer statuses do not train AI, publish tags or change ranking.
+
+## Optional accounts (inactive)
+
+Supabase code is prepared, not an operational feature of this release. To activate it, apply `backend/account-schema.sql`, configure email-code delivery, and supply public `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` build variables. Never use a service-role secret in the frontend. Verify row-level isolation between two accounts, guest snapshot merge, sign-out and cross-device restoration before claiming synchronization. Current library persistence remains local to the browser.

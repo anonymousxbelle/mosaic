@@ -4,7 +4,7 @@
 
 Mosaic is a prototype that brings a person’s media preferences into one shared taste profile. It uses story metadata and content-based similarity to recommend titles within and across media types.
 
-[Try Mosaic](https://anonymousxbelle.github.io/mosaic/) · [Roadmap](docs/IMPLEMENTATION-PLAN.md) · [User-study questions](docs/PARTICIPANT-QUESTIONNAIRE.md)
+[Try Mosaic](https://anonymousxbelle.github.io/mosaic/) · [Roadmap](docs/ROADMAP.md) · [User-study questions](docs/PARTICIPANT-QUESTIONNAIRE.md)
 
 ## Why this project exists
 
@@ -55,16 +55,15 @@ Supabase integration code exists, but active account synchronization and shared 
 
 ## Documentation
 
-- [How Mosaic works](docs/IMPLEMENTATION.md): retrieval, rating weights, ranking and AI roles.
-- [Roadmap](docs/IMPLEMENTATION-PLAN.md): current priorities and future work.
-- [Local development](docs/LOCAL-DEVELOPMENT.md): setup, checks and deployment.
-- [Evidence and limitations](docs/EVIDENCE-AND-LIMITATIONS.md): verification, study versions and known constraints.
-- [User-study questions](docs/PARTICIPANT-QUESTIONNAIRE.md) and [study plan](docs/USER-STUDY-PLAN.md).
-- [Architecture](docs/ARCHITECTURE.md) and [backend setup](backend/README.md)
-- [Week 4/6 verification](docs/MILESTONES.md) and [Week 8 experiment](docs/WEEK8.md)
-- [Taxonomy editor](docs/TAXONOMY-EDITOR.md) and [submission checklist](docs/SUBMISSION-READINESS.md)
+- [Implementation](docs/IMPLEMENTATION.md) and [architecture](docs/ARCHITECTURE.md): what exists and how it works.
+- [Roadmap](docs/ROADMAP.md): remaining work and future proposals.
+- [Local development](docs/LOCAL-DEVELOPMENT.md) and [backend setup](backend/README.md).
+- [Taxonomy](docs/TAXONOMY.md), [all tags](TAG-CATALOG.md) and [AI tagging](docs/AI-TAGGING.md).
+- [Testing and evidence](docs/TESTING.md), [catalog/API verification](docs/CATALOG-VERIFICATION.md) and [cosine experiment](docs/COSINE-EXPERIMENT.md).
+- [User study](docs/USER-STUDY.md), [questionnaire](docs/PARTICIPANT-QUESTIONNAIRE.md) and [feedback changes](docs/FEEDBACK-CHANGES.md).
+- [Recommendation research](docs/recommendation-research.md) and [evaluation tools](evaluation/README.md).
 
-`components/` contains the interface, `lib/` contains normalization/retrieval/ranking, `backend/` contains the Worker, and `tests/` contains automated checks. Course pages (`/milestones/`, `/week8/`) use isolated fixtures; `/review/` holds reviewer experiments. Historical reports describe their recorded revisions.
+`components/` contains the interface, `lib/` normalization/retrieval/ranking, `backend/` the Worker, and `tests/` automated checks. Course pages retain legacy `/milestones/` and `/week8/` paths with isolated fixtures; `/review/` holds reviewer tools. Dated evidence describes its recorded revision, not a fresh verification of the live site.
 
 ## Data attribution
 

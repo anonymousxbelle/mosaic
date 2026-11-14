@@ -1,8 +1,8 @@
 # How Mosaic works
 
-[Back to README](../README.md) · [Roadmap](IMPLEMENTATION-PLAN.md)
+[Back to README](../README.md) · [Roadmap](ROADMAP.md)
 
-This document explains current behavior: retrieval, recommendation ranking and AI roles. The [roadmap](IMPLEMENTATION-PLAN.md) tracks remaining work and future proposals; those are not promises of existing functionality.
+This document explains current behavior: retrieval, recommendation ranking and AI roles. The [roadmap](ROADMAP.md) tracks remaining work and future proposals; those are not promises of existing functionality.
 
 ## How recommendations work
 
@@ -24,7 +24,7 @@ Normal **For You** uses positive rating weights of 3 for five stars, 2 for four 
 
 Each fetched batch is ranked, then appended and displayed 12 results per page. Batch 1 stays in place when batch 2 arrives—even if a new candidate has a higher score. Rankings therefore apply **within each batch**, not globally across every page. Shared-tag counts alone do not determine rank, and similarity is not a probability of enjoyment.
 
-An isolated [Week 8 experiment](WEEK8.md) tests a different rating rule: 5 stars = +2, 4 = +1, 3 = 0, 2 = −1 and 1 = −2. Negative values subtract features from its profile. This teaching/reviewer experiment is separate from the normal For You weights above.
+An isolated [signed-cosine experiment](COSINE-EXPERIMENT.md) tests a different rating rule: 5 stars = +2, 4 = +1, 3 = 0, 2 = −1 and 1 = −2. Negative values subtract features from its profile. This teaching/reviewer experiment is separate from the normal For You weights above.
 
 ## What AI does
 
@@ -33,3 +33,11 @@ An isolated [Week 8 experiment](WEEK8.md) tests a different rating rule: 5 stars
 | Based On description comparison | Workers AI embeddings compare the source synopsis with a bounded shortlist of up to 24 candidate descriptions. This supplements other matching evidence. |
 | Reviewer tag analysis | A language model proposes tags with evidence, confidence estimates and provenance. Suggestions require review; new taxonomy labels require a separate taxonomy decision. |
 | Normal For You | Uses the combined feature profile without a fresh AI description-comparison request. Accepted tags can contribute to its features. |
+
+## Tag centrality and retrieval limits
+
+A genre should describe the story, not an incidental mention. Broad automatic sports tags require central plot evidence or an explicit provider label; a specific sport can be a subject without making the work sports fiction. Manual and accepted reviewer tags remain deliberate overrides. These are conservative rules, not complete semantic understanding.
+
+AI analysis asks for central or substantial evidence across taxonomy facets; genre/subgenre suggestions must be central. See [AI tagging](AI-TAGGING.md) for review and validation.
+
+Continuation tracks provider cursors and retries failed pages without restarting successful ones. Provider page budgets are finite; an empty additional batch does not prove the whole catalog is exhausted. Reviewer-only pure cosine sorts its full pool by score, unlike normal discovery's stable batch append. See [the experiment](COSINE-EXPERIMENT.md).

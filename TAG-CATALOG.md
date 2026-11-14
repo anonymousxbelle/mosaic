@@ -226,4 +226,4 @@ These internal labels are still recognized by the original story matcher. Newly 
 
 ## Next work
 
-Expand and evaluate themes/tropes per subgenre, source mappings for new nonfiction subjects and formats, audience and tone evidence, and setting overlaps. Music/game vocabulary is retained for stored records but hidden in the current interface. See PROJECT-BACKLOG.md.
+Expand and evaluate themes/tropes per subgenre, source mappings for new nonfiction subjects and formats, audience and tone evidence, and setting overlaps. Music/game vocabulary is retained for stored records but hidden in the current interface. See the [roadmap](docs/ROADMAP.md).

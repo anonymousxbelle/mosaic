@@ -23,4 +23,4 @@ Rate at least five familiar titles spanning at least two supported media types, 
 | Follow-up | Whether they actually tried a recommendation and enjoyed it, if applicable. |
 | Reporting permission | Follow-up and quotation preferences. |
 
-This questionnaire measures perceived usefulness and discovery. It does not by itself prove mixed-media profiles outperform single-media profiles. See the [study plan](USER-STUDY-PLAN.md) for the proposed comparison and reporting approach, and the [feedback log](PARTICIPANT-FEEDBACK-LOG.md) for reported observations. Do not substitute intent to try for actual enjoyment.
+This questionnaire measures perceived usefulness and discovery. It does not by itself prove mixed-media profiles outperform single-media profiles. See the [study plan](USER-STUDY.md) for the proposed comparison and reporting approach, and the [feedback log](FEEDBACK-CHANGES.md) for reported observations. Do not substitute intent to try for actual enjoyment.

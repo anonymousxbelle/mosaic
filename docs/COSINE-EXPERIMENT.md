@@ -1,10 +1,10 @@
-# Week 8: unified signed taste profile and cosine discovery
+# Signed-cosine recommendation experiment
 
 Implemented September 25, 2026. This milestone demonstrates content-based personalization, not measured recommendation accuracy or full live support for every provider.
 
 ## What changed
 
-Before this work Mosaic had weighted tag cosine, but its profile treated 3 stars as positive and its displayed order could be changed by story tiers, AI, providers, preferences and diversity. Those methods remain available. **Week 8: signed taste profile + pure cosine** is a separate explicit method in Advanced matching for both main discovery modes. The course page `/week8/` uses that same algorithm against all 25 structured JSON records.
+Before this work Mosaic had weighted tag cosine, but its profile treated 3 stars as positive and its displayed order could be changed by story tiers, AI, providers, preferences and diversity. Those methods remain available. **Week 8: signed taste profile + pure cosine** is a separate explicit method in reviewer Advanced matching for both discovery modes. The course page `/week8/` uses that same algorithm against all 25 structured JSON records.
 
 `lib/cosine-discovery.ts` provides the shared implementation. It unions genres, themes, moods, keywords and legacy tags, normalizes Unicode/case/spacing, removes duplicates, and sorts the vocabulary alphabetically. A feature present in several fields counts once. Creators and media type are not scoring features. Custom/unknown labels present in records join the vocabulary; labels outside a frozen vocabulary contribute zero. No title or example has a ranking exception.
 
@@ -68,10 +68,7 @@ The evidence command is deterministic apart from the capture timestamp and requi
 4. Select Based On, Hunger Games and Music. Check the four book-to-music scores. Switch to All and verify each music score is unchanged.
 5. Select another starting title, such as Pride and Prejudice, and confirm a different order.
 6. For mixed-media For You, clear Pride and Prejudice, set Hunger Games 5, Interstellar 4 and Stranger Things 5; choose All. Compare `mixed` in the JSON evidence.
-7. In normal Mosaic, add real catalog favorites, choose Week 8 in Advanced matching, and search in either mode. All displayed scores must descend. The retrieved pool can change or be empty; course evidence does not claim five live API workflows.
+7. In reviewer mode (`/review/`), add real catalog favorites and choose the signed-cosine experiment in Advanced matching, and search in either mode. All displayed scores must descend. The retrieved pool can change or be empty; course evidence does not claim five live API workflows.
 
-## Files and next work
 
-New: `lib/cosine-discovery.ts`, `app/week8/page.tsx`, `tests/cosine-discovery.test.mjs`, `scripts/verify-week8.mjs`, this report and `evidence/week8/`. Updated: `app/page.tsx` (both-mode integration), `app/milestones/page.tsx` (course navigation), `PROJECT-BACKLOG.md` (later taxonomy editor request), and README entry point.
-
-The later taxonomy editor is recorded, not implemented. It should edit versioned data with stable IDs, aliases, parents/applicability and mappings; validate duplicates/cycles; preview classification/ranking changes; then publish. Renaming a visible label alone cannot teach provider retrieval or synopsis extraction a new concept.
+The normal interface uses different weighting and additional ranking rules; see [Implementation](IMPLEMENTATION.md). Course game/music output is fixture-based, not a claim of live participant support. The [taxonomy editor](TAXONOMY.md) now exists.

@@ -1,5 +1,7 @@
 # Recommendation systems for Mosaic
 
+Historical research and proposals from September 2026. Read [Implementation](IMPLEMENTATION.md) for current behavior and [Roadmap](ROADMAP.md) for remaining work.
+
 ## Recommendation
 
 Mosaic should develop an **evaluated hybrid recommender**: provider-filtered retrieval, structured genre and topic matching, semantic comparison of descriptions, and a small amount of diversity. Shared community behavior should become an additional signal when reliable interaction data exists. The immediate priority is measuring where good titles disappear, then improving their representation and ranking.

@@ -29,3 +29,7 @@ New tags do not invent metadata: they still need manual assignment or provider l
 ## Verification
 
 Automated tests cover valid drafts, malformed input, conflicting aliases, missing/circular references, archive references, preserved identities and class/media/branch applicability. Browser testing added a coastal-mystery draft, saved it, observed it in the mystery preview and restored it after reload. This test draft is local only and is not shipped in the taxonomy. The editor has responsive columns, labelled fields, keyboard focus indicators and separate padded sections.
+
+## Definitions and history
+
+See the [complete tag catalog](../TAG-CATALOG.md) for labels and definitions, and the [detailed taxonomy revision rationale](TAXONOMY-CHANGES-2026-11-06.md) for the earlier review. That rationale records a draft decision process, not the current publication status of each tag.

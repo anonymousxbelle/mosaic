@@ -46,5 +46,5 @@ Snapshots contain provider descriptions and metadata. Review them before sharing
 
 ## Current implementation and historical notes
 
-See [How Mosaic works](../docs/IMPLEMENTATION.md) for current behavior and the [roadmap](../docs/IMPLEMENTATION-PLAN.md) for planned work. The [previous version of this guide](https://github.com/anonymousxbelle/mosaic/blob/2b652af1767d88dc4f79e4aee9c11f1f94b5f758/evaluation/README.md) preserves September development notes, earlier ranking formulas and proposed case counts. Those notes are historical proposals, not completed experiments or current participant requirements.
+See [How Mosaic works](../docs/IMPLEMENTATION.md) for current behavior and the [roadmap](../docs/ROADMAP.md) for planned work. The [previous version of this guide](https://github.com/anonymousxbelle/mosaic/blob/2b652af1767d88dc4f79e4aee9c11f1f94b5f758/evaluation/README.md) preserves September development notes, earlier ranking formulas and proposed case counts. Those notes are historical proposals, not completed experiments or current participant requirements.
 
